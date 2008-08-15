@@ -23,3 +23,5 @@
   untracked = cyan
 [github]
 	user = bjeanes
+[core]
+	editor = mate -w
