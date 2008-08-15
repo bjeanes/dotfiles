@@ -45,6 +45,9 @@ alias ss='ruby ./script/server'
 alias sc='ruby ./script/console'
 
 # git stuff
+
+alias gs='git status'
+alias gd='git diff'
 alias gi='git init'
 alias ga='git add .'
 alias gc='git commit'
