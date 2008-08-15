@@ -82,7 +82,7 @@ alias show='cat ~/.dirs'
 save (){
 	command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; 
 }
-source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
+source ~/.dirs  # Initialization for the above 'save' facility: source the .dirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
 
 # history (bigger size, no duplicates, always append):
