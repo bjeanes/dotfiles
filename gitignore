@@ -6,3 +6,4 @@ pkg/*
 .svn
 *.pbxuser
 *.move1v3
+*~
