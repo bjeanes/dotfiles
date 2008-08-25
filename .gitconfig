@@ -19,4 +19,5 @@
 [core]
   editor = mate -w
   excludesfile = ~/.gitignore
+	whitespace = fix
 
