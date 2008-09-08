@@ -1,3 +1,5 @@
+export PATH="/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/:$PATH"
+
 export COLOR_NC='\e[0m' # No Color
 export COLOR_WHITE='\e[1;37m'
 export COLOR_BLACK='\e[0;30m'
