@@ -48,19 +48,6 @@ alias rlog='tail -f -0 ./log/*.log'
 alias ss='ruby ./script/server'
 alias sc='ruby ./script/console'
 
-# git stuff
-
-alias gs='git status'
-alias gd='git diff'
-alias gi='git init'
-alias ga='git add .'
-alias gc='git commit'
-alias gac='git commit -a'
-alias gps='git push origin master'
-alias gpl='git pull origin master'
-
-alias ignore_empty='find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;'
-
 # Gem Doc
 export GEMDIR=`gem env gemdir`
 gemdoc() {
