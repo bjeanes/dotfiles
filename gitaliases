@@ -42,3 +42,6 @@ alias gpl='gl'
 alias gpo='gp origin master'
 
 alias ignore_empty='find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;'
+
+export PATH=/usr/local/git/bin:$PATH
+export MANPATH=/usr/local/git/man:$MANPATH

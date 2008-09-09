@@ -1,6 +1,7 @@
 export PATH="/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/:$PATH"
 export PATH="/Library/PostgreSQL8/bin/:$PATH"     
 export PATH="/usr/local/mysql/bin/:$PATH"
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 export COLOR_NC='\e[0m' # No Color
 export COLOR_WHITE='\e[1;37m'
