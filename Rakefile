@@ -6,7 +6,9 @@ task :install do
   Dir['*'].each do |file|
     next if %w[Rakefile README].include? file
     
-    if File.exist?(File.join(ENV['HOME'], ".#{file}"))
+    original = File.join(ENV['HOME'], ".#{file}")
+
+    if File.exist?(original) || File.symlink?(original)
       if replace_all
         replace_file(file)
       else
