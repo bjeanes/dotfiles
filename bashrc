@@ -27,9 +27,9 @@ export PS1='\h:\W \u$(__git_ps1 " \[${COLOR_RED}\](%s)\[${COLOR_NC}\]")\$ '
 export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
-export EDITOR='mate -w'
-export GIT_EDITOR='mate -w'
-export VISUAL='mate -w'
+export EDITOR='/usr/bin/mate -w'
+export GIT_EDITOR=$EDITOR
+export VISUAL=$EDITOR
 # sets title of window to be user@host
 export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*} ${PWD}"; echo -ne "\007"' 
 
