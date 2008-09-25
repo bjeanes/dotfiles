@@ -24,18 +24,11 @@ function gpall() {
 }
 alias gitrm="git stat | grep deleted | awk '{print $3}' | xargs git rm"
 alias gitx="open -b nl.frim.GitX"
-
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
-PS1="\w\$(parse_git_branch) $ "
                                 
 # End Dr Nic Compatibility Mode
                             
 # Bo's preferred aliases
-alias gs='gst'
 alias gi='git init'
-alias ga='git add .'
 alias gac='gca'
 alias gps='gp'
 alias gpl='gl'
