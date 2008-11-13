@@ -49,6 +49,9 @@ alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' 
 alias rlog='tail -f -0 ./log/*.log'
 alias ss='ruby ./script/server'
 alias sc='ruby ./script/console'
+alias cdm='cap deploy deploy:migrate'
+
+alias startpg='sudo /Library/StartupItems/PostgreSQL/PostgreSQL start'
 
 # Gem Doc
 export GEMDIR=`gem env gemdir`
