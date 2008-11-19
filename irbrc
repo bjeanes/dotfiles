@@ -2,7 +2,10 @@
 require 'rubygems'
 require 'wirble'
 
-__wirble_colors = {
+Wirble.init(:history_size => 10000)
+Wirble.colorize
+
+Wirble::Colorize.colors = {
   # delimiter colors
   :comma              => :white,
   :refers             => :white,
@@ -35,12 +38,6 @@ __wirble_colors = {
   :class              => :red,
   :range              => :light_blue,
 }
-
-Wirble.init(:history_size => 10000)
-Wirble.colorize
-
-Wirble::Colorize.colors = __wirble_colors
-
 
 class Object
   # Return a list of methods defined locally for a particular object.  Useful
