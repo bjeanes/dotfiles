@@ -7,3 +7,5 @@ pkg/*
 *.pbxuser
 *.move1v3
 *~
+log/*
+tmp/**/*
