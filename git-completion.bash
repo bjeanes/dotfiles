@@ -1368,6 +1368,7 @@ complete -o default -o nospace -F _git_bisect git-bisect
 complete -o default -o nospace -F _git_branch git-branch
 complete -o default -o nospace -F _git_bundle git-bundle
 complete -o default -o nospace -F _git_checkout git-checkout
+complete -o default -o nospace -F _git_checkout gco
 complete -o default -o nospace -F _git_cherry git-cherry
 complete -o default -o nospace -F _git_cherry_pick git-cherry-pick
 complete -o default -o nospace -F _git_commit git-commit

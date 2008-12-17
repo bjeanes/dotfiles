@@ -3,7 +3,7 @@ require 'autotest/timestamp'
 
 module Autotest::Growl
   def self.growl title, msg, img, pri=0, sticky=""
-    system "growlnotify -n autotest -d #{title} -I #{img} -p #{pri} -m #{msg.inspect} #{title} #{sticky}"
+    system "growlnotify -n autotest -d #{title} --image #{img} -p #{pri} -m #{msg.inspect} #{title} #{sticky}"
   end
 
   Autotest.add_hook :ran_command do |at|

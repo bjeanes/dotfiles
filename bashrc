@@ -64,6 +64,8 @@ _gemdocomplete() {
 }
 
 complete -o default -o nospace -F _gemdocomplete gemdoc
+complete -C ~/.rake-completion.rb -o default rake
+
 
 # readline settings
 bind "set completion-ignore-case on" 
