@@ -34,6 +34,7 @@ export VISUAL=$EDITOR
 # sets title of window to be user@host
 export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*} ${PWD}"; echo -ne "\007"' 
 
+alias gem='sudo gem' # sick of always forgetting sudo
 alias ls='ls -G'
 alias ll='ls -lah'
 alias ..='cd ..;' # can then do .. .. .. to move up multiple directories.
