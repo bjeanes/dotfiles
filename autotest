@@ -8,7 +8,7 @@ module Autotest::Growl
 
   Autotest.add_hook :ran_command do |at|
     unless at.results.empty?
-      output = at.results.last.slice(/(\d+)\s.*examples?,\s(\d+)\s.*failures?/)
+      output = at.results.last.slice(/(\d+)\s.*(?:examples|assertions)?,\s(\d+)\s.*failures?/)
       if output =~ /[1-9]\sfailures?/
         growl "Tests", "#{output}", "~/.ruby_fail.png", 2, "-s"
       else
