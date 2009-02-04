@@ -59,6 +59,9 @@ alias rollback='rake db:rollback'
 
 alias startpg='sudo /Library/StartupItems/PostgreSQL/PostgreSQL start'
 
+alias hidefile='/usr/bin/SetFile -a "V"'
+alias showfile='/usr/bin/SetFile -a "v"'
+
 # Gem Doc
 export GEMDIR=`gem env gemdir`
 gemdoc() {
