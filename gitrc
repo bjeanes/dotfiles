@@ -1,3 +1,4 @@
+source ~/.git-completion
 # Dr Nic Compatibility Mode
 
 alias gst='git status'
