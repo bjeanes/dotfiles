@@ -1,0 +1,64 @@
+# From http://codesnippets.joyent.com/posts/show/1516
+
+# Minimise terminal window to Dock
+function mintw() { printf "\e[2t"; return 0; }
+
+# Send Terminal window to background
+function bgtw() { printf "\e[6t"; return 0; }
+
+function hidetw() { 
+   /usr/bin/osascript -e 'tell application "System Events" to set visible of some item of ( get processes whose name = "Terminal" ) to false'
+   return 0
+}
+
+# positive integer test (including zero)
+function positive_int() { return $(test "$@" -eq "$@" > /dev/null 2>&1 && test "$@" -ge 0 > /dev/null 2>&1); }
+
+# move the Terminal window
+function mvtw() { 
+   if [[ $# -eq 2 ]] && $(positive_int "$1") && $(positive_int "$2"); then 
+      printf "\e[3;${1};${2};t"
+      return 0
+   fi
+   return 1
+}
+
+# resize the Terminal window
+function sizetw() { 
+   if [[ $# -eq 2 ]] && $(positive_int "$1") && $(positive_int "$2"); then 
+      printf "\e[8;${1};${2};t"
+      /usr/bin/clear
+      return 0
+   fi
+   return 1
+}
+
+# full screen
+function fullscreen() { printf "\e[3;0;0;t\e[8;0;0t"; /usr/bin/clear; return 0; }
+
+# default screen
+function defaultscreen() { printf "\e[8;35;150;t"; printf "\e[3;300;240;t"; /usr/bin/clear; return 0; }
+
+# max columns
+function maxc() { printf "\e[3;0;0;t\e[8;50;0t"; /usr/bin/clear; return 0; }
+
+# max rows
+function maxr() { printf "\e[3;0;0;t\e[8;0;100t"; /usr/bin/clear; return 0; }
+
+# show number of lines & columns
+function lc() { printf "lines: $(/usr/bin/tput lines)\ncolums: $(/usr/bin/tput cols)\n"; return 0; }
+
+unset -v TITLE PROMPT_COMMAND
+declare -x TITLE="Terminal"
+declare -x PROMPT_COMMAND='printf "\e]0;${TITLE}\a"'
+
+function title() { declare -x TITLE="$@"; }
+
+# open a new Terminal window in same location as current directory
+unset -f newin
+function newin() {
+   /bin/pwd | /usr/bin/pbcopy
+   /usr/bin/open -a Terminal
+   /usr/bin/osascript -e 'tell application "Terminal" to do script with command "cd \"$(/usr/bin/pbpaste)\"; echo \" \" | /usr/bin/pbcopy; /usr/bin/clear"'
+   return 0 
+}
