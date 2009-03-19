@@ -1,5 +1,5 @@
 # Gem Doc
-export GEMDIR=`gem env gemdir`
+export GEMDIR=`/usr/bin/gem env gemdir`
 gemdoc() {
   open $GEMDIR/doc/`$(which ls) $GEMDIR/doc | grep $1 | sort | tail -1`/rdoc/index.html
 }
