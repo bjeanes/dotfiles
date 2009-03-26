@@ -9,6 +9,7 @@ alias ducks='du -cks * | sort -rn|head -11' # Lists the size of all the folders
 alias top='top -o cpu'
 alias systail='tail -f /var/log/system.log'
 alias m='mate .'
+alias o='open .'
 alias et="m"
 
 alias home='cd ~' # the tilda is too hard to reach
