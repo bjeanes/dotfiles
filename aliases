@@ -46,7 +46,7 @@ if [ $system_name == 'Darwin' ]; then
      x4="$(/usr/bin/arch)"
      echo "${x1} - ${x2} - ${x3} - ${x4}"
   }
-
+  alias ls='ls -G'
   alias m='mate .'
   alias et="m"
   alias o='open .'
@@ -55,4 +55,6 @@ if [ $system_name == 'Darwin' ]; then
   alias showfile='/usr/bin/SetFile -a "v"'
   alias startpg='sudo /Library/StartupItems/PostgreSQL/PostgreSQL start'
   alias readrails="mate `ruby -rubygems -e "puts( ['rails', 'activerecord', 'activeresource', 'actionpack', 'activesupport'].collect { |gem| gems = Gem.source_index.find_name(gem); gems.last.full_gem_path; }.join(' '))"`"
+else
+  alias ls='ls --color=auto'
 fi

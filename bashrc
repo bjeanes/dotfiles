@@ -8,6 +8,10 @@ source ~/.save-directory
 if [ $system_name == 'Darwin' ]; then
   source ~/.gemdoc
   source ~/.terminal
+else
+  if [ -f /etc/bash_completion ]; then
+      . /etc/bash_completion
+  fi
 fi
 
 export PS1='$(__git_ps1 "\[${COLOR_RED}\](%s)\[${COLOR_NC}\] ")\$ '

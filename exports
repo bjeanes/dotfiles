@@ -40,8 +40,6 @@ export CLICOLOR=1
 # sets title of window to be user@host
 export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*} ${PWD}"; echo -ne "\007"'
 
-export BASH_COMPLETION='~/.bash_completion'
-
 # export HISTCONTROL=erasedups # I actually want duplicates because of profileme
 export HISTSIZE=1000000
 
