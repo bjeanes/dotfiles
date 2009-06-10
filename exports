@@ -2,6 +2,8 @@ if [ $system_name == 'Darwin' ]; then
   export EDITOR='mate -w'
   export PATH="/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/:$PATH"
   export PATH="/Library/PostgreSQL8/bin/:$PATH"
+  export CDPATH='.:~:~/Projecs:~/Sites'
+  export GEM_OPEN_EDITOR='mate'
 else  
   export EDITOR='nano -w'
 fi
@@ -9,6 +11,7 @@ fi
 export PATH="/usr/local/mysql/bin/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="$PATH:/usr/local/jruby/bin"
+
 
 export IRBRC="$HOME/.irbrc"
 

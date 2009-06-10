@@ -1,10 +1,11 @@
-# require 'wirble'
+require 'pp'
 require 'rubygems'
 require 'wirble'
 
 Wirble.init(:history_size => 10000)
 Wirble.colorize
 
+=begin
 Wirble::Colorize.colors = {
   # delimiter colors
   :comma              => :white,
@@ -38,6 +39,7 @@ Wirble::Colorize.colors = {
   :class              => :red,
   :range              => :light_blue,
 }
+=end
 
 class Object
   # Return a list of methods defined locally for a particular object.  Useful
@@ -46,4 +48,10 @@ class Object
   def local_methods(obj = self)
     (obj.methods - obj.class.superclass.instance_methods).sort
   end
+end
+
+# Log to STDOUT if in Rails
+if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
+  require 'logger'
+  RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
 end

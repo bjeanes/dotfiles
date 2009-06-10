@@ -29,6 +29,9 @@ alias migration='script/generate migration'
 alias migrate='rake db:migrate'
 alias rollback='rake db:rollback'
 alias r='rake'
+alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"'
+
+alias pubkey='cat ~/.ssh/*.pub'
 
 # replacement netstat cmd to find ports used by apps on OS X
 alias netstat="sudo lsof -i -P"
@@ -36,6 +39,27 @@ alias netstat="sudo lsof -i -P"
 alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 function f() { find * -name $1; }
+
+function extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1        ;;
+            *.tar.gz)    tar xvzf $1     ;;
+            *.bz2)       bunzip2 $1       ;;
+            *.rar)       unrar x $1     ;;
+            *.gz)        gunzip $1     ;;
+            *.tar)       tar xvf $1        ;;
+            *.tbz2)      tar xvjf $1      ;;
+            *.tgz)       tar xvzf $1       ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1    ;;
+            *)           echo "'$1' cannot be extracted via >extract<" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
 
 if [ $system_name == 'Darwin' ]; then
   function manpdf() { man -t $@ | open -f -a Preview; }
@@ -47,6 +71,7 @@ if [ $system_name == 'Darwin' ]; then
      echo "${x1} - ${x2} - ${x3} - ${x4}"
   }
   alias ls='ls -G'
+  alias pubkey='cat ~/.ssh/*.pub | pbcopy && echo "Keys copied to clipboard"'
   alias m='mate .'
   alias et="m"
   alias o='open .'

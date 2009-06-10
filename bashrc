@@ -14,7 +14,11 @@ else
   fi
 fi
 
-export PS1='$(__git_ps1 "\[${COLOR_RED}\](%s)\[${COLOR_NC}\] ")\$ '
+export PS1=' [`pwd`$(__git_ps1 " \[${COLOR_RED}\](%s)\[${COLOR_NC}\]")]\n$ '
+
+function __pair_status {
+  hitchstatus " %s";
+}
 
 # readline settings
 bind "set completion-ignore-case on" 
@@ -23,5 +27,6 @@ bind "set show-all-if-ambiguous On" # this allows you to automatically show comp
 
 shopt -s checkwinsize
 shopt -s histappend
+shopt -s globstar
 
 complete -C ~/.rake-completion.rb -o default rake}
