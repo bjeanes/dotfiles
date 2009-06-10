@@ -7,7 +7,4 @@ function git_cwd_info
 			printf "%s" (git_dirty_files_count)
 		end
 	end
-
-
-
 end

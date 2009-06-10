@@ -1,5 +1,5 @@
 alias gem='sudo gem' # sick of always forgetting sudo
-alias ls='ls -G'
+alias ls='ls -FG'
 alias ll='ls -lah'
 alias ..='cd ..;' # can then do .. .. .. to move up multiple directories.
 alias ...='.. ..'
