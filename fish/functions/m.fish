@@ -1,3 +1,7 @@
 function m
-	mate . $argv; 
+	if not test $argv
+		set argv .
+	end
+	mate $argv
+
 end

@@ -18,7 +18,8 @@ function fish_prompt --description 'Write out the prompt'
   end
  
   printf '%s%s ' (set_color $fish_color_git_branch) (git_parse_branch)
- 
+  
+
   if git_dirty
     printf '%s☠ ' (set_color red)
   end

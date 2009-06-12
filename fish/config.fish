@@ -1,7 +1,8 @@
+cd $HOME ^/dev/null # for some reason $PWD is empty in new consoles
+
 mkdir -p ~/.l
 
 set fish_greeting ''
-set -x PWD "~" # some reason this is empty in new consoles
 
 set -x PATH      $PATH /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin
 set -x CDPATH    . ~ ~/Sites ~/Code /Volumes ~/.l
