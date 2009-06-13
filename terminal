@@ -1,5 +1,8 @@
 # From http://codesnippets.joyent.com/posts/show/1516
 
+declare -x PROMPT_COMMAND='printf "\e]0;$(/bin/pwd | /usr/bin/tr -d "[[:cntrl:]]") \a"'
+
+
 # Minimise terminal window to Dock
 function mintw() { printf "\e[2t"; return 0; }
 
@@ -47,12 +50,6 @@ function maxr() { printf "\e[3;0;0;t\e[8;0;100t"; /usr/bin/clear; return 0; }
 
 # show number of lines & columns
 function lc() { printf "lines: $(/usr/bin/tput lines)\ncolums: $(/usr/bin/tput cols)\n"; return 0; }
-
-unset -v TITLE PROMPT_COMMAND
-declare -x TITLE="Terminal"
-declare -x PROMPT_COMMAND='printf "\e]0;${TITLE}\a"'
-
-function title() { declare -x TITLE="$@"; }
 
 # open a new Terminal window in same location as current directory
 unset -f newin

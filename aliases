@@ -1,5 +1,5 @@
 alias gem='sudo gem' # sick of always forgetting sudo
-alias ls='ls -G'
+alias ls='ls -FG'
 alias ll='ls -lah'
 alias ..='cd ..;' # can then do .. .. .. to move up multiple directories.
 alias ...='.. ..'
@@ -7,14 +7,18 @@ alias g='grep -i'  #case insensitive grep
 alias h='history|g'
 alias ducks='du -cks * | sort -rn|head -11' # Lists the size of all the folders
 alias top='top -o cpu'
-alias systail='tail -f /var/log/system.log'
 alias m='mate .'
 alias o='open .'
 alias et="m"
 
 alias home='cd ~' # the tilda is too hard to reach
+alias systail='tail -f -n0 /var/log/system.log'
+alias aptail='tail -f -n0 /var/log/apache*/*log'
+alias l='ls'
+alias b='cd -'
+
 alias c='clear' # shortcut to clear your terminal
-alias eprof='mate ~/.dot-files'
+
 alias sprof='source ~/.bash_profile'
 
 # useful command to find what you should be aliasing:
@@ -30,25 +34,58 @@ alias controller='script/generate controller'
 alias migration='script/generate migration'
 alias migrate='rake db:migrate'
 alias rollback='rake db:rollback'
+alias r='rake'
+alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"'
 
-alias startpg='sudo /Library/StartupItems/PostgreSQL/PostgreSQL start'
+alias pubkey='cat ~/.ssh/*.pub'
 
 # replacement netstat cmd to find ports used by apps on OS X
 alias netstat="sudo lsof -i -P"
-
-alias hidefile='/usr/bin/SetFile -a "V"'
-alias showfile='/usr/bin/SetFile -a "v"'
 
 alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 function f() { find * -name $1; }
 
-function manpdf() { man -t $@ | open -f -a Preview; }
-
-function osinfo() { 
-   x1="$(/usr/bin/sw_vers -productName)"
-   x2="$(/usr/bin/sw_vers -productVersion)"
-   x3="$(/usr/bin/sw_vers -buildVersion)"
-   x4="$(/usr/bin/arch)"
-   echo "${x1} - ${x2} - ${x3} - ${x4}"
+function extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1        ;;
+            *.tar.gz)    tar xvzf $1     ;;
+            *.bz2)       bunzip2 $1       ;;
+            *.rar)       unrar x $1     ;;
+            *.gz)        gunzip $1     ;;
+            *.tar)       tar xvf $1        ;;
+            *.tbz2)      tar xvjf $1      ;;
+            *.tgz)       tar xvzf $1       ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1    ;;
+            *)           echo "'$1' cannot be extracted via >extract<" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
 }
+
+if [ $system_name == 'Darwin' ]; then
+  function manpdf() { man -t $@ | open -f -a Preview; }
+  function osinfo() { 
+     x1="$(/usr/bin/sw_vers -productName)"
+     x2="$(/usr/bin/sw_vers -productVersion)"
+     x3="$(/usr/bin/sw_vers -buildVersion)"
+     x4="$(/usr/bin/arch)"
+     echo "${x1} - ${x2} - ${x3} - ${x4}"
+  }
+  alias ls='ls -G'
+  alias pubkey='cat ~/.ssh/*.pub | pbcopy && echo "Keys copied to clipboard"'
+  alias m='mate .'
+  alias et="m"
+  alias o='open .'
+  alias eprof="mate ~/.dot-files"
+  alias hidefile='/usr/bin/SetFile -a "V"'
+  alias showfile='/usr/bin/SetFile -a "v"'
+  alias startpg='sudo /Library/StartupItems/PostgreSQL/PostgreSQL start'
+  alias readrails="mate `ruby -rubygems -e "puts( ['rails', 'activerecord', 'activeresource', 'actionpack', 'activesupport'].collect { |gem| gems = Gem.source_index.find_name(gem); gems.last.full_gem_path; }.join(' '))"`"
+else
+  alias ls='ls --color=auto'
+fi

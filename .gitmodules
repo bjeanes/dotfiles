@@ -1,0 +1,3 @@
+[submodule "fish/nuggets"]
+	path = fish/nuggets
+	url = git://github.com/zmalltalker/fish-nuggets.git
