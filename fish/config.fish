@@ -4,8 +4,24 @@ mkdir -p ~/.l
 
 set fish_greeting ''
 
-set -x PATH      $PATH /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin
-set -x CDPATH    . ~ ~/Sites ~/Code /Volumes ~/.l
+set path_list /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin
+set cd_path_list    . ~ ~/Sites ~/Code /Volumes ~/.l
+
+for i in $path_list
+	if not contains $i $PATH
+		if test -d $i
+			set PATH $PATH $i
+		end
+	end
+end
+
+for i in $cd_path_list
+	if not contains $i $CDPATH
+		if test -d $i
+			set CDPATH $CDPATH $i
+		end
+	end
+end
 
 set -x EDITOR    "mate -w"
 set -x VISUAL    $EDITOR
