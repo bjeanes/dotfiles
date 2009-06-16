@@ -17,7 +17,7 @@ function fish_prompt --description 'Write out the prompt'
     printf '%s%s ' (set_color -o $fish_color_uneditable_cwd) (prompt_pwd)
   end
  
-  printf '%s%s ' (set_color $fish_color_git_branch) (git_parse_branch)
+  printf '%s%s ' (set_color red) (git_parse_branch)
   
 
   if git_dirty

@@ -4,7 +4,7 @@ mkdir -p ~/.l
 
 set fish_greeting ''
 
-set path_list /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin
+set path_list /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin /usr/local/nginx/sbin /Library/PostgreSQL8/bin
 set cd_path_list    . ~ ~/Sites ~/Code /Volumes ~/.l
 
 for i in $path_list
@@ -25,7 +25,7 @@ end
 
 set -x EDITOR    "mate -w"
 set -x VISUAL    $EDITOR
-set -x GITEDITOR $EDITOR
+set -x GIT_EDITOR "mate -wl1" # ensures cursor is at beginning of document
 
 set -x CLICOLOR 1
 set -x JAVA_HOME "/usr/"
