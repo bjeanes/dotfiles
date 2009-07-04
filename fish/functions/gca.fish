@@ -1,4 +1,5 @@
 function gca
-	gc -a
+	gc -a $argv
+
 
 end

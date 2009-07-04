@@ -1,4 +1,5 @@
 function migrate
-	rake db:migrate $argv
+	rake db:migrate db:test:clone $argv
+
 
 end
