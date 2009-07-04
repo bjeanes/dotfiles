@@ -31,9 +31,7 @@ set -x CLICOLOR 1
 set -x JAVA_HOME "/usr/"
 set -U BROWSER "open -a Safari"
 
-
-bind \cr "rake"
-
-set fish_color_git_branch green
 set fish_color_cwd blue
 set fish_color_uneditable_cwd red
+
+bind \er 'restart_rails_app >/dev/null'
