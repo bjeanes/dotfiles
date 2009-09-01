@@ -4,7 +4,7 @@ mkdir -p ~/.l
 
 set fish_greeting ''
 
-set path_list /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin /usr/local/nginx/sbin /Library/PostgreSQL8/bin
+set path_list /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin /usr/local/nginx/sbin /Library/PostgreSQL8/bin /usr/local/ruby19/bin
 set cd_path_list    . ~ ~/Sites ~/Code /Volumes ~/.l
 
 for i in $path_list
