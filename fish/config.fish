@@ -4,13 +4,16 @@ mkdir -p ~/.l
 
 set fish_greeting ''
 
-set path_list /usr/local/git/bin /usr/local/mysql/bin /usr/local/jruby/bin /usr/local/nginx/sbin /Library/PostgreSQL8/bin
+set path_list /Library/PostgreSQL8/bin /opt/local/*bin /opt/local/*/*bin /usr/local/*bin /usr/local/*/*bin  /opt/nginx/*bin ~/.config/fish/bin 
+
 set cd_path_list    . ~ ~/Sites ~/Code /Volumes ~/.l
+
+set PATH /usr/sbin /usr/bin /sbin /bin
 
 for i in $path_list
 	if not contains $i $PATH
 		if test -d $i
-			set PATH $PATH $i
+			set PATH $i $PATH
 		end
 	end
 end
