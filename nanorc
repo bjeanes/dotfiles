@@ -1,0 +1,69 @@
+#####################################################################
+# Ruby syntax highlighting for Nano.
+# Author:  Josef 'Jupp' Schugt, jupp(a)rubyforge.org
+# License: GPL 2  or later
+# Version: 0.1 of 2004-02-20
+#####################################################################
+
+# Automatically use for '.rb' files
+syntax "ruby" ".*\.*rb$"
+
+# General
+color white ".+"
+
+# Operators
+color brightyellow "::|\*\*|!|~|\*|/|%|\+|-|&|<<|>>|\|\^|>|>=|<|<="
+color brightyellow "<=>|\||\|\||!=|=~|!~|&&|\+=|-=|=|\.\.|\.\.\."
+color brightyellow "\<not\>|\<and\>|\<or\>"
+
+# Keywords
+color brightyellow "\<(BEGIN|END|alias|and|begin|break|case)\>"
+color brightyellow "\<(class|def|defined|do|else|elsif|end)\>"
+color brightyellow "\<(ensure|for|if|in|module|next|not|or|redo)\>"
+color brightyellow "\<(rescue|retry|return|self|super|then|undef)\>"
+color brightyellow "\<(unless|until|when|while|yield)\>"
+
+# false, nil, true
+color magenta "\<(false|nil|true)\>"
+
+# Above must not match 'nil?'
+color white "\<nil\?"
+
+# external stuff
+color brightgreen "\<(load|require|%q|%!|%Q|%r|%x)"
+
+# Iterators
+color brightgreen "\|\w*\|"
+
+# Constants
+color yellow "\<[A-Z]\w*\>"
+
+# Symbols
+color yellow "([ \t]|^):(@|@@|\$)?\w+\>"
+
+# Strings
+color green "\"(\\.|[^\\\"])*\"|'(\\.|[^\\'])*'"
+
+# Backticks
+color green "`(\\.|[^\\\"])*`"
+
+# Regular expressions
+color green "/(\\.|[^\\/])*/[imox]*"
+
+# Escapes
+color red "\\[0-7][0-7][0-7]|\\x[0-9a-fA-F][0-9a-fA-F]"
+color red "\\[abefnrs]"
+color red "(\\c|\\C-|\\M-|\\M-\\C-)."
+
+# Expression substitution
+color red "#{[^}]*}|#(@|@@|\$)\w+"
+
+# Simple comments
+color cyan         "#([^{].*)?$"
+
+# Shebang
+color brightcyan   "^#!.*"
+
+# Multiline comments
+color cyan         start="^=begin" end="^=end"
+
