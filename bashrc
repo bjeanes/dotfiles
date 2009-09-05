@@ -30,3 +30,4 @@ shopt -s histappend
 shopt -s globstar
 
 complete -C ~/.rake-completion.rb -o default rake}
+if [ -f ~/.rvm/bin/rvm ] ; then source ~/.rvm/bin/rvm ; fi
