@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+command = ARGV.shift
+
+case command
+when /^git(@|:\/\/).*\.git$/
+  system("git clone #{command.inspect}")
+when /^(?:ftp|https?):\/\/.+\.t(?:ar\.)?gz$/
+  system("curl #{command.inspect} | tar xzv")
+else
+  $stderr.puts "No default action defined in #{__FILE__.inspect}"
+end
