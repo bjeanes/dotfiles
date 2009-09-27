@@ -2,7 +2,7 @@ source ~/.git-completion
 # Dr Nic Compatibility Mode
 
 alias gst='git status'
-alias gl='git pull'
+alias gl='git pull --rebase'
 alias gp='git push'
 alias gpa='git push-all' # see [alias] in ~/.gitconfig
 alias gd='git diff | mate'
