@@ -34,6 +34,8 @@ set -x CLICOLOR 1
 set -x JAVA_HOME "/usr/"
 set -U BROWSER "open -a Safari"
 
+set -x JEWELER_OPTS "--rspec --gemcutter --rubyforge --reek --roodi"
+
 set fish_color_cwd blue
 set fish_color_uneditable_cwd red
 
