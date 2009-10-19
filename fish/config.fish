@@ -26,7 +26,7 @@ for i in $cd_path_list
 	end
 end
 
-set -x EDITOR    "mate -w"
+set -x EDITOR    (echo (which mate) -w)
 set -x VISUAL    $EDITOR
 set -x GIT_EDITOR "mate -wl1" # ensures cursor is at beginning of document
 

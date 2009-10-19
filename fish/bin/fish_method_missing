@@ -2,11 +2,19 @@
 
 command = ARGV.shift
 
+def run(cmd)
+  puts "Running #{cmd.inspect} instead"
+  system(cmd)
+end
+
 case command
 when /^git(@|:\/\/).*\.git$/
-  system("git clone #{command.inspect}")
+  run("git clone #{command.inspect}")
 when /^(?:ftp|https?):\/\/.+\.t(?:ar\.)?gz$/
-  system("curl #{command.inspect} | tar xzv")
+  run("curl #{command.inspect} | tar xzv")
+when /^[a-z0-9_\-\/]+\.feature$/
+  run("cucumber #{command}")
 else
   $stderr.puts "No default action defined in #{__FILE__.inspect}"
+  abort
 end

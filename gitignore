@@ -1,56 +1,44 @@
-.DS_Store
-Thumbs.db
-._*
-build/*
-pkg/*
-.svn
-*.pbxuser
-*.move1v3
-*~
-log/*
-tmp/**/*
-# use glob syntax.
-syntax: glob
-*.ser
-*.class
-*~
 *.bak
-*.off
-*.old
-.DS_Store
- 
-# logs
-derby.log
- 
-# eclipse conf file
-.settings
-.classpath
-.project
-.manager
- 
-# building
-target
-build
-null
-tmp*
-temp*
-dist
-test-output
- 
-# other scm
-.svn
-.CVS
-.hg*
- 
-# switch to regexp syntax.
-#  syntax: regexp
-#  ^\.pc/
- 
- 
-# IntelliJ
+*.class
 *.iml
 *.ipr
 *.iws
-
-# Rubymine
+*.mode1v3
+*.mode2v3
+*.move1v3
+*.off
+*.old
+*.out
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.ser
+*.swp
+*.xcodeproj/*.tm_build_errors
+*~
+*~.nib
+.classpath
+.CVS
+.DS_Store
+.hg*
 .idea
+.manager
+.project
+.settings
+.svn
+._*
+bin/*
+build
+build/*
+derby.log
+dist
+log/*
+null
+pkg/*
+profile
+target
+temp*
+test-output
+Thumbs.db
+tmp*
+tmp/**/*
