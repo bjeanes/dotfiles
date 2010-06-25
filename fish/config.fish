@@ -4,9 +4,9 @@ mkdir -p ~/.l
 
 set fish_greeting ''
 
-set path_list /Library/PostgreSQL8/bin /opt/local/*bin /opt/local/*/*bin /usr/local/*bin /usr/local/*/*bin /opt/nginx/*bin ~/.config/fish/bin 
+set path_list /Library/PostgreSQL8/bin /opt/local/*bin /usr/X11/bin /opt/local/*/*bin /usr/local/*bin /usr/local/*/*bin /usr/local/**/bin /opt/nginx/*bin ~/.config/fish/bin  
 
-set cd_path_list    . ~ ~/Sites ~/Code /Volumes ~/.l
+set cd_path_list    . ~ ~/Sites ~/Sites/* ~/Code /Volumes ~/.l
 
 set PATH /usr/sbin /usr/bin /sbin /bin
 

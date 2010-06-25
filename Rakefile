@@ -3,8 +3,8 @@ require 'rake'
 desc "install the dot files into user's home directory"
 task :install do
   replace_all = false
-  Dir['*'].each do |file|
-    next if %w[Rakefile README].include? file
+  Dir['*'].each do |dir|
+    next unless File.directory?(dir)
     
     original = File.join(ENV['HOME'], ".#{file}")
 

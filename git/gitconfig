@@ -1,0 +1,38 @@
+[user]
+  name = Bodaniel Jeanes
+  email = me@bjeanes.com
+[merge]
+  summary = true
+  tool = opendiff
+[alias]
+  co = checkout
+  put = push origin HEAD
+  push-all = "!for i in $(git config --list | grep -E ^remote\\..+\\.url | sed -E 's/^remote\\.(.*)\\.url=.*/\\1/'); do git push $i master; done"
+  unadd = reset HEAD
+[apply]
+  whitespace = nowarn
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+  ui = auto
+[core]
+  editor = mate -w
+  excludesfile = ~/.gitignore
+  whitespace = fix
+[branch]
+  autosetupmerge = always
+  autosetuprebase = local
+[push]
+  default = matching	
+[diff "ruby"]
+  funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+
+
+[github]
+  user = bjeanes
+  token = df574517df9e5cef449ff0010fdce8b6
+[codebase]
+  username = bjeanes
+  domain = mocra.codebasehq.com
+  apikey = 5f1pkluckqk82ip9if8jomfbfxi38ofbn2keiata
