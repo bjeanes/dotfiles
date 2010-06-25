@@ -3,7 +3,6 @@
 :verbose: true
 :update_sources: true
 gem: --no-ri
-gemcutter_key: 36e2540f40da9e6e1737951140f1723c
 :sources: 
 - http://gemcutter.org
 :backtrace: false
