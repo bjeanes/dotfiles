@@ -67,7 +67,7 @@ function extract() {
     fi
 }
 
-if [ $system_name == 'Darwin' ]; then
+if [ $system_name = 'Darwin' ]; then
   function manpdf() { man -t $@ | open -f -a Preview; }
   function osinfo() { 
      x1="$(/usr/bin/sw_vers -productName)"

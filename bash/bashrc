@@ -1,16 +1,18 @@
-system_name=`uname -s` # Sets 'Darwin' or 'Linux' etc
 
-source ~/.exports
-source ~/.gitrc
-source ~/.aliases
-source ~/.save-directory
+export DOT_FILES=$HOME/.config
+source $DOT_FILES/bash/common
+source $DOT_FILES/git/git-completion
+source $DOT_FILES/bash/save-directory
+
 
 if [ $system_name == 'Darwin' ]; then
-  source ~/.gemdoc
-  source ~/.terminal
+  source $DOT_FILES/ruby/gemdoc
+  source $DOT_FILES/bash/terminal
 else
   if [ -f /etc/bash_completion ]; then
-      . /etc/bash_completion
+    . /etc/bash_completion
+  else
+    . $DOT_FILES/bash/bash_completion
   fi
 fi
 
@@ -27,7 +29,6 @@ bind "set show-all-if-ambiguous On" # this allows you to automatically show comp
 
 shopt -s checkwinsize
 shopt -s histappend
-shopt -s globstar
+shopt -s globstar 2>/dev/null # Bash 4 and above only
 
-complete -C ~/.rake-completion.rb -o default rake}
-if [ -f ~/.rvm/bin/rvm ] ; then source ~/.rvm/bin/rvm ; fi
+complete -C $DOT_FILES/bash/rake-completion.rb -o default rake}

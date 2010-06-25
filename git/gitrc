@@ -1,6 +1,3 @@
-source ~/.git-completion
-# Dr Nic Compatibility Mode
-
 alias gst='git status'
 alias gl='git pull --rebase'
 alias gp='git push'

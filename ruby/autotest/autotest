@@ -10,9 +10,9 @@ module Autotest::Growl
     unless at.results.empty?
       output = at.results.last.slice(/(\d+)\s.*(?:examples|assertions)?,\s(\d+)\s.*failures?/)
       if output =~ /[1-9]\sfailures?/
-        growl "Tests", "#{output}", "~/.ruby_fail.png", 2, "-s"
+        growl "Tests", "#{output}", "~/.config/ruby/autotest/ruby_fail.png", 2, "-s"
       else
-        growl "Tests", "#{output}", "~/.ruby_ok.png"
+        growl "Tests", "#{output}", "~/.config/ruby/autotest/ruby_ok.png"
       end
     end
   end

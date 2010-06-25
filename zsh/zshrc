@@ -22,3 +22,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/local/mongodb/bin:/usr/local/pgsql/bin:/usr/X11/bin:/opt/local/bin
+
+export DOT_FILES=$HOME/.config
+source $DOT_FILES/zsh/theme
+source $DOT_FILES/bash/common
