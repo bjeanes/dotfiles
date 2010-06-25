@@ -24,15 +24,6 @@
   autosetupmerge = always
   autosetuprebase = local
 [push]
-  default = matching	
+  default = matching
 [diff "ruby"]
   funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
-
-
-[github]
-  user = bjeanes
-  token = df574517df9e5cef449ff0010fdce8b6
-[codebase]
-  username = bjeanes
-  domain = mocra.codebasehq.com
-  apikey = 5f1pkluckqk82ip9if8jomfbfxi38ofbn2keiata
