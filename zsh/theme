@@ -1,17 +1,15 @@
 function prompt_color() {
-  if [ "$(whoami)" = "root" ]; then 
+  if [ "$USER" = "root" ]; then 
     echo "red"
   else
     echo "green"
   fi
 }
 
+# Prompts
 ZSH_THEME_VCS_PROMPT_PREFIX="%{$fg[red]%}‹"
 ZSH_THEME_VCS_PROMPT_SUFFIX="›%{$reset_color%}"
 ZSH_THEME_VCS_PROMPT_FORMAT="${ZSH_THEME_VCS_PROMPT_PREFIX}%b:%h${ZSH_THEME_VCS_PROMPT_SUFFIX}"
 
-# Prompts
-# PS1='%{$fg[green]%}%n@%m:%{$fg_bold[blue]%}%2~ %{$reset_color%}%(!.#.$) '
-
-PS1='%~ %{$fg[$(prompt_color)]%}♪%{$reset_color%} '
+PS1='%{$fg[blue]%}$(prompt_pwd)%{$reset_color%} %{$fg[$(prompt_color)]%}♪%{$reset_color%} '
 RPS1='$(${VCPROMPT} -f ${ZSH_THEME_VCS_PROMPT_FORMAT})'
