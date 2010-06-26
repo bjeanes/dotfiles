@@ -1,28 +1,7 @@
-# Path to your oh-my-zsh configuration.
-export ZSH=$HOME/.oh-my-zsh
-
-# Set to the name theme to load.
-# Look in ~/.oh-my-zsh/themes/
-export ZSH_THEME="risto"
-
-# Set to this to use case-sensitive completion
-# export CASE_SENSITIVE="true"
-
-# Comment this out to disable weekly auto-update checks
-# export DISABLE_AUTO_UPDATE="true"
-
-# Uncomment following line if you want to disable colors in ls
-# export DISABLE_LS_COLORS="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(rails git textmate ruby osx)
-
-source $ZSH/oh-my-zsh.sh
-
-# Customize to your needs...
+export DOT_FILES=$HOME/.config
+export CURRENT_SHELL=`which zsh`
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/local/mongodb/bin:/usr/local/pgsql/bin:/usr/X11/bin:/opt/local/bin
 
-export DOT_FILES=$HOME/.config
+source $DOT_FILES/zsh/oh-my-zsh
 source $DOT_FILES/zsh/theme
 source $DOT_FILES/bash/common

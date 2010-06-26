@@ -1,0 +1,15 @@
+export ZSH=$HOME/.oh-my-zsh
+export ZSH_THEME="risto"
+plugins=(rails git textmate ruby osx)
+
+if [ -d "$ZSH" ]; then
+  source $ZSH/oh-my-zsh.sh
+else
+  echo "Cloning Oh My Zsh..."
+  /usr/bin/env git clone git://github.com/robbyrussell/oh-my-zsh.git "$ZSH"
+  source $ZSH/oh-my-zsh.sh
+fi
+
+
+
+
