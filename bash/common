@@ -1,8 +1,13 @@
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/local/mongodb/bin:/usr/local/pgsql/bin:/usr/X11/bin:/opt/local/bin
+export CDPATH=".:~"
+
 system_name=`uname -s` # Sets 'Darwin' or 'Linux' etc
 
 # Common functionality between Zsh and Bash
 source $DOT_FILES/bash/exports
 source $DOT_FILES/git/gitrc
 source $DOT_FILES/bash/aliases
+
+export VCPROMPT=~/.config/misc/vcprompt.py
 
 if [ -f ~/.rvm/bin/rvm ] ; then source ~/.rvm/bin/rvm ; fi

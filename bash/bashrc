@@ -1,10 +1,14 @@
 export CURRENT_SHELL=`which bash`
 export DOT_FILES=$HOME/.config
 
-source $DOT_FILES/bash/common # All things that are both ZSH and Bash compatible
-source $DOT_FILES/git/git-completion
+# All things that are both ZSH and Bash compatible
+source $DOT_FILES/bash/common
 source $DOT_FILES/bash/save-directory
+source $DOT_FILES/git/git-completion
 
+alias reload="source ~/.bashrc"
+
+export PS1="\w ♪ "
 
 if [ $system_name == 'Darwin' ]; then
   source $DOT_FILES/bash/terminal

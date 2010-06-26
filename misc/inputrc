@@ -1,5 +1,7 @@
-# from http://www.pixelbeat.org/settings/.inputrc
- 
+set meta-flag on
+set input-meta on
+set output-meta on
+set convert-meta off
  
 # By default up/down are bound to previous-history
 # and next-history respectively. The following does the
@@ -12,7 +14,7 @@
 #
 "\e[B": history-search-forward
 "\e[A": history-search-backward
- 
+
 $if Bash
   # F10 toggles mc on and off
   # Note Ctrl-o toggles panes on and off in mc

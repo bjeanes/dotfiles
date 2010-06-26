@@ -1,1 +1,2 @@
+alias reload="source ~/.zshrc"
 setopt extendedglob

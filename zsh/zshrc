@@ -1,8 +1,14 @@
 export DOT_FILES=$HOME/.config
 export CURRENT_SHELL=`which zsh`
-export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/local/mongodb/bin:/usr/local/pgsql/bin:/usr/X11/bin:/opt/local/bin
 
-source $DOT_FILES/zsh/oh-my-zsh
-source $DOT_FILES/zsh/config
-source $DOT_FILES/zsh/theme
+# Include some ZSH-compatible config from bash (such as aliases, etc)
 source $DOT_FILES/bash/common
+
+# Install and load oh-my-zsh
+source $DOT_FILES/zsh/oh-my-zsh
+
+# Extra ZSH configuration
+source $DOT_FILES/zsh/config
+
+# My custom theme
+source $DOT_FILES/zsh/theme

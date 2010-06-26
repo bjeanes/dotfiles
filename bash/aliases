@@ -1,4 +1,4 @@
-alias gem='sudo gem' # sick of always forgetting sudo
+alias gi='sudo gem install'
 alias ls='ls -FG'
 alias ll='ls -lah'
 alias ..='cd ..;' # can then do .. .. .. to move up multiple directories.
@@ -7,9 +7,10 @@ alias g='grep -i'  #case insensitive grep
 alias h='history|g'
 alias ducks='du -cks * | sort -rn|head -11' # Lists the size of all the folders
 alias top='top -o cpu'
-alias m='mate .'
 alias o='open .'
 alias et="m"
+
+alias sprof="reload"
 
 alias home='cd ~' # the tilda is too hard to reach
 alias systail='tail -f -n0 /var/log/system.log'
@@ -19,8 +20,6 @@ alias b='cd -'
 
 alias c='clear' # shortcut to clear your terminal
 
-alias sprof='source ~/.bash_profile'
-
 # useful command to find what you should be aliasing:
 alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
 
@@ -28,9 +27,7 @@ alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' 
 alias log='tail -f -0 ./log/*.log'
 alias ss='ruby ./script/server'
 alias sc='ruby ./script/console'
-alias cdm='cap deploy deploy:migrate'
-alias model='script/generate model'
-alias controller='script/generate controller'
+alias gen='script/generate'
 alias migration='script/generate migration'
 alias migrate='rake db:migrate'
 alias rollback='rake db:rollback'
@@ -45,6 +42,17 @@ alias netstat="sudo lsof -i -P"
 alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 function f() { find * -name $1; }
+function p() {
+  cd $* && m
+}
+function m() {
+  if [ -n "$*" ]; then
+    files=$*
+  else
+    files=.
+  fi
+  mate -l1 $files 2>/dev/null
+}
 
 function extract() {
     if [ -f $1 ] ; then
@@ -78,7 +86,6 @@ if [ $system_name = 'Darwin' ]; then
   }
   alias ls='ls -G'
   alias pubkey='pubkey | pbcopy && echo "Keys copied to clipboard"'
-  alias m='mate .'
   alias et="m"
   alias o='open .'
   alias eprof="mate ~/.config"
