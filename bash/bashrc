@@ -1,26 +1,20 @@
-
+export CURRENT_SHELL=`which bash`
 export DOT_FILES=$HOME/.config
-source $DOT_FILES/bash/common
+
+source $DOT_FILES/bash/common # All things that are both ZSH and Bash compatible
 source $DOT_FILES/git/git-completion
 source $DOT_FILES/bash/save-directory
 
 
 if [ $system_name == 'Darwin' ]; then
-  source $DOT_FILES/ruby/gemdoc
   source $DOT_FILES/bash/terminal
-else
-  if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  else
-    . $DOT_FILES/bash/bash_completion
-  fi
 fi
 
-export PS1=' [`pwd`$(__git_ps1 " \[${COLOR_RED}\](%s)\[${COLOR_NC}\]")]\n$ '
-
-function __pair_status {
-  hitchstatus " %s";
-}
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+else
+  . $DOT_FILES/bash/bash_completion
+fi
 
 # readline settings
 bind "set completion-ignore-case on" 
