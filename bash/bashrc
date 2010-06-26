@@ -12,8 +12,8 @@ fi
 
 if [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
-else
-  . $DOT_FILES/bash/bash_completion
+# else
+  # . $DOT_FILES/bash/bash_completion
 fi
 
 # readline settings
