@@ -2,7 +2,11 @@ function prompt_color() {
   if [ "$USER" = "root" ]; then 
     echo "red"
   else
-    echo "green"
+    if [ -n "$SSH_TTY" ]; then
+      echo "blue"
+    else
+      echo "green"
+    fi
   fi
 }
 
