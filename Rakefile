@@ -14,6 +14,7 @@ task :install do
                    ruby/gemrc
                    ruby/irbrc
                    ruby/rdebugrc
+                   git/gitk
                    git/gitconfig
                    git/gitignore
                    git/gitattributes)
