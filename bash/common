@@ -10,4 +10,4 @@ source $DOT_FILES/bash/aliases
 
 export VCPROMPT=~/.config/misc/vcprompt.py
 
-if [ -f ~/.rvm/bin/rvm ] ; then source ~/.rvm/bin/rvm ; fi
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
