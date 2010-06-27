@@ -12,3 +12,6 @@ source $DOT_FILES/zsh/config
 
 # My custom theme
 source $DOT_FILES/zsh/theme
+
+# RVM
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm

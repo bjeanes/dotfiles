@@ -9,5 +9,3 @@ source $DOT_FILES/git/gitrc
 source $DOT_FILES/bash/aliases
 
 export VCPROMPT=~/.config/misc/vcprompt.py
-
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm

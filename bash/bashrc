@@ -30,3 +30,6 @@ shopt -s histappend
 shopt -s globstar 2>/dev/null # Bash 4 and above only
 
 complete -C $DOT_FILES/bash/rake-completion.rb -o default rake}
+
+# RVM
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
