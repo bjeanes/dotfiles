@@ -27,6 +27,7 @@
 .settings
 .svn
 ._*
+.rake_tasks
 bin/*
 build
 build/*
