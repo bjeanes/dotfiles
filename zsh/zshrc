@@ -13,6 +13,9 @@ source $DOT_FILES/zsh/config
 # Rake completion
 source $DOT_FILES/zsh/completions
 
+# Rake completion
+source $DOT_FILES/zsh/rake_completion
+
 # My custom theme
 source $DOT_FILES/zsh/theme
 
