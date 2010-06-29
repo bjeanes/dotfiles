@@ -13,7 +13,7 @@ zstyle ':completion:*' group-name ''
 
 
 
-
+# Leaving these out until I know what they do or how to change them
 
 # zstyle ':completion:*:options' description 'yes'
 # zstyle ':completion:*:options' auto-description '%d'
