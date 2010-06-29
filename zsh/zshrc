@@ -10,6 +10,9 @@ source $DOT_FILES/zsh/oh-my-zsh
 # Extra ZSH configuration
 source $DOT_FILES/zsh/config
 
+# Rake completion
+source $DOT_FILES/zsh/completions
+
 # My custom theme
 source $DOT_FILES/zsh/theme
 

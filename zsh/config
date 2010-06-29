@@ -29,27 +29,3 @@ setopt recexact                # recognise exact, ambiguous matches
 # for kill-word, etc.
 export WORDCHARS=''
 
-#
-# completion tweaking
-#
-
-# complete hostnames out of ssh's ~/.ssh/known_hosts
-autoload -U compinit; compinit
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' users resolve
-hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*})
-zstyle ':completion:*:hosts' hosts $hosts
-
-# use dircolours in completion listings
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# allow approximate matching
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 1 numeric
-zstyle ':completion:*' auto-description 'Specify: %d'
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' verbose true
-zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns \
-    '*?.(o|c~|zwc)' '*?~'
