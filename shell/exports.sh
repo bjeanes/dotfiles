@@ -1,23 +1,13 @@
-if [ $system_name = 'Darwin' ]; then
-  export EDITOR='mate -w'
-  export PATH="/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/:$PATH"
-  export PATH="/Library/PostgreSQL8/bin/:$PATH"
-  CDPATH="${CDPATH}:${HOME}/Code/Mocra/:${HOME}/Code/Personal:${HOME}/Sites/Mocra/:${HOME}/Sites/Personal/"
-  export GEM_OPEN_EDITOR='mate'
-else  
-  export EDITOR='nano -w'
-fi
-
 export PATH="/usr/local/mysql/bin/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="$PATH:/usr/local/jruby/bin"
 
+export GEM_OPEN_EDITOR=$EDITOR
+export GIT_EDITOR=$EDITOR
+export VISUAL=$EDITOR
 
 export IRBRC="$HOME/.irbrc"
 export JEWELER_OPTS="--rspec --gemcutter --rubyforge --reek --roodi"
-
-export GIT_EDITOR=$EDITOR
-export VISUAL=$EDITOR
 
 export COLOR_NC='\e[0m' # No Color
 export COLOR_WHITE='\e[1;37m'
@@ -41,9 +31,5 @@ export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 
-# sets title of window to be user@host
-export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*} ${PWD}"; echo -ne "\007"'
-
-# export HISTCONTROL=erasedups # I actually want duplicates because of profileme
 export HISTSIZE=1000000
 

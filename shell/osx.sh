@@ -1,3 +1,40 @@
+export EDITOR='mate -w'
+export PATH="/Library/PostgreSQL8/bin/:$PATH"
+CDPATH="${CDPATH}:${HOME}/Code/Mocra/:${HOME}/Code/Personal:${HOME}/Sites/Mocra/:${HOME}/Sites/Personal/"
+
+alias o='open .'
+
+# replacement netstat cmd to find ports used by apps on OS X
+alias netstat="sudo lsof -i -P"
+alias pubkey='pubkey | pbcopy && echo "Keys copied to clipboard"'
+
+
+alias hidefile='/usr/bin/SetFile -a "V"'
+alias showfile='/usr/bin/SetFile -a "v"'
+
+function manpdf() { man -t $@ | open -f -a Preview; }
+function osinfo() { 
+   x1="$(/usr/bin/sw_vers -productName)"
+   x2="$(/usr/bin/sw_vers -productVersion)"
+   x3="$(/usr/bin/sw_vers -buildVersion)"
+   x4="$(/usr/bin/arch)"
+   echo "${x1} - ${x2} - ${x3} - ${x4}"
+}
+
+
+
+function tab() {
+  osascript 2>/dev/null <<EOF
+    tell application "System Events"
+      tell process "Terminal" to keystroke "t" using command down
+    end
+    tell application "Terminal"
+      activate
+      do script with command "cd \"$PWD\"; $*" in window 1
+    end tell
+EOF
+}
+
 # Minimise terminal window to Dock
 function mintw() { printf "\e[2t"; return 0; }
 

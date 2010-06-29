@@ -1,18 +1,16 @@
 alias gi='sudo gem install'
-alias ls='ls -FG'
 alias ll='ls -lah'
 alias ..='cd ..;' # can then do .. .. .. to move up multiple directories.
 alias ...='.. ..'
 alias g='grep -i'  #case insensitive grep
 alias h='history|g'
-alias ducks='du -cks * | sort -rn|head -11' # Lists the size of all the folders
+alias ducks='du -cks * | sort -rn |head -11' # Lists the size of all the folders
 alias top='top -o cpu'
-alias o='open .'
-alias et="m"
+alias et="$EDITOR ."
 
 alias sprof="reload"
 
-alias home='cd ~' # the tilda is too hard to reach
+alias home="cd $HOME" # the tilde is too hard to reach
 alias systail='tail -f -n0 /var/log/system.log'
 alias aptail='tail -f -n0 /var/log/apache*/*log'
 alias l='ls'
@@ -34,11 +32,7 @@ alias rollback='rake db:rollback'
 alias r='rake'
 alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"'
 
-alias pubkey='cat ~/.ssh/*.pub'
-
-# replacement netstat cmd to find ports used by apps on OS X
-alias netstat="sudo lsof -i -P"
-
+alias pubkey="cat $HOME/.ssh/*.pub"
 alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 function f() { find * -name $1; }
@@ -75,7 +69,7 @@ function extract() {
     fi
 }
 
-if [ `uname` = "Darwin" ]; then
+if [ `uname -s` = "Darwin" ]; then
   function prompt_pwd() {
     if [ "$PWD" != "$HOME" ]; then
       printf "%s" `echo $PWD|sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g'`
@@ -96,28 +90,4 @@ else # defined two for diff systems because Fish did (not entirely sure why)
         ;;
     esac
   }
-fi
-
-
-
-if [ $system_name = 'Darwin' ]; then
-  function manpdf() { man -t $@ | open -f -a Preview; }
-  function osinfo() { 
-     x1="$(/usr/bin/sw_vers -productName)"
-     x2="$(/usr/bin/sw_vers -productVersion)"
-     x3="$(/usr/bin/sw_vers -buildVersion)"
-     x4="$(/usr/bin/arch)"
-     echo "${x1} - ${x2} - ${x3} - ${x4}"
-  }
-  alias ls='ls -G'
-  alias pubkey='pubkey | pbcopy && echo "Keys copied to clipboard"'
-  alias et="m"
-  alias o='open .'
-  alias eprof="mate ~/.config"
-  alias hidefile='/usr/bin/SetFile -a "V"'
-  alias showfile='/usr/bin/SetFile -a "v"'
-  alias startpg='sudo /Library/StartupItems/PostgreSQL/PostgreSQL start'
-  alias readrails="mate `ruby -rubygems -e "puts( ['rails', 'activerecord', 'activeresource', 'actionpack', 'activesupport'].collect { |gem| gems = Gem.source_index.find_name(gem); gems.last.full_gem_path; }.join(' '))"`"
-else
-  alias ls='ls --color=auto'
 fi

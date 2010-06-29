@@ -2,7 +2,7 @@
 :benchmark: false
 :verbose: true
 :update_sources: true
-gem: --no-ri
+gem: --no-ri --no-rdoc
 :sources: 
 - http://gemcutter.org
 :backtrace: false
