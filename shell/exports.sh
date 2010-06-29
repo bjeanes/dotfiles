@@ -2,9 +2,10 @@ export PATH="/usr/local/mysql/bin/:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export PATH="$PATH:/usr/local/jruby/bin"
 
-export GEM_OPEN_EDITOR=$EDITOR
-export GIT_EDITOR=$EDITOR
-export VISUAL=$EDITOR
+# Use single quotes here to lazy evaluate the $EDITOR variable
+export GEM_OPEN_EDITOR='$EDITOR'
+export GIT_EDITOR='$EDITOR'
+export VISUAL='$EDITOR'
 
 export IRBRC="$HOME/.irbrc"
 export JEWELER_OPTS="--rspec --gemcutter --rubyforge --reek --roodi"
