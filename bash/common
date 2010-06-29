@@ -1,5 +1,5 @@
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/local/mongodb/bin:/usr/local/pgsql/bin:/usr/X11/bin:/opt/local/bin
-export CDPATH=".:~"
+export CDPATH=".:${HOME}"
 
 system_name=`uname -s` # Sets 'Darwin' or 'Linux' etc
 
