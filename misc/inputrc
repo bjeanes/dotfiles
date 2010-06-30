@@ -15,6 +15,10 @@ set convert-meta off
 "\e[B": history-search-forward
 "\e[A": history-search-backward
 
+# Option right/left to jump word
+"\e\e[C": forward-word
+"\e\e[D": backward-word
+
 $if Bash
   # F10 toggles mc on and off
   # Note Ctrl-o toggles panes on and off in mc
