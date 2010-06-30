@@ -9,6 +9,7 @@ shopt -s checkwinsize
 shopt -s histappend
 shopt -s cdable_vars
 shopt -s globstar 2>/dev/null # Bash 4 and above only
+shopt -s nullglob
 
 complete -C $DOT_FILES/bash/rake-completion.rb -o default rake}
 
