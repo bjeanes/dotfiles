@@ -1,4 +1,4 @@
-export CURRENT_SHELL=`which bash`
+export CURRENT_SHELL="bash"
 export DOT_FILES=$HOME/.config
 
 # All things that are both ZSH and Bash compatible
