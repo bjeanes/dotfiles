@@ -9,9 +9,14 @@ zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m'
 zstyle ':completion::complete:cd:' tag-order local-directories path-directories
 zstyle ':completion:*' group-name ''
 
+# Don't auto-complete internal functions (ones prefixed with _)
+zstyle ':completion:*:functions' ignored-patterns '_*'
 
+# Verbose completions
+zstyle ':completion:*' verbose yes
 
-
+# Use menu ()
+zstyle ':completion:*' menu select
 
 # Leaving these out until I know what they do or how to change them
 
@@ -33,8 +38,5 @@ zstyle ':completion:*' group-name ''
 # zstyle ':completion:*' completer _complete _match _approximate
 # zstyle ':completion:*:match:*' original only
 # zstyle ':completion:*:approximate:*' max-errors 1 numeric
-# zstyle ':completion:*' auto-description 'Specify: %d'
-# zstyle ':completion:*' verbose true
-# zstyle ':completion:*:functions' ignored-patterns '_*'
 # zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns \
 #     '*?.(o|c~|zwc)' '*?~'
