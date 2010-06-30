@@ -5,6 +5,7 @@
 * Make `rake install` set up a loop that will always try to `git pull` the dot-files (if working directory is clean) so they are always up to date
 * Remove 'export' from variables that don't need them
 * Make current directory red in prompt if non-writeable (ala fish)
+* use `~/.rvm/bin/rvm-prompt s i v p g` to put the current ruby into (R)PS1
 
 Copyright (c) 2008-2010 Bodaniel Jeanes
  
