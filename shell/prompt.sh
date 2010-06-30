@@ -76,5 +76,5 @@ function prompt_vcs_if_bash() {
   fi
 }
 
-RPS1='$(${VCPROMPT} -f $(color red)‹%b:%h›$(color reset))'
+RPS1='$(${HOME}/.config/misc/vcprompt.py -f $(color red)‹%b:%h›$(color reset))'
 PS1="\$(color blue)\$(prompt_pwd)\$(prompt_vcs_if_bash) \$(color \$(prompt_color))\$(prompt_char)\$(color reset) "
