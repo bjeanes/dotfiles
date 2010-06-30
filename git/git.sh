@@ -2,7 +2,6 @@ alias gst='git status'
 alias gl='git pull --rebase'
 alias gp='git push'
 alias gpa='git push-all' # see [alias] in ~/.gitconfig
-alias gd='git diff | mate'
 alias ga='git add'
 alias gcl='git config --list'
 alias gc='git commit -v'
@@ -13,6 +12,10 @@ alias gba='git branch -a'
 alias gco='git checkout'
 alias gdc='git-svn dcommit'
 alias gk='gitk --all &'
+
+function gd() {
+  git diff $* | mate
+}
 
 alias gpatch='git diff master -p'
 # alias up='sake git:update' - need to priorities origin vs git-svn
