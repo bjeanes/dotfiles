@@ -1,5 +1,5 @@
 export CURRENT_SHELL="bash"
-export DOT_FILES=$HOME/.config
+export DOT_FILES=$(dirname $(dirname $(readlink $BASH_SOURCE)))
 
 # All things that are both ZSH and Bash compatible
 source $DOT_FILES/shell/common.sh

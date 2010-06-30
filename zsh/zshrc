@@ -1,5 +1,5 @@
 export CURRENT_SHELL="zsh"
-export DOT_FILES=$HOME/.config
+export DOT_FILES=$(dirname $(dirname $(readlink $HOME/.zshrc)))
 
 # Install and load oh-my-zsh
 source $DOT_FILES/zsh/oh-my-zsh.zsh
