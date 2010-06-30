@@ -1,4 +1,4 @@
-export EDITOR='mate -w'
+export EDITOR='mate -wl1'
 export PATH="/Library/PostgreSQL8/bin/:$PATH"
 CDPATH="${CDPATH}:${HOME}/Code/Mocra/:${HOME}/Code/Personal:${HOME}/Sites/Mocra/:${HOME}/Sites/Personal/"
 
