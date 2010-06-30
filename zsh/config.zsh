@@ -1,7 +1,8 @@
 alias reload="source ~/.zshrc"
 
-bindkey "\e\e[C" forward-word
-bindkey "\e\e[D" backward-word
+# Option-Left + Option-Right for moving word-by-word in OS X
+bindkey "\e\e[C" vi-forward-word
+bindkey "\e\e[D" vi-backward-word
 
 # http://www.scannedinavian.com/~shae/shae.zshrc
 # These are options I've copied but yet to totally investigate if it's what I want
