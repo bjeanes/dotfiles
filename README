@@ -3,6 +3,7 @@
 * Make ZSH/Bash PATH dynamically figured out (via globbing) like fish
 * Make `rake install` install a .git pre-commit hook to remind about or automatically remove all API keys from dot files (gitconfig, etc)
 * Make `rake install` set up a loop that will always try to `git pull` the dot-files (if working directory is clean) so they are always up to date
+* Remove 'export' from variables that don't need them
 
 Copyright (c) 2008-2010 Bodaniel Jeanes
  
