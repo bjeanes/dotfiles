@@ -30,6 +30,7 @@ setopt nohup                   # and don't kill BG jobs when shell exits
 setopt extendedglob            # awesome pattern matching (ala Dir.glob() in Ruby)
 setopt promptcr                # ensure a new line before prompt is drawn
 setopt listtypes               # show types in completion
+setopt nocompletealiases       # Allows alias 'ga' to use 'git add' completions (for example)
 
 # jump to each element in a path with m-f m-b, same
 # for kill-word, etc.
