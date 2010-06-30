@@ -25,7 +25,6 @@ zstyle ':completion:*' group-name ''
 # zstyle ':completion:*' users resolve
 # hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*})
 # zstyle ':completion:*:hosts' hosts $hosts
-# zstyle ':completion::complete:cd:' tag-order local-directories path-directories
 
 # # use dircolours in completion listings
 # zstyle ':completion:*' list-colors ${(s.:.)LSCOLORS}
