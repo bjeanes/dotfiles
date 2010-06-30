@@ -6,8 +6,7 @@ alias o='open .'
 
 # replacement netstat cmd to find ports used by apps on OS X
 alias netstat="sudo lsof -i -P"
-alias pubkey='pubkey | pbcopy && echo "Keys copied to clipboard"'
-
+alias pubkey="cat $HOME/.ssh/*.pub | pbcopy && echo 'Keys copied to clipboard'"
 
 alias hidefile='/usr/bin/SetFile -a "V"'
 alias showfile='/usr/bin/SetFile -a "v"'
@@ -20,8 +19,6 @@ function osinfo() {
    x4="$(/usr/bin/arch)"
    echo "${x1} - ${x2} - ${x3} - ${x4}"
 }
-
-
 
 function tab() {
   osascript 2>/dev/null <<EOF

@@ -1,16 +1,4 @@
-alias reload="source ~/.bashrc"
-
-export PS1="\w ♪ "
-
-if [ $system_name == 'Darwin' ]; then
-  source $DOT_FILES/bash/terminal
-fi
-
-if [ -f /etc/bash_completion ]; then
-  . /etc/bash_completion
-# else
-  # . $DOT_FILES/bash/bash_completion
-fi
+[[ -f /etc/bash_completion ]] && source /etc/bash_completion
 
 # readline settings
 bind "set completion-ignore-case on" 
@@ -23,3 +11,5 @@ shopt -s cdable_vars
 shopt -s globstar 2>/dev/null # Bash 4 and above only
 
 complete -C $DOT_FILES/bash/rake-completion.rb -o default rake}
+
+alias reload="source ~/.bashrc"

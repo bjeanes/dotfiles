@@ -1,23 +1,17 @@
-export CURRENT_SHELL=`which zsh`
+export CURRENT_SHELL="zsh"
 export DOT_FILES=$HOME/.config
-
-# Common functionality between Zsh and Bash
-source $DOT_FILES/shell/common.sh
 
 # Install and load oh-my-zsh
 source $DOT_FILES/zsh/oh-my-zsh.zsh
 
-# Extra ZSH configuration
-source $DOT_FILES/zsh/config.zsh
+# Common functionality between Zsh and Bash
+source $DOT_FILES/shell/common.sh
 
 # Rake completion
 source $DOT_FILES/zsh/completions.zsh
 
 # Rake completion
 source $DOT_FILES/zsh/rake_completion.zsh
-
-# My custom theme
-source $DOT_FILES/zsh/theme.zsh
 
 # RVM
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm

@@ -68,26 +68,3 @@ function extract() {
         echo "'$1' is not a valid file"
     fi
 }
-
-if [ `uname -s` = "Darwin" ]; then
-  function prompt_pwd() {
-    if [ "$PWD" != "$HOME" ]; then
-      printf "%s" `echo $PWD|sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g'`
-      echo $PWD|sed -e 's-.*/\.\{0,1\}[^/]\([^/]*$\)-\1-'
-    else
-      echo '~'
-    fi
-  }
-else # defined two for diff systems because Fish did (not entirely sure why)
-  function prompt_pwd() {
-    case "$PWD" in
-      $HOME)
-        echo '~'
-        ;;
-      *)
-        printf "%s" `echo $PWD|sed -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g'`
-        echo $PWD|sed -n -e 's-.*/\.\{0,1\}.\([^/]*\)-\1-p'
-        ;;
-    esac
-  }
-fi
