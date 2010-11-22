@@ -20,12 +20,19 @@ function p() {
   cd $* && m
 }
 function m() {
+  file=.
+  cd_to=.
+
   if [ -n "$*" ]; then
-    files=$*
-  else
-    files=.
+    if [ -d "$1" ]; then
+      cd_to=$1
+      file=.
+    else
+      file=$*
+    fi
   fi
-  mate -l1 $files 2>/dev/null
+
+  bash -l -c "cd $cd_to && $VISUAL $file"
 }
 
 function extract() {
