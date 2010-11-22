@@ -1,54 +1,7 @@
-require 'pp'
-require 'rubygems'
-
 begin
-  require 'wirble'
-  Wirble.init(:history_size => 10000)
-  Wirble.colorize
-
-
-  # Wirble::Colorize.colors = {
-  #   # delimiter colors
-  #   :comma              => :white,
-  #   :refers             => :white,
-  # 
-  #   # container colors (hash and array)
-  #   :open_hash          => :white,
-  #   :close_hash         => :white,
-  #   :open_array         => :white,
-  #   :close_array        => :white,
-  # 
-  #   # object colors
-  #   :open_object        => :light_red,
-  #   :object_class       => :red,
-  #   :object_addr_prefix => :blue,
-  #   :object_line_prefix => :blue,
-  #   :close_object       => :light_red,
-  # 
-  #   # symbol colors
-  #   :symbol             => :blue,
-  #   :symbol_prefix      => :blue,
-  # 
-  #   # string colors
-  #   :open_string        => :light_green,
-  #   :string             => :light_green,
-  #   :close_string       => :light_green,
-  # 
-  #   # misc colors
-  #   :number             => :light_blue,
-  #   :keyword            => :orange,
-  #   :class              => :red,
-  #   :range              => :light_blue,
-  # }
+  require 'irbtools'
 rescue LoadError
-  puts "please run: `sudo gem install wirble`"
-end
-
-begin
-  require 'hirb'
-  Hirb.enable
-rescue LoadError
-  puts "please run: `sudo gem install cldwalker-hirb --source http://gems.github.com`"
+  $stderr.puts "Please install 'irbtools' or add it to your Gemfile"
 end
 
 class Object
@@ -61,7 +14,7 @@ class Object
 end
 
 # Log to STDOUT if in Rails
-if ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')
+if Object.const_defined?('ActiveRecord')
   require 'logger'
-  RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
 end
