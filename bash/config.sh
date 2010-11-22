@@ -7,7 +7,6 @@ bind "set show-all-if-ambiguous On" # this allows you to automatically show comp
 bind '"\e\e[C": forward-word'
 bind '"\e\e[D": backward-word'
 
-
 shopt -s checkwinsize histappend cdable_vars extglob nullglob cdspell cmdhist hostcomplete
 
 # Bash 4 and above only
