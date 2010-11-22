@@ -17,13 +17,15 @@ task :install do
                    git/gitk
                    git/gitconfig
                    git/gitignore
-                   git/gitattributes)
-  
-  files.each do |file|   
+                   git/gitattributes
+                   vim/gvimrc.local
+                   vim/vimrc.local)
+
+  files.each do |file|
     file_name        = file.split(/\//).last
     source_file      = File.join(dot_files, file)
     destination_file = File.join(ENV['HOME'], ".#{file_name}")
-    
+
     if File.exist?(destination_file) || File.symlink?(destination_file)
       if replace_all
         replace_file(destination_file, source_file)
