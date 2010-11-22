@@ -24,6 +24,6 @@
   autosetupmerge = always
   autosetuprebase = local
 [push]
-  default = matching
+  default = tracking
 [diff "ruby"]
   funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
