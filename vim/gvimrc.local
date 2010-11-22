@@ -1,1 +1,4 @@
 color railscasts2
+set shell=/bin/sh
+set transparency=4
+
