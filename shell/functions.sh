@@ -30,7 +30,7 @@ function m() {
     fi
   fi
 
-  bash -l -c "cd $cd_to && $VISUAL $file"
+  eval "cd $cd_to && $VISUAL $file"
 }
 
 function extract() {
