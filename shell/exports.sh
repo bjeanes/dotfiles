@@ -1,12 +1,18 @@
-export PATH="/usr/local/mysql/bin/:$PATH"
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-export PATH="$PATH:/usr/local/jruby/bin"
+if $(which mate); then
+  EDITOR="mate -wl1"
+elif $(which nano); then
+  EDITOR="nano -w"
+elif $(which mvim); then
+  EDITOR="mvim"
+elif $(which gvim); then
+  EDITOR="gvim"
+else
+  EDITOR="vim"
+fi
 
-# Use single quotes here to lazy evaluate the $EDITOR variable (as it changes later if on OS X)
-export EDITOR='nano -w'
-export GEM_OPEN_EDITOR='$EDITOR'
-export GIT_EDITOR='$EDITOR'
-export VISUAL='$EDITOR'
+export GEM_OPEN_EDITOR=$EDITOR
+export GIT_EDITOR=$EDITOR
+export VISUAL=$EDITOR
 
 export IRBRC="$HOME/.irbrc"
 export JEWELER_OPTS="--rspec --gemcutter --rubyforge --reek --roodi"

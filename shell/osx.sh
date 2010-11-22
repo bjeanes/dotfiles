@@ -1,9 +1,4 @@
-export EDITOR='mate -wl1'
-export VISUAL=$EDITOR
-export GIT_EDITOR=$EDITOR
-
-export PATH="/Library/PostgreSQL8/bin/:$PATH"
-CDPATH="${CDPATH}:${HOME}/Code/Mocra/:${HOME}/Code/Personal:${HOME}/Sites/Mocra:${HOME}/Sites/Personal:${HOME}/Sites/Client/"
+CDPATH="${CDPATH}:${HOME}/Code/Mocra/:${HOME}/Code/Personal:${HOME}/Code/:${HOME}/Code/Open Source:${HOME}/Sites/Mocra:${HOME}/Sites/Personal:${HOME}/Sites/Client/"
 
 alias o='open .'
 

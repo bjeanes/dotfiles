@@ -9,7 +9,7 @@ alias top='top -o cpu'
 alias et="$EDITOR ."
 
 alias sprof="reload"
-alias eprof="$EDITOR $HOME/.config"
+alias eprof="m $HOME/.config"
 
 alias home="cd $HOME" # the tilde is too hard to reach
 alias systail='tail -fn0 /var/log/system.log'
