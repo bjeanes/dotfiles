@@ -1,1 +1,4 @@
 set guioptions=aAce
+set t_Co=256
+colorscheme jellybeans+
+set mouse=a
