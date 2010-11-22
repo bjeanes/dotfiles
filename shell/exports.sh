@@ -1,10 +1,10 @@
-if $(which mate); then
+if $(which mate > /dev/null); then
   EDITOR="mate -wl1"
-elif $(which nano); then
+elif $(which nano > /dev/null); then
   EDITOR="nano -w"
-elif $(which mvim); then
+elif $(which mvim > /dev/null); then
   EDITOR="mvim"
-elif $(which gvim); then
+elif $(which gvim > /dev/null); then
   EDITOR="gvim"
 else
   EDITOR="vim"
@@ -17,7 +17,7 @@ export VISUAL=$EDITOR
 export IRBRC="$HOME/.irbrc"
 export JEWELER_OPTS="--rspec --gemcutter --rubyforge --reek --roodi"
 
-export TERM=xterm-color
+export TERM=xterm-256color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 
