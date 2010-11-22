@@ -1,3 +1,20 @@
+function GET() {
+  curl -i -X GET -H "X-Requested-With: XMLHttpRequest" $*
+}
+
+function POST() {
+  curl -i -X POST -H "X-Requested-With: XMLHttpRequest" $*
+  #-d "key=val"
+}
+
+function PUT() {
+  curl -i -X PUT -H "X-Requested-With: XMLHttpRequest" $*
+}
+
+function DELETE() {
+  curl -i -X DELETE -H "X-Requested-With: XMLHttpRequest" $*
+}
+
 function f() { find * -name $1; }
 function p() {
   cd $* && m

@@ -46,7 +46,7 @@ function color {
   if [ $CURRENT_SHELL = 'zsh' ]; then
     echo "%{$chosen%}"
   else
-    printf "$chosen"
+    printf $chosen®
   fi
 }
 

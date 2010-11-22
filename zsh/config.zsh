@@ -4,13 +4,29 @@ alias reload="source ~/.zshrc"
 bindkey "\e\e[C" vi-forward-word
 bindkey "\e\e[D" vi-backward-word
 
+# # forward/back directories with Option+Up/Down
+# function back-dir {
+#   cd -1 >/dev/null
+#   echo
+# }
+# 
+# function fwd-dir {
+#   cd +1 >/dev/null
+#   echo
+# }
+# 
+# zle -N back-dir back-dir
+# zle -N fwd-dir fwd-dir
+# 
+# bindkey "\e\e[A" back-dir
+# bindkey "\e\e[B" fwd-dir
+
 # http://www.scannedinavian.com/~shae/shae.zshrc
 # These are options I've copied but yet to totally investigate if it's what I want
 setopt alwaystoend             # when complete from middle, move cursor
 setopt completeinword          # not just at the end
 setopt correct                 # spelling correction
 setopt histverify              # when using ! cmds, confirm first
-setopt interactivecomments     # escape commands so i can use them later
 setopt listpacked              # compact completion lists
 setopt noautomenu              # don't cycle completions
 setopt pushdignoredups         # and don't duplicate them
@@ -32,8 +48,10 @@ setopt extendedglob            # awesome pattern matching (ala Dir.glob() in Rub
 setopt promptcr                # ensure a new line before prompt is drawn
 setopt listtypes               # show types in completion
 setopt nocompletealiases       # Allows alias 'ga' to use 'git add' completions (for example)
+setopt interactivecomments     # escape commands so i can use them later
+
 
 # jump to each element in a path with m-f m-b, same
 # for kill-word, etc.
-export WORDCHARS=''
+WORDCHARS=''
 
