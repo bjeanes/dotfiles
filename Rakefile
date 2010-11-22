@@ -1,5 +1,5 @@
 require 'rake'
- 
+
 desc "install the dot files into user's home directory"
 task :install do
   replace_all = false
@@ -48,12 +48,12 @@ task :install do
     end
   end
 end
- 
+
 def replace_file(old_file, new_file)
   system %Q{rm "#{old_file}"}
   link_file(old_file, new_file)
 end
- 
+
 def link_file(old_file, new_file)
   puts "#{old_file} => #{new_file}"
   system %Q{ln -fs "#{new_file}" "#{old_file}"}
