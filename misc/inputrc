@@ -14,6 +14,7 @@ set convert-meta off
 #
 "\e[B": history-search-forward
 "\e[A": history-search-backward
+"\ep": history-search-backward
 
 # Option right/left to jump word
 "\e\e[C": forward-word
