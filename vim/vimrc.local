@@ -2,3 +2,46 @@ set guioptions=aAce
 set t_Co=256
 colorscheme jellybeans+
 set mouse=a
+
+" Window manipulation
+map tt               <C-w>
+map <C-w><Backspace> <C-w><Left> | " This and the below are also useful for colemak
+map <C-w><Space>     <C-w><Right>
+
+" Surrounds shortcuts for visual selections
+vmap " s"
+vmap ' s'
+vmap ( s)
+vmap [ s]
+vmap { s}
+vmap < s>
+
+" Pressing backspace with selection does something weird
+" thanks to above surrounds shortcuts so let's be specific
+" here:
+vmap <Backspace> xi
+
+" Colemak
+"
+" * Switch 'h' and 'n' (so 'up' is on top of 'down').
+" * Use <Space> and <Backspace> for <Right> and <Left>, instead (and disable 'j'
+"   and 'l' which are where 'y' and 'u' are in in QWERTY)
+nmap h <Up>
+nmap k <Down>
+nmap j <nop>
+nmap l <nop>
+
+" Quick save
+nmap <Leader>w :w!<CR>
+
+" Nicer split controls
+"map <C-_>  normal :split<CR>
+"map <C-\|> normal :vsplit<CR>
+
+imap ii <Esc>     | " 'i' for insert mode and 'ii' to get out of it!
+
+map nn <Leader>   | " This will probably have to be remapped (because nn is a fairly common combo)
+imap nn <Leader>  |
+
+map <Esc> <nop>   |
+imap <Esc> <nop>  |
