@@ -10,9 +10,9 @@ else
   EDITOR="vim"
 fi
 
-export GEM_OPEN_EDITOR=$EDITOR
-export GIT_EDITOR=$EDITOR
-export VISUAL=$EDITOR
+export VISUAL="$EDITOR"
+export GEM_OPEN_EDITOR="$EDITOR"
+export GIT_EDITOR=`which vim` # http://is.gd/hGrsF
 
 export IRBRC="$HOME/.irbrc"
 export JEWELER_OPTS="--rspec --gemcutter --rubyforge --reek --roodi"
