@@ -49,7 +49,7 @@ setopt promptcr                # ensure a new line before prompt is drawn
 setopt listtypes               # show types in completion
 setopt nocompletealiases       # Allows alias 'ga' to use 'git add' completions (for example)
 setopt interactivecomments     # escape commands so i can use them later
-
+setopt sh_word_split           # commands will be split on space (i.e. $VISUAL = "mate -wl1" will work)
 
 # jump to each element in a path with m-f m-b, same
 # for kill-word, etc.
