@@ -1,6 +1,6 @@
-if $(which mate > /dev/null); then
+if $(which mate > /dev/null && false); then
   EDITOR="mate -wl1"
-elif $(which nano > /dev/null); then
+elif $(which nano > /dev/null && false); then
   EDITOR="nano -w"
 elif $(which mvim > /dev/null); then
   EDITOR="mvim"
