@@ -51,4 +51,5 @@ cnoremap <C-A>      <Home>
 cnoremap <C-E>      <End>
 cnoremap <C-K>      <C-U>
 
+set wildignore+=Transmission*Remote*GUI
 
