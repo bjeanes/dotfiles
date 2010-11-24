@@ -45,3 +45,10 @@ imap nn <Leader>  |
 
 map <Esc> <nop>   |
 imap <Esc> <nop>  |
+
+" Emacs-like keys for the command line
+cnoremap <C-A>      <Home>
+cnoremap <C-E>      <End>
+cnoremap <C-K>      <C-U>
+
+
