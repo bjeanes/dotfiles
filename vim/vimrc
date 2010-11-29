@@ -1,6 +1,18 @@
+" Pathogen setup
+filetype off
+call pathogen#runtime_append_all_bundles()
+filetype plugin indent on
+
+syntax on
+colorscheme railscasts
+
+set tabstop=2
+set shiftwidth=2
+set autoindent
+set smarttab
+set expandtab
+
 set guioptions=aAce
-set t_Co=256
-colorscheme jellybeans+
 set mouse=a
 
 " Window manipulation
