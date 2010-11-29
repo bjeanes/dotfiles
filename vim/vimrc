@@ -1,9 +1,14 @@
 " Pathogen setup
-filetype off
-call pathogen#runtime_append_all_bundles()
-filetype plugin indent on
+runtime! autoload/pathogen.vim
+if exists('g:loaded_pathogen')
+  filetype off
+
+  call pathogen#runtime_append_all_bundles(expand("~/.vim/bundle"))
+  call pathogen#helptags()
+endif
 
 syntax on
+filetype plugin indent on
 colorscheme railscasts
 
 set tabstop=2
@@ -53,4 +58,8 @@ cnoremap <C-K>      <C-U>
 set wildignore+=Transmission*Remote*GUI
 
 let g:ragtag_global_maps = 1 
+
+if filereadable(expand('~/.vimrc.local'))
+  source ~/.vimrc.local
+endif
 
