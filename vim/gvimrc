@@ -1,11 +1,11 @@
 color railscasts2
 set shell=/bin/sh
-set transparency=4
-
-if has("gui_macvim")
-  macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
-endif
 
 " Mac OS X style command line editing
 cnoremap <A-Backspace> <C-W>
 cnoremap <D-Backspace> <C-U>
+
+if has("gui_macvim")
+  " macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
+  set transparency=12
+endif

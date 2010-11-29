@@ -18,8 +18,9 @@ task :install do
                    git/gitconfig
                    git/gitignore
                    git/gitattributes
-                   vim/gvimrc.local
-                   vim/vimrc.local)
+                   vim
+                   vim/gvimrc
+                   vim/vimrc)
 
   files.each do |file|
     file_name        = file.split(/\//).last
