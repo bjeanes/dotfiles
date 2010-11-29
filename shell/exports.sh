@@ -12,7 +12,7 @@ fi
 
 export VISUAL="$EDITOR"
 export GEM_OPEN_EDITOR="$EDITOR"
-export GIT_EDITOR=`which vim` # http://is.gd/hGrsF
+export GIT_EDITOR="$(which mvim || which vim) -f" # http://is.gd/hGrsF
 
 export IRBRC="$HOME/.irbrc"
 export JEWELER_OPTS="--rspec --gemcutter --rubyforge --reek --roodi"
