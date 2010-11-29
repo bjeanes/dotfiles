@@ -52,3 +52,5 @@ cnoremap <C-K>      <C-U>
 
 set wildignore+=Transmission*Remote*GUI
 
+let g:ragtag_global_maps = 1 
+
