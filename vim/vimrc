@@ -1,9 +1,11 @@
+set nocompatible
+
 " Pathogen setup
 runtime! autoload/pathogen.vim
 if exists('g:loaded_pathogen')
   filetype off
 
-  call pathogen#runtime_append_all_bundles(expand("~/.vim/bundle"))
+  call pathogen#runtime_append_all_bundles()
   call pathogen#helptags()
 endif
 
