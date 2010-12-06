@@ -9,18 +9,75 @@ if exists('g:loaded_pathogen')
   call pathogen#helptags()
 endif
 
+" Syntax
 syntax on
 filetype plugin indent on
+match ErrorMsg '\%>80v.\+'
+
+
+" UI
+set number
+set ruler
+set guioptions=aAce
+set mouse=a
 colorscheme railscasts
 
+" Tabs/Whitespace
 set tabstop=2
 set shiftwidth=2
 set autoindent
 set smarttab
 set expandtab
+set nowrap
+set list listchars=tab:\ \ ,trail:·
 
-set guioptions=aAce
-set mouse=a
+" Searching
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" Tab completion
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc
+
+" Status bar
+set laststatus=2
+
+" CTags
+map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
+
+" Remember last location in file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal g'\"" | endif
+endif
+
+function s:setupWrapping()
+  set wrap
+  set wm=2
+  set textwidth=72
+endfunction
+
+function s:setupMarkup()
+  call s:setupWrapping()
+  map <buffer> <Leader>p :Mm <CR>
+endfunction
+
+" make and python use real tabs
+au FileType make                                     set noexpandtab
+au FileType python                                   set noexpandtab
+
+" Thorfile, Rakefile and Gemfile are Ruby
+au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
+
+" md, markdown, and mk are markdown and define buffer-local preview
+au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
+
+au BufRead,BufNewFile *.txt call s:setupWrapping()
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
 
 " Window manipulation
 "map tt               <C-w>

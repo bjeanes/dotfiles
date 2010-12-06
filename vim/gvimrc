@@ -1,10 +1,19 @@
 set shell=/bin/sh
 
-" Mac OS X style command line editing
-cnoremap <A-Backspace> <C-W>
-cnoremap <D-Backspace> <C-U>
+" hide toolbar
+set guioptions-=T
+
 
 if has("gui_macvim")
   " macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
+
   set transparency=12
+
+  " Fullscreen takes up entire screen
+  set fuoptions=maxhorz,maxvert
+
+  " Mac OS X style command line editing
+  cnoremap <A-Backspace> <C-W>
+  cnoremap <D-Backspace> <C-U>
+
 endif
