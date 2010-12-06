@@ -4,9 +4,6 @@
 [submodule "vim/bundle/NERDCommenter"]
 	path = vim/bundle/NERDCommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
-[submodule "vim/bundle/NERDTree"]
-	path = vim/bundle/NERDTree
-	url = https://github.com/scrooloose/nerdcommenter.git
 [submodule "vim/bundle/repeat"]
 	path = vim/bundle/repeat
 	url = https://github.com/tpope/vim-repeat.git
@@ -52,3 +49,6 @@
 [submodule "vim/bundle/snipmate"]
 	path = vim/bundle/snipmate
 	url = https://github.com/msanders/snipmate.vim.git
+[submodule "vim/bundle/nerdtree"]
+	path = vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
