@@ -46,3 +46,4 @@ test-output
 Thumbs.db
 tmp*
 tmp/**/*
+doc/tags
