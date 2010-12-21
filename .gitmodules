@@ -55,3 +55,24 @@
 [submodule "vim/bundle/command-t"]
 	path = vim/bundle/command-t
 	url = git://git.wincent.com/command-t.git
+[submodule "vim/bundle/Conque-Shell"]
+	path = vim/bundle/Conque-Shell
+	url = https://github.com/vim-scripts/Conque-Shell.git
+[submodule "vim/bundle/align"]
+	path = vim/bundle/align
+	url = git://github.com/tsaleh/vim-align.git
+[submodule "vim/bundle/markdown-preview"]
+	path = vim/bundle/markdown-preview
+	url = git://github.com/robgleeson/vim-markdown-preview.git
+[submodule "vim/bundle/supertab"]
+	path = vim/bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "vim/bundle/javascript"]
+	path = vim/bundle/javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "vim/bundle/indent-object"]
+	path = vim/bundle/indent-object
+	url = https://github.com/michaeljsmith/vim-indent-object.git
+[submodule "vim/bundle/taglist"]
+	path = vim/bundle/taglist
+	url = https://github.com/vim-scripts/taglist.vim.git
