@@ -1,8 +1,5 @@
-set shell=/bin/sh
-
 " hide toolbar
 set guioptions-=T
-
 
 if has("gui_macvim")
   " macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
@@ -16,4 +13,8 @@ if has("gui_macvim")
   cnoremap <A-Backspace> <C-W>
   cnoremap <D-Backspace> <C-U>
 
+  " Command-/ to toggle comments
+  map <D-/> <plug>NERDCommenterToggle<CR>
+
 endif
+
