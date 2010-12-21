@@ -1,10 +1,9 @@
 --- 
 :benchmark: false
-gem: -n/usr/local/bin
+gem: --no-rdoc --no-ri
 :backtrace: false
 :update_sources: true
 :sources: 
 - http://gemcutter.org
 :verbose: true
 :bulk_threshold: 1000
-rdoc: --inline-source --line-numbers --fmt=shtml --template=direct
