@@ -14,7 +14,6 @@ syntax on
 filetype plugin indent on
 match ErrorMsg '\%>80v.\+'
 
-
 " UI
 set number
 set ruler
@@ -206,10 +205,10 @@ set backspace=indent,eol,start
 
 " Window manipulation
 "map tt               <C-w>
-map <C-w><Backspace>   <Esc>:wincmd h<CR> | " This and the below are also useful for colemak
-map <C-w><Space>       <Esc>:wincmd l<CR>
-map <C-w><S-Backspace> <Esc>:wincmd H<CR>
-map <C-w><S-Space>     <Esc>:wincmd L<CR>
+map <C-w><Backspace>   <Esc>:wincmd h
+map <C-w><Space>       <Esc>:wincmd l
+map <C-w><S-Backspace> <Esc>:wincmd H
+map <C-w><S-Space>     <Esc>:wincmd L
 
 " Opens an edit command with the path of the currently edited file filled in
 " Normal mode: <Leader>e
@@ -224,8 +223,8 @@ nmap h <Up>
 nmap k <Down>
 
 " Nicer split controls
-"map <C-_>  normal :split<CR>
-"map <C-\|> normal :vsplit<CR>
+map <C-_> :split<CR>
+map <C-\> :vsplit<CR>
 
 " Emacs-like keys for the command line
 cnoremap <C-A>      <Home>
