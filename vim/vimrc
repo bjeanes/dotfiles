@@ -17,7 +17,7 @@ match ErrorMsg '\%>80v.\+'
 " UI
 set number
 set ruler
-set guioptions=aAce
+set guioptions=ce
 set mouse=a
 colorscheme railscasts
 

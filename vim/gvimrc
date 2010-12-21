@@ -1,6 +1,5 @@
-" hide toolbar
-set guioptions-=TaA
-set guioptions+=Rr
+set guioptions-=T  " hide toolbar
+set guioptions+=Rr " Turn on scroll bars
 
 if has("gui_macvim")
   " macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
@@ -20,5 +19,4 @@ if has("gui_macvim")
   " Command-T (a la Textmate)
   macmenu &File.New\ Tab key=<nop>
   map <D-t> :CommandT<CR>
-endif
-
+end
