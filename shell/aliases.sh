@@ -35,3 +35,5 @@ alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"'
 
 alias pubkey="cat $HOME/.ssh/*.pub"
 alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
+
+alias jsonify='python -mjson.tool'

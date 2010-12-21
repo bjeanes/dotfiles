@@ -66,3 +66,19 @@ function command_not_found_handle() {
   command_not_found_handler $*
   return $?
 }
+
+function json() {
+  tmpfile=`mktemp -t json`
+  curl -s $* | python -mjson.tool > $tmpfile
+  cat $tmpfile
+  cat $tmpfile | pbcopy
+  rm $tmpfile
+}
+
+function xml() {
+  tmpfile=`mktemp -t xml`
+  curl -s $* | xmllint —format - > $tmpfile
+  cat $tmpfile
+  cat $tmpfile | pbcopy
+  rm $tmpfile
+}
