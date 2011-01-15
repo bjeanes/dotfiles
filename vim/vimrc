@@ -1,5 +1,7 @@
 set nocompatible
 
+runtime macros/matchit.vim
+
 " Pathogen setup
 runtime! autoload/pathogen.vim
 if exists('g:loaded_pathogen')
@@ -235,14 +237,31 @@ set wildignore+=Transmission*Remote*GUI
 
 let g:ragtag_global_maps = 1
 
-if filereadable(expand('~/.vimrc.local'))
-  source ~/.vimrc.local
-endif
-
 "Directories for swp files
 set backupdir=~/.vim/backup
 set directory=~/.vim/backup
 " better way to run this?
 let ignorethisvar = system("mkdir -p ~/.vim/backup")
 
+" Align cucumber tables
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+" Prevents '<Plug>DiscretionaryEnd' being inserted when pressing <Enter> in
+" insert mode on new files. Blame SuperTab
+let g:SuperTabCrMapping = 0
+let g:SuperTabDefaultCompletionType = "context"
+
+if filereadable(expand('~/.vimrc.local'))
+  source ~/.vimrc.local
+endif

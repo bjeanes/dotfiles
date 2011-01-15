@@ -76,3 +76,21 @@
 [submodule "vim/bundle/taglist"]
 	path = vim/bundle/taglist
 	url = https://github.com/vim-scripts/taglist.vim.git
+[submodule "vim/bundle/matchit"]
+	path = vim/bundle/matchit
+	url = https://github.com/mhz/vim-matchit.git
+[submodule "vim/bundle/textobj-user"]
+	path = vim/bundle/textobj-user
+	url = https://github.com/kana/vim-textobj-user.git
+[submodule "vim/bundle/textobj-rubyblock"]
+	path = vim/bundle/textobj-rubyblock
+	url = https://github.com/nelstrom/vim-textobj-rubyblock.git
+[submodule "vim/bundle/tabular"]
+	path = vim/bundle/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "vim/bundle/ruby-refactoring"]
+	path = vim/bundle/ruby-refactoring
+	url = https://github.com/ecomba/vim-ruby-refactoring.git
+[submodule "vim/bundle/AutoAlign"]
+	path = vim/bundle/AutoAlign
+	url = https://github.com/vim-scripts/AutoAlign.git
