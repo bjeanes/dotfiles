@@ -46,6 +46,7 @@ hi link htmlEndTag                  xmlEndTag
 
 hi Directory                        guifg=#CC7833 ctermfg=173 cterm=NONE
 hi NonText                          guifg=#565656 ctermfg=240 cterm=NONE
+hi SpecialKey                       guifg=#565656 ctermfg=240 cterm=NONE
 
 highlight Normal                    guifg=#E6E1DC guibg=#111111 
 highlight Cursor                    guifg=#000000 ctermfg=0 guibg=#FFFFFF ctermbg=15	
