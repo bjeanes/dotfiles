@@ -298,6 +298,18 @@ let g:vimwiki_list          = [
   \  }
   \]
 
+" Command-T
+let g:CommandTMaxFiles  = 20000
+let g:CommandTMaxHeight = 10
+
+" Syntastic
+let g:syntastic_enable_signs  = 1
+let g:syntastic_auto_loc_list = 0
+
+" Indent Guides
+let g:indent_guides_color_change_percent = 10
+autocmd! VimEnter * :IndentGuidesEnable
+
 " Disable arrow keys
 nnoremap <up> <nop>
 nnoremap <down> <nop>
