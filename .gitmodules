@@ -94,3 +94,15 @@
 [submodule "vim/bundle/AutoAlign"]
 	path = vim/bundle/AutoAlign
 	url = https://github.com/vim-scripts/AutoAlign.git
+[submodule "vim/bundle/nginx"]
+	path = vim/bundle/nginx
+	url = https://github.com/vim-scripts/nginx.vim.git
+[submodule "vim/bundle/vimwiki"]
+	path = vim/bundle/vimwiki
+	url = https://github.com/vim-scripts/vimwiki.git
+[submodule "vim/bundle/speeddating"]
+	path = vim/bundle/speeddating
+	url = https://github.com/vim-scripts/speeddating.vim.git
+[submodule "vim/bundle/ruby"]
+	path = vim/bundle/ruby
+	url = https://github.com/vim-ruby/vim-ruby.git
