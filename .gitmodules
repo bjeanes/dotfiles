@@ -106,3 +106,9 @@
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
+[submodule "vim/bundle/indent-guides"]
+	path = vim/bundle/indent-guides
+	url = https://github.com/nathanaelkane/vim-indent-guides.git
+[submodule "vim/snippets"]
+	path = vim/snippets
+	url = https://github.com/scrooloose/snipmate-snippets.git

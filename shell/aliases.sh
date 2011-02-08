@@ -37,3 +37,10 @@ alias pubkey="cat $HOME/.ssh/*.pub"
 alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 alias jsonify='python -mjson.tool'
+
+if [ -f "$HOME/Applications/MacVim.app/Contents/MacOS/Vim" ]; then
+  alias vim="$HOME/Applications/MacVim.app/Contents/MacOS/Vim"
+else if [ -f "/Applications/MacVim.app/Contents/MacOS/Vim" ]
+  alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+fi
+
