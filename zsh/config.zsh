@@ -26,7 +26,6 @@ bindkey "\e\e[D" vi-backward-word
 setopt alwaystoend             # when complete from middle, move cursor
 setopt completeinword          # not just at the end
 setopt correct                 # spelling correction
-setopt histverify              # when using ! cmds, confirm first
 setopt listpacked              # compact completion lists
 setopt noautomenu              # don't cycle completions
 setopt pushdignoredups         # and don't duplicate them
@@ -35,6 +34,7 @@ setopt nullglob
 
 # These are options that I definitely want
 setopt sharehistory
+setopt histverify              # when using ! cmds, confirm first
 setopt correct                 # spelling correction
 setopt rmstarwait              # if `rm *` wait 10 seconds before performing it!
 setopt notify                  # notify of BG job completion immediately
@@ -51,7 +51,7 @@ setopt nocompletealiases       # Allows alias 'ga' to use 'git add' completions 
 setopt interactivecomments     # escape commands so i can use them later
 setopt sh_word_split           # commands will be split on space (i.e. $VISUAL = "mate -wl1" will work)
 
-# jump to each element in a path with m-f m-b, same
-# for kill-word, etc.
-WORDCHARS=''
+# Allow kill word and moving forward/backword by word to behave like bash (e.g. stop at / chars)
+autoload -U select-word-style
+select-word-style bash
 

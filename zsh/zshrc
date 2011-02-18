@@ -7,7 +7,7 @@ source $DOT_FILES/zsh/oh-my-zsh.zsh
 # Common functionality between Zsh and Bash
 source $DOT_FILES/shell/common.sh
 
-# Rake completion
+# Completion
 source $DOT_FILES/zsh/completions.zsh
 
 # Rake completion

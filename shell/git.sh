@@ -21,7 +21,7 @@ alias glg="git log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow
 alias ignore_empty='find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;'
 
 function gd() {
-  git diff $* | mate
+  git diff $* | mvim -
 }
 
 if [[ -d "/usr/local/git" ]]; then
