@@ -63,7 +63,7 @@ function! s:CdIfDirectory(directory)
   let directory = explicitDirectory || empty(a:directory)
 
   if explicitDirectory
-    exe "cd " . a:directory
+    exe "ChangeDirectory " . a:directory
   endif
 
   if directory
@@ -209,24 +209,9 @@ au! BufRead,BufNewFile *.txt call s:setupWrapping()
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-" Window manipulation
-"map tt               <C-w>
-map <C-w><Backspace>   <Esc>:wincmd h
-map <C-w><Space>       <Esc>:wincmd l
-map <C-w><S-Backspace> <Esc>:wincmd H
-map <C-w><S-Space>     <Esc>:wincmd L
-
 " Opens an edit command with the path of the currently edited file filled in
 " Normal mode: <Leader>e
 map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-" Colemak
-"
-" * Switch 'h' and 'n' (so 'up' is on top of 'down').
-" * Use <Space> and <Backspace> for <Right> and <Left>, instead (and disable 'j'
-"   and 'l' which are where 'y' and 'u' are in in QWERTY)
-"nmap h <Up>
-"nmap k <Down>
 
 " Nicer split controls
 map <C-_> :split<CR>
@@ -276,6 +261,8 @@ function! s:align()
   endif
 endfunction
 
+autocmd! FocusLost * :wa
+
 " Prevents '<Plug>DiscretionaryEnd' being inserted when pressing <Enter> in
 " insert mode on new files. Blame SuperTab
 let g:SuperTabCrMapping = 0
@@ -307,8 +294,11 @@ let g:syntastic_enable_signs  = 1
 let g:syntastic_auto_loc_list = 0
 
 " Indent Guides
-let g:indent_guides_color_change_percent = 10
-autocmd! VimEnter * :IndentGuidesEnable
+let g:indent_guides_color_change_percent = 7
+autocmd! VimEnter * IndentGuidesEnable
+
+" snipMate config
+let g:snips_author = 'Bodaniel Jeanes'
 
 " Disable arrow keys
 nnoremap <up> <nop>
@@ -320,10 +310,19 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
+" Easy window management
+map <C-h> <C-w>h
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+map <C-l> <C-w>l
+
 " Source vimrc after saving it
 autocmd! BufWritePost .vimrc,vimrc source $MYVIMRC | NERDTreeToggle | NERDTreeToggle
+
+" Quick editing of common dot-files
 map <Leader>vv :edit $MYVIMRC<CR>
 map <Leader>gg :edit $MYGVIMRC<CR>
+map <Leader>.. :ChangeDirectory ~/.config<CR>:wincmd l<CR>:enew<CR>
 
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local

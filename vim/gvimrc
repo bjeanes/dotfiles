@@ -4,7 +4,7 @@ set guioptions+=Rr " Turn on scroll bars
 if has("gui_macvim")
   " macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
 
-  set transparency=12
+  set transparency=7
 
   " Fullscreen takes up entire screen
   set fuoptions=maxhorz,maxvert
