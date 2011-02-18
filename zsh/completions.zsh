@@ -33,7 +33,7 @@ zstyle ':completion:*' menu select
 
 # # use dircolours in completion listings
 # zstyle ':completion:*' list-colors ${(s.:.)LSCOLORS}
-# 
+#
 # # allow approximate matching
 # zstyle ':completion:*' completer _complete _match _approximate
 # zstyle ':completion:*:match:*' original only

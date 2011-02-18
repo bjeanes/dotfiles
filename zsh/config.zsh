@@ -9,15 +9,15 @@ bindkey "\e\e[D" vi-backward-word
 #   cd -1 >/dev/null
 #   echo
 # }
-# 
+#
 # function fwd-dir {
 #   cd +1 >/dev/null
 #   echo
 # }
-# 
+#
 # zle -N back-dir back-dir
 # zle -N fwd-dir fwd-dir
-# 
+#
 # bindkey "\e\e[A" back-dir
 # bindkey "\e\e[B" fwd-dir
 
