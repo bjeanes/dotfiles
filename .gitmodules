@@ -112,3 +112,6 @@
 [submodule "vim/snippets"]
 	path = vim/snippets
 	url = https://github.com/scrooloose/snipmate-snippets.git
+[submodule "vim/bundle/vim-css-color"]
+	path = vim/bundle/vim-css-color
+	url = https://github.com/skammer/vim-css-color.git
