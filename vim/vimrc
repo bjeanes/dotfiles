@@ -14,7 +14,7 @@ endif
 " Syntax
 syntax on
 filetype plugin indent on
-match ErrorMsg '\%>80v.\+'
+"match ErrorMsg '\%>80v.\+'
 
 " UI
 set number
@@ -33,6 +33,18 @@ set nowrap
 set list
 set listchars=tab:▸\ ,eol:¬,trail:·
 
+set switchbuf=useopen                      " Don't re-open already opened buffers
+set nostartofline                          " Avoid moving cursor to BOL when jumping around
+set virtualedit=all                        " Let cursor move past the last char
+set showmatch                              " Briefly jump to a paren once it's balanced
+set cursorline
+set whichwrap=b,s,h,l,<,>,[,]
+let mapleader = ','
+set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+set autoread                  " watch for file changes
+set fileformats=unix
+
+
 " Searching
 set hlsearch
 set incsearch
@@ -48,7 +60,7 @@ set laststatus=2
 
 " NERDTree configuration
 let NERDTreeIgnore=['\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>
+map <Leader>n :NERDTreeToggle<CR>:wincmd l<CR>
 
 " Project Tree
 autocmd! VimEnter * call s:CdIfDirectory(expand("<amatch>"))
@@ -56,6 +68,13 @@ autocmd! VimEnter * call s:CdIfDirectory(expand("<amatch>"))
 " Reselect visual block after adjusting indentation
 vnoremap < <gv
 vnoremap > >gv
+
+" For when you forget to sudo.. Really Write the file.
+cmap w!! w !sudo tee % >/dev/null
+
+" TODO create function to generate tags for gemset and append a path to
+" current tags that represents that gemset.
+set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 
 " If the parameter is a directory, cd into it
 function! s:CdIfDirectory(directory)
@@ -201,6 +220,8 @@ au! FileType python                                   set noexpandtab
 " Thorfile, Rakefile and Gemfile are Ruby
 au! BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
 
+au! BufRead,BufNewFile gitconfig set ft=gitconfig
+
 " md, markdown, and mk are markdown and define buffer-local preview
 au! BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
 
@@ -265,7 +286,7 @@ function! s:align()
   endif
 endfunction
 
-autocmd! FocusLost * :wa
+autocmd! FocusLost * :up
 
 " Prevents '<Plug>DiscretionaryEnd' being inserted when pressing <Enter> in
 " insert mode on new files. Blame SuperTab
