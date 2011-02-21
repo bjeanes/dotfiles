@@ -1,3 +1,5 @@
+[ `which hub` ] && alias git='nocorrect hub'
+
 alias ll='ls -lah'
 alias ..='cd ..;' # can then do .. .. .. to move up multiple directories.
 alias ...='.. ..'

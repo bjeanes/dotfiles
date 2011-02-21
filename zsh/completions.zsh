@@ -3,6 +3,8 @@
 #
 autoload -U compinit; compinit
 
+compdef hub=git
+
 # Group matches and describe groups
 zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m'

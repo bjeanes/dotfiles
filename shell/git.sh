@@ -1,5 +1,3 @@
-[ `which hub` ] && alias git='hub'
-
 alias gi='git init'
 alias gst='git status -s'
 alias gl='git pull --rebase'
