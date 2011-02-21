@@ -5,6 +5,7 @@ task :install do
   replace_all = false
   dot_files   = File.dirname(__FILE__)
   files       = %w(zsh/zshrc
+                   zsh/zshenv
                    bash/bashrc
                    bash/bash_profile
                    misc/ackrc
