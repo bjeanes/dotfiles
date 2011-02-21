@@ -15,3 +15,5 @@ source $DOT_FILES/zsh/rake_completion.zsh
 
 # RVM
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
+rvm default
+
