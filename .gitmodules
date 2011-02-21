@@ -115,3 +115,15 @@
 [submodule "vim/bundle/vim-css-color"]
 	path = vim/bundle/vim-css-color
 	url = https://github.com/skammer/vim-css-color.git
+[submodule "vim/bundle/AutoCloseTag"]
+	path = vim/bundle/AutoCloseTag
+	url = https://github.com/vim-scripts/HTML-AutoCloseTag.git
+[submodule "vim/bundle/SearchComplete"]
+	path = vim/bundle/SearchComplete
+	url = https://github.com/vim-scripts/SearchComplete.git
+[submodule "vim/bundle/Ack.vim"]
+	path = vim/bundle/Ack.vim
+	url = https://github.com/mileszs/ack.vim.git
+[submodule "vim/bundle/vim-flog"]
+	path = vim/bundle/vim-flog
+	url = https://github.com/fousa/vim-flog.git
