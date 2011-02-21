@@ -226,11 +226,15 @@ set wildignore+=Transmission*Remote*GUI
 
 let g:ragtag_global_maps = 1
 
+" persistent undos
+
+set undodir=~/.vim/undos
+set undofile
+
 "Directories for swp files
-set backupdir=~/.vim/backup
-set directory=~/.vim/backup
-" better way to run this?
-let ignorethisvar = system("mkdir -p ~/.vim/backup")
+set backupdir=~/.vim/dirs/backups
+set undodir=~/.vim/dirs/undos
+set directory=~/.vim/dirs/swaps
 
 " Strip trailing whitespace
 function! <SID>StripTrailingWhitespaces()
