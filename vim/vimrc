@@ -172,7 +172,7 @@ call s:DefineCommand("rm", "Remove")
 call s:DefineCommand("e", "Edit")
 
 " This helps with RVM etc
-set shell=/bin/sh
+set shell=zsh
 
 " CTags
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
