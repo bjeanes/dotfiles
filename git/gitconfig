@@ -17,7 +17,7 @@
   status = auto
   ui = auto
 [core]
-  editor = mate -w
+  attributesfile = ~/.gitattributes
   excludesfile = ~/.gitignore
   whitespace = fix
 [branch]
@@ -27,15 +27,21 @@
   default = tracking
 [diff "ruby"]
   funcname = ^ *\\(\\(class\\|module\\|def\\) .*\\)
+
+# Kaleidoscope.app
 [difftool "Kaleidoscope"]
 	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [difftool]
 	prompt = false
 [diff]
-	tool = Kaleidoscope
+  tool = Kaleidoscope
+
+# http://bitfission.com/blog/2010/07/auto-merge-gemfile-lock.html
 [merge "bundlelock"]
 	name = lock Gemfile
-	driver = bundle install
+  driver = bundle install
+
+# http://tbaggery.com/2010/10/24/reduce-your-rails-schema-conflicts.html
 [merge "railsschema"]
 	name = newer Rails schema version
 	driver = "ruby -e '\n\

@@ -1,1 +1,3 @@
 *.rb diff=ruby
+db/schema.rb merge=railsschema
+Gemfile.lock merge=gemfilelock
