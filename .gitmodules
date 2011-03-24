@@ -127,3 +127,6 @@
 [submodule "vim/bundle/vim-flog"]
 	path = vim/bundle/vim-flog
 	url = https://github.com/fousa/vim-flog.git
+[submodule "vim/bundle/extradite"]
+	path = vim/bundle/extradite
+	url = https://github.com/int3/vim-extradite.git
