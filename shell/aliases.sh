@@ -25,8 +25,8 @@ alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' 
 
 # rails stuff
 alias log='tail -fn0 ./log/*.log /var/log/apache*/*log'
-alias ss='ruby ./script/server'
-alias sc='ruby ./script/console'
+alias sc="if [ -f script/console ]; then script/console; else script/rails console; fi"
+alias ss="if [ -f script/server ]; then script/server; else script/rails server; fi"
 alias gen='script/generate'
 alias migration='script/generate migration'
 alias migrate='rake db:migrate && rake db:migrate RAILS_ENV=test'

@@ -1,4 +1,5 @@
 # RVM
+PATH="/usr/local/bin:$PATH"
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 rvm default
 [[ -s $PWD/.rvmrc ]] && source .rvmrc
