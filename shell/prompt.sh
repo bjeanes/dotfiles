@@ -1,80 +1,86 @@
-if [ `uname -s` = "Darwin" ]; then
-  function prompt_pwd() {
-    if [ "$PWD" != "$HOME" ]; then
-      printf "%s" `echo $PWD|sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g'`
-      echo $PWD|sed -e 's-.*/\.\{0,1\}[^/]\([^/]*$\)-\1-'
-    else
-      echo '~'
-    fi
-  }
-else # defined two for diff systems because Fish did (not entirely sure why)
-  function prompt_pwd() {
-    case "$PWD" in
-      $HOME)
-        echo '~'
-        ;;
-      *)
-        printf "%s" `echo $PWD|sed -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g'`
-        echo $PWD|sed -n -e 's-.*/\.\{0,1\}.\([^/]*\)-\1-p'
-        ;;
-    esac
-  }
+autoload zsh/terminfo
+
+pr_reset="%f%u%k%s%b" # reset all codes
+
+if [ "$terminfo[colors]" -eq 256 ]; then
+  pr_red="%F{52}"
+  pr_blue="%F{25}"
+  pr_green="%F{28}"
+  pr_grey="%F{59}"
+else
+  if [ "$terminfo[colors]" -eq 8 ]; then
+    pr_red="%F{red}"
+    pr_blue="%F{blue}"
+    pr_green="%F{green}"
+    pr_grey="%B%F{black}"
+  fi
 fi
 
-# colors
-function color {
-  local reset='\e[0m'
-  local white='\e[1;37m'
-  local black='\e[0;30m'
-  local blue='\e[0;34m'
-  local light_blue='\e[1;34m'
-  local green='\e[0;32m'
-  local light_green='\e[1;32m'
-  local cyan='\e[0;36m'
-  local light_cyan='\e[1;36m'
-  local red='\e[0;31m'
-  local light_red='\e[1;31m'
-  local purple='\e[0;35m'
-  local light_purple='\e[1;35m'
-  local brown='\e[0;33m'
-  local yellow='\e[1;33m'
-  local gray='\e[0;30m'
-  local light_gray='\e[0;37m'
-  
-  local chosen="$(eval echo \$$1)" 
-  
-  if [ $CURRENT_SHELL = 'zsh' ]; then
-    echo "%{$chosen%}"
-  else
-    printf $chosen®
-  fi
-}
+# VCS configuration
+autoload vcs_info
+zstyle ':vcs_info:*'      enable             git hg svn
+zstyle ':vcs_info:*'      get-revision       true
+zstyle ':vcs_info:*'      formats            "(%s) %b:%8>>%i%<<" "%r"
+zstyle ':vcs_info:*'      actionformats      "(%s) %i|%a"
+zstyle ':vcs_info:*'      branchformat       "%b:%r"
+zstyle ':vcs_info:hg*:*'  use-simple         true
+zstyle ':vcs_info:svn:*'  formats            "(%s) %b:r%i" "%r"
+zstyle ':vcs_info:svn:*'  branchformat       "%b"
 
-function prompt_char {
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
-    # echo '○'
-    echo '♪'
-}
+function prompt_pwd() {
+  local repo="$vcs_info_msg_1_"
 
-function prompt_color() {
-  if [ "$USER" = "root" ]; then 
-    echo red
-  else
-    if [ -n "$SSH_TTY" ]; then
-      echo blue
+  parts=(${(s:/:)${${PWD}/#${HOME}/\~}})
+
+  i=0
+  while (( i++ < ${#parts} )); do
+    part="$parts[i]"
+    if [[ "$part" == "$repo" ]]; then
+      # if this part of the path represents the repo,
+      # underline it, and skip truncating the component
+      parts[i]="%U$part%u"
     else
-      echo green
+      # Shorten the path as long as it isn't the last piece
+      if [[ "$parts[${#parts}]" != "$part" ]]; then
+        parts[i]="$part[1,1]"
+      fi
+    fi
+  done
+
+  echo "${(j:/:)parts}"
+}
+
+function precmd {
+  vcs_info
+
+  local cwd="$pr_blue`prompt_pwd`$pr_reset"
+  local char="%0(?.$pr_green.$pr_red)♪$pr_reset"
+  local time="$pr_grey⌚%*$pr_reset"
+
+  local user_at_host
+  if [[ "$USER" != "bjeanes" ]]; then
+    user_at_host="$USER"
+
+    if [[ "$user" == "root" ]] then
+      user_at_host="$pr_red$user$pr_reset"
     fi
   fi
-}
 
-function prompt_vcs_if_bash() {
-  if [ $CURRENT_SHELL = 'bash' ]; then
-    local vcs="$(eval echo $RPS1)"
-    [[ "$vcs" != "" ]] && echo " $vcs"
+  if [[ -n "$SSH_TTY" ]]; then
+    user_at_host+="$pr_blue@`hostname -s`$pr_reset"
   fi
+
+  local rev="$pr_grey$vcs_info_msg_0_$pr_reset"
+  rev="${rev/\(git\) /±}"
+  rev="${rev/\(hg\) /☿}"
+  rev="${rev/\(svn\) /↯}"
+
+  local left right
+  left=($user_at_host $cwd $char)
+  right=($rev $rvm $time)
+
+  PS1="$left [ "
+  RPS1="] $right"
 }
 
-RPS1='$(${DOT_FILES}/misc/vcprompt.py -f $(color red)‹%b:%h›$(color reset))'
-PS1="\$(color blue)\$(prompt_pwd)\$(prompt_vcs_if_bash) \$(color \$(prompt_color))\$(prompt_char)\$(color reset) "
+
