@@ -63,7 +63,7 @@ function precmd {
     user_at_host="$USER"
 
     if [[ "$user" == "root" ]] then
-      user_at_host="$pr_red$user$pr_reset"
+      user_at_host="$pr_red$user_at_host$pr_reset"
     fi
   fi
 
