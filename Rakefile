@@ -20,6 +20,7 @@ task :install do
                    git/gitconfig
                    git/gitignore
                    git/gitattributes
+                   hg/hgrc
                    vim
                    vim/gvimrc
                    vim/vimrc)
