@@ -23,3 +23,7 @@ export GREP_COLOR='1;32'
 export CLICOLOR=1
 
 export HISTSIZE=1000000
+
+export REPORTTIME=2
+export TIMEFMT="%*Es total, %U user, %S system, %P cpu"
+
