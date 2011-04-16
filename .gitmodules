@@ -130,3 +130,9 @@
 [submodule "vim/bundle/extradite"]
 	path = vim/bundle/extradite
 	url = https://github.com/int3/vim-extradite.git
+[submodule "vim/bundle/VimClojure"]
+	path = vim/bundle/VimClojure
+	url = https://github.com/vim-scripts/VimClojure.git
+[submodule "vim/bundle/vim-solarized"]
+	path = vim/bundle/vim-solarized
+	url = git://github.com/altercation/vim-colors-solarized.git
