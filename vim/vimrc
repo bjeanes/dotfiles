@@ -21,7 +21,8 @@ set number
 set ruler
 set guioptions=ce
 set mouse=a
-colorscheme railscasts
+set background=light
+colorscheme solarized
 
 " Tabs/Whitespace
 set tabstop=2
