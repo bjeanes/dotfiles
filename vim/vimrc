@@ -342,6 +342,10 @@ let NERDSpaceDelims = 1
 " snipMate config
 let g:snips_author = 'Bodaniel Jeanes'
 
+"clojure
+let vimclojure#ParenRainbow=1
+autocmd FileType clojure AutoCloseOff
+
 " Disable arrow keys
 nnoremap <up> <nop>
 nnoremap <down> <nop>
