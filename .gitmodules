@@ -136,3 +136,6 @@
 [submodule "vim/bundle/vim-solarized"]
 	path = vim/bundle/vim-solarized
 	url = git://github.com/altercation/vim-colors-solarized.git
+[submodule "vim/bundle/git-grep"]
+	path = vim/bundle/git-grep
+	url = https://github.com/tjennings/git-grep-vim.git
