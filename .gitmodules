@@ -118,9 +118,6 @@
 [submodule "vim/bundle/AutoCloseTag"]
 	path = vim/bundle/AutoCloseTag
 	url = https://github.com/vim-scripts/HTML-AutoCloseTag.git
-[submodule "vim/bundle/SearchComplete"]
-	path = vim/bundle/SearchComplete
-	url = https://github.com/vim-scripts/SearchComplete.git
 [submodule "vim/bundle/Ack.vim"]
 	path = vim/bundle/Ack.vim
 	url = https://github.com/mileszs/ack.vim.git
@@ -139,3 +136,9 @@
 [submodule "vim/bundle/git-grep"]
 	path = vim/bundle/git-grep
 	url = https://github.com/tjennings/git-grep-vim.git
+[submodule "vim/bundle/ZoomWin"]
+	path = vim/bundle/ZoomWin
+	url = https://github.com/vim-scripts/ZoomWin.git
+[submodule "vim/bundle/mru.vim"]
+	path = vim/bundle/mru.vim
+	url = git://github.com/vim-scripts/mru.vim.git
