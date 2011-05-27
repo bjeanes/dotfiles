@@ -55,3 +55,4 @@ setopt sh_word_split           # commands will be split on space (i.e. $VISUAL =
 autoload -U select-word-style
 select-word-style bash
 
+REPORTTIME=2
