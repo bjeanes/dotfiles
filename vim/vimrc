@@ -360,11 +360,11 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
-" Easy window management
-map <C-h> <C-w>h
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-map <C-l> <C-w>l
+" Move around in insert mode
+inoremap <C-h> <left>
+inoremap <C-k> <up>
+inoremap <C-j> <down>
+inoremap <C-l> <right>
 
 " Source vimrc after saving it
 autocmd! BufWritePost .vimrc,vimrc source $MYVIMRC | NERDTreeToggle | NERDTreeToggle

@@ -136,9 +136,9 @@
 [submodule "vim/bundle/git-grep"]
 	path = vim/bundle/git-grep
 	url = git://github.com/tjennings/git-grep-vim.git
-[submodule "vim/bundle/ZoomWin"]
-	path = vim/bundle/ZoomWin
-	url = git://github.com/vim-scripts/ZoomWin.git
 [submodule "vim/bundle/mru.vim"]
 	path = vim/bundle/mru.vim
 	url = git://github.com/vim-scripts/mru.vim.git
+[submodule "vim/bundle/ZoomWin"]
+	path = vim/bundle/ZoomWin
+	url = https://github.com/vim-scripts/ZoomWin.git
