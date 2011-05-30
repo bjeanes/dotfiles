@@ -21,8 +21,8 @@ set number
 set ruler
 set guioptions=ce
 set mouse=a
-set background=light
-colorscheme solarized
+set background=dark
+colorscheme Tubster
 
 " Tabs/Whitespace
 set tabstop=2
