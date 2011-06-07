@@ -61,8 +61,13 @@ set laststatus=2
 set linespace=2
 
 " NERDTree configuration
-let NERDTreeIgnore=['\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>:wincmd l<CR>
+let NERDTreeIgnore     = ['\.rbc$', '\~$']
+let NERDTreeChDirMode  = 2
+let NERDTreeMouseMode  = 3
+let NERDTreeQuitOnOpen = 1
+let NERDTreeMinimalUI  = 1
+let NERDTreeDirArrows  = 1
+map <Leader>n :NERDTreeToggle<CR>
 
 " Project Tree
 autocmd! VimEnter * call s:CdIfDirectory(expand("<amatch>"))
