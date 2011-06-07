@@ -31,7 +31,6 @@
 .rvmrc
 .rake_tasks
 .redcar
-bin/*
 build
 build/*
 derby.log
