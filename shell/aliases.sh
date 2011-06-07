@@ -7,9 +7,7 @@ alias g='grep -i'  #case insensitive grep
 alias h='history|g'
 alias ducks='du -cks * | sort -rn |head -11' # Lists the size of all the folders
 alias top='top -o cpu'
-function mvim() {
-  mvim $* 2>/dev/null
-}
+alias mvim='mvim 2>/dev/null'
 
 alias sprof="reload"
 alias eprof="m $HOME/.config"
@@ -29,8 +27,8 @@ alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' 
 alias log='tail -fn0 ./log/*.log /var/log/apache*/*log'
 alias sc="if [ -f script/console ]; then script/console; else script/rails console; fi"
 alias ss="if [ -f script/server ]; then script/server; else script/rails server; fi"
-alias gen='script/generate'
-alias migration='script/generate migration'
+alias gen='if [ -f script/generate ]; then script/generate; else script/rails generate; fi'
+alias migration='gen migration'
 alias migrate='rake db:migrate && rake db:migrate RAILS_ENV=test'
 alias rollback='rake db:rollback'
 alias r='rake'
