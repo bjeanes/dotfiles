@@ -46,3 +46,4 @@ Thumbs.db
 tmp*
 tmp/**/*
 doc/tags
+.bundle/*
