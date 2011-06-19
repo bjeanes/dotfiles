@@ -27,6 +27,9 @@ zstyle ':vcs_info:hg*:*'  use-simple         true
 zstyle ':vcs_info:svn:*'  formats            "(%s) %b:r%i" "%r"
 zstyle ':vcs_info:svn:*'  branchformat       "%b"
 
+# TODO:
+#   - Don't lose / at beginning of path if not in home dir
+#   - Discover root of repo based on full path, not basename (to avoid underlining multiple path components)
 function prompt_pwd() {
   local repo="$vcs_info_msg_1_"
 
