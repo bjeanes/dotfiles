@@ -44,7 +44,6 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 set autoread                  " watch for file changes
 set fileformats=unix
 
-
 " Searching
 set hlsearch
 set incsearch
@@ -58,7 +57,14 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
 " Status bar
 set laststatus=2
 
+" Format
 set linespace=2
+
+" Nicer text navigation
+imap j gj
+imap h gh
+imap l gl
+imap k gk
 
 " NERDTree configuration
 let NERDTreeIgnore     = ['\.rbc$', '\~$']
