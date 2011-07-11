@@ -1,9 +1,9 @@
---- 
-:benchmark: false
-gem: --no-rdoc --no-ri
-:backtrace: false
+---
 :update_sources: true
-:sources: 
+:sources:
 - http://gemcutter.org
 :verbose: true
 :bulk_threshold: 1000
+gem: -n/usr/local/bin --no-ri --no-rdoc
+:backtrace: false
+:benchmark: false
