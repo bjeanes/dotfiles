@@ -61,10 +61,8 @@ set laststatus=2
 set linespace=2
 
 " Nicer text navigation
-imap j gj
-imap h gh
-imap l gl
-imap k gk
+nmap j gj
+nmap k gk
 
 " NERDTree configuration
 let NERDTreeIgnore     = ['\.rbc$', '\~$']
