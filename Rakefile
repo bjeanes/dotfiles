@@ -11,7 +11,7 @@ task :install do
                    misc/ackrc
                    misc/inputrc
                    misc/nanorc
-                   mist/ctags
+                   misc/ctags
                    ruby/autotest/autotest
                    ruby/gemrc
                    ruby/irbrc
