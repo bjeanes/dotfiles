@@ -22,7 +22,7 @@ set ruler
 set guioptions=ce
 set mouse=a
 set background=dark
-colorscheme Tubster
+colorscheme railscasts
 
 " Tabs/Whitespace
 set tabstop=2
