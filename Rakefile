@@ -25,13 +25,13 @@ task :install do
                    vim/gvimrc
                    vim/vimrc)
 
-  files = Hash[files.zip(Array.new(files.size, "~/"))]
+  files = Hash[files.zip(Array.new(files.size, "~/."))]
   files["ruby/global.gems"] = "~/.rvm/gemsets/"
 
   files.each do |file, destination|
     file_name        = file.split(/\//).last
     source_file      = File.join(dot_files, file)
-    destination_file = File.expand_path(File.join(destination, ".#{file_name}"))
+    destination_file = File.expand_path("#{destination}#{file_name}")
 
     if File.exist?(destination_file) || File.symlink?(destination_file)
       if replace_all
