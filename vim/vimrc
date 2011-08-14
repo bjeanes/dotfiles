@@ -233,6 +233,9 @@ au! FileType scss    syntax cluster sassCssAttributes add=@cssColors
 
 " Thorfile, Rakefile and Gemfile are Ruby
 au! BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
+au! FileType ruby let &l:tags = pathogen#legacyjoin(pathogen#uniq(
+      \ pathogen#split(&tags) +
+      \ map(split($GEM_PATH,':'),'v:val."/gems/*/tags"')))
 
 au! BufRead,BufNewFile gitconfig set ft=gitconfig
 
