@@ -1,4 +1,4 @@
-require 'autotest/redgreen'
+# require 'autotest/redgreen'
 require 'autotest/timestamp'
 
 module Autotest::Growl
