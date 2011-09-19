@@ -13,6 +13,10 @@ source $DOT_FILES/zsh/completions.zsh
 # Rake completion
 source $DOT_FILES/zsh/rake_completion.zsh
 
+# Tmuxinator
+[[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
+alias tmuxinator='rvm default exec tmuxinator'
+
 # RVM
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 rvm default

@@ -70,3 +70,5 @@
   insteadOf = "heroku:"
 
 
+[github]
+	user = bjeanes

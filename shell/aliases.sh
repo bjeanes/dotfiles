@@ -39,3 +39,4 @@ alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 alias jsonify='python -mjson.tool'
 
+alias serial="ioreg -l | grep IOPlatformSerialNumber | cut -f 10 -d' ' | cut -d'\"' -f 2 | pbcopy && echo 'Copied to clipboard'"
