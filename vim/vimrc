@@ -2,15 +2,6 @@ set nocompatible
 
 runtime! macros/matchit.vim
 
-" Pathogen setup
-runtime autoload/pathogen.vim
-if exists('g:loaded_pathogen')
-  filetype off
-
-  call pathogen#runtime_append_all_bundles()
-  call pathogen#helptags()
-endif
-
 " Syntax
 syntax on
 filetype plugin indent on
