@@ -1,5 +1,9 @@
 set nocompatible
 
+source ~/.vim/ui.vim
+source ~/.vim/autocommands.vim
+source ~/.vim/bundles.vim
+
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
 
@@ -10,15 +14,12 @@ set shell=zsh
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 
+" Theme development help
 cmap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
-let g:ragtag_global_maps = 1
-
 " Align cucumber tables
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
-
 function! s:align()
   let p = '^\s*|\s.*\s|\s*$'
   if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -29,27 +30,12 @@ function! s:align()
     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
   endif
 endfunction
-
-" Prevents '<Plug>DiscretionaryEnd' being inserted when pressing <Enter> in
-" insert mode on new files. Blame SuperTab
-let g:SuperTabCrMapping = 0
-let g:SuperTabDefaultCompletionType = "context"
-
-" snipMate config
-let g:snips_author = 'Bodaniel Jeanes'
-
-"clojure
-let vimclojure#ParenRainbow=1
-autocmd FileType clojure AutoCloseOff
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
 " Quick editing of common dot-files
 map <Leader>vv :edit $MYVIMRC<CR>
 map <Leader>gg :edit $MYGVIMRC<CR>
 map <Leader>.. :cd ~/.config<CR>:enew<CR>
-
-source ~/.vim/ui.vim
-source ~/.vim/autocommands.vim
-source ~/.vim/bundles.vim
 
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
