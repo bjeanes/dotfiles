@@ -47,3 +47,4 @@ tmp*
 tmp/**/*
 doc/tags
 .bundle/*
+.rbx/

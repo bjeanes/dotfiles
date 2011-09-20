@@ -2,8 +2,6 @@ set guioptions-=T  " hide toolbar
 set guioptions+=Rr " Turn on scroll bars
 
 if has("gui_macvim")
-  " macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
-
   set transparency=7
 
   " Fullscreen takes up entire screen
@@ -16,11 +14,6 @@ if has("gui_macvim")
   " Command-/ to toggle comments
   map <D-/> <plug>NERDCommenterToggle
   imap <D-/> <Esc><plug>NERDCommenterToggle i
-
-  " Command-T (a la Textmate)
-  macmenu &File.New\ Tab key=<nop>
-  map <D-t> :CommandT<CR>
-  imap <D-t> <Esc>:CommandT<CR>
 end
 
 " Source vimrc after saving it

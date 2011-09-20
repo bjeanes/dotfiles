@@ -1,293 +1,20 @@
 set nocompatible
 
-runtime! macros/matchit.vim
-
-" Syntax
-syntax on
-filetype plugin indent on
-"match ErrorMsg '\%>80v.\+'
-
-" UI
-set number
-set ruler
-set guioptions=ce
-set mouse=a
-set background=dark
-colorscheme railscasts
-
-" Tabs/Whitespace
-set tabstop=2
-set shiftwidth=2
-set autoindent
-set smarttab
-set expandtab
-set nowrap
-set list
-set listchars=tab:▸\ ,eol:¬,trail:·
-
-set switchbuf=useopen                      " Don't re-open already opened buffers
-set nostartofline                          " Avoid moving cursor to BOL when jumping around
-set virtualedit=all                        " Let cursor move past the last char
-set showmatch                              " Briefly jump to a paren once it's balanced
-set whichwrap=b,s,h,l,<,>,[,]
-let mapleader = ','
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-set autoread                  " watch for file changes
-set fileformats=unix
-
-" Searching
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-
-" Tab completion
-set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
-
-" Status bar
-set laststatus=2
-
-" Format
-set linespace=2
-
-" Nicer text navigation
-nmap j gj
-nmap k gk
-
-" NERDTree configuration
-let NERDTreeIgnore     = ['\.rbc$', '\~$']
-let NERDTreeChDirMode  = 2
-let NERDTreeMouseMode  = 3
-let NERDTreeQuitOnOpen = 1
-let NERDTreeMinimalUI  = 1
-let NERDTreeDirArrows  = 1
-map <Leader>n :NERDTreeToggle<CR>
-
-" Project Tree
-autocmd! VimEnter * call s:CdIfDirectory(expand("<amatch>"))
-
-" Reselect visual block after adjusting indentation
-vnoremap < <gv
-vnoremap > >gv
-
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
-
-" TODO create function to generate tags for gemset and append a path to
-" current tags that represents that gemset.
-set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
-
-" If the parameter is a directory, cd into it
-function! s:CdIfDirectory(directory)
-  let explicitDirectory = isdirectory(a:directory)
-  let directory = explicitDirectory || empty(a:directory)
-
-  if explicitDirectory
-    exe "ChangeDirectory " . a:directory
-  endif
-
-  if directory
-    NERDTree
-    wincmd p
-    bd
-  endif
-endfunction
-
-" NERDTree utility function
-function! s:UpdateNERDTree(...)
-  let stay = 0
-
-  if(exists("a:1"))
-    let stay = a:1
-  end
-
-  if exists("t:NERDTreeBufName")
-    let nr = bufwinnr(t:NERDTreeBufName)
-    if nr != -1
-      exe nr . "wincmd w"
-      exe substitute(mapcheck("R"), "<CR>", "", "")
-      if !stay
-        wincmd p
-      end
-    endif
-  endif
-
-  if exists("CommandTFlush")
-    CommandTFlush
-  endif
-endfunction
-
-" Utility functions to create file commands
-function! s:CommandCabbr(abbreviation, expansion)
-  execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
-endfunction
-
-function! s:FileCommand(name, ...)
-  if exists("a:1")
-    let funcname = a:1
-  else
-    let funcname = a:name
-  endif
-
-  execute 'command! -nargs=1 -complete=file ' . a:name . ' :call ' . funcname . '(<f-args>)'
-endfunction
-
-function! s:DefineCommand(name, destination)
-  call s:FileCommand(a:destination)
-  call s:CommandCabbr(a:name, a:destination)
-endfunction
-
-" Public NERDTree-aware versions of builtin functions
-function! ChangeDirectory(dir, ...)
-  execute "cd " . a:dir
-  let stay = exists("a:1") ? a:1 : 1
-
-  NERDTree
-
-  wincmd l
-  "if !stay
-    "wincmd p
-  "endif
-endfunction
-
-function! Touch(file)
-  execute "!touch " . a:file
-  call s:UpdateNERDTree()
-endfunction
-
-function! Remove(file)
-  let current_path = expand("%")
-  let removed_path = fnamemodify(a:file, ":p")
-
-  if (current_path == removed_path) && (getbufvar("%", "&modified"))
-    echo "You are trying to remove the file you are editing. Please close the buffer first."
-  else
-    execute "!rm " . a:file
-  endif
-
-  call s:UpdateNERDTree()
-endfunction
-
-function! Edit(file)
-  if exists("b:NERDTreeRoot")
-    wincmd p
-  endif
-
-  execute "e " . a:file
-
-  ruby << RUBY
-  destination = File.expand_path(VIM.evaluate(%{system("dirname " . a:file)}))
-  pwd         = File.expand_path(Dir.pwd)
-  home        = pwd == File.expand_path("~")
-
-  if home || Regexp.new("^" + Regexp.escape(pwd)) !~ destination
-    VIM.command(%{call ChangeDirectory(system("dirname " . a:file), 0)})
-  end
-RUBY
-endfunction
-
-" Define the NERDTree-aware aliases
-call s:DefineCommand("cd", "ChangeDirectory")
-call s:DefineCommand("touch", "Touch")
-call s:DefineCommand("rm", "Remove")
-call s:DefineCommand("e", "Edit")
 
 " This helps with RVM etc
 set shell=zsh
 
 " CTags
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
-
-" Remember last location in file
-if has("autocmd")
-  au! BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal g'\"" | endif
-endif
-
-function! s:setupWrapping()
-  set wrap
-  set wm=2
-  set textwidth=72
-endfunction
-
-function! s:setupMarkup()
-  call s:setupWrapping()
-  map <buffer> <Leader>p :Mm <CR>
-endfunction
-
-" make and python use real tabs
-au! FileType make    set noexpandtab
-au! FileType python  set noexpandtab
-
-au! FileType scss    syntax cluster sassCssAttributes add=@cssColors
-
-" Thorfile, Rakefile and Gemfile are Ruby
-au! BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
-au! FileType ruby let &l:tags = pathogen#legacyjoin(pathogen#uniq(
-      \ pathogen#split(&tags) +
-      \ map(split($GEM_PATH,':'),'v:val."/gems/*/tags"')))
-
-au! BufRead,BufNewFile gitconfig set ft=gitconfig
-
-" md, markdown, and mk are markdown and define buffer-local preview
-au! BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
-
-au! BufRead,BufNewFile *.txt call s:setupWrapping()
+set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 
 cmap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
-" Opens an edit command with the path of the currently edited file filled in
-" Normal mode: <Leader>e
-map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-" Nicer split controls
-map <C-_> :split<CR>
-map <C-\> :vsplit<CR>
-
-" Emacs-like keys for the command line
-cnoremap <C-A>      <Home>
-cnoremap <C-E>      <End>
-cnoremap <C-K>      <C-U>
-
-set wildignore+=Transmission*Remote*GUI
-
 let g:ragtag_global_maps = 1
-
-" persistent undos
-
-set undodir=~/.vim/undos
-set undofile
-
-"Directories for swp files
-set backupdir=~/.vim/dirs/backups
-set undodir=~/.vim/dirs/undos
-set directory=~/.vim/dirs/swaps
-
-" To HTML
-let html_number_lines = 0
-let use_xhtml = 1
-let html_use_css = 1
-
-" Strip trailing whitespace
-function! <SID>StripTrailingWhitespaces()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-
-autocmd! BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Align cucumber tables
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
@@ -303,44 +30,10 @@ function! s:align()
   endif
 endfunction
 
-autocmd! FocusLost * :up
-
 " Prevents '<Plug>DiscretionaryEnd' being inserted when pressing <Enter> in
 " insert mode on new files. Blame SuperTab
 let g:SuperTabCrMapping = 0
 let g:SuperTabDefaultCompletionType = "context"
-
-
-" vim wiki
-let g:vimwiki_hl_cb_checked = 1
-let g:vimwiki_menu          = 'Plugin.Vimwiki'
-let g:vimwiki_badsyms       = ' '
-let g:vimwiki_use_mouse     = 1
-let g:vimwiki_dir_link      = 'index'
-let g:vimwiki_list          = [
-  \  {
-  \     'path': '~/Dropbox/Wiki/Text',
-  \     'path_html': '~/Dropbox/Wiki/HTML',
-  \     'nested_syntaxes': {
-  \       'ruby': 'ruby'
-  \     }
-  \  }
-  \]
-
-" Command-T
-let g:CommandTMaxFiles  = 20000
-let g:CommandTMaxHeight = 10
-
-" Syntastic
-let g:syntastic_enable_signs  = 1
-let g:syntastic_auto_loc_list = 0
-
-" Indent Guides
-let g:indent_guides_color_change_percent = 7
-autocmd! VimEnter * IndentGuidesEnable
-
-" Put a space between comments and comment marker
-let NERDSpaceDelims = 1
 
 " snipMate config
 let g:snips_author = 'Bodaniel Jeanes'
@@ -349,23 +42,14 @@ let g:snips_author = 'Bodaniel Jeanes'
 let vimclojure#ParenRainbow=1
 autocmd FileType clojure AutoCloseOff
 
-" ZoomWin
-map <Leader>z :ZoomWin<CR>
-imap <Leader>z <Esc>:ZoomWin<CR>
-
-" Move around in insert mode
-inoremap <C-h> <left>
-inoremap <C-k> <up>
-inoremap <C-j> <down>
-inoremap <C-l> <right>
-
-" Source vimrc after saving it
-autocmd! BufWritePost .vimrc,vimrc source $MYVIMRC | NERDTreeToggle | NERDTreeToggle
-
 " Quick editing of common dot-files
 map <Leader>vv :edit $MYVIMRC<CR>
 map <Leader>gg :edit $MYGVIMRC<CR>
-map <Leader>.. :ChangeDirectory ~/.config<CR>:wincmd l<CR>:enew<CR>
+map <Leader>.. :cd ~/.config<CR>:enew<CR>
+
+source ~/.vim/ui.vim
+source ~/.vim/autocommands.vim
+source ~/.vim/bundles.vim
 
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
