@@ -15,6 +15,7 @@ export GEM_OPEN_EDITOR="$EDITOR"
 export GIT_EDITOR="$(which mvim || which vim) -f" # http://is.gd/hGrsF
 
 export IRBRC="$HOME/.irbrc"
+export RBXOPT="-Xrbc.db=/tmp/rbx"
 
 #export TERM=xterm-256color
 export GREP_OPTIONS='--color=auto'
