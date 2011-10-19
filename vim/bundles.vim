@@ -15,7 +15,6 @@ call vundle#rc()
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'tpope/vim-endwise'
   Bundle 'tpope/vim-rake'
-  Bundle 'tpope/vim-rails'
   Bundle 'tpope/vim-haml'
   " }}}
 
