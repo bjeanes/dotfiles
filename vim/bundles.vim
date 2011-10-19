@@ -15,6 +15,7 @@ call vundle#rc()
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'tpope/vim-endwise'
   Bundle 'tpope/vim-rake'
+  "Bundle 'tpope/vim-rails' " too slow...
   Bundle 'tpope/vim-haml'
   " }}}
 
@@ -32,11 +33,27 @@ call vundle#rc()
 " Git {{{
   Bundle 'tpope/vim-fugitive'
   Bundle 'tpope/vim-git'
+  Bundle 'tjennings/git-grep-vim'
 " }}}
 
 " Utility {{{
   Bundle 'tpope/vim-bundler'
-  Bundle 'tjennings/git-grep-vim'
+
+  Bundle 'Tabular'
+  " These need more work:
+  " TODO: - keep cursor position
+  "       - don't align equals sign if inside hashrocket
+  " inoremap => =><Esc>:Tab /=> <CR>i
+  " inoremap =  =<Esc>:Tab /=<CR>i
+  map <Leader>a= :Tab /=<CR>
+  map <Leader>a> :Tab /=><CR>
+  map <Leader>a: :Tab /\z:<CR>
+  vmap <Leader>a= :Tab /=<CR>
+  vmap <Leader>a> :Tab /=><CR>
+  vmap <Leader>a: :Tab /\z:<CR>
+  imap <Leader>a= <Esc>:Tab /=<CR>i
+  imap <Leader>a> <Esc>:Tab /=><CR>i
+  imap <Leader>a: <Esc>:Tab /\z:<CR>i
 
   Bundle 'scrooloose/nerdcommenter'
   let NERDSpaceDelims = 1 " space between comment and code
