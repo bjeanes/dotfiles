@@ -36,24 +36,51 @@ call vundle#rc()
   Bundle 'tjennings/git-grep-vim'
 " }}}
 
+" Text objects {{{
+  Bundle 'kana/vim-textobj-user'
+  Bundle 'nelstrom/vim-textobj-rubyblock'
+  Bundle 'michaeljsmith/vim-indent-object'
+  Bundle 'argtextobj.vim'
+" }}}
+
 " Utility {{{
   Bundle 'tpope/vim-bundler'
 
   Bundle 'Tabular'
-  " These need more work:
-  " TODO: - keep cursor position
-  "       - don't align equals sign if inside hashrocket
-  " inoremap => =><Esc>:Tab /=> <CR>i
-  " inoremap =  =<Esc>:Tab /=<CR>i
-  map <Leader>a= :Tab /=<CR>
-  map <Leader>a> :Tab /=><CR>
-  map <Leader>a: :Tab /\z:<CR>
-  vmap <Leader>a= :Tab /=<CR>
-  vmap <Leader>a> :Tab /=><CR>
-  vmap <Leader>a: :Tab /\z:<CR>
-  imap <Leader>a= <Esc>:Tab /=<CR>i
-  imap <Leader>a> <Esc>:Tab /=><CR>i
-  imap <Leader>a: <Esc>:Tab /\z:<CR>i
+  if exists(":Tabularize")
+    map <Leader>a= :Tab /=<CR>
+    map <Leader>a> :Tab /=><CR>
+    map <Leader>a: :Tab /\z:<CR>
+
+    vmap <Leader>a= :Tab /=<CR>
+    vmap <Leader>a> :Tab /=><CR>
+    vmap <Leader>a: :Tab /\z:<CR>
+
+    imap <Leader>a= <Esc>:Tab /=<CR>i
+    imap <Leader>a> <Esc>:Tab /=><CR>i
+    imap <Leader>a: <Esc>:Tab /\z:<CR>i
+
+    " Auto-align
+    "" Cucumber
+    inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
+    function! s:align()
+      let p = '^\s*|\s.*\s|\s*$'
+      if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+        Tabularize/|/l1
+        normal! 0
+        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+      endif
+    endfunction
+
+    "" Assignments etc
+    " These need more work:
+    " TODO: - keep cursor position
+    "       - don't align equals sign if inside hashrocket
+    " inoremap => =><Esc>:Tab /=> <CR>i
+    " inoremap =  =<Esc>:Tab /=<CR>i
+  endif
 
   Bundle 'scrooloose/nerdcommenter'
   let NERDSpaceDelims = 1 " space between comment and code
