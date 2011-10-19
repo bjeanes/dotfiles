@@ -17,6 +17,7 @@ alias systail='tail -fn0 /var/log/system.log'
 alias aptail='tail -fn0 /var/log/apache*/*log'
 alias l='ls'
 alias b='cd -'
+alias cdr='cd ./$(git rev-parse --show-cdup)'
 
 alias c='clear' # shortcut to clear your terminal
 
