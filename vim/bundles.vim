@@ -86,6 +86,9 @@ call vundle#rc()
 
   Bundle 'scrooloose/nerdcommenter'
   let NERDSpaceDelims = 1 " space between comment and code
+  map  <Leader>/ <plug>NERDCommenterToggle
+  vmap <Leader>/ <plug>NERDCommenterToggle gv
+  imap <Leader>/ <Esc><plug>NERDCommenterToggle i
 
   Bundle 'ZoomWin'
   map <Leader>z :ZoomWin<CR>

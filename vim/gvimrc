@@ -12,8 +12,9 @@ if has("gui_macvim")
   cnoremap <D-Backspace> <C-U>
 
   " Command-/ to toggle comments
-  map <D-/> <plug>NERDCommenterToggle
-  imap <D-/> <Esc><plug>NERDCommenterToggle i
+  map  <D-/> ,/
+  imap <D-/> ,/
+  vmap <D-/> ,/
 end
 
 " Source vimrc after saving it
