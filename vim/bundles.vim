@@ -111,12 +111,13 @@ call vundle#rc()
     \]
 
   Bundle 'scrooloose/nerdtree'
-  let NERDTreeIgnore     = ['\.rbc$', '\~$']
-  let NERDTreeChDirMode  = 2
-  let NERDTreeMouseMode  = 3
-  let NERDTreeQuitOnOpen = 1
-  let NERDTreeMinimalUI  = 1
-  let NERDTreeDirArrows  = 1
+  let g:NERDTreeIgnore      = ['\.rbc$', '\~$']
+  let g:NERDTreeChDirMode   = 2
+  let g:NERDTreeMouseMode   = 3
+  let g:NERDTreeQuitOnOpen  = 1
+  let g:NERDTreeMinimalUI   = 1
+  let g:NERDTreeDirArrows   = 1
+  let g:NERDTreeHijackNetrw = 0
   map <Leader>n :NERDTreeToggle<CR>
 
   Bundle 'Command-T'
