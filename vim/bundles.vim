@@ -111,7 +111,7 @@ call vundle#rc()
     \]
 
   Bundle 'scrooloose/nerdtree'
-  let g:NERDTreeIgnore      = ['\.rbc$', '\~$']
+  let g:NERDTreeIgnore      = ['\.rbx$', '\.rbc$', '\~$']
   let g:NERDTreeChDirMode   = 2
   let g:NERDTreeMouseMode   = 3
   let g:NERDTreeQuitOnOpen  = 1
