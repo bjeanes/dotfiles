@@ -50,17 +50,17 @@ call vundle#rc()
 
   Bundle 'Tabular'
   if exists(":Tabularize")
-    map <Leader>a= :Tab /=<CR>
-    map <Leader>a> :Tab /=><CR>
-    map <Leader>a: :Tab /\z:<CR>
+    map <Leader>a= :Tabularize /=<CR>
+    map <Leader>a> :Tabularize /=><CR>
+    map <Leader>a: :Tabularize /\z:<CR>
 
-    vmap <Leader>a= :Tab /=<CR>
-    vmap <Leader>a> :Tab /=><CR>
-    vmap <Leader>a: :Tab /\z:<CR>
+    vmap <Leader>a= :Tabularize /=<CR>
+    vmap <Leader>a> :Tabularize /=><CR>
+    vmap <Leader>a: :Tabularize /\z:<CR>
 
-    imap <Leader>a= <Esc>:Tab /=<CR>i
-    imap <Leader>a> <Esc>:Tab /=><CR>i
-    imap <Leader>a: <Esc>:Tab /\z:<CR>i
+    imap <Leader>a= <Esc>:Tabularize /=<CR>i
+    imap <Leader>a> <Esc>:Tabularize /=><CR>i
+    imap <Leader>a: <Esc>:Tabularize /\z:<CR>i
 
     " Auto-align
     "" Cucumber
@@ -80,8 +80,8 @@ call vundle#rc()
     " These need more work:
     " TODO: - keep cursor position
     "       - don't align equals sign if inside hashrocket
-    " inoremap => =><Esc>:Tab /=> <CR>i
-    " inoremap =  =<Esc>:Tab /=<CR>i
+    " inoremap => =><Esc>:Tabularize /=> <CR>i
+    " inoremap =  =<Esc>:Tabularize /=<CR>i
   endif
 
   Bundle 'scrooloose/nerdcommenter'
