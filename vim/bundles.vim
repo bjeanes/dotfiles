@@ -15,7 +15,7 @@ call vundle#rc()
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'tpope/vim-endwise'
   Bundle 'tpope/vim-rake'
-  "Bundle 'tpope/vim-rails' " too slow...
+  Bundle 'tpope/vim-rails'
   Bundle 'tpope/vim-haml'
   " }}}
 
@@ -44,7 +44,9 @@ call vundle#rc()
 " }}}
 
 " Utility {{{
-  Bundle 'tpope/vim-bundler'
+  " temporarily disable due to speed issues
+  "   see: https://github.com/tpope/vim-bundler/issues/4
+  " Bundle 'tpope/vim-bundler'
 
   Bundle 'Tabular'
   if exists(":Tabularize")
