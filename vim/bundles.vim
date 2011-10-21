@@ -54,9 +54,9 @@ call vundle#rc()
     map <Leader>a> :Tabularize /=><CR>
     map <Leader>a: :Tabularize /\z:<CR>
 
-    vmap <Leader>a= :Tabularize /=<CR>
-    vmap <Leader>a> :Tabularize /=><CR>
-    vmap <Leader>a: :Tabularize /\z:<CR>
+    vmap <Leader>a= :Tabularize /=<CR>gv
+    vmap <Leader>a> :Tabularize /=><CR>gv
+    vmap <Leader>a: :Tabularize /\z:<CR>gv
 
     imap <Leader>a= <Esc>:Tabularize /=<CR>i
     imap <Leader>a> <Esc>:Tabularize /=><CR>i
