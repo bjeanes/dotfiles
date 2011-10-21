@@ -1,18 +1,7 @@
-if $(which mate > /dev/null && false); then
-  EDITOR="mate -wl1"
-elif $(which nano > /dev/null && false); then
-  EDITOR="nano -w"
-elif $(which mvim > /dev/null); then
-  EDITOR="mvim"
-elif $(which gvim > /dev/null); then
-  EDITOR="gvim"
-else
-  EDITOR="vim"
-fi
-
+export EDITOR="$(which mvim || which vim) -f" # http://is.gd/hGrsF
 export VISUAL="$EDITOR"
 export GEM_OPEN_EDITOR="$EDITOR"
-export GIT_EDITOR="$(which mvim || which vim) -f" # http://is.gd/hGrsF
+export GIT_EDITOR="$EDITOR"
 
 export IRBRC="$HOME/.irbrc"
 export RBXOPT="-Xrbc.db=/tmp/rbx"
