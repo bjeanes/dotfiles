@@ -1,7 +1,4 @@
 .netrwhist
-fish/fish_history
-fish/fish_read_history
-fish/fishd.*
 .rake_tasks
 Transmission Remote GUI
 vim/bundle/*
