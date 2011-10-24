@@ -17,6 +17,10 @@ call vundle#rc()
   Bundle 'tpope/vim-rake'
   Bundle 'tpope/vim-rails'
   Bundle 'tpope/vim-haml'
+
+  " temporarily disable due to speed issues
+  "   see: https://github.com/tpope/vim-bundler/issues/4
+  " Bundle 'tpope/vim-bundler'
   " }}}
 
   " Markdown/Textile/etc {{{
@@ -44,9 +48,8 @@ call vundle#rc()
 " }}}
 
 " Utility {{{
-  " temporarily disable due to speed issues
-  "   see: https://github.com/tpope/vim-bundler/issues/4
-  " Bundle 'tpope/vim-bundler'
+
+  Bundle "tpope/vim-surround"
 
   Bundle 'Tabular'
   if exists(":Tabularize")
