@@ -17,6 +17,6 @@ when /^[a-z0-9_\-\/]+\.feature$/
 when /(.+)\.gem$/
   run("gem install #{$1}")
 else
-  $stderr.puts "No default action defined in #{__FILE__}"
+  # $stderr.puts "No default action defined in #{__FILE__}"
   abort
 end
