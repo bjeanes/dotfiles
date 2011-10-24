@@ -7,7 +7,7 @@ syntax on
   set showmatch                 " Briefly jump to a paren once it's balanced
   set linespace=2
   set background=dark
-  colorscheme railscasts
+  colorscheme Tomorrow-Night
 
 " Tabs/Whitespace
   set tabstop=2
