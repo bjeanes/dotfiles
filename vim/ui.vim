@@ -6,6 +6,7 @@ syntax on
   set guioptions=ce
   set showmatch                 " Briefly jump to a paren once it's balanced
   set linespace=2
+  set cursorline
   set background=dark
   colorscheme Tomorrow-Night
 
