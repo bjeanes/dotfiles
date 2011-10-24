@@ -12,18 +12,18 @@ task :install do
                    misc/inputrc
                    misc/nanorc
                    misc/ctags
-                   ruby/autotest/autotest
-                   ruby/gemrc
-                   ruby/irbrc
-                   ruby/rdebugrc
-                   git/gitk
-                   git/gitconfig
-                   git/gitignore
-                   git/gitattributes
-                   hg/hgrc
-                   vim
-                   vim/gvimrc
-                   vim/vimrc)
+                   languages/ruby/autotest/autotest
+                   languages/ruby/gemrc
+                   languages/ruby/irbrc
+                   languages/ruby/rdebugrc
+                   vcs/git/gitk
+                   vcs/git/gitconfig
+                   vcs/git/gitignore
+                   vcs/git/gitattributes
+                   vcs/hg/hgrc
+                   editors/vim
+                   editors/vim/gvimrc
+                   editors/vim/vimrc)
 
   files = Hash[files.zip(Array.new(files.size, "~/."))]
   # files["ruby/global.gems"] = "~/.rvm/gemsets/"
