@@ -56,6 +56,45 @@ function prompt_pwd() {
   echo "$prompt_path"
 }
 
+
+function prompt_pwd_new() {
+  local parts path part cwd i=0
+  typeset -L path
+
+
+  parts=(${(s:/:)${${PWD}/#${HOME}/\~}})
+
+  while (( i++ < ${#parts} )); do
+    part="$parts[i]"
+
+    if [[ "$part" == "~" ]]; then
+      path="$part"
+    else
+      # This check is broken because LHS is collapsed, RHS is expanded
+      if [[ "$path/$part" == "${vcs_info_msg_2_/#${HOME}/~}" ]]; then
+        part="%U$part%u"
+      elif [[ "$parts[${#parts}]" != "$part" ]]; then
+        part="$part[1,1]"
+      fi
+
+      path="$path/$part"
+    fi
+
+    # if [[ "$part" == "$repo" ]]; then
+      # # if this part of the path represents the repo,
+      # # underline it, and skip truncating the component
+      # parts[i]="%U$part%u"
+    # else
+      # # Shorten the path as long as it isn't the last piece
+      # if [[ "$parts[${#parts}]" != "$part" ]]; then
+        # parts[i]="$part[1,1]"
+      # fi
+    # fi
+  done
+
+  echo "$path"
+}
+
 function precmd {
   vcs_info
 
