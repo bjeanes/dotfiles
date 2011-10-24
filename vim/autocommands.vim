@@ -2,7 +2,7 @@
 autocmd! BufWritePost .vimrc,vimrc source $MYVIMRC | NERDTreeToggle | NERDTreeToggle
 
 " Auto save files on window blur
-autocmd! FocusLost * :up
+autocmd! FocusLost * :silent! up
 
 " make and python use real tabs
 au! FileType make    set noexpandtab
