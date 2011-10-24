@@ -52,19 +52,19 @@ call vundle#rc()
   Bundle "tpope/vim-surround"
 
   Bundle 'Tabular'
+  map <Leader>a= :Tabularize /=<CR>
+  map <Leader>a> :Tabularize /=><CR>
+  map <Leader>a: :Tabularize /\z:<CR>
+
+  vmap <Leader>a= :Tabularize /=<CR>gv
+  vmap <Leader>a> :Tabularize /=><CR>gv
+  vmap <Leader>a: :Tabularize /\z:<CR>gv
+
+  imap <Leader>a= <Esc>:Tabularize /=<CR>i
+  imap <Leader>a> <Esc>:Tabularize /=><CR>i
+  imap <Leader>a: <Esc>:Tabularize /\z:<CR>i
+
   if exists(":Tabularize")
-    map <Leader>a= :Tabularize /=<CR>
-    map <Leader>a> :Tabularize /=><CR>
-    map <Leader>a: :Tabularize /\z:<CR>
-
-    vmap <Leader>a= :Tabularize /=<CR>gv
-    vmap <Leader>a> :Tabularize /=><CR>gv
-    vmap <Leader>a: :Tabularize /\z:<CR>gv
-
-    imap <Leader>a= <Esc>:Tabularize /=<CR>i
-    imap <Leader>a> <Esc>:Tabularize /=><CR>i
-    imap <Leader>a: <Esc>:Tabularize /\z:<CR>i
-
     " Auto-align
     "" Cucumber
     inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
