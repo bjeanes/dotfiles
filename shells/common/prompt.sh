@@ -57,7 +57,6 @@ function prompt_pwd() {
 }
 
 # TODO:
-#  - Make '@' not present when SSHd in as 'bjeanes'
 function precmd {
   vcs_info
 
@@ -76,10 +75,12 @@ function precmd {
     if [[ "$user" == "root" ]] then
       user_at_host="$pr_red$user_at_host$pr_reset"
     fi
+
+    user_at_host+="@"
   fi
 
   if [[ -n "$SSH_TTY" ]]; then
-    user_at_host+="$pr_blue@`hostname -s`$pr_reset"
+    user_at_host+="$pr_blue`hostname -s`$pr_reset"
   fi
 
   local rev="$pr_grey$vcs_info_msg_0_$pr_reset"
