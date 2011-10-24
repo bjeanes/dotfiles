@@ -1,4 +1,6 @@
-export EDITOR="$(which mvim || which vim) -f" # http://is.gd/hGrsF
+which vim  &>/dev/null && export EDITOR="$(which vim)  -f"
+which mvim &>/dev/null && export EDITOR="$(which mvim) -f"
+
 export VISUAL="$EDITOR"
 export GEM_OPEN_EDITOR="$EDITOR"
 export GIT_EDITOR="$EDITOR"
