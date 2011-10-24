@@ -317,6 +317,10 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("javaScriptNumber", s:orange, "", "")
 	call <SID>X("javaScriptMember", s:orange, "", "")
 
+	" Ident Guides
+	" call <SID>X("IndentGuidesOdd", "", s:background, "")
+	call <SID>X("IndentGuidesEven", "", s:line, "")
+
 	" Delete Functions
 	delf <SID>X
 	delf <SID>rgb

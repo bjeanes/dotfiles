@@ -134,8 +134,6 @@ call vundle#rc()
   Bundle 'Indent-Guides'
   let g:indent_guides_auto_colors = 0
   let g:indent_guides_enable_on_vim_startup = 1
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#303030 ctermfg=235
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#585858 ctermfg=239
   autocmd! VimEnter * IndentGuidesEnable
 
   Bundle 'Syntastic'
