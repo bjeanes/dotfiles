@@ -1,0 +1,119 @@
+#compdef pip
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for pip (http://pypi.python.org/pypi/pip).
+#
+#  Source: https://github.com/technolize/zsh-completion-funcs
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * technolize (https://github.com/technolize)
+#
+# ------------------------------------------------------------------------------
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+# ------------------------------------------------------------------------------
+
+
+local ret=1 state
+
+declare -ga common_ops
+common_ops=(
+  "--version[display version number]"
+  {-h,--help}"[show help]"
+  {-E,--environment=}"[virtualenv environment to run pip]:environment:_directories"
+  {-s,--enable-site-packages}"[include site-packages in virtualenv]"
+  {-v,--verbose}"[give more output]"
+  {-q,--quiet}"[give less output]"
+  "--log=[log file where a complete record will be kept]"
+  "--proxy=[specify a proxy in the form user:passwd@proxy.server:port]:proxy"
+  "--timeout=[set the socket timeout (default 15 seconds)]:second"
+)
+
+_directories () {
+  _wanted directories expl directory _path_files -/ "$@" -
+}
+
+typeset -A opt_args
+_arguments \
+  ':subcommand:->subcommand' \
+  $common_ops \
+  '*::options:->options' && ret=0
+
+case $state in
+  subcommand)
+    subcommands=(
+      "bundle:create pybundle"
+      "freeze:put all currently installed packages"
+      "help:show available commands"
+      "install:install packages"
+      "search:search pypi"
+      "usinstall:uninstall packages"
+      "unzip:unzip undividual packages"
+      "zip:zip dividual packages"
+    )
+
+    _describe -t subcommands 'pip subcommand' subcommands && ret=0
+  ;;
+
+  options)
+    declare -a args
+    args=(
+      $common_ops
+    )
+
+    declare -a requirement
+    requirement=(
+      {-r,--requirement=}"[install all the packages listed in the given requirements file]:filename"
+    )
+
+    declare -a findlink
+    findlink=(
+      {-f,--find-links=}"[URL to look for packages at]:url"
+    )
+
+    case $words[1] in
+      bundle | install)
+        args+=(
+          {-e,--editable=}"[install a package directly from a checkout]:VCS+REPOS_URL[@REV]#egg=PACKAGE"
+          $requirement
+          $findlink
+          {-i,--index-url=,--pypi-url=}"[base URL of Python Package Index]:URL"
+          "--extra-index-url=[extra URLs of package indexes to use]:URL"
+          {-b,--build=,--build-dir=}"[unpack packages into DIR]:directory:_directories"
+          {--src=,--source=}"[check out --editable packages into DIR]:directory:_directories"
+          {-U,--upgrade}"[upgrade all packages to the newest available version]"
+          {-I,--ignore-installed}"[ignore the installed packages]"
+          "--noinstall[download and unpack all packages, but don't actually install them]"
+          "--install-option=[extra arguments to be supplied to the setup.py install command]"
+        )
+      ;;
+
+      freeze)
+        args+=(
+          $requirement
+          $findlink
+        )
+      ;;
+
+      unzip | zip)
+        args+=(
+          "--unzip[unzip a package]"
+          "--no-pyc[do not include .pyc files in zip files]"
+          {-l,--list}"[list the packages available, and their zip status]"
+          "--sort-files[with --list, sort packages according to how many files they contain]"
+          "--path=[restrict operation to the given paths]:paths"
+          {-n,--simulate}"[do not actually perform the zip/unzip operation]"
+        )
+      ;;
+    esac
+
+    _arguments $args && ret=0
+  ;;
+esac
+
+return ret

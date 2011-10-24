@@ -1,6 +1,5 @@
-export ZSH=$DOT_FILES/zsh/lib/oh-my-zsh
-export ZSH_THEME="risto"
-plugins=(rails3 git ruby osx brew)
+export ZSH=$DOT_FILES/shells/zsh/lib/oh-my-zsh
+plugins=(rails3 git ruby osx brew cap gem lein npm node)
 
 if ! [ -d "$ZSH" ]; then
   echo "Cloning Oh My Zsh..."

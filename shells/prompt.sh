@@ -59,7 +59,7 @@ function precmd {
   local cwd="$pr_blue`prompt_pwd`$pr_reset"
   local char="%0(?.$pr_green.$pr_red)♪$pr_reset"
   local time="$pr_grey⌚ %*$pr_reset"
-  local rvm="❖ `rvm-prompt`"
+  # local rvm="❖ `rvm-prompt`"
 
   local user_at_host
   if [[ "$USER" != "bjeanes" ]]; then
@@ -81,7 +81,8 @@ function precmd {
 
   local left right
   left=($user_at_host $cwd $char)
-  right=($rev $rvm $time)
+  # right=($rev $rvm $time)
+  right=($rev $time)
 
   PS1="$left [ "
   RPS1="] $right"

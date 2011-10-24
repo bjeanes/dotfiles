@@ -4,10 +4,10 @@ desc "install the dot files into user's home directory"
 task :install do
   replace_all = false
   dot_files   = File.dirname(__FILE__)
-  files       = %w(zsh/zshrc
-                   zsh/zshenv
-                   bash/bashrc
-                   bash/bash_profile
+  files       = %w(shells/zsh/zshrc
+                   shells/zsh/zshenv
+                   shells/bash/bashrc
+                   shells/bash/bash_profile
                    misc/ackrc
                    misc/inputrc
                    misc/nanorc
@@ -53,6 +53,10 @@ task :install do
     else
       link_file(destination_file, source_file)
     end
+  end
+
+  File.open(File.expand_path("~/.dot-files"), 'w') do |f|
+    f.print "export DOT_FILES=#{File.dirname(__FILE__).inspect}"
   end
 end
 
