@@ -56,7 +56,6 @@ function prompt_pwd() {
   echo "$prompt_path"
 }
 
-# TODO:
 function precmd {
   vcs_info
 
