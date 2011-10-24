@@ -28,7 +28,6 @@ zstyle ':vcs_info:svn:*'  formats            "(%s) %b:r%i" "%r"
 zstyle ':vcs_info:svn:*'  branchformat       "%b"
 
 # TODO:
-#   - Don't lose / at beginning of path if not in home dir
 #   - Discover root of repo based on full path, not basename (to avoid underlining multiple path components) ($vcs_info_msg_2_)
 function prompt_pwd() {
   local repo="$vcs_info_msg_1_"
@@ -50,7 +49,11 @@ function prompt_pwd() {
     fi
   done
 
-  echo "${(j:/:)parts}"
+  local prompt_path="${(j:/:)parts}"
+  if [ "$parts[1]" != "~" ]; then
+    prompt_path="/$prompt_path"
+  fi
+  echo "$prompt_path"
 }
 
 function precmd {
