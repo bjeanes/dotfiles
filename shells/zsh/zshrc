@@ -1,27 +1,28 @@
 export CURRENT_SHELL="zsh"
 if [ -f "$HOME/.dot-files" ]; then
 	source "$HOME/.dot-files"
-
-	fpath=($DOT_FILES/shells/zsh/completions $fpath)
-
-	# Install and load oh-my-zsh
-	source $DOT_FILES/shells/zsh/oh-my-zsh.zsh
-
-	# Common functionality between Zsh and Bash
-	source $DOT_FILES/shells/common/common.sh
-
-	for file in $(ls -1 $DOT_FILES/shells/zsh/lib/*.zsh); do
-		source $file
-	done
-
-	# Tmuxinator
-	if [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]]; then
-		source $HOME/.tmuxinator/scripts/tmuxinator
-		# alias tmuxinator='rvm default exec tmuxinator'
-	fi
-
-	# rbenv
-	which rbenv &>/dev/null && eval "$(rbenv init -)"
 else
 	echo 'You need to run `rake install` again.'
+  return
 fi
+
+fpath=($DOT_FILES/shells/zsh/completions $fpath)
+
+# Install and load oh-my-zsh
+source $DOT_FILES/shells/zsh/oh-my-zsh.zsh
+
+# Common functionality between Zsh and Bash
+source $DOT_FILES/shells/common/common.sh
+
+for file in $(ls -1 $DOT_FILES/shells/zsh/lib/*.zsh); do
+  source $file
+done
+
+# Tmuxinator
+if [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]]; then
+  source $HOME/.tmuxinator/scripts/tmuxinator
+  # alias tmuxinator='rvm default exec tmuxinator'
+fi
+
+# rbenv
+which rbenv &>/dev/null && eval "$(rbenv init -)"
