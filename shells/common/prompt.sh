@@ -56,6 +56,8 @@ function prompt_pwd() {
   echo "$prompt_path"
 }
 
+# TODO:
+#  - Make '@' not present when SSHd in as 'bjeanes'
 function precmd {
   vcs_info
 
