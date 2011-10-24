@@ -1,4 +1,4 @@
-export ZSH=$DOT_FILES/zsh/oh-my-zsh
+export ZSH=$DOT_FILES/zsh/lib/oh-my-zsh
 export ZSH_THEME="risto"
 plugins=(rails git ruby osx brew)
 

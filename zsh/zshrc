@@ -7,11 +7,9 @@ source $DOT_FILES/zsh/oh-my-zsh.zsh
 # Common functionality between Zsh and Bash
 source $DOT_FILES/shell/common.sh
 
-# Completion
-source $DOT_FILES/zsh/completions.zsh
-
-# Rake completion
-source $DOT_FILES/zsh/rake_completion.zsh
+for file in $(ls -1 $DOT_FILES/zsh/lib/*.zsh); do
+  source $file
+done
 
 # Tmuxinator
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
