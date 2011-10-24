@@ -20,7 +20,7 @@ fi
 autoload vcs_info
 zstyle ':vcs_info:*'      enable             git hg svn
 zstyle ':vcs_info:*'      get-revision       true
-zstyle ':vcs_info:*'      formats            "(%s) %b@%6>>%i%<<…" "%r"
+zstyle ':vcs_info:*'      formats            "(%s) %b@%6>>%i%<<…" "%r" "%R" "%S"
 zstyle ':vcs_info:*'      actionformats      "(%s) %b@%6>>%i%<<…|%U%a%%u"
 zstyle ':vcs_info:*'      branchformat       "%b:%r"
 zstyle ':vcs_info:hg*:*'  use-simple         true
@@ -29,7 +29,7 @@ zstyle ':vcs_info:svn:*'  branchformat       "%b"
 
 # TODO:
 #   - Don't lose / at beginning of path if not in home dir
-#   - Discover root of repo based on full path, not basename (to avoid underlining multiple path components)
+#   - Discover root of repo based on full path, not basename (to avoid underlining multiple path components) ($vcs_info_msg_2_)
 function prompt_pwd() {
   local repo="$vcs_info_msg_1_"
 
