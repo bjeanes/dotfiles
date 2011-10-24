@@ -8,7 +8,7 @@ if [ -f "$HOME/.dot-files" ]; then
 	source $DOT_FILES/shells/zsh/oh-my-zsh.zsh
 
 	# Common functionality between Zsh and Bash
-	source $DOT_FILES/shells/common.sh
+	source $DOT_FILES/shells/common/common.sh
 
 	for file in $(ls -1 $DOT_FILES/shells/zsh/lib/*.zsh); do
 		source $file
