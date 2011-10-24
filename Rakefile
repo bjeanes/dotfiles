@@ -26,7 +26,7 @@ task :install do
                    vim/vimrc)
 
   files = Hash[files.zip(Array.new(files.size, "~/."))]
-  files["ruby/global.gems"] = "~/.rvm/gemsets/"
+  # files["ruby/global.gems"] = "~/.rvm/gemsets/"
 
   files.each do |file, destination|
     file_name        = file.split(/\//).last
