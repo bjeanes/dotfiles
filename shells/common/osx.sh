@@ -1,4 +1,4 @@
-[[ `uname -s` != 'Darwin' ]] && return # Only for OS X
+osx || return # Only for OS X
 
 alias o='open .'
 
