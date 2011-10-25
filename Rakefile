@@ -54,10 +54,6 @@ task :install do
       link_file(destination_file, source_file)
     end
   end
-
-  File.open(File.expand_path("~/.dot-files"), 'w') do |f|
-    f.print "export DOT_FILES=#{File.dirname(__FILE__).inspect}"
-  end
 end
 
 def replace_file(old_file, new_file)
