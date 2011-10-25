@@ -106,20 +106,6 @@ function precmd {
   which rvm-prompt &>/dev/null && ruby="❖ `rvm-prompt`"
   which rbenv      &>/dev/null && ruby="❖ `rbenv version-name`"
 
-  local user_at_host
-  if [[ "$USER" != "bjeanes" ]]; then
-    user_at_host="$USER"
-
-    if [[ "$user" == "root" ]] then
-      user_at_host="$pr_red$user_at_host$pr_reset"
-    fi
-
-    user_at_host+="@"
-  fi
-
-  if [[ -n "$SSH_TTY" ]]; then
-    user_at_host+="$pr_blue`hostname -s`$pr_reset"
-  fi
 
   local rev="$pr_grey$vcs_info_msg_0_$pr_reset"
   rev="${rev/\(git\)/±}"
@@ -127,7 +113,7 @@ function precmd {
   rev="${rev/\(svn\)/↯}"
 
   local left right
-  left=($user_at_host $cwd $char)
+  left=($(user_at_host) $cwd $char)
   right=($rev $ruby $time)
 
   PS1="$left [ "
