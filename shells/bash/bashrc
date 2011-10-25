@@ -1,11 +1,5 @@
-export CURRENT_SHELL="bash"
-export DOT_FILES=$(dirname $(dirname $(readlink $BASH_SOURCE)))
+CURRENT_SHELL="bash"
+SHELL_FILES="$(dirname $(readlink $BASH_SOURCE))"
+DOT_FILES="$(dirname $(dirname $SHELL_FILES))"
 
-# All things that are both ZSH and Bash compatible
-source $DOT_FILES/shell/common.sh
-
-# Git completion support in bash
-source $DOT_FILES/git/git-completion
-
-# RVM
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
+source $DOT_FILES/shells/bootstrap.sh

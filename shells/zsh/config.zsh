@@ -1,5 +1,7 @@
 alias reload="source ~/.zshrc"
 
+fpath=($SHELL_FILES/completions $fpath)
+
 # Option-Left + Option-Right for moving word-by-word in OS X
 bindkey "\e\e[C" vi-forward-word
 bindkey "\e\e[D" vi-backward-word

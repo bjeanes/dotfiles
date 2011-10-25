@@ -1,4 +1,4 @@
-CDPATH="${CDPATH}:${HOME}/Code/Mocra/:${HOME}/Code/Personal:${HOME}/Code/:${HOME}/Code/Open Source:${HOME}/Sites/Mocra:${HOME}/Sites/Personal:${HOME}/Sites/Client/"
+[[ `uname -s` != 'Darwin' ]] && return # Only for OS X
 
 alias o='open .'
 
@@ -10,7 +10,7 @@ alias hidefile='/usr/bin/SetFile -a "V"'
 alias showfile='/usr/bin/SetFile -a "v"'
 
 function manpdf() { man -t $@ | open -f -a Preview; }
-function osinfo() { 
+function osinfo() {
    x1="$(/usr/bin/sw_vers -productName)"
    x2="$(/usr/bin/sw_vers -productVersion)"
    x3="$(/usr/bin/sw_vers -buildVersion)"
@@ -36,7 +36,7 @@ function mintw() { printf "\e[2t"; return 0; }
 # Send Terminal window to background
 function bgtw() { printf "\e[6t"; return 0; }
 
-function hidetw() { 
+function hidetw() {
    /usr/bin/osascript -e 'tell application "System Events" to set visible of some item of ( get processes whose name = "Terminal" ) to false'
    return 0
 }
@@ -45,8 +45,8 @@ function hidetw() {
 function positive_int() { return $(test "$@" -eq "$@" > /dev/null 2>&1 && test "$@" -ge 0 > /dev/null 2>&1); }
 
 # move the Terminal window
-function mvtw() { 
-   if [[ $# -eq 2 ]] && $(positive_int "$1") && $(positive_int "$2"); then 
+function mvtw() {
+   if [[ $# -eq 2 ]] && $(positive_int "$1") && $(positive_int "$2"); then
       printf "\e[3;${1};${2};t"
       return 0
    fi
@@ -54,8 +54,8 @@ function mvtw() {
 }
 
 # resize the Terminal window
-function sizetw() { 
-   if [[ $# -eq 2 ]] && $(positive_int "$1") && $(positive_int "$2"); then 
+function sizetw() {
+   if [[ $# -eq 2 ]] && $(positive_int "$1") && $(positive_int "$2"); then
       printf "\e[8;${1};${2};t"
       /usr/bin/clear
       return 0
