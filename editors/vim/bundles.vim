@@ -51,6 +51,13 @@ call vundle#rc()
 
   Bundle "tpope/vim-surround"
 
+  Bundle "kien/rainbow_parentheses.vim"
+  au VimEnter * RainbowParenthesesToggle
+  au Syntax * RainbowParenthesesLoadRound
+  au Syntax * RainbowParenthesesLoadSquare
+  au Syntax * RainbowParenthesesLoadBraces
+
+
   Bundle 'Tabular'
   map <Leader>a= :Tabularize /=<CR>
   map <Leader>a> :Tabularize /=><CR>
