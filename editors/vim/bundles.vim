@@ -52,10 +52,10 @@ call vundle#rc()
   Bundle "tpope/vim-surround"
 
   Bundle "kien/rainbow_parentheses.vim"
-  au VimEnter * RainbowParenthesesToggle
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
+  autocmd VimEnter * RainbowParenthesesToggle
+  autocmd Syntax * RainbowParenthesesLoadRound
+  autocmd Syntax * RainbowParenthesesLoadSquare
+  autocmd Syntax * RainbowParenthesesLoadBraces
 
 
   Bundle 'Tabular'
@@ -141,13 +141,13 @@ call vundle#rc()
   Bundle 'Indent-Guides'
   let g:indent_guides_auto_colors = 0
   let g:indent_guides_enable_on_vim_startup = 1
-  autocmd! VimEnter * IndentGuidesEnable
+  autocmd VimEnter * IndentGuidesEnable
 
   Bundle 'Syntastic'
   let g:syntastic_enable_signs  = 1
   let g:syntastic_auto_loc_list = 0
 " }}}
 
-autocmd! BufWritePost bundles.vim source ~/.vim/bundles.vim
+autocmd BufWritePost bundles.vim source ~/.vim/bundles.vim
 filetype plugin indent on
 
