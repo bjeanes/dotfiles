@@ -31,6 +31,7 @@ call vundle#rc()
   Bundle 'tpope/vim-cucumber'
   Bundle 'skammer/vim-css-color'
   Bundle 'kchmck/vim-coffee-script'
+  Bundle 'pangloss/vim-javascript'
   " }}}
 " }}}
 
@@ -71,37 +72,33 @@ call vundle#rc()
   imap <Leader>a> <Esc>:Tabularize /=><CR>i
   imap <Leader>a: <Esc>:Tabularize /\z:<CR>i
 
-  if exists(":Tabularize")
-    " Auto-align
-    "" Cucumber
-    inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
-    function! s:align()
-      let p = '^\s*|\s.*\s|\s*$'
-      if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-        Tabularize/|/l1
-        normal! 0
-        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-      endif
-    endfunction
+  " Auto-align
+  "" Cucumber
+  inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
+  function! s:align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
+  endfunction
 
-    "" Assignments etc
-    " These need more work:
-    " TODO: - keep cursor position
-    "       - don't align equals sign if inside hashrocket
-    " inoremap => =><Esc>:Tabularize /=> <CR>i
-    " inoremap =  =<Esc>:Tabularize /=<CR>i
-  endif
+  "" Assignments etc
+  " These need more work:
+  " TODO: - keep cursor position
+  "       - don't align equals sign if inside hashrocket
+  " inoremap => =><Esc>:Tabularize /=> <CR>i
+  " inoremap =  =<Esc>:Tabularize /=<CR>i
 
   Bundle 'scrooloose/nerdcommenter'
   let NERDSpaceDelims = 1 " space between comment and code
   map  // <plug>NERDCommenterToggle
   vmap // <plug>NERDCommenterToggle gv
-  imap // <Esc><plug>NERDCommenterToggle i
   map  <Leader>/ //
   vmap <Leader>/ //
-  imap <Leader>/ //
 
   Bundle 'ZoomWin'
   map <Leader>z :ZoomWin<CR>

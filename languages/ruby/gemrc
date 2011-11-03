@@ -4,6 +4,6 @@
 - http://gemcutter.org
 :verbose: true
 :bulk_threshold: 1000
-gem: -n/usr/local/bin --no-ri --no-rdoc
+gem: --no-ri --no-rdoc
 :backtrace: false
 :benchmark: false

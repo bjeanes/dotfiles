@@ -1,12 +1,13 @@
-which vim  &>/dev/null && export EDITOR="$(which vim)  -f"
-which mvim &>/dev/null && export EDITOR="$(which mvim) -f"
+which vim  &>/dev/null && editor="$(which vim)"
+# which mvim &>/dev/null && editor="$(which mvim)"
 
-export VISUAL="$EDITOR"
-export GEM_OPEN_EDITOR="$EDITOR"
-export GIT_EDITOR="$EDITOR"
+export EDITOR="$editor -f"
+export VISUAL="$editor"
+export GEM_OPEN_EDITOR="$editor"
+export GIT_EDITOR="$editor -f"
 
 export IRBRC="$HOME/.irbrc"
-export RBXOPT="-Xrbc.db=/tmp/rbx"
+export RBXOPT="-Xrbc.db=/tmp/rbx -X19"
 
 export TERM=xterm-256color
 export GREP_OPTIONS='--color=auto'
