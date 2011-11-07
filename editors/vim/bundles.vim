@@ -17,6 +17,7 @@ call vundle#rc()
   Bundle 'tpope/vim-rake'
   Bundle 'tpope/vim-rails'
   Bundle 'tpope/vim-haml'
+  Bundle 'ecomba/vim-ruby-refactoring'
 
   " temporarily disable due to speed issues
   "   see: https://github.com/tpope/vim-bundler/issues/4
@@ -50,9 +51,16 @@ call vundle#rc()
 
 " Utility {{{
 
-  Bundle "tpope/vim-surround"
+  Bundle 'majutsushi/tagbar'
+  Bundle 'tpope/vim-surround'
+  Bundle 'millermedeiros/vim-statline'
+  Bundle 'Gundo'
+  Bundle 'Lokaltog/vim-easymotion'
+  Bundle 'Raimondi/delimitMate'
+  Bundle 'AutoComplPop'
+  Bundle 'ShowMarks7'
 
-  Bundle "kien/rainbow_parentheses.vim"
+  Bundle 'kien/rainbow_parentheses.vim'
   autocmd VimEnter * RainbowParenthesesToggle
   autocmd Syntax * RainbowParenthesesLoadRound
   autocmd Syntax * RainbowParenthesesLoadSquare
