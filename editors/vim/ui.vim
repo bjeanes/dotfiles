@@ -107,6 +107,7 @@ syntax on
   autocmd WinLeave * :setlocal nonumber
 
 " automatically resize vertical splits (great for smaller screens).
+" TODO: ignore NerdTree
   autocmd WinEnter * :set winfixheight
   autocmd WinEnter * :wincmd ="
 
