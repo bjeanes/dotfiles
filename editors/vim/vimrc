@@ -24,6 +24,9 @@ map <Leader>vv :edit $MYVIMRC<CR>
 map <Leader>gg :edit $MYGVIMRC<CR>
 map <Leader>.. :cd ~/.config<CR>:enew<CR>
 
+set pastetoggle=<Leader>p
+map <leader>p :set invpaste paste?<CR>
+
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
