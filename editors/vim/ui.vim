@@ -1,12 +1,10 @@
 syntax on
 
 " Visual
-  set number
   set ruler
   set guioptions=ce
   set showmatch                 " Briefly jump to a paren once it's balanced
   set linespace=2
-  set cursorline
   set background=dark
   colorscheme Tomorrow-Night
 
@@ -95,6 +93,21 @@ syntax on
 
 " Opens an edit command with the path of the currently edited file filled in Normal mode: <Leader>e
   map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+
+"  Always show cursorline, but only in current window.
+  set cursorline
+  autocmd WinEnter * :setlocal cursorline
+  autocmd WinLeave * :setlocal nocursorline
+
+" Always show line numbers, but only in current window (great for smaller screens).
+  set number
+  autocmd WinEnter * :setlocal number
+  autocmd WinLeave * :setlocal nonumber
+
+" automatically resize vertical splits (great for smaller screens).
+  autocmd WinEnter * :set winfixheight
+  autocmd WinEnter * :wincmd ="
+
 
 " Strip trailing whitespace on save
   function! <SID>StripTrailingWhitespaces()
