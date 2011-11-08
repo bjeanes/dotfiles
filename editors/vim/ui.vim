@@ -96,7 +96,8 @@ syntax on
 " way better...
   map 0 ^
 
-" Opens an edit command with the path of the currently edited file filled in Normal mode: <Leader>e
+" Opens an edit command with the path of the currently
+" edited file filled in Normal mode: <Leader>e
   map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "  Always show cursorline, but only in current window.
