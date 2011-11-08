@@ -6,7 +6,7 @@ syntax on
   set showmatch                 " Briefly jump to a paren once it's balanced
   set linespace=2
   set background=dark
-  colorscheme Tomorrow-Night
+  colorscheme molokai_mac
 
 " Tabs/Whitespace
   set tabstop=2
