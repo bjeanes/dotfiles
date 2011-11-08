@@ -15,7 +15,7 @@ map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 
 " Theme development help
-cmap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+nmap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
