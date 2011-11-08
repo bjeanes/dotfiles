@@ -33,6 +33,11 @@ call vundle#rc()
   Bundle 'skammer/vim-css-color'
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'pangloss/vim-javascript'
+  Bundle 'css3'
+  Bundle 'othree/html5-syntax.vim'
+  Bundle 'tyok/js-mask'
+  Bundle 'AnsiEsc.vim'
+  Bundle 'mhz/vim-matchit'
   " }}}
 " }}}
 
