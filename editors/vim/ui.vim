@@ -108,6 +108,7 @@ syntax on
 
 " automatically resize vertical splits (great for smaller screens).
 " TODO: ignore NerdTree
+  autocmd WinEnter NERD_tree_* :setlocal winfixwidth
   autocmd WinEnter * :set winfixheight
   autocmd WinEnter * :wincmd ="
 
