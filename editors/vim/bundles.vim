@@ -53,12 +53,20 @@ call vundle#rc()
 
   Bundle 'majutsushi/tagbar'
   Bundle 'tpope/vim-surround'
-  Bundle 'millermedeiros/vim-statline'
-  Bundle 'Gundo'
   Bundle 'Lokaltog/vim-easymotion'
   Bundle 'Raimondi/delimitMate'
   Bundle 'AutoComplPop'
   Bundle 'ShowMarks7'
+
+  Bundle 'millermedeiros/vim-statline'
+  let g:statline_syntastic         = 1
+  let g:statline_fugitive          = 1
+  let g:statline_rvm               = 0 " TODO: how to integrate with rbenv
+  let g:statline_filename_relative = 1
+  let g:statline_trailing_space    = 0 " I already auto-fix these
+
+  Bundle 'Gundo'
+  nnoremap <Leader>u :GundoToggle<CR>
 
   Bundle 'kien/rainbow_parentheses.vim'
   autocmd VimEnter * RainbowParenthesesToggle
