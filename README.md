@@ -6,7 +6,6 @@
 * Remove 'export' from variables that don't need them
 * Make current directory red in prompt if non-writeable (ala fish)
 * Fix shell $PATH. Intelligently build up from only existent directories and ensure no-duplicates
-* Git template with ctag/other hooks (http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html)
 
 Copyright (c) 2008-2011 Bodaniel Jeanes
 

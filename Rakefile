@@ -25,6 +25,7 @@ task :install do
                    vcs/git/gitconfig
                    vcs/git/gitignore
                    vcs/git/gitk
+                   vcs/git/git_template
                    vcs/hg/hgrc
                   )
 

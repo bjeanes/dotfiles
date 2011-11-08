@@ -9,6 +9,7 @@
   put = push origin HEAD
   push-all = "!for i in $(git config --list | grep -E ^remote\\..+\\.url | sed -E 's/^remote\\.(.*)\\.url=.*/\\1/'); do git push $i master; done"
   unadd = reset HEAD
+	ctags = !.git/hooks/ctags
 [apply]
   whitespace = nowarn
 [color]
@@ -63,3 +64,5 @@
 
 [github]
   user = bjeanes
+[init]
+	templatedir = ~/.git_template
