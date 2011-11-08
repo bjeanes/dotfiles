@@ -154,7 +154,6 @@ call vundle#rc()
   Bundle 'Command-T'
   let g:CommandTMaxFiles  = 20000
   let g:CommandTMaxHeight = 10
-  set wildignore+=Transmission*Remote*GUI
 
   Bundle 'Indent-Guides'
   let g:indent_guides_auto_colors = 0
