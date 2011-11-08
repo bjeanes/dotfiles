@@ -43,6 +43,7 @@ syntax on
   set incsearch
   set ignorecase
   set smartcase
+  noremap <silent> <Space> <Esc>:noh<CR><Space>
 
 " Tab completion
   set wildmode=list:longest,list:full
