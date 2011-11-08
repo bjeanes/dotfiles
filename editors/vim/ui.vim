@@ -16,8 +16,12 @@ syntax on
   set expandtab
   set nowrap
   set list
-  set listchars=tab:▸\ ,eol:¬,trail:·
   set backspace=indent,eol,start " allow backspacing over everything in insert mode
+
+  " Toggle show tabs and trailing spaces (,c)
+  set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
+  set fillchars=vert:\ ,fold:-
+  nnoremap <silent> <Leader>c :set nolist!<CR>
 
 " Misc
   set switchbuf=useopen         " Don't re-open already opened buffers
