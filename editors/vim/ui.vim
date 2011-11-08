@@ -49,10 +49,6 @@ syntax on
   set wildmode=list:longest,list:full
   set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
 
-" Status bar
-  " set laststatus=2
-  " set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-
 " Folding
   set foldenable " Turn on folding
   set foldmethod=marker " Fold on the marker
