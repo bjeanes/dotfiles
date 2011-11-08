@@ -1,3 +1,4 @@
+# See https://github.com/gf3/dotfiles/blob/master/.bash_prompt for ideas for coloring (maybe in ZSH/Bash cross-compatible way?)
 function prompt_pwd() {
   if osx; then
     extended="-E"
