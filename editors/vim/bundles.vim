@@ -15,13 +15,15 @@ call vundle#rc()
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'tpope/vim-endwise'
   Bundle 'tpope/vim-rake'
-  Bundle 'tpope/vim-rails'
   Bundle 'tpope/vim-haml'
   Bundle 'ecomba/vim-ruby-refactoring'
 
-  " temporarily disable due to speed issues
-  "   see: https://github.com/tpope/vim-bundler/issues/4
+  " " temporarily disable due to speed issues
+  " "   see: https://github.com/tpope/vim-bundler/issues/4
   " Bundle 'tpope/vim-bundler'
+  "
+  " " Also this:
+  " Bundle 'tpope/vim-rails'
   " }}}
 
   " Markdown/Textile/etc {{{
@@ -38,6 +40,7 @@ call vundle#rc()
   Bundle 'tyok/js-mask'
   Bundle 'AnsiEsc.vim'
   Bundle 'mhz/vim-matchit'
+
   " }}}
 " }}}
 
@@ -58,10 +61,13 @@ call vundle#rc()
 
   Bundle 'majutsushi/tagbar'
   Bundle 'tpope/vim-surround'
-  Bundle 'Lokaltog/vim-easymotion'
   Bundle 'Raimondi/delimitMate'
   Bundle 'AutoComplPop'
   Bundle 'ShowMarks7'
+
+  Bundle 'Lokaltog/vim-easymotion'
+  let g:EasyMotion_keys = "arstdhneio" " Colemak home row
+
 
   Bundle 'millermedeiros/vim-statline'
   let g:statline_syntastic         = 1
