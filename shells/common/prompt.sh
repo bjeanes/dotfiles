@@ -17,3 +17,11 @@ function user_at_host() {
 
   echo $str
 }
+
+function prompt_bg_job() {
+  if [ "$CURRENT_SHELL" = "zsh" ]; then
+    jobs | grep '+' | awk '{print $4}'
+  else
+    jobs | grep '+' | awk '{print $3}'
+  fi
+}
