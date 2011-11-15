@@ -101,17 +101,7 @@ syntax on
   autocmd WinEnter * :setlocal cursorline
   autocmd WinLeave * :setlocal nocursorline
 
-" Always show line numbers, but only in current window (great for smaller screens).
   set number
-  autocmd WinEnter * :setlocal number
-  autocmd WinLeave * :setlocal nonumber
-
-" automatically resize vertical splits (great for smaller screens).
-" TODO: ignore NerdTree
-  autocmd WinEnter NERD_tree_* :setlocal winfixwidth
-  autocmd WinEnter * :set winfixheight
-  autocmd WinEnter * :wincmd ="
-
 
 " Strip trailing whitespace on save
   function! <SID>StripTrailingWhitespaces()

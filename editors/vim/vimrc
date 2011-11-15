@@ -14,6 +14,21 @@ set shell=zsh
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 
+" ,w - write file
+nnoremap <silent> ,w :write<CR>
+
+" ,N - toggle line numbers
+function! ToggleLineNumbers()
+  if &number
+    set nonumber
+  elseif &relativenumber
+    set number
+  else
+    set relativenumber
+  endif
+endfunction
+nnoremap <silent> ,N :call ToggleLineNumbers()<CR>
+
 " Theme development help
 nmap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
