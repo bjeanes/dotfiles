@@ -92,6 +92,9 @@ syntax on
 " way better...
   map 0 ^
 
+  nmap <Leader>] :tabnext<CR>
+  nmap <Leader>[ :tabprev<CR>
+
 " Opens an edit command with the path of the currently
 " edited file filled in Normal mode: <Leader>e
   map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
@@ -116,3 +119,6 @@ syntax on
     call cursor(l, c)
   endfunction
   autocmd! BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+  " For when other people use my setup
+  nmap \ <Leader>
