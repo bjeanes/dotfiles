@@ -1,0 +1,2 @@
+which rbenv &>/dev/null || return
+eval "$(rbenv init - zsh)"
