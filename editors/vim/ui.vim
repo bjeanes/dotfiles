@@ -43,7 +43,18 @@ syntax on
   set incsearch
   set ignorecase
   set smartcase
-  noremap <silent> <Space> <Esc>:noh<CR><Space>
+
+  " Remove highlighting when entering insert (not working... )
+  autocmd InsertEnter * nohlsearch
+
+  " center result
+  nnoremap n nzz
+  nnoremap N Nzz
+  nnoremap * *zz
+  nnoremap # #zz
+  nnoremap g* g*zz
+  nnoremap g# g#zz
+
 
 " Tab completion
   set wildmode=list:longest,list:full
