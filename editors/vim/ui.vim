@@ -62,7 +62,7 @@ syntax on
 
 " Folding
   set foldenable " Turn on folding
-  set foldmethod=marker " Fold on the marker
+  set foldmethod=syntax " Fold on the marker
   set foldlevel=100 " Don't autofold anything (but I can still fold manually)
   set foldopen=block,hor,mark,percent,quickfix,tag " what movements open folds
 
