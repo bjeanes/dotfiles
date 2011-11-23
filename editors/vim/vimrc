@@ -46,3 +46,5 @@ if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 
+" OS X clipboard when yanking/pasting
+set clipboard=unnamed
