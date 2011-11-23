@@ -1,7 +1,7 @@
 ---
 :update_sources: true
 :sources:
-- http://gemcutter.org
+- http://rubygems.org
 :verbose: true
 :bulk_threshold: 1000
 gem: --no-ri --no-rdoc
