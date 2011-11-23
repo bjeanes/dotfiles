@@ -111,6 +111,8 @@ syntax on
   map <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "  Always show cursorline, but only in current window.
+  set scrolloff=3
+  set scrolljump=10
   set cursorline
   autocmd WinEnter * :setlocal cursorline
   autocmd WinLeave * :setlocal nocursorline
