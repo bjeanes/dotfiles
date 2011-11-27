@@ -32,7 +32,7 @@ call vundle#rc()
 
   " Other {{{
   Bundle 'tpope/vim-cucumber'
-  Bundle 'skammer/vim-css-color'
+  " Bundle 'skammer/vim-css-color'
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'pangloss/vim-javascript'
   Bundle 'css3'
@@ -184,8 +184,9 @@ call vundle#rc()
   autocmd VimEnter * IndentGuidesEnable
 
   Bundle 'Syntastic'
-  let g:syntastic_enable_signs  = 1
-  let g:syntastic_auto_loc_list = 0
+  let g:syntastic_enable_signs       = 1
+  let g:syntastic_auto_loc_list      = 0
+  let g:syntastic_disabled_filetypes = ['cucumber']
 " }}}
 
 autocmd BufWritePost bundles.vim source ~/.vim/bundles.vim
