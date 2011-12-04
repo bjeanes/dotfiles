@@ -112,9 +112,9 @@ call vundle#rc()
   vmap <Leader>a> :Tabularize /=><CR>gv
   vmap <Leader>a: :Tabularize /\z:<CR>gv
 
-  imap <Leader>a= <Esc>:Tabularize /=<CR>i
-  imap <Leader>a> <Esc>:Tabularize /=><CR>i
-  imap <Leader>a: <Esc>:Tabularize /\z:<CR>i
+  imap <Leader>a= <Esc>:Tabularize /=<CR>a
+  imap <Leader>a> <Esc>:Tabularize /=><CR>a
+  imap <Leader>a: <Esc>:Tabularize /\z:<CR>a
 
   " Auto-align
   "" Cucumber
@@ -134,8 +134,8 @@ call vundle#rc()
   " These need more work:
   " TODO: - keep cursor position
   "       - don't align equals sign if inside hashrocket
-  " inoremap => =><Esc>:Tabularize /=> <CR>i
-  " inoremap =  =<Esc>:Tabularize /=<CR>i
+  " inoremap => =><Esc>:Tabularize /=> <CR>a
+  " inoremap =  =<Esc>:Tabularize /=<CR>a
 
   Bundle 'scrooloose/nerdcommenter'
   let NERDSpaceDelims = 1 " space between comment and code
