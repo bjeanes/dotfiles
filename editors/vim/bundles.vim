@@ -39,7 +39,7 @@ call vundle#rc()
   Bundle 'othree/html5-syntax.vim'
   Bundle 'tyok/js-mask'
   Bundle 'AnsiEsc.vim'
-  Bundle 'mhz/vim-matchit'
+  Bundle 'thisivan/vim-matchit'
 
   " }}}
 " }}}
