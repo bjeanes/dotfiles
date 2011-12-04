@@ -146,7 +146,7 @@ call vundle#rc()
 
   Bundle 'ZoomWin'
   map <Leader>z :ZoomWin<CR>
-  imap <Leader>z <Esc>:ZoomWin<CR>
+  imap <Leader>z <Esc>:ZoomWin<CR>a
 
   Bundle 'vimwiki'
   let g:vimwiki_hl_cb_checked = 1
