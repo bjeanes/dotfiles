@@ -32,7 +32,7 @@ call vundle#rc()
 
   " Other {{{
   Bundle 'tpope/vim-cucumber'
-  " Bundle 'skammer/vim-css-color'
+  " Bundle 'ap/vim-css-color'
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'pangloss/vim-javascript'
   Bundle 'css3'
