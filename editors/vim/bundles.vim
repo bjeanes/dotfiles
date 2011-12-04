@@ -80,7 +80,7 @@ call vundle#rc()
 
   " only enable if a filetype is set
   let g:acp_enableAtStartup = 0
-  autocmd FileType * AcpEnable
+  " autocmd FileType * AcpEnable
 
   Bundle 'Lokaltog/vim-easymotion'
   let g:EasyMotion_keys = "arstdhneio" " Colemak home row
