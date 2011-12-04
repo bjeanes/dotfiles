@@ -135,3 +135,9 @@ syntax on
 
   " For when other people use my setup
   nmap \ <Leader>
+
+  " May only work in iTerm2 and may have other bad effects,
+  " but this shows a block in normal mode, and vertical bar
+  " in insert mode.
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
