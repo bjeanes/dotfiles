@@ -28,6 +28,11 @@ call vundle#rc()
     " Bundle 'tpope/vim-rails'
   " }}}
 
+  " Lisp/Clojure {{{
+    Bundle 'VimClojure'
+    let vimclojure#FuzzyIndent = 1
+  " }}}
+
   " Markdown/Textile/etc {{{
     Bundle 'tpope/vim-markdown'
   " }}}
