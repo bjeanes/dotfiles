@@ -86,8 +86,8 @@ syntax on
 " Nicer splitting
   set splitbelow
   set splitright
-  map <C-_> :split<CR>
-  map <C-\> :vsplit<CR>
+  map <C-_> :new<CR>
+  map <C-\> :vnew<CR>
 
 " Emacs-like keys for the command line
   cnoremap <C-A> <Home>
