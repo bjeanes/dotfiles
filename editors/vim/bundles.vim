@@ -12,36 +12,34 @@ call vundle#rc()
 
 " Languages/Syntaxes/Frameworks {{{
   " Ruby {{{
-  Bundle 'vim-ruby/vim-ruby'
-  Bundle 'tpope/vim-endwise'
-  Bundle 'tpope/vim-rake'
-  Bundle 'tpope/vim-haml'
-  Bundle 'ecomba/vim-ruby-refactoring'
+    Bundle 'vim-ruby/vim-ruby'
+    Bundle 'tpope/vim-endwise'
+    Bundle 'tpope/vim-rake'
+    Bundle 'tpope/vim-haml'
+    Bundle 'ecomba/vim-ruby-refactoring'
 
-  " " temporarily disable due to speed issues
-  " "   see: https://github.com/tpope/vim-bundler/issues/4
-  " Bundle 'tpope/vim-bundler'
-  "
-  " " Also this:
-  " Bundle 'tpope/vim-rails'
+    Bundle 'tpope/vim-cucumber'
+
+    " " temporarily disable due to speed issues
+    " "   see: https://github.com/tpope/vim-bundler/issues/4
+    " Bundle 'tpope/vim-bundler'
+    "
+    " " Also this:
+    " Bundle 'tpope/vim-rails'
   " }}}
 
   " Markdown/Textile/etc {{{
-  Bundle 'tpope/vim-markdown'
+    Bundle 'tpope/vim-markdown'
   " }}}
 
-  " Other {{{
-  Bundle 'tpope/vim-cucumber'
-  " Bundle 'ap/vim-css-color'
-  Bundle 'kchmck/vim-coffee-script'
-  Bundle 'pangloss/vim-javascript'
-  Bundle 'css3'
-  Bundle 'othree/html5-syntax.vim'
-  Bundle 'tyok/js-mask'
-  Bundle 'AnsiEsc.vim'
-  Bundle 'thisivan/vim-matchit'
-
+  " HTML/CSS/Javascript {{{
+    Bundle 'kchmck/vim-coffee-script'
+    Bundle 'pangloss/vim-javascript'
+    Bundle 'css3'
+    Bundle 'othree/html5-syntax.vim'
+    " Bundle 'ap/vim-css-color'
   " }}}
+
 " }}}
 
 " Git {{{
@@ -116,6 +114,13 @@ call vundle#rc()
   imap <Leader>a> <Esc>:Tabularize /=><CR>a
   imap <Leader>a: <Esc>:Tabularize /\z:<CR>a
 
+  "" Assignments etc
+  " These need more work:
+  " TODO: - keep cursor position
+  "       - don't align equals sign if inside hashrocket
+  " inoremap => =><Esc>:Tabularize /=> <CR>a
+  " inoremap =  =<Esc>:Tabularize /=<CR>a
+
   " Auto-align
   "" Cucumber
   inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>a
@@ -129,13 +134,6 @@ call vundle#rc()
       call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
     endif
   endfunction
-
-  "" Assignments etc
-  " These need more work:
-  " TODO: - keep cursor position
-  "       - don't align equals sign if inside hashrocket
-  " inoremap => =><Esc>:Tabularize /=> <CR>a
-  " inoremap =  =<Esc>:Tabularize /=<CR>a
 
   Bundle 'scrooloose/nerdcommenter'
   let NERDSpaceDelims = 1 " space between comment and code
@@ -187,6 +185,11 @@ call vundle#rc()
   let g:syntastic_enable_signs       = 1
   let g:syntastic_auto_loc_list      = 0
   let g:syntastic_disabled_filetypes = ['cucumber']
+" }}}
+
+" Other {{{
+  Bundle 'AnsiEsc.vim'
+  Bundle 'thisivan/vim-matchit'
 " }}}
 
 autocmd BufWritePost bundles.vim source ~/.vim/bundles.vim
