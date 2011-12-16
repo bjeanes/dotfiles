@@ -1,4 +1,5 @@
 begin
+  require 'rubygems' unless defined? Gem
   require 'irbtools'
 rescue LoadError
   $stderr.puts "Please install 'irbtools' or add it to your Gemfile"
@@ -11,10 +12,4 @@ class Object
   def local_methods(obj = self)
     (obj.methods - obj.class.superclass.instance_methods).sort
   end
-end
-
-# Log to STDOUT if in Rails
-if Object.const_defined?('ActiveRecord')
-  require 'logger'
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
 end

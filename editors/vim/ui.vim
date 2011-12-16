@@ -55,7 +55,6 @@ syntax on
   nnoremap g* g*zz
   nnoremap g# g#zz
 
-
 " Tab completion
   set wildmode=list:longest,list:full
   set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
