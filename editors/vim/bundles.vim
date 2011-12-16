@@ -73,6 +73,7 @@ call vundle#rc()
   nnoremap <silent> ,y :YRShow<CR>
 
   Bundle 'AutoComplPop'
+  let g:acp_enableAtStartup        = 0
   let g:acp_completeoptPreview     = 1
   let g:acp_behaviorKeywordLength  = 3
   let g:acp_behaviorKeywordIgnores = [
@@ -80,10 +81,6 @@ call vundle#rc()
     \ 'else', 'elsif', 'elif', 'endif', 'then',
     \ 'case', 'done', 'do'
     \ ]
-
-  " only enable if a filetype is set
-  let g:acp_enableAtStartup = 0
-  " autocmd FileType * AcpEnable
 
   Bundle 'Lokaltog/vim-easymotion'
   let g:EasyMotion_keys = "arstdhneio" " Colemak home row
