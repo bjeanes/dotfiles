@@ -66,3 +66,5 @@
 	user = bjeanes
 [init]
 	templatedir = ~/.git_template
+[rerere]
+	enabled = 1
