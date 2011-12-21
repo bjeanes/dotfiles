@@ -9,6 +9,18 @@ alias pubkey="cat $HOME/.ssh/*.pub | pbcopy && echo 'Keys copied to clipboard'"
 alias hidefile='/usr/bin/SetFile -a "V"'
 alias showfile='/usr/bin/SetFile -a "v"'
 
+if which reattach-to-user-namespace >/dev/null 2>&1; then
+  # See https://raw.github.com/phinze/homebrew/15e923f17f282e6dcd2b2155947163ffed7ec8c9/Library/Formula/reattach-to-user-namespace.rb
+  #   and http://writeheavy.com/2011/10/23/reintroducing-tmux-to-the-osx-clipboard.html
+  alias vim='reattach-to-user-namespace vim'
+else
+  if [ -n "$TMUX" ]; then
+    echo "Installing pbpaste/pbcopy wrappers to get them working in Tmux..."
+    formula="https://raw.github.com/phinze/homebrew/15e923f17f282e6dcd2b2155947163ffed7ec8c9/Library/Formula/reattach-to-user-namespace.rb"
+    brew install --HEAD "$formula" --wrap-pbpaste-and-pbcopy >/dev/null 2>&1 && echo "Done." || echo "Failed."
+  fi
+fi
+
 function manpdf() { man -t $@ | open -f -a Preview; }
 function osinfo() {
    x1="$(/usr/bin/sw_vers -productName)"
