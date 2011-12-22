@@ -64,7 +64,9 @@ call vundle#rc()
 
   Bundle 'spiiph/vim-space'
   Bundle 'tpope/vim-surround'
+
   Bundle 'Raimondi/delimitMate'
+  autocmd FileType clojure let delimitMate_quotes = "\""
 
   Bundle 'ShowMarks7'
   let g:showmarks_enable=0
@@ -182,6 +184,7 @@ call vundle#rc()
   let g:indent_guides_auto_colors = 0
   let g:indent_guides_enable_on_vim_startup = 1
   autocmd VimEnter * IndentGuidesEnable
+  autocmd FileType clojure IndentGuidesDisable
 
   Bundle 'Syntastic'
   let g:syntastic_enable_signs       = 1
