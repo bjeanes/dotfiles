@@ -14,3 +14,23 @@ au! FileType scss    syntax cluster sassCssAttributes add=@cssColors
 au! BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
 
 au! BufRead,BufNewFile gitconfig set ft=gitconfig
+
+function! <SID>StripTrailingWhitespaces()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+
+" Strip trailing whitespace on save
+autocmd! BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+" Strip trailing whitespace on command
+nmap <Leader>sw :call <SID>StripTrailingWhitespaces()<CR>
+
+
