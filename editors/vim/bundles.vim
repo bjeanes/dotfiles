@@ -17,6 +17,7 @@ call vundle#rc()
     Bundle 'tpope/vim-rake'
     Bundle 'tpope/vim-haml'
     Bundle 'ecomba/vim-ruby-refactoring'
+    Bundle 'thisivan/vim-ruby-matchit'
 
     Bundle 'tpope/vim-cucumber'
 
