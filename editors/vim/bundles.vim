@@ -72,9 +72,6 @@ call vundle#rc()
   Bundle 'ShowMarks7'
   let g:showmarks_enable=0
 
-  Bundle 'YankRing.vim'
-  nnoremap <silent> ,y :YRShow<CR>
-
   Bundle 'AutoComplPop'
   let g:acp_enableAtStartup        = 0
   let g:acp_completeoptPreview     = 1
@@ -87,7 +84,6 @@ call vundle#rc()
 
   Bundle 'Lokaltog/vim-easymotion'
   let g:EasyMotion_keys = "arstdhneio" " Colemak home row
-
 
   Bundle 'millermedeiros/vim-statline'
   let g:statline_syntastic         = 1
