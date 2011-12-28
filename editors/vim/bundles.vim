@@ -6,10 +6,6 @@ call vundle#rc()
 " Let Vundle manage Vundle
   Bundle 'gmarik/vundle'
 
-" Experimenting
-  Bundle 'robgleeson/hammer.vim'
-  let g:HammerQuiet = 1
-
 " Languages/Syntaxes/Frameworks {{{
   " Ruby {{{
     Bundle 'vim-ruby/vim-ruby'
@@ -63,7 +59,6 @@ call vundle#rc()
 
 " Utility {{{
 
-  Bundle 'spiiph/vim-space'
   Bundle 'tpope/vim-surround'
 
   Bundle 'Raimondi/delimitMate'
