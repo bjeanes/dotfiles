@@ -187,6 +187,9 @@ call vundle#rc()
 " Other {{{
   Bundle 'AnsiEsc.vim'
   Bundle 'thisivan/vim-matchit'
+
+  Bundle 'aklt/plantuml-syntax'
+  au BufNewFile,BufRead *.uml set filetype=plantuml
 " }}}
 
 autocmd BufWritePost bundles.vim source ~/.vim/bundles.vim
