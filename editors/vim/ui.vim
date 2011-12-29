@@ -121,6 +121,9 @@ syntax on
   " For when other people use my setup
   nmap \ <Leader>
 
+  " OS X clipboard when yanking/pasting
+  set clipboard=unnamed
+
   " May only work in iTerm2 and may have other bad effects,
   " but this shows a block in normal mode, and vertical bar
   " in insert mode.

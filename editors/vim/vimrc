@@ -21,17 +21,8 @@ set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 " ,w - write file
 nnoremap <silent> ,w :write<CR>
 
-" ,N - toggle line numbers
-function! ToggleLineNumbers()
-  if &number
-    set nonumber
-  elseif &relativenumber
-    set number
-  else
-    set relativenumber
-  endif
-endfunction
-nnoremap <silent> ,N :call ToggleLineNumbers()<CR>
+set pastetoggle=<Leader>p
+map <leader>p :set invpaste paste?<CR>
 
 " Theme development help
 nmap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -43,12 +34,7 @@ map <Leader>vv :edit $MYVIMRC<CR>
 map <Leader>gg :edit $MYGVIMRC<CR>
 map <Leader>.. :cd ~/.config<CR>:enew<CR>
 
-set pastetoggle=<Leader>p
-map <leader>p :set invpaste paste?<CR>
-
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 
-" OS X clipboard when yanking/pasting
-set clipboard=unnamed
