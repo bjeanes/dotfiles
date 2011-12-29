@@ -4,11 +4,15 @@ source ~/.vim/ui.vim
 source ~/.vim/autocommands.vim
 source ~/.vim/bundles.vim
 
+" This helps with RVM etc
+set shell=zsh
+
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
 
-" This helps with RVM etc
-set shell=zsh
+" Send visual selection to gist.github.com
+" Requires gist (brew install gist)
+vnoremap <leader>G :w !gist -p -t %:e \| pbcopy<cr>
 
 " CTags
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
