@@ -31,6 +31,7 @@ syntax on
   let mapleader = ','
   set autoread                  " watch for file changes
   set mouse=a
+  set ttymouse=xterm            " Needed to get mouse working when in Tmux/screen
   set fileformats=unix
 
 " Bells
