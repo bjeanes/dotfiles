@@ -1,8 +1,6 @@
 COMMON_SHELL_FILES="$SHELL_FILES/../common"
 
-# TODO: Remove duplicates from the PATH
-PATH="/usr/local/bin:/usr/local/sbin:/usr/X11/bin:/usr/bin:/usr/sbin:/bin:/sbin:${PATH}"
-
+source "$SHELL_FILES/../path.sh"
 source "$SHELL_FILES/../tmux.sh"
 
 CDPATH=".:${HOME}"
