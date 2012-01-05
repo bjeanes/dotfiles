@@ -1,5 +1,33 @@
 osx || return # Only for OS X
 
+function __setup_tmux_wrappers() {
+  local wrap="reattach-to-user-namespace"
+  local editors="VISUAL $(env | grep EDITOR | cut -d= -f1)"
+
+  alias vim="$wrap vim"
+  alias mvim="$wrap mvim"
+
+  for editor in $editors; do
+    eval "$editor='$wrap $(eval "echo \$$editor")'"
+  done
+}
+
+if which reattach-to-user-namespace >/dev/null 2>&1; then
+  # and http://writeheavy.com/2011/10/23/reintroducing-tmux-to-the-osx-clipboard.html
+  [ -n "$TMUX" ] && __setup_tmux_wrappers
+else
+  if [ -n "$TMUX" ]; then
+    echo "Installing pbpaste/pbcopy wrappers to get them working in Tmux..."
+    formula="https://raw.github.com/phinze/homebrew/15e923f17f282e6dcd2b2155947163ffed7ec8c9/Library/Formula/reattach-to-user-namespace.rb"
+    brew install --HEAD "$formula" --wrap-pbpaste-and-pbcopy >/dev/null 2>&1 && echo "Done." || echo "Failed."
+    __setup_tmux_wrappers
+  fi
+fi
+
+if [ -z "$JAVA_HOME" -a -d /System/Library/Frameworks/JavaVM.framework/Home ]; then
+  export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+fi
+
 alias o='open .'
 
 # replacement netstat cmd to find ports used by apps on OS X
@@ -8,18 +36,6 @@ alias pubkey="cat $HOME/.ssh/*.pub | pbcopy && echo 'Keys copied to clipboard'"
 
 alias hidefile='/usr/bin/SetFile -a "V"'
 alias showfile='/usr/bin/SetFile -a "v"'
-
-if which reattach-to-user-namespace >/dev/null 2>&1; then
-  # See https://raw.github.com/phinze/homebrew/15e923f17f282e6dcd2b2155947163ffed7ec8c9/Library/Formula/reattach-to-user-namespace.rb
-  #   and http://writeheavy.com/2011/10/23/reintroducing-tmux-to-the-osx-clipboard.html
-  alias vim='reattach-to-user-namespace vim'
-else
-  if [ -n "$TMUX" ]; then
-    echo "Installing pbpaste/pbcopy wrappers to get them working in Tmux..."
-    formula="https://raw.github.com/phinze/homebrew/15e923f17f282e6dcd2b2155947163ffed7ec8c9/Library/Formula/reattach-to-user-namespace.rb"
-    brew install --HEAD "$formula" --wrap-pbpaste-and-pbcopy >/dev/null 2>&1 && echo "Done." || echo "Failed."
-  fi
-fi
 
 function manpdf() { man -t $@ | open -f -a Preview; }
 function osinfo() {
