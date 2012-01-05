@@ -44,3 +44,4 @@ autoload -U select-word-style
 select-word-style bash
 
 REPORTTIME=2
+TIMEFMT="%*Es total, %U user, %S system, %P cpu"

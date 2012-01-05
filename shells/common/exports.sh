@@ -11,6 +11,3 @@ export CLICOLOR=1
 export HISTSIZE=1000000
 export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
 
-export REPORTTIME=2
-export TIMEFMT="%*Es total, %U user, %S system, %P cpu"
-
