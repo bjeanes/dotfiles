@@ -1,5 +1,8 @@
 alias reload="source ~/.zshrc"
 
+# TODO: Get rid of oh-my-zsh already...
+source $SHELL_FILES/oh-my-zsh.zsh
+
 fpath=($SHELL_FILES/completions $fpath)
 
 # Option-Left + Option-Right for moving word-by-word in OS X
