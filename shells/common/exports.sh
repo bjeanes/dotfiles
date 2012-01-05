@@ -1,5 +1,4 @@
-which vim  &>/dev/null && editor="$(which vim)"
-# which mvim &>/dev/null && editor="$(which mvim)"
+which vim &>/dev/null && editor="$(which vim)"
 
 export EDITOR="$editor -f"
 export VISUAL="$editor"
