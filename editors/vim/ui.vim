@@ -33,6 +33,10 @@ syntax on
   set mouse=a
   set ttymouse=xterm            " Needed to get mouse working when in Tmux/screen
   set fileformats=unix
+  set history=1000
+  set hidden
+  set title                     " Show title in Terminal
+  set shortmess=atI
 
 " Bells
   set novisualbell  " No blinking
@@ -130,3 +134,5 @@ syntax on
   " in insert mode.
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+  runtime macros/matchit.vim
