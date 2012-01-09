@@ -31,7 +31,7 @@ syntax on
   let mapleader = ','
   set autoread                  " watch for file changes
   set mouse=a
-  set ttymouse=xterm            " Needed to get mouse working when in Tmux/screen
+  set ttymouse=xterm2           " Needed to get mouse working when in Tmux/screen
   set fileformats=unix
   set history=1000
   set hidden
@@ -125,6 +125,9 @@ syntax on
 
   " For when other people use my setup
   nmap \ <Leader>
+
+  " Easier
+  nnoremap ; :
 
   " OS X clipboard when yanking/pasting
   set clipboard=unnamed

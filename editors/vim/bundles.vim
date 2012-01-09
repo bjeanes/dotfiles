@@ -133,6 +133,7 @@ call vundle#rc()
   endfunction
 
   Bundle 'scrooloose/nerdcommenter'
+  let NERDCreateDefaultMappings = 0
   let NERDSpaceDelims = 1 " space between comment and code
   map  // <plug>NERDCommenterToggle
   vmap // <plug>NERDCommenterToggle gv
