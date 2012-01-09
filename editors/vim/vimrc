@@ -7,6 +7,9 @@ source ~/.vim/bundles.vim
 " This helps with RVM etc
 set shell=zsh
 
+" http://tim.theenchanter.com/2008/07/crontab-temp-file-must-be-edited-in.html
+set backupskip=/tmp/*,/private/tmp/*"
+
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
 
