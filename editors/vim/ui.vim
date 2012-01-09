@@ -22,7 +22,7 @@ syntax on
   " Toggle show tabs and trailing spaces (,c)
   set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
   set fillchars=vert:\ ,fold:-
-  nnoremap <silent> <Leader>c :set nolist!<CR>
+  nnoremap <Leader>c :set nolist!<CR>
 
 " Misc
   set switchbuf=useopen         " Don't re-open already opened buffers
