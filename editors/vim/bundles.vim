@@ -16,13 +16,6 @@ call vundle#rc()
     Bundle 'thisivan/vim-ruby-matchit'
 
     Bundle 'tpope/vim-cucumber'
-
-    " " temporarily disable due to speed issues
-    " "   see: https://github.com/tpope/vim-bundler/issues/4
-    " Bundle 'tpope/vim-bundler'
-    "
-    " " Also this:
-    " Bundle 'tpope/vim-rails'
   " }}}
 
   " Lisp/Clojure {{{
@@ -40,7 +33,6 @@ call vundle#rc()
     Bundle 'pangloss/vim-javascript'
     Bundle 'css3'
     Bundle 'othree/html5-syntax.vim'
-    " Bundle 'ap/vim-css-color'
   " }}}
 
 " }}}
@@ -91,7 +83,6 @@ call vundle#rc()
   autocmd Syntax * RainbowParenthesesLoadRound
   autocmd Syntax * RainbowParenthesesLoadSquare
   autocmd Syntax * RainbowParenthesesLoadBraces
-
 
   Bundle 'Tabular'
   map <Leader>a= :Tabularize /=<CR>
