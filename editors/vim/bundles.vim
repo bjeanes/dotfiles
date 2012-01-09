@@ -32,6 +32,7 @@ call vundle#rc()
 
   " Markdown/Textile/etc {{{
     Bundle 'tpope/vim-markdown'
+    Bundle 'robgleeson/hammer.vim'
   " }}}
 
   " HTML/CSS/Javascript {{{
