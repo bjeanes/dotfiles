@@ -6,6 +6,7 @@
 * Remove 'export' from variables that don't need them
 * Make current directory red in prompt if non-writeable (ala fish)
 * Fix shell $PATH. Intelligently build up from only existent directories and ensure no-duplicates
+* Steal some awesome stuff from https://github.com/skwp/dotfiles/blob/master/osx
 
 Copyright (c) 2008-2011 Bodaniel Jeanes
 
