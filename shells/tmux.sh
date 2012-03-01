@@ -15,8 +15,8 @@ if [ -z "$TMUX" ]; then
       last_session="$(tmux list-windows -t login | tail -n1 | cut -d: -f1)"
       tmux new-session -t login \; new-window -a -t $last_session # Create a *new* session bound to "login" and create a new window
     fi
-  fi
 
-  # When Tmux exits, we exit
-  exit
+    # When Tmux exits, we exit
+    exit
+  fi
 fi
