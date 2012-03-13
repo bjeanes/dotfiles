@@ -20,7 +20,13 @@ call vundle#rc()
 
   " Lisp/Clojure {{{
     Bundle 'VimClojure'
-    let vimclojure#FuzzyIndent = 1
+    let g:vimclojure#FuzzyIndent = 1
+    let g:vimclojure#DynamicHighlighting = 1
+
+    Bundle 'jgdavey/tslime.vim'
+
+    Bundle 'emezeske/paredit.vim'
+    autocmd FileType clojure call PareditInitBuffer()
   " }}}
 
   " Markdown/Textile/etc {{{
