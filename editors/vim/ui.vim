@@ -61,6 +61,9 @@ syntax on
   nnoremap g* g*zz
   nnoremap g# g#zz
 
+" Work around bug that leaves cursor in middle of line
+  nnoremap dd ddI<Esc>
+
 " Tab completion
   set wildmode=list:longest,list:full
   set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
