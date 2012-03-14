@@ -22,6 +22,7 @@ call vundle#rc()
     Bundle 'VimClojure'
     let g:vimclojure#FuzzyIndent = 1
     let g:vimclojure#DynamicHighlighting = 1
+    let g:vimclojure#ParenRainbow = 1
 
     Bundle 'jgdavey/tslime.vim'
 
@@ -85,10 +86,10 @@ call vundle#rc()
   nnoremap <Leader>u :GundoToggle<CR>
 
   Bundle 'kien/rainbow_parentheses.vim'
-  autocmd VimEnter * RainbowParenthesesToggle
-  autocmd Syntax * RainbowParenthesesLoadRound
-  autocmd Syntax * RainbowParenthesesLoadSquare
-  autocmd Syntax * RainbowParenthesesLoadBraces
+  autocmd VimEnter *.{rb,coffee} RainbowParenthesesToggle
+  autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadRound
+  autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadSquare
+  autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadBraces
 
   Bundle 'Tabular'
   map <Leader>a= :Tabularize /=<CR>
