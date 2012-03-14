@@ -92,24 +92,18 @@ call vundle#rc()
   autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadBraces
 
   Bundle 'Tabular'
-  map <Leader>a= :Tabularize /=<CR>
-  map <Leader>a> :Tabularize /=><CR>
-  map <Leader>a: :Tabularize /\z:<CR>
+  AddTabularPattern! first_eq     /\%(=.*\)\@<!=[>=]\@!/l1c1l0
+  AddTabularPattern! first_rocket /\%(=>.*\)\@<!=>/l1c1l0
+  AddTabularPattern! first_key    /\v%(%(\h\w*|"[^"]+"):.*)@<!%(\h\w*|"[^"]+")\zs:/l0l1
 
-  vmap <Leader>a= :Tabularize /=<CR>gv
-  vmap <Leader>a> :Tabularize /=><CR>gv
-  vmap <Leader>a: :Tabularize /\z:<CR>gv
+  " mark, select indent level, tabularize, go to mark
+  nmap <Leader>a= mT:Tabularize first_eq<CR>`T
+  nmap <Leader>a> mT:Tabularize first_rocket<CR>`T
+  nmap <Leader>a: mT:Tabularize first_key<CR>`T
 
-  imap <Leader>a= <Esc>:Tabularize /=<CR>a
-  imap <Leader>a> <Esc>:Tabularize /=><CR>a
-  imap <Leader>a: <Esc>:Tabularize /\z:<CR>a
-
-  "" Assignments etc
-  " These need more work:
-  " TODO: - keep cursor position
-  "       - don't align equals sign if inside hashrocket
-  " inoremap => =><Esc>:Tabularize /=> <CR>a
-  " inoremap =  =<Esc>:Tabularize /=<CR>a
+  vmap <Leader>a= :Tabularize first_eq<CR>gv
+  vmap <Leader>a> :Tabularize first_rocket<CR>gv
+  vmap <Leader>a: :Tabularize first_key<CR>gv
 
   " Auto-align
   "" Cucumber
