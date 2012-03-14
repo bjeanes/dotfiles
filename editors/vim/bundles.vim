@@ -92,18 +92,18 @@ call vundle#rc()
   autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadBraces
 
   Bundle 'Tabular'
-  AddTabularPattern! first_eq     /\%(=.*\)\@<!=[>=]\@!/l1c1l0
-  AddTabularPattern! first_rocket /\%(=>.*\)\@<!=>/l1c1l0
-  AddTabularPattern! first_key    /\v%(%(\h\w*|"[^"]+"):.*)@<!%(\h\w*|"[^"]+")\zs:/l0l1
+  autocmd VimEnter * AddTabularPattern! first_eq     /\%(=.*\)\@<!=[>=]\@!/l1c1l0
+  autocmd VimEnter * AddTabularPattern! first_rocket /\%(=>.*\)\@<!=>/l1c1l0
+  autocmd VimEnter * AddTabularPattern! first_key    /\v%(%(\h\w*|"[^"]+"):.*)@<!%(\h\w*|"[^"]+")\zs:/l0l1
 
   " mark, select indent level, tabularize, go to mark
-  nmap <Leader>a= mT:Tabularize first_eq<CR>`T
-  nmap <Leader>a> mT:Tabularize first_rocket<CR>`T
-  nmap <Leader>a: mT:Tabularize first_key<CR>`T
+  nmap <silent> <Leader>a = mT:Tabularize first_eq<CR>`T
+  nmap <silent> <Leader>a> mT:Tabularize first_rocket<CR>`T
+  nmap <silent> <Leader>a: mT:Tabularize first_key<CR>`T
 
-  vmap <Leader>a= :Tabularize first_eq<CR>gv
-  vmap <Leader>a> :Tabularize first_rocket<CR>gv
-  vmap <Leader>a: :Tabularize first_key<CR>gv
+  vmap <silent> <Leader>a= :Tabularize first_eq<CR>gv
+  vmap <silent> <Leader>a> :Tabularize first_rocket<CR>gv
+  vmap <silent> <Leader>a: :Tabularize first_key<CR>gv
 
   " Auto-align
   "" Cucumber
