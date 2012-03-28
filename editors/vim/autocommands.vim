@@ -15,6 +15,9 @@ au! BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
 
 au! BufRead,BufNewFile gitconfig set ft=gitconfig
 
+" Attempted fix for Vim losing mouse support when inside Tmux
+au! TermResponse,CursorHold,CursorHoldI * set ttymouse=xterm2
+
 function! <SID>StripTrailingWhitespaces()
   " Preparation: save last search, and cursor position.
   let _s=@/
