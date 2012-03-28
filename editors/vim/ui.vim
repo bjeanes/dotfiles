@@ -132,6 +132,9 @@ syntax on
   " Easier
   nnoremap ; :
 
+  " I keep deleting words when I want to switch windows
+  imap <C-w> <Esc><C-w>
+
   " OS X clipboard when yanking/pasting
   set clipboard=unnamed
 
