@@ -19,20 +19,17 @@ call vundle#rc()
   " }}}
 
   " Lisp/Clojure {{{
-    Bundle 'VimClojure'
-    let g:vimclojure#FuzzyIndent = 1
-    let g:vimclojure#DynamicHighlighting = 1
-    let g:vimclojure#ParenRainbow = 1
-
-    Bundle 'jgdavey/tslime.vim'
-
-    Bundle 'emezeske/paredit.vim'
-    autocmd FileType clojure call PareditInitBuffer()
+    Bundle 'gberenfield/sjl-slimv'
+    let g:lisp_rainbow = 1
+    let g:slimv_repl_syntax = 1
+    let g:slimv_swank_clojure = "! xterm -e lein swank &"
+    let g:slimv_indent_keylists = 0
+    let g:paredit_shortmaps = 1
   " }}}
 
   " Markdown/Textile/etc {{{
     Bundle 'tpope/vim-markdown'
-    Bundle 'robgleeson/hammer.vim'
+    Bundle 'matthias-guenther/hammer.vim'
   " }}}
 
   " HTML/CSS/Javascript {{{
