@@ -30,6 +30,7 @@ task :install do
                   )
 
   files = Hash[files.zip(Array.new(files.size, "~/."))]
+  files["languages/clojure/lein/profiles.clj"] = "~/.lein/"
   # files["ruby/global.gems"] = "~/.rvm/gemsets/"
 
   files.each do |file, destination|
