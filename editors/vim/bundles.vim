@@ -153,10 +153,12 @@ call vundle#rc()
   let g:NERDTreeDirArrows   = 1
   let g:NERDTreeHijackNetrw = 0
   map <Leader>n :NERDTreeToggle<CR>
+  map <Leader>N :NERDTreeFind<CR>
 
   Bundle 'Command-T'
   let g:CommandTMaxFiles  = 20000
   let g:CommandTMaxHeight = 10
+  map <Leader>f :CommandTFlush<CR>
 
   Bundle 'Indent-Guides'
   let g:indent_guides_auto_colors = 0
