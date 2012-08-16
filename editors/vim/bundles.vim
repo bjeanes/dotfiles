@@ -161,12 +161,14 @@ augroup bundles
     let g:NERDTreeDirArrows   = 1
     let g:NERDTreeHijackNetrw = 0
     map <Space>n :NERDTreeToggle<CR>
+    map <Leader>N :NERDTreeFind<CR>
 
     Bundle 'Command-T'
     let g:CommandTMaxFiles  = 20000
     let g:CommandTMaxHeight = 10
     nnoremap <silent> <Leader>t :CommandT<CR>
     nnoremap <silent> <Leader>b :CommandTBuffer<CR>
+    nnoremap <Leader>f :CommandTFlush<CR>
 
     Bundle 'Indent-Guides'
     let g:indent_guides_auto_colors = 0
@@ -190,5 +192,4 @@ augroup bundles
 
   autocmd BufWritePost bundles.vim source ~/.vim/bundles.vim
   filetype plugin indent on
-
 augroup END

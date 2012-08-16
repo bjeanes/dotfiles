@@ -1,27 +1,7 @@
 export GEM_OPEN_EDITOR="$editor"
 export IRBRC="$HOME/.irbrc"
 export RBXOPT="-Xrbc.db=/tmp/rbx -X19"
-
-function rake
-{
-  if [ -f Gemfile ]; then
-    bundle exec rake "$@"
-  else
-    "$(which rake)" "$@"
-  fi
-}
-
-function rails_command
-{
-  local cmd=$1
-  shift
-
-  if [ -e script/rails ]; then
-    script/rails "$cmd" "$@"
-  else
-    "script/$cmd" "$@"
-  fi
-}
+export JRUBY_OPTS="--1.9"
 
 function __database_yml {
   if [[ -f config/database.yml ]]; then
@@ -36,5 +16,5 @@ function psql
     PGDATABASE="$(__database_yml database)" "$(which psql)" "$@"
     return $?
   fi
-  "$(which psql)" "$@"
+  "$(/usr/bin/which psql)" "$@"
 }
