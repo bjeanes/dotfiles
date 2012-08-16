@@ -22,17 +22,13 @@ augroup bundles
     " }}}
 
     " Lisp/Clojure {{{
-      Bundle 'gberenfield/sjl-slimv'
+      Bundle 'RyanMcG/slimVimClojure'
       let g:lisp_rainbow = 1
       let g:slimv_repl_syntax = 1
       let g:slimv_swank_clojure = "!screen -d -m lein swank"
       let g:slimv_indent_keylists = 0
       let g:paredit_shortmaps = 1
-
-      Bundle 'VimClojure'
       let g:vimclojure#ParenRainbow = 1
-      " If indent doesn't work, run:
-      "   (cd ~/.vim/bundle/*slimv*; rm -f ftdetect/clojure.vim indent/clojure.vim syntax/clojure/slimv-syntax-clojure.vim)
     " }}}
 
     " Markdown/Textile/etc {{{
