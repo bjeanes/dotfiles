@@ -23,6 +23,8 @@ task :install do
                    shells/zsh/zshrc
                    vcs/git/gitattributes
                    vcs/git/gitconfig
+                   vcs/git/gitconfig.merge
+                   vcs/git/gitconfig.pushurls
                    vcs/git/gitignore
                    vcs/git/gitk
                    vcs/git/git_template
@@ -30,7 +32,8 @@ task :install do
                   )
 
   files = Hash[files.zip(Array.new(files.size, "~/."))]
-  # files["ruby/global.gems"] = "~/.rvm/gemsets/"
+
+  system "cp -n vcs/git/gitconfig.local ~/.gitconfig.local"
 
   files.each do |file, destination|
     file_name        = file.split(/\//).last
