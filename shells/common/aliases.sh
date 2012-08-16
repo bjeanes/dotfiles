@@ -19,8 +19,6 @@ alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 alias jsonify='python -mjson.tool'
 
-alias serial="ioreg -l | grep IOPlatformSerialNumber | cut -f 10 -d' ' | cut -d'\"' -f 2 | pbcopy && echo 'Copied to clipboard'"
-
 if [ -n "$SSH_CONNECTION" ]; then
   # Never open GUI vim when SSHd into a box
   alias mvim='vim'

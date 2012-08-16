@@ -1,5 +1,7 @@
 osx || return # Only for OS X
 
+alias serial="ioreg -l | grep IOPlatformSerialNumber | cut -f 10 -d' ' | cut -d'\"' -f 2 | pbcopy && echo 'Copied to clipboard'"
+
 function __setup_tmux_wrappers() {
   local wrap="reattach-to-user-namespace"
   local editors="VISUAL $(env | grep EDITOR | cut -d= -f1)"
