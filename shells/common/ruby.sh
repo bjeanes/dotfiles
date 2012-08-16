@@ -16,5 +16,5 @@ function psql
     PGDATABASE="$(__database_yml database)" "$(which psql)" "$@"
     return $?
   fi
-  "$(which psql)" "$@"
+  "$(/usr/bin/which psql)" "$@"
 }
