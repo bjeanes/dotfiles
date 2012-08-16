@@ -138,7 +138,13 @@ syntax on
   " May only work in iTerm2 and may have other bad effects,
   " but this shows a block in normal mode, and vertical bar
   " in insert mode.
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  if exists('$TMUX')
+    " https://github.com/sjl/vitality.vim/issues/8#issuecomment-7664649
+    let &t_SI = "\<Esc>[3 q"
+    let &t_EI = "\<Esc>[0 q"
+  else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  endif
 
   runtime macros/matchit.vim
