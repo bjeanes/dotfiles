@@ -65,9 +65,6 @@ augroup bundles
     Bundle 'Raimondi/delimitMate'
     autocmd FileType clojure let delimitMate_quotes = "\""
 
-    Bundle 'ShowMarks7'
-    let g:showmarks_enable=0
-
     Bundle 'AutoComplPop'
     let g:acp_enableAtStartup        = 0
     let g:acp_completeoptPreview     = 1
