@@ -1,4 +1,5 @@
 require 'rake'
+require 'fileutils'
 
 desc "install the dot files into user's home directory"
 task :install do
@@ -33,6 +34,7 @@ task :install do
 
   files = Hash[files.zip(Array.new(files.size, "~/."))]
   files["languages/clojure/lein/profiles.clj"] = "~/.lein/"
+  files["editors/emacs/init.el"] = "~/.emacs.d/"
 
   system "cp -n vcs/git/gitconfig.local ~/.gitconfig.local"
 
@@ -71,5 +73,6 @@ end
 
 def link_file(old_file, new_file)
   puts "#{old_file} => #{new_file}"
+  FileUtils.mkdir_p(File.dirname(new_file))
   system %Q{ln -fs "#{new_file}" "#{old_file}"}
 end
