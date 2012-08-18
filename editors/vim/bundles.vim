@@ -21,14 +21,13 @@ augroup bundles
       Bundle 'tpope/vim-cucumber'
     " }}}
 
-    " Lisp/Clojure {{{
-      Bundle 'RyanMcG/slimVimClojure'
-      let g:lisp_rainbow = 1
-      let g:slimv_repl_syntax = 1
-      let g:slimv_swank_clojure = "!screen -d -m lein swank"
-      let g:slimv_indent_keylists = 0
-      let g:paredit_shortmaps = 1
+    " Clojure {{{
+      Bundle 'paredit.vim'
+      Bundle 'VimClojure'
       let g:vimclojure#ParenRainbow = 1
+      let vimclojure#FuzzyIndent = 1
+      autocmd FileType clojure set lispwords-='->'
+      autocmd FileType clojure set lispwords-='->>'
     " }}}
 
     " Markdown/Textile/etc {{{
