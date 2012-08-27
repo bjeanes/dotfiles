@@ -6,4 +6,4 @@
                   [lein-outdated "0.1.0"]
                   [lein-ring "0.7.1"]
                   [lein-swank "1.4.0"]]
-        :vimclojure-opts {:repl true}}
+        :vimclojure-opts {:repl true}}}
