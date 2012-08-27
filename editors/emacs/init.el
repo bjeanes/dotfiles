@@ -12,11 +12,11 @@
                       starter-kit-lisp
                       starter-kit-eshell
                       starter-kit-js
-                      starter-kit-bindings
                       clojure-mode
                       clojure-project-mode
                       color-theme
                       color-theme-molokai
+                      rainbow-delimiters
                       ctags
                       paredit
                       undo-tree
@@ -27,22 +27,3 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
         (package-install p)))
-
-(require 'evil)
-(evil-mode 1)
-
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-
-(defun plist-to-alist (&optional arg) nil) ; stop a weird error coming
-                                           ; from color-theme-molokai
-(require 'paredit)
-(paredit)
-
-(require 'color-theme)
-(require 'color-theme-molokai)
-(color-theme-molokai)

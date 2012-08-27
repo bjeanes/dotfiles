@@ -49,3 +49,7 @@ doc/tags
 .bundle/*
 .rbx/
 .netrwhist
+
+# emacs
+.#*
+\#*#

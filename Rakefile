@@ -35,6 +35,7 @@ task :install do
   files = Hash[files.zip(Array.new(files.size, "~/."))]
   files["languages/clojure/lein/profiles.clj"] = "~/.lein/"
   files["editors/emacs/init.el"] = "~/.emacs.d/"
+  files["editors/emacs/bjeanes"] = "~/.emacs.d/"
 
   system "cp -n vcs/git/gitconfig.local ~/.gitconfig.local"
 
