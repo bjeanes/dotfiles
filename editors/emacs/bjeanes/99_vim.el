@@ -8,5 +8,7 @@
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 
+(define-key evil-motion-state-map (kbd "C-u") 'evil-scroll-up)
+
 ;; TODO
 ;; Map D to C-k (i.e. preserve paredit's version)
