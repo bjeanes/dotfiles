@@ -14,6 +14,10 @@
                       starter-kit-js
                       clojure-mode
                       clojure-project-mode
+                      autopair
+                      ruby-interpolation
+                      ruby-tools
+                      ruby-end
                       color-theme
                       color-theme-molokai
                       rainbow-delimiters
@@ -21,7 +25,9 @@
                       paredit
                       undo-tree
                       org
-                      evil)
+                      evil
+                      ;evil-surround ; this is not in ELPA or marmalade :(
+                      )
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
