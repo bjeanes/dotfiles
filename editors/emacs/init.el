@@ -26,8 +26,7 @@
                       undo-tree
                       org
                       evil
-                      ;evil-surround ; this is not in ELPA or marmalade :(
-                      )
+                      surround)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
