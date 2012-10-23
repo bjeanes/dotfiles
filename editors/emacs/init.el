@@ -15,7 +15,8 @@
                       starter-kit-eshell
                       starter-kit-js
                       clojure-mode
-                      clojure-project-mode
+                      clojure-test-mode
+                      clojurescript-mode
                       autopair
                       ruby-tools
                       ruby-end

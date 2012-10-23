@@ -1,5 +1,7 @@
 (require 'evil)
 (add-hook 'prog-mode-hook 'evil-mode)
+(require 'surround)
+(add-hook 'prog-mode-hook 'global-surround-mode)
 
 (define-key evil-motion-state-map (kbd "C-u") 'evil-scroll-up)
 
