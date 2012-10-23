@@ -31,3 +31,5 @@
 	path = .gitconfig.pushurls
 	path = .gitconfig.merge
 	path = .gitconfig.local
+[credential]
+	helper = osxkeychain
