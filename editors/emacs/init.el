@@ -21,6 +21,7 @@
                       ruby-tools
                       ruby-end
                       ruby-electric
+                      markdown-mode
                       color-theme
                       color-theme-molokai
                       rainbow-delimiters
