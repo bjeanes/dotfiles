@@ -17,7 +17,7 @@ task :install do
                    misc/ctags
                    misc/inputrc
                    misc/nanorc
-                   misc/tmux.conf
+                   misc/tmux/tmux.conf
                    shells/bash/bash_profile
                    shells/bash/bashrc
                    shells/zsh/zshenv
