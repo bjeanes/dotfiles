@@ -1,3 +1,5 @@
+(require 'cl) ; needed for powerline
+
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -15,9 +17,9 @@
                       clojure-mode
                       clojure-project-mode
                       autopair
-                      ruby-interpolation
                       ruby-tools
                       ruby-end
+                      ruby-electric
                       color-theme
                       color-theme-molokai
                       rainbow-delimiters
@@ -25,6 +27,7 @@
                       paredit
                       undo-tree
                       org
+                      powerline
                       evil
                       surround)
   "A list of packages to ensure are installed at launch.")
