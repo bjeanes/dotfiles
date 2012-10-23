@@ -4,8 +4,8 @@
                   [lein-clojars "0.9.0"]
                   [lein-tarsier "0.9.1"]
                   ;[lein-pedantic "0.0.2"]
-                  [lein-outdated "0.1.0"]
-                  [lein-ring "0.7.1"]
+                  [lein-outdated "1.0.0"]
+                  [lein-ring "0.7.5"]
                   [lein-swank "1.4.0"]]
         :dependencies [[clj-stacktrace "0.2.4"]]
         :injections [(let [orig (ns-resolve (doto 'clojure.stacktrace require)
