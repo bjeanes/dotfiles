@@ -24,6 +24,7 @@
                       markdown-mode
                       color-theme
                       color-theme-molokai
+                      color-theme-sanityinc-tomorrow
                       rainbow-delimiters
                       ctags
                       paredit
