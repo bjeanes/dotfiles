@@ -100,7 +100,7 @@ function precmd {
 
   local cwd="$pr_blue`prompt_pwd`$pr_reset"
   local char="%0(?.$pr_green.$pr_red)♪$pr_reset"
-  local time="$pr_grey⌚ %*$pr_reset"
+  # local time="$pr_grey⌚ %*$pr_reset"
 
   local ruby
   which rvm-prompt &>/dev/null && ruby="❖ `rvm-prompt`"
@@ -116,8 +116,6 @@ function precmd {
   left=($(user_at_host) $cwd $char)
   right=($rev $ruby $time)
 
-  PS1="$left [ "
-  RPS1="] $right"
+  PS1="$left  "
+  RPS1=" $right"
 }
-
-
