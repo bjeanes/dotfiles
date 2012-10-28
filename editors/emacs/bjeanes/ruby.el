@@ -2,7 +2,8 @@
 (require 'ruby-end)
 (require 'ruby-tools)
 
-(custom-set-variables '(ruby-end-insert-newline nil))
+(custom-set-variables '(ruby-end-insert-newline nil)
+                      '(ruby-deep-indent-paren nil))
 
 (eval-after-load 'ruby-mode '(progn
                                (add-hook 'ruby-mode-hook
