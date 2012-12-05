@@ -4,6 +4,7 @@
 	push-all = "!for i in $(git config --list | grep -E ^remote\\..+\\.url | sed -E 's/^remote\\.(.*)\\.url=.*/\\1/'); do git push $i master; done"
 	unadd = reset HEAD
 	ctags = !.git/hooks/ctags
+	latest = for-each-ref --sort=-committerdate --format='%(committerdate:relative) -> %(refname:short)'
 [apply]
 	whitespace = nowarn
 [color]
