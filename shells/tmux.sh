@@ -16,7 +16,11 @@ if [ -z "$TMUX" ]; then
       tmux new-session -t login \; new-window -a -t $last_session # Create a *new* session bound to "login" and create a new window
     fi
 
-    # When Tmux exits, we exit
-    exit
+    # When Tmux exits, we exit. Unless we want to keep the shell
+    if [[ -f "/tmp/keep-shell-$USER" ]]; then
+      rm "/tmp/keep-shell-$USER"
+    else
+      exit
+    fi
   fi
 fi
