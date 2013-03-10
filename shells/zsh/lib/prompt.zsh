@@ -1,19 +1,15 @@
-autoload zsh/terminfo
-
 pr_reset="%f%u%k%s%b" # reset all codes
 
-if [ "$terminfo[colors]" -eq 256 ]; then
+pr_red="%F{red}"
+pr_blue="%F{blue}"
+pr_green="%F{green}"
+pr_grey="%B%F{black}"
+
+if [ "$(tput colors 2>/dev/null)" -eq 256 ]; then
   pr_red="%F{52}"
   pr_blue="%F{25}"
   pr_green="%F{28}"
   pr_grey="%F{59}"
-else
-  if [ "$terminfo[colors]" -eq 8 ]; then
-    pr_red="%F{red}"
-    pr_blue="%F{blue}"
-    pr_green="%F{green}"
-    pr_grey="%B%F{black}"
-  fi
 fi
 
 # VCS configuration

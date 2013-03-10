@@ -1,5 +1,7 @@
 alias reload="source ~/.zshrc"
 
+[[ $EMACS = t ]] && unsetopt zle
+
 fpath=($SHELL_FILES/completions $fpath)
 
 # Option-Left + Option-Right for moving word-by-word in OS X
