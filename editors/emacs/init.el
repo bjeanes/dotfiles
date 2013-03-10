@@ -9,30 +9,34 @@
   (package-refresh-contents))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(starter-kit
-                      starter-kit-ruby
-                      starter-kit-lisp
-                      starter-kit-eshell
-                      starter-kit-js
+(defvar my-packages '(ac-nrepl
+                      auto-complete
+                      autopair
                       clojure-mode
                       clojure-test-mode
                       clojurescript-mode
-                      autopair
-                      ruby-tools
-                      ruby-end
-                      ruby-electric
-                      markdown-mode
                       color-theme
-                      color-theme-molokai
                       color-theme-sanityinc-tomorrow
-                      rainbow-delimiters
                       ctags
-                      paredit
-                      undo-tree
-                      org
-                      powerline
                       evil
-                      surround)
+                      evil-paredit
+                      exec-path-from-shell
+                      find-file-in-repository
+                      markdown-mode
+                      paredit
+                      powerline
+                      rainbow-delimiters
+                      ruby-electric
+                      ruby-end
+                      ruby-tools
+                      starter-kit
+                      starter-kit-eshell
+                      starter-kit-js
+                      starter-kit-lisp
+                      starter-kit-ruby
+                      surround
+                      undo-tree
+                      yasnippet)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)

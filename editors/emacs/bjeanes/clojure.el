@@ -1,6 +1,7 @@
 (require 'clojure-mode)
 (define-clojure-indent
   (defroutes 'defun)
+  (do-seq 1)
   (GET 2)
   (POST 2)
   (PUT 2)
