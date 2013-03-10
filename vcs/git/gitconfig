@@ -5,6 +5,14 @@
 	unadd = reset HEAD
 	ctags = !.git/hooks/ctags
 	latest = for-each-ref --sort=-committerdate --format='%(committerdate:relative) -> %(refname:short)'
+	switch = !legit switch \"$@\"
+	branches = !legit branches
+	sprout = !legit sprout \"$@\"
+	unpublish = !legit unpublish \"$@\"
+	harvest = !legit harvest \"$@\"
+	sync = !legit sync \"$@\"
+	publish = !legit publish \"$@\"
+	graft = !legit graft \"$@\"
 [apply]
 	whitespace = nowarn
 [color]
