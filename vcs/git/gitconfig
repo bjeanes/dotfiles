@@ -2,7 +2,7 @@
 	# Add file excluding whitespace changes (http://stackoverflow.com/a/7149602/56690)
 	addnw = !sh -c 'git diff -w --no-color "$@" | git apply --cached --ignore-whitespace' -
 	unadd = reset HEAD
-	ctags = !.git/hooks/ctags
+	ctags = "!$(git rev-parse --show-toplevel)/.git/hooks/ctags"
 	latest = for-each-ref --sort=-committerdate --format='%(committerdate:relative) -> %(refname:short)'
 	switch = !legit switch \"$@\"
 	branches = !legit branches
