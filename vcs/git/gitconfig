@@ -1,7 +1,6 @@
 [alias]
-	co = checkout
-	put = push origin HEAD
-	push-all = "!for i in $(git config --list | grep -E ^remote\\..+\\.url | sed -E 's/^remote\\.(.*)\\.url=.*/\\1/'); do git push $i master; done"
+	# Add file excluding whitespace changes (http://stackoverflow.com/a/7149602/56690)
+	addnw = !sh -c 'git diff -w --no-color "$@" | git apply --cached --ignore-whitespace' -
 	unadd = reset HEAD
 	ctags = !.git/hooks/ctags
 	latest = for-each-ref --sort=-committerdate --format='%(committerdate:relative) -> %(refname:short)'
