@@ -5,6 +5,14 @@ rescue LoadError
   $stderr.puts "Please install 'irbtools' or add it to your Gemfile"
 end
 
+require 'irb/ext/save-history'
+require 'irb/completion'
+
+ARGV.concat [ "--readline", "--prompt-mode", "simple" ]
+
+IRB.conf[:SAVE_HISTORY] = 1000
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb-save-history"
+
 class Object
   # Return a list of methods defined locally for a particular object.  Useful
   # for seeing what it does whilst losing all the guff that's implemented
