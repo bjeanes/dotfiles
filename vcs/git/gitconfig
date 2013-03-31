@@ -4,6 +4,7 @@
 	unadd = reset HEAD
 	ctags = "!$(git rev-parse --show-toplevel)/.git/hooks/ctags"
 	latest = for-each-ref --sort=-committerdate --format='%(committerdate:relative) -> %(refname:short)'
+	lg = log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 	switch = !legit switch \"$@\"
 	branches = !legit branches
 	sprout = !legit sprout \"$@\"
@@ -13,7 +14,7 @@
 	publish = !legit publish \"$@\"
 	graft = !legit graft \"$@\"
 [apply]
-	whitespace = nowarn
+	whitespace = fix
 [color]
 	branch = auto
 	diff = auto
@@ -22,7 +23,9 @@
 [core]
 	attributesfile = ~/.gitattributes
 	excludesfile = ~/.gitignore
-	whitespace = fix
+	whitespace = trailing-space,space-before-tab
+	precomposeunicode = true
+	editor = vim -u NONE +0 -c 'syntax on'
 [branch]
 	autosetupmerge = always
 	autosetuprebase = local
@@ -40,11 +43,15 @@
 	path = .gitconfig.merge
 	path = .gitconfig.local
 [credential]
+	username = bjeanes
 	helper = osxkeychain
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
+	algorithm = minimal
+	mnemonicprefix = true
 	tool = Kaleidoscope
+	renames = copies
 [difftool]
 	prompt = false
 [mergetool "Kaleidoscope"]
@@ -53,4 +60,5 @@
 [mergetool]
 	prompt = false
 [merge]
+	conflictstyle = diff3
 	tool = Kaleidoscope
