@@ -99,9 +99,8 @@ function precmd {
   # local time="$pr_grey⌚ %*$pr_reset"
 
   local ruby
-  which rvm-prompt &>/dev/null && ruby="❖ `rvm-prompt`"
-  which rbenv      &>/dev/null && ruby="❖ `rbenv version-name`"
-
+  ruby="$(current_ruby)"
+  [ "x$ruby" != "x" ] && ruby="❖ $ruby"
 
   local rev="$pr_grey$vcs_info_msg_0_$pr_reset"
   rev="${rev/\(git\)/±}"
