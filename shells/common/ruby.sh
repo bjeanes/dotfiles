@@ -27,4 +27,6 @@ elif [ `which rvm &>/dev/null` ]; then
   function current_ruby() {
     echo `rvm-prompt`
   }
+else
+  function current_ruby() {}
 fi
