@@ -12,7 +12,7 @@ if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
 
   function current_ruby() {
     if [ "x$RUBY_ROOT" != "x" ]; then
-      echo `basename $RUBY_ROOT`
+      basename $RUBY_ROOT
     else
       return 1
     fi
@@ -21,13 +21,13 @@ elif $which -s rbenv; then
   eval "$(rbenv init - $CURRENT_SHELL)"
 
   function current_ruby() {
-    echo `rbenv version-name`
+    rbenv version-name
   }
 elif $which -s rvm; then
   source $HOME/.rvm/scripts/rvm
 
   function current_ruby() {
-    echo `rvm-prompt`
+    rvm-prompt
   }
 else
   function current_ruby() {}
