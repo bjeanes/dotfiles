@@ -1,4 +1,4 @@
-which hub &>/dev/null && alias git='nocorrect hub'
+which hub &>/dev/null && alias git='hub'
 
 alias ll='ls -lah'
 alias l='ls'

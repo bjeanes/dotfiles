@@ -30,5 +30,7 @@ elif $which -s rvm; then
     rvm-prompt
   }
 else
-  function current_ruby() {}
+  function current_ruby() {
+    exit 0
+  }
 fi
