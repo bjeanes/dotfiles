@@ -22,6 +22,7 @@
                       evil-paredit
                       exec-path-from-shell
                       find-file-in-repository
+                      go-mode
                       markdown-mode
                       paredit
                       powerline
