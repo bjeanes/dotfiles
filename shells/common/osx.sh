@@ -20,8 +20,8 @@ if which reattach-to-user-namespace >/dev/null 2>&1; then
 else
   if [ -n "$TMUX" ]; then
     echo "Installing pbpaste/pbcopy wrappers to get them working in Tmux..."
-    formula="https://raw.github.com/phinze/homebrew/15e923f17f282e6dcd2b2155947163ffed7ec8c9/Library/Formula/reattach-to-user-namespace.rb"
-    brew install --HEAD "$formula" --wrap-pbpaste-and-pbcopy >/dev/null 2>&1 && echo "Done." || echo "Failed."
+    formula="--HEAD --wrap-pbcopy-and-pbpaste --wrap-launchctl reattach-to-user-namespace"
+    brew install $formula >/dev/null 2>&1 && echo "Done." || echo "Failed."
     __setup_tmux_wrappers
   fi
 fi
