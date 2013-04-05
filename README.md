@@ -1,12 +1,8 @@
-# TODO
+# My dot files.
 
-* Make ZSH/Bash PATH dynamically figured out (via globbing) like fish
-* Make `rake install` install a .git pre-commit hook to remind about or automatically remove all API keys from dot files (gitconfig, etc)
-* Make `rake install` set up a loop that will always try to `git pull` the dot-files (if working directory is clean) so they are always up to date
-* Remove 'export' from variables that don't need them
-* Make current directory red in prompt if non-writeable (ala fish)
-* Fix shell $PATH. Intelligently build up from only existent directories and ensure no-duplicates
-* Steal some awesome stuff from https://github.com/skwp/dotfiles/blob/master/osx
+Please explore and/or suggest!
+
+# LICENSE
 
 Copyright (c) 2008-2011 Bodaniel Jeanes
 
