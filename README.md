@@ -4,7 +4,7 @@ Please explore and/or suggest!
 
 # LICENSE
 
-Copyright (c) 2008-2011 Bodaniel Jeanes
+Copyright (c) 2008-2013 Bodaniel Jeanes
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
