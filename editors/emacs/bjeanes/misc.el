@@ -1,5 +1,5 @@
 (require 'powerline)
-(command-execute 'powerline-default)
+(command-execute 'powerline-default-theme)
 
 (global-auto-revert-mode t)
 
