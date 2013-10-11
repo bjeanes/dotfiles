@@ -53,3 +53,4 @@ doc/tags
 # emacs
 .#*
 \#*#
+*.pyc

@@ -62,3 +62,9 @@
 [merge]
 	conflictstyle = diff3
 	tool = Kaleidoscope
+[pull]
+	rebase = true
+[heroku]
+	account = heroku
+[push]
+	default = simple

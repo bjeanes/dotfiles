@@ -13,6 +13,7 @@ task :install do
                    languages/ruby/gemrc
                    languages/ruby/irbrc
                    languages/ruby/rdebugrc
+                   languages/ruby/railsrc
                    misc/ackrc
                    misc/ctags
                    misc/inputrc

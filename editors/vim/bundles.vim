@@ -128,22 +128,6 @@ augroup bundles
     map <Leader>z :ZoomWin<CR>
     imap <Leader>z <Esc>:ZoomWin<CR>a
 
-    Bundle 'vimwiki'
-    let g:vimwiki_hl_cb_checked = 1
-    let g:vimwiki_menu          = 'Plugin.Vimwiki'
-    let g:vimwiki_badsyms       = ' '
-    let g:vimwiki_use_mouse     = 1
-    let g:vimwiki_dir_link      = 'index'
-    let g:vimwiki_list          = [
-      \  {
-      \     'path': '~/Dropbox/Wiki/Text',
-      \     'path_html': '~/Dropbox/Wiki/HTML',
-      \     'nested_syntaxes': {
-      \       'ruby': 'ruby'
-      \     }
-      \  }
-      \]
-
     Bundle 'scrooloose/nerdtree'
     let g:NERDTreeIgnore      = ['\.rbc$', '\~$', '.DS_Store$']
     let g:NERDTreeChDirMode   = 2
