@@ -1,70 +1,85 @@
 augroup bundles
   autocmd!
 
-  filetype off
+  if has('vim_starting')
+    set nocompatible
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
+  endif
 
-  set rtp+=~/.vim/bundle/vundle/
-  call vundle#rc()
+  call neobundle#rc(expand('~/.vim/bundle/'))
 
-  " Let Vundle manage Vundle
-    Bundle 'gmarik/vundle'
+  " Let NeoNeoBundle manage NeoBundle
+  NeoBundleFetch 'Shougo/neobundle.vim'
+
+  NeoBundle 'Shougo/vimproc', {
+  \ 'build' : {
+  \     'mac' : 'make -f make_mac.mak',
+  \     'unix' : 'make -f make_unix.mak',
+  \    },
+  \ }
 
   " Languages/Syntaxes/Frameworks {{{
     " Ruby {{{
-      Bundle 'vim-ruby/vim-ruby'
-      Bundle 'tpope/vim-endwise'
-      Bundle 'tpope/vim-rake'
-      Bundle 'tpope/vim-haml'
-      Bundle 'ecomba/vim-ruby-refactoring'
-      Bundle 'thisivan/vim-ruby-matchit'
-
-      Bundle 'tpope/vim-cucumber'
+      NeoBundleLazy 'vim-ruby/vim-ruby'
+      NeoBundleLazy 'tpope/vim-endwise'
+      NeoBundleLazy 'tpope/vim-rake'
+      NeoBundleLazy 'thisivan/vim-ruby-matchit'
+      NeoBundleLazy 'nelstrom/vim-textobj-rubyblock', { 'depends' : 'kana/vim-textobj-user' }
+      autocmd FileType ruby NeoBundleSource
+      \ vim-ruby
+      \ vim-rake
+      \ vim-endwise
+      \ vim-haml
+      \ vim-ruby-matchit
+      \ vim-textobj-rubyblock
     " }}}
 
     " Clojure {{{
-      Bundle 'paredit.vim'
-      Bundle 'VimClojure'
+      NeoBundleLazy 'paredit.vim'
+      NeoBundleLazy 'VimClojure'
       let g:vimclojure#ParenRainbow = 1
       let vimclojure#FuzzyIndent = 1
-      autocmd FileType clojure set lispwords-='->'
-      autocmd FileType clojure set lispwords-='->>'
+      autocmd FileType clojure,clojurescript set lispwords-='->'
+      autocmd FileType clojure,clojurescript set lispwords-='->>'
+      autocmd FileType clojure,clojurescript NeoBundleSource paredit.vim VimClojure
     " }}}
 
     " Markdown/Textile/etc {{{
-      Bundle 'tpope/vim-markdown'
-      Bundle 'matthias-guenther/hammer.vim'
+      NeoBundleLazy 'tpope/vim-markdown'
+      NeoBundleLazy 'matthias-guenther/hammer.vim'
+      autocmd FileType markdown NeoBundleSource vim-markdown hammer.vim
     " }}}
 
     " HTML/CSS/Javascript {{{
-      Bundle 'kchmck/vim-coffee-script'
-      Bundle 'pangloss/vim-javascript'
-      Bundle 'css3'
-      Bundle 'othree/html5-syntax.vim'
+      NeoBundleLazy 'tpope/vim-haml',           { 'autoload' : { 'filetypes' : 'haml' } }
+      NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : { 'filetypes' : 'coffee' } }
+      NeoBundleLazy 'pangloss/vim-javascript',  { 'autoload' : { 'filetypes' : 'javascript' } }
+      NeoBundleLazy 'css3',                     { 'autoload' : { 'filetypes' : 'css' } }
+      NeoBundleLazy 'othree/html5-syntax.vim',  { 'autoload' : { 'filetypes' : 'html' } }
+      NeoBundleLazy 'slim-template/vim-slim',   { 'autoload' : { 'filetypes' : 'slim' } }
     " }}}
 
   " }}}
 
   " Git {{{
-    Bundle 'tpope/vim-fugitive'
-    Bundle 'tpope/vim-git'
-    Bundle 'tjennings/git-grep-vim'
+    NeoBundle 'tpope/vim-fugitive', { 'augroup': 'fugitive' }
+    NeoBundle 'tpope/vim-git'
+    NeoBundle 'tjennings/git-grep-vim'
   " }}}
 
   " Text objects {{{
-    Bundle 'kana/vim-textobj-user'
-    Bundle 'nelstrom/vim-textobj-rubyblock'
-    Bundle 'michaeljsmith/vim-indent-object'
-    Bundle 'argtextobj.vim'
+    NeoBundle 'michaeljsmith/vim-indent-object'
+    NeoBundle 'argtextobj.vim'
   " }}}
 
   " Utility {{{
 
-    Bundle 'tpope/vim-surround'
+    NeoBundle 'tpope/vim-surround'
 
-    Bundle 'Raimondi/delimitMate'
+    NeoBundle 'Raimondi/delimitMate'
     autocmd FileType clojure let delimitMate_quotes = "\""
 
-    Bundle 'AutoComplPop'
+    NeoBundle 'AutoComplPop'
     let g:acp_enableAtStartup        = 0
     let g:acp_completeoptPreview     = 1
     let g:acp_behaviorKeywordLength  = 3
@@ -74,27 +89,27 @@ augroup bundles
       \ 'case', 'done', 'do'
       \ ]
 
-    Bundle 'Lokaltog/vim-easymotion'
+    NeoBundle 'Lokaltog/vim-easymotion'
     let g:EasyMotion_keys = "arstdhneio" " Colemak home row
 
-    Bundle 'Lokaltog/vim-powerline'
+    NeoBundle 'Lokaltog/vim-powerline'
 
-    Bundle 'Gundo'
+    NeoBundle 'Gundo'
     nnoremap <Leader>u :GundoToggle<CR>
 
-    Bundle 'kien/rainbow_parentheses.vim'
+    NeoBundle 'kien/rainbow_parentheses.vim'
     autocmd VimEnter *.{rb,coffee} RainbowParenthesesToggle
     autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadRound
     autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadSquare
     autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadBraces
 
-    Bundle 'Tabular'
+    NeoBundle 'Tabular'
     autocmd VimEnter * AddTabularPattern! first_eq     /\%(=.*\)\@<!=[>=]\@!/l1c1l0
     autocmd VimEnter * AddTabularPattern! first_rocket /\%(=>.*\)\@<!=>/l1c1l0
     autocmd VimEnter * AddTabularPattern! first_key    /\v%(%(\h\w*|"[^"]+"):.*)@<!%(\h\w*|"[^"]+")\zs:/l0l1
 
     " mark, select indent level, tabularize, go to mark
-    nmap <silent> <Leader>a = mT:Tabularize first_eq<CR>`T
+    nmap <silent> <Leader>a= mT:Tabularize first_eq<CR>`T
     nmap <silent> <Leader>a> mT:Tabularize first_rocket<CR>`T
     nmap <silent> <Leader>a: mT:Tabularize first_key<CR>`T
 
@@ -116,7 +131,7 @@ augroup bundles
       endif
     endfunction
 
-    Bundle 'scrooloose/nerdcommenter'
+    NeoBundle 'scrooloose/nerdcommenter'
     let NERDCreateDefaultMappings = 0
     let NERDSpaceDelims = 1 " space between comment and code
     map  // <plug>NERDCommenterToggle
@@ -124,11 +139,11 @@ augroup bundles
     map  <Leader>/ //
     vmap <Leader>/ //
 
-    Bundle 'ZoomWin'
+    NeoBundle 'ZoomWin'
     map <Leader>z :ZoomWin<CR>
     imap <Leader>z <Esc>:ZoomWin<CR>a
 
-    Bundle 'scrooloose/nerdtree'
+    NeoBundle 'scrooloose/nerdtree', { 'augroup' : 'NERDTreeHijackNetrw' }
     let g:NERDTreeIgnore      = ['\.rbc$', '\~$', '.DS_Store$']
     let g:NERDTreeChDirMode   = 2
     let g:NERDTreeMouseMode   = 3
@@ -137,35 +152,38 @@ augroup bundles
     let g:NERDTreeDirArrows   = 1
     let g:NERDTreeHijackNetrw = 0
     map <Space>n :NERDTreeToggle<CR>
+    map <Leader>n :NERDTreeToggle<CR>
     map <Leader>N :NERDTreeFind<CR>
 
-    Bundle 'Command-T'
+    NeoBundle 'wincent/Command-T', {
+    \   'build' : {
+    \     'mac'  : '/usr/bin/ruby ruby/command-t/extconf.rb && make',
+    \     'unix' : 'ruby ruby/command-t/extconf.rb && make'
+    \   }
+    \ }
     let g:CommandTMaxFiles  = 20000
     let g:CommandTMaxHeight = 10
     nnoremap <silent> <Leader>t :CommandT<CR>
     nnoremap <silent> <Leader>b :CommandTBuffer<CR>
     nnoremap <Leader>f :CommandTFlush<CR>
 
-    Bundle 'Indent-Guides'
+    NeoBundle 'Indent-Guides'
     let g:indent_guides_auto_colors = 0
     let g:indent_guides_enable_on_vim_startup = 1
     autocmd VimEnter * IndentGuidesEnable
     autocmd FileType clojure IndentGuidesDisable
 
-    Bundle 'Syntastic'
+    NeoBundle 'Syntastic'
     let g:syntastic_enable_signs       = 1
     let g:syntastic_auto_loc_list      = 0
     let g:syntastic_disabled_filetypes = ['cucumber']
   " }}}
 
   " Other {{{
-    Bundle 'AnsiEsc.vim'
-    Bundle 'thisivan/vim-matchit'
-
-    Bundle 'aklt/plantuml-syntax'
-    au BufNewFile,BufRead *.uml set filetype=plantuml
+    NeoBundle 'thisivan/vim-matchit'
   " }}}
 
-  autocmd BufWritePost bundles.vim source ~/.vim/bundles.vim
   filetype plugin indent on
+
+  NeoBundleCheck
 augroup END
