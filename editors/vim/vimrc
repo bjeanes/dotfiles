@@ -3,6 +3,7 @@ set nocompatible
 source ~/.vim/ui.vim
 source ~/.vim/autocommands.vim
 source ~/.vim/bundles.vim
+source ~/.vim/ruby.vim
 
 set backupdir=~/.vim/dirs/backups       " store file backups here
 set backupskip=/tmp/*,/private/tmp/*"   " don't use backups for tmp files

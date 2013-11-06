@@ -18,17 +18,21 @@ augroup bundles
   \    },
   \ }
 
+  NeoBundleLazy 'tpope/vim-endwise' " Auto-add 'end' etc appropriately in various languages
+
   " Languages/Syntaxes/Frameworks {{{
     " Ruby {{{
       NeoBundleLazy 'vim-ruby/vim-ruby'
-      NeoBundleLazy 'tpope/vim-endwise'
+      NeoBundleLazy 'tpope/vim-rails'
       NeoBundleLazy 'tpope/vim-rake'
+      NeoBundleLazy 'tpope/vim-bundler'
       NeoBundleLazy 'thisivan/vim-ruby-matchit'
-      NeoBundleLazy 'nelstrom/vim-textobj-rubyblock', { 'depends' : 'kana/vim-textobj-user' }
+      NeoBundleLazy 'nelstrom/vim-textobj-rubyblock', { 'depends' : ['kana/vim-textobj-user', 'thisivan/vim-matchit'] }
       autocmd FileType ruby NeoBundleSource
       \ vim-ruby
+      \ vim-rails  " <- how to maket his only load in rails projects?
+      \ vim-bundler
       \ vim-rake
-      \ vim-endwise
       \ vim-haml
       \ vim-ruby-matchit
       \ vim-textobj-rubyblock
@@ -36,13 +40,12 @@ augroup bundles
 
     " Clojure {{{
       NeoBundleLazy 'paredit.vim'
-      NeoBundleLazy 'VimClojure'
-      let g:vimclojure#ParenRainbow = 1
-      let vimclojure#FuzzyIndent = 1
+      autocmd FileType clojure,clojurescript NeoBundleSource paredit.vim
       autocmd FileType clojure,clojurescript set lispwords-='->'
       autocmd FileType clojure,clojurescript set lispwords-='->>'
-      autocmd FileType clojure,clojurescript NeoBundleSource paredit.vim VimClojure
-    " }}}
+
+      NeoBundleLazy 'tpope/vim-fireplace', { 'depends' : 'guns/vim-clojure-static', 'autoload' : { 'filetypes' : 'clojure' } }
+      NeoBundleLazy 'tpope/vim-classpath', { 'autoload' : { 'filetypes' : ['clojure', 'java'] } }
 
     " Markdown/Textile/etc {{{
       NeoBundleLazy 'tpope/vim-markdown'
@@ -74,12 +77,9 @@ augroup bundles
 
   " Utility {{{
 
-    NeoBundle 'tpope/vim-surround'
+    NeoBundle 'tpope/vim-surround', { 'depends' : 'tpope/vim-repeat' }
 
-    NeoBundle 'Raimondi/delimitMate'
-    autocmd FileType clojure let delimitMate_quotes = "\""
-
-    NeoBundle 'AutoComplPop'
+    NeoBundleLazy 'AutoComplPop', { 'autoload' : { 'insert' : 1 } }
     let g:acp_enableAtStartup        = 0
     let g:acp_completeoptPreview     = 1
     let g:acp_behaviorKeywordLength  = 3
@@ -131,13 +131,10 @@ augroup bundles
       endif
     endfunction
 
-    NeoBundle 'scrooloose/nerdcommenter'
-    let NERDCreateDefaultMappings = 0
-    let NERDSpaceDelims = 1 " space between comment and code
-    map  // <plug>NERDCommenterToggle
-    vmap // <plug>NERDCommenterToggle gv
-    map  <Leader>/ //
-    vmap <Leader>/ //
+    NeoBundle 'tpope/vim-commentary'
+    autocmd FileType clojure,clojurescript set commentstring=;\ %s
+    nmap // <Plug>CommentaryLine
+    vmap // <Plug>Commentary
 
     NeoBundle 'ZoomWin'
     map <Leader>z :ZoomWin<CR>
@@ -177,10 +174,6 @@ augroup bundles
     let g:syntastic_enable_signs       = 1
     let g:syntastic_auto_loc_list      = 0
     let g:syntastic_disabled_filetypes = ['cucumber']
-  " }}}
-
-  " Other {{{
-    NeoBundle 'thisivan/vim-matchit'
   " }}}
 
   filetype plugin indent on

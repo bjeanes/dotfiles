@@ -2,8 +2,6 @@ set guioptions-=T  " hide toolbar
 set guioptions+=Rr " Turn on scroll bars
 
 if has("gui_macvim")
-  set transparency=7
-
   " Fullscreen takes up entire screen
   set fuoptions=maxhorz,maxvert
 
