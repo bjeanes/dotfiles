@@ -14,13 +14,6 @@ endfunction
 " Strip trailing whitespace on command
 nmap <Leader>sw :call <SID>StripTrailingWhitespaces()<CR>
 
-" http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
-" augroup auto_highlight
-  " au!
-  " set updatetime=500
-  " au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-" augroup end
-
 augroup the_rest
   au!
 
@@ -40,8 +33,6 @@ augroup the_rest
   " make and python use real tabs
   autocmd FileType make    set noexpandtab
   autocmd FileType python  set noexpandtab
-
-  autocmd FileType scss    syntax cluster sassCssAttributes add=@cssColors
 
   " Thorfile, Rakefile and Gemfile are Ruby
   autocmd BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
