@@ -9,6 +9,9 @@ syntax on
   set laststatus=2
   colorscheme molokai_mac
 
+  set rtp+=~/.config/vendor/powerline/powerline/bindings/vim
+
+
 " Tabs/Whitespace
   set tabstop=2                  " a Tab take up 2 spaces
   set shiftwidth=2               " (un)indent 2 spaces at at ime

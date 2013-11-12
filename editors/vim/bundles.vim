@@ -44,7 +44,7 @@ augroup bundles
       autocmd FileType clojure,clojurescript set lispwords-='->'
       autocmd FileType clojure,clojurescript set lispwords-='->>'
 
-      NeoBundleLazy 'tpope/vim-fireplace', { 'depends' : 'guns/vim-clojure-static', 'autoload' : { 'filetypes' : 'clojure' } }
+
       NeoBundleLazy 'tpope/vim-classpath', { 'autoload' : { 'filetypes' : ['clojure', 'java'] } }
 
     " Markdown/Textile/etc {{{
@@ -91,8 +91,6 @@ augroup bundles
 
     NeoBundle 'Lokaltog/vim-easymotion'
     let g:EasyMotion_keys = "arstdhneio" " Colemak home row
-
-    NeoBundle 'Lokaltog/vim-powerline'
 
     NeoBundle 'Gundo'
     nnoremap <Leader>u :GundoToggle<CR>

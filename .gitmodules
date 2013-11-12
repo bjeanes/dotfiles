@@ -1,3 +1,6 @@
 [submodule "editors/vim/bundle/neobundle.vim"]
 	path = editors/vim/bundle/neobundle.vim
 	url = git://github.com/Shougo/neobundle.vim
+[submodule "vendor/powerline"]
+	path = vendor/powerline
+	url = git://github.com/Lokaltog/powerline.git
