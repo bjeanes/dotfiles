@@ -4,3 +4,9 @@
 [submodule "vendor/powerline"]
 	path = vendor/powerline
 	url = git://github.com/Lokaltog/powerline.git
+[submodule "shells/zsh/lib/syntax-highlighting"]
+	path = shells/zsh/lib/syntax-highlighting
+	url = git://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "shells/zsh/lib/history-substring-search"]
+	path = shells/zsh/lib/history-substring-search
+	url = git://github.com/zsh-users/zsh-history-substring-search.git
