@@ -1,0 +1,33 @@
+:link:
+  editors/emacs/init.el: ~/.emacs.d/init.el
+  editors/emacs/bjeanes: ~/.emacs.d/bjeanes
+  editors/vim: ~/.vim
+  editors/vim/gvimrc: ~/.gvimrc
+  editors/vim/vimrc: ~/.vimrc
+  languages/clojure/lein/profiles.clj: ~/.lein/profiles.clj
+  languages/ruby/autotest/autotest: ~/.autotest
+  languages/ruby/gemrc: ~/.gemrc
+  languages/ruby/irbrc: ~/.irbrc
+  languages/ruby/rdebugrc: ~/.rdebugrc
+  languages/ruby/railsrc: ~/.railsrc
+  misc/ackrc: ~/.ackrc
+  misc/ctags: ~/.ctags
+  misc/inputrc: ~/.inputrc
+  misc/nanorc: ~/.nanorc
+  misc/psqlrc: ~/.psqlrc
+  misc/tmux/tmux.conf: ~/.tmux.conf
+  shells/bash/bash_profile: ~/.bash_profile
+  shells/bash/bashrc: ~/.bashrc
+  shells/zsh/zshenv: ~/.zshenv
+  shells/zsh/zshrc: ~/.zshrc
+  shells/zsh/zprofile: ~/.zprofile
+  vcs/git/gitattributes: ~/.gitattributes
+  vcs/git/gitconfig: ~/.gitconfig
+  vcs/git/gitconfig.merge: ~/.gitconfig.merge
+  vcs/git/gitconfig.pushurls: ~/.gitconfig.pushurls
+  vcs/git/gitignore: ~/.gitignore
+  vcs/git/gitk: ~/.gitk
+  vcs/git/git_template: ~/.git_template
+  vcs/hg/hgrc: ~/.hgrc
+:copy:
+  vcs/git/gitconfig.local: ~/.gitconfig.local

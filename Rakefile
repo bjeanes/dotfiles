@@ -1,82 +1,20 @@
-require 'rake'
-require 'fileutils'
+require 'yaml'
 
 desc "install the dot files into user's home directory"
 task :install do
-  replace_all = false
-  dot_files   = File.dirname(__FILE__)
-  files       = %w(
-                   editors/vim
-                   editors/vim/gvimrc
-                   editors/vim/vimrc
-                   languages/ruby/autotest/autotest
-                   languages/ruby/gemrc
-                   languages/ruby/irbrc
-                   languages/ruby/rdebugrc
-                   languages/ruby/railsrc
-                   misc/ackrc
-                   misc/ctags
-                   misc/inputrc
-                   misc/nanorc
-                   misc/psqlrc
-                   misc/tmux/tmux.conf
-                   shells/bash/bash_profile
-                   shells/bash/bashrc
-                   shells/zsh/zshenv
-                   shells/zsh/zshrc
-                   shells/zsh/zprofile
-                   vcs/git/gitattributes
-                   vcs/git/gitconfig
-                   vcs/git/gitconfig.merge
-                   vcs/git/gitconfig.pushurls
-                   vcs/git/gitignore
-                   vcs/git/gitk
-                   vcs/git/git_template
-                   vcs/hg/hgrc
-                  )
-
-  files = Hash[files.zip(Array.new(files.size, "~/."))]
-  files["languages/clojure/lein/profiles.clj"] = "~/.lein/"
-  files["editors/emacs/init.el"] = "~/.emacs.d/"
-  files["editors/emacs/bjeanes"] = "~/.emacs.d/"
-
-  system "cp -n vcs/git/gitconfig.local ~/.gitconfig.local"
-
-  files.each do |file, destination|
-    file_name        = file.split(/\//).last
-    source_file      = File.join(dot_files, file)
-    destination_file = File.expand_path("#{destination}#{file_name}")
-
-    if File.exist?(destination_file) || File.symlink?(destination_file)
-      if replace_all
-        replace_file(destination_file, source_file)
-      else
-        print "overwrite #{destination_file}? [ynaq] "
-        case $stdin.gets.chomp.downcase
-        when 'a'
-          replace_all = true
-          replace_file(destination_file, source_file)
-        when 'y'
-          replace_file(destination_file, source_file)
-        when 'q'
-          exit
-        else
-          puts "skipping #{destination_file}"
-        end
-      end
-    else
-      link_file(destination_file, source_file)
+  dot_files = File.dirname(__FILE__)
+  install   = proc do |files, cmd|
+    files.each do |source, destination|
+      source      = File.expand_path(source, dot_files)
+      destination = File.expand_path(destination, ENV['HOME'])
+      system 'mkdir', '-p', File.dirname(destination)
+      # puts [*cmd, source, destination].join(" ")
+      system *cmd, source, destination
     end
   end
-end
 
-def replace_file(old_file, new_file)
-  system %Q{rm "#{old_file}"}
-  link_file(old_file, new_file)
-end
+  plan = YAML.load_file(File.expand_path("install.yml", dot_files))
 
-def link_file(old_file, new_file)
-  puts "#{old_file} => #{new_file}"
-  FileUtils.mkdir_p(File.dirname(new_file))
-  system %Q{ln -fs "#{new_file}" "#{old_file}"}
+  install.call plan[:link], %w[ln -sinF]
+  install.call plan[:copy], %w[cp -n]
 end
