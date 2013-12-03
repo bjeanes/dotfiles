@@ -4,6 +4,7 @@ set guioptions+=Rr " Turn on scroll bars
 if has("gui_macvim")
   " Fullscreen takes up entire screen
   set fuoptions=maxhorz,maxvert
+  set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
 
   "Mac OS X style command line editing
   cnoremap <A-Backspace> <C-W>
