@@ -138,11 +138,6 @@ augroup bundles
     map <Leader>z :ZoomWin<CR>
     imap <Leader>z <Esc>:ZoomWin<CR>a
 
-    NeoBundle 'Indent-Guides'
-    let g:indent_guides_auto_colors = 0
-    let g:indent_guides_enable_on_vim_startup = 1
-    autocmd VimEnter * IndentGuidesEnable
-    autocmd FileType clojure,lisp IndentGuidesDisable
     NeoBundle 'kien/ctrlp.vim'
     NeoBundle 'Shougo/unite.vim'
 
