@@ -24,6 +24,7 @@ task :install do
                    shells/bash/bashrc
                    shells/zsh/zshenv
                    shells/zsh/zshrc
+                   shells/zsh/zprofile
                    vcs/git/gitattributes
                    vcs/git/gitconfig
                    vcs/git/gitconfig.merge
