@@ -92,9 +92,6 @@ syntax on
 "  Always show cursorline, but only in current window.
   set scrolloff=3
   set scrolljump=10
-  set cursorline
-  autocmd WinEnter * :setlocal cursorline
-  autocmd WinLeave * :setlocal nocursorline
 
 set number " line numbers
 
