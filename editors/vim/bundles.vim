@@ -138,35 +138,13 @@ augroup bundles
     map <Leader>z :ZoomWin<CR>
     imap <Leader>z <Esc>:ZoomWin<CR>a
 
-    NeoBundle 'scrooloose/nerdtree', { 'augroup' : 'NERDTreeHijackNetrw' }
-    let g:NERDTreeIgnore      = ['\.rbc$', '\~$', '.DS_Store$']
-    let g:NERDTreeChDirMode   = 2
-    let g:NERDTreeMouseMode   = 3
-    let g:NERDTreeQuitOnOpen  = 1
-    let g:NERDTreeMinimalUI   = 1
-    let g:NERDTreeDirArrows   = 1
-    let g:NERDTreeHijackNetrw = 0
-    map <Space>n :NERDTreeToggle<CR>
-    map <Leader>n :NERDTreeToggle<CR>
-    map <Leader>N :NERDTreeFind<CR>
-
-    NeoBundle 'wincent/Command-T', {
-    \   'build' : {
-    \     'mac'  : '/usr/bin/ruby ruby/command-t/extconf.rb && make',
-    \     'unix' : 'ruby ruby/command-t/extconf.rb && make'
-    \   }
-    \ }
-    let g:CommandTMaxFiles  = 20000
-    let g:CommandTMaxHeight = 10
-    nnoremap <silent> <Leader>t :CommandT<CR>
-    nnoremap <silent> <Leader>b :CommandTBuffer<CR>
-    nnoremap <Leader>f :CommandTFlush<CR>
-
     NeoBundle 'Indent-Guides'
     let g:indent_guides_auto_colors = 0
     let g:indent_guides_enable_on_vim_startup = 1
     autocmd VimEnter * IndentGuidesEnable
     autocmd FileType clojure,lisp IndentGuidesDisable
+    NeoBundle 'kien/ctrlp.vim'
+    NeoBundle 'Shougo/unite.vim'
 
     NeoBundle 'Syntastic'
     let g:syntastic_enable_signs       = 1
