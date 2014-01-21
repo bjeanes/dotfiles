@@ -11,6 +11,8 @@
 	lg = log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 	me = !sh -c 'echo `git config user.name` \\<`git config user.email`\\>'
 	mine = !sh -c 'git lg --author=\"`git me`\"'
+
+  # TODO make this use selecta, when installed
 	f = "!git ls-files | grep -i"
 
 	# Add file excluding whitespace changes (http://stackoverflow.com/a/7149602/56690)
