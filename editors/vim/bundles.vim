@@ -103,9 +103,6 @@ augroup bundles
       \ 'case', 'done', 'do'
       \ ]
 
-    NeoBundle 'Lokaltog/vim-easymotion'
-    let g:EasyMotion_keys = "arstdhneio" " Colemak home row
-
     NeoBundle 'Gundo'
     nnoremap <Leader>u :GundoToggle<CR>
 
