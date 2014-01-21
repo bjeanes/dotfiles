@@ -19,6 +19,7 @@ augroup bundles
   \ }
 
   NeoBundleLazy 'tpope/vim-endwise' " Auto-add 'end' etc appropriately in various languages
+  NeoBundle 'kana/vim-smartinput'
 
   " Languages/Syntaxes/Frameworks {{{
     " Ruby {{{
