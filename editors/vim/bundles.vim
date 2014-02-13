@@ -143,10 +143,6 @@ augroup bundles
     nmap // <Plug>CommentaryLine
     vmap // <Plug>Commentary
 
-    NeoBundle 'ZoomWin'
-    map <Leader>z :ZoomWin<CR>
-    imap <Leader>z <Esc>:ZoomWin<CR>a
-
     NeoBundle 'kien/ctrlp.vim'
     NeoBundle 'Shougo/unite.vim'
 
