@@ -104,9 +104,6 @@ augroup bundles
       \ 'case', 'done', 'do'
       \ ]
 
-    NeoBundle 'Gundo'
-    nnoremap <Leader>u :GundoToggle<CR>
-
     NeoBundle 'kien/rainbow_parentheses.vim'
     autocmd VimEnter *.{rb,coffee} RainbowParenthesesToggle
     autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadRound
