@@ -138,7 +138,6 @@ augroup bundles
     vmap // <Plug>Commentary
 
     NeoBundle 'kien/ctrlp.vim'
-    NeoBundle 'Shougo/unite.vim'
 
     NeoBundle 'Syntastic'
     let g:syntastic_enable_signs       = 1
