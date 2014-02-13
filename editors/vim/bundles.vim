@@ -61,12 +61,9 @@ augroup bundles
 
       " Separate because useful for Java and Clojure
       NeoBundleLazy 'tpope/vim-classpath', { 'autoload' : { 'filetypes' : ['clojure', 'java'] } }
-
-    " Markdown/Textile/etc {{{
-      NeoBundleLazy 'tpope/vim-markdown'
-      NeoBundleLazy 'matthias-guenther/hammer.vim'
-      autocmd FileType markdown NeoBundleSource vim-markdown hammer.vim
     " }}}
+
+    NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : { 'filetypes' : ['markdown'] } }
 
     " HTML/CSS/Javascript {{{
       NeoBundleLazy 'tpope/vim-haml',           { 'autoload' : { 'filetypes' : 'haml' } }
