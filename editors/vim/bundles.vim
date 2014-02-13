@@ -40,7 +40,7 @@ augroup bundles
       \ vim-textobj-rubyblock
     " }}}
 
-    " Clojure {{{
+    " Clojure(script) {{{
       NeoBundleLazy 'guns/vim-clojure-static'
       NeoBundleLazy 'guns/vim-sexp', { 'depends' : ['tpope/vim-repeat'] }
       NeoBundleLazy 'tpope/vim-sexp-mappings-for-regular-people', { 'depends' : ['guns/vim-sexp'] }
@@ -49,12 +49,7 @@ augroup bundles
       autocmd FileType clojure,clojurescript NeoBundleSource
             \ vim-clojure-static
             \ vim-sexp-mappings-for-regular-people
-
-      autocmd FileType clojure NeoBundleSource
-            \ vim-classpath
             \ vim-fireplace
-
-      autocmd FileType clojurescript NeoBundleSource vim-fireplace
 
       autocmd FileType clojure,clojurescript set lispwords-='->'
       autocmd FileType clojure,clojurescript set lispwords-='->>'
