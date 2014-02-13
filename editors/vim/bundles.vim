@@ -104,12 +104,6 @@ augroup bundles
       \ 'case', 'done', 'do'
       \ ]
 
-    NeoBundle 'kien/rainbow_parentheses.vim'
-    autocmd VimEnter *.{rb,coffee} RainbowParenthesesToggle
-    autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadRound
-    autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadSquare
-    autocmd Syntax   *.{rb,coffee} RainbowParenthesesLoadBraces
-
     NeoBundle 'Tabular'
     autocmd VimEnter * AddTabularPattern! first_eq     /\%(=.*\)\@<!=[>=]\@!/l1c1l0
     autocmd VimEnter * AddTabularPattern! first_rocket /\%(=>.*\)\@<!=>/l1c1l0
