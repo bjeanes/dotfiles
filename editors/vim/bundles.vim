@@ -26,6 +26,11 @@ augroup bundles
     NeoBundleLazy 'wting/rust.vim', { 'autoload' : { 'filetypes' : ['rust'] } }
     au BufNewFile,BufRead *.rs set filetype=rust
 
+    NeoBundleLazy 'jnwhiteh/vim-golang', { 'autoload' : { 'filetypes' : ['go'] } }
+    au BufNewFile,BufRead *.go set filetype=go
+    au FileType go autocmd BufWritePre <buffer> Fmt
+    au FileType go set noexpandtab
+
     " Ruby {{{
       NeoBundleLazy 'vim-ruby/vim-ruby'
       NeoBundleLazy 'tpope/vim-rails'
