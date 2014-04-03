@@ -23,7 +23,7 @@ syntax on
 
   " Toggle show tabs and trailing spaces (,c)
   set list
-  set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
+  set listchars=tab:⤑\ ,trail:·,eol:↵,nbsp:_
   set fillchars=vert:\ ,fold:-
   nnoremap <Leader>c :set list!<CR>
 
