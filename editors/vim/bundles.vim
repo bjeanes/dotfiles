@@ -23,6 +23,9 @@ augroup bundles
   NeoBundleLazy 'tpope/vim-vinegar', { 'autoload' : { 'filetypes' : ['netrw'] } }
 
   " Languages/Syntaxes/Frameworks {{{
+    NeoBundleLazy 'wting/rust.vim', { 'autoload' : { 'filetypes' : ['rust'] } }
+    au BufNewFile,BufRead *.rs set filetype=rust
+
     " Ruby {{{
       NeoBundleLazy 'vim-ruby/vim-ruby'
       NeoBundleLazy 'tpope/vim-rails'
