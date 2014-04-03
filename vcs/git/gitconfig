@@ -27,6 +27,10 @@
 	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
 	unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 	assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
+
+	# From https://github.com/garybernhardt/dotfiles/blob/master/bin/git-churn
+	churn = "!git log --all -M -C --name-only --format='format:' \"$@\" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print \"count\tfile\"} {print $1 \"\t\" $2}' | sort -g"
+	br = branch
 [apply]
 	whitespace = fix
 [color]
