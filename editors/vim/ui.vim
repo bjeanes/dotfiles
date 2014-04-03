@@ -7,7 +7,7 @@ syntax on
   set linespace=2
   set background=dark
   set laststatus=2
-  colorscheme tubster
+  colorscheme tubster_bo
 
   set rtp+=~/.config/vendor/powerline/powerline/bindings/vim
 
