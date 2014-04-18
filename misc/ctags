@@ -1,4 +1,3 @@
-# Ruby
 --regex-ruby=/(^|[:;])[ \t]*([A-Z][[:alnum:]_]+) *=/\2/c,class,constant/
 --regex-ruby=/(^|;)[ \t]*(has_many|belongs_to|has_one|has_and_belongs_to_many)\(? *:([[:alnum:]_]+)/\3/f,function,association/
 --regex-ruby=/(^|;)[ \t]*(named_)?scope\(? *:([[:alnum:]_]+)/\3/f,function,named_scope/
@@ -6,10 +5,8 @@
 --regex-ruby=/(^|;)[ \t]*event\(? *:([[:alnum:]_]+)/\2!/f,function,aasm_event/
 --regex-ruby=/(^|;)[ \t]*event\(? *:([[:alnum:]_]+)/\2?/f,function,aasm_event/
 
-# Clojure
 --langmap=Lisp:+.clj
 
-# CofeeScript
 --langdef=coffee
 --langmap=coffee:.coffee
 --regex-coffee=/^class ([A-Za-z.]+)( extends [A-Za-z.]+)?$/\1/c,class/
