@@ -1,5 +1,5 @@
 [alias]
-	st = status -s
+	st = status -s -b
 	pl = pull --rebase
 	p = push
 	co = checkout
