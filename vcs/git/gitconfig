@@ -53,8 +53,6 @@
 	user = bjeanes
 [init]
 	templatedir = ~/.git_template
-[rerere]
-	enabled = 1
 [include]
 	path = .gitconfig.github
 	path = .gitconfig.pushurls
