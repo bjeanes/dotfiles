@@ -52,7 +52,9 @@ augroup bundles
       NeoBundleLazy 'guns/vim-clojure-static'
       NeoBundleLazy 'guns/vim-sexp', { 'depends' : ['tpope/vim-repeat'] }
       NeoBundleLazy 'tpope/vim-sexp-mappings-for-regular-people', { 'depends' : ['guns/vim-sexp'] }
-      NeoBundleLazy 'tpope/vim-fireplace'
+      NeoBundleLazy 'tpope/vim-dispatch'
+      NeoBundleLazy 'tpope/vim-leiningen', { 'depends' : ['tpope/vim-dispatch'] }
+      NeoBundleLazy 'tpope/vim-fireplace', { 'depends' : ['tpope/vim-leiningen']}
 
       autocmd FileType clojure,clojurescript NeoBundleSource
             \ vim-clojure-static
@@ -61,9 +63,6 @@ augroup bundles
 
       autocmd FileType clojure,clojurescript set lispwords-='->'
       autocmd FileType clojure,clojurescript set lispwords-='->>'
-
-      " Separate because useful for Java and Clojure
-      NeoBundleLazy 'tpope/vim-classpath', { 'autoload' : { 'filetypes' : ['clojure', 'java'] } }
     " }}}
 
     NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : { 'filetypes' : ['markdown'] } }
