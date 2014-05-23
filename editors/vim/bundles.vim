@@ -25,6 +25,8 @@ augroup bundles
     nmap <silent> K <Plug>DashSearch
   endif
 
+  NeoBundle 'tpope/vim-sleuth' " auto-config indent and tabs etc based on other files
+
   NeoBundle 'tpope/vim-endwise' " Auto-add 'end' etc appropriately in various languages
   NeoBundle 'kana/vim-smartinput'
   NeoBundleLazy 'tpope/vim-vinegar', { 'autoload' : { 'filetypes' : ['netrw'] } }
