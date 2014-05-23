@@ -18,6 +18,13 @@ augroup bundles
   \    },
   \ }
 
+  if has("mac") || has("macunix")
+    NeoBundle 'rizzatti/funcoo.vim'
+    NeoBundle 'rizzatti/dash.vim'
+
+    nmap <silent> K <Plug>DashSearch
+  endif
+
   NeoBundle 'tpope/vim-endwise' " Auto-add 'end' etc appropriately in various languages
   NeoBundle 'kana/vim-smartinput'
   NeoBundleLazy 'tpope/vim-vinegar', { 'autoload' : { 'filetypes' : ['netrw'] } }
