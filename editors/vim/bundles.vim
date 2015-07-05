@@ -112,19 +112,9 @@ augroup bundles
       \ 'case', 'done', 'do'
       \ ]
 
-    NeoBundle 'Tabular'
-    autocmd VimEnter * AddTabularPattern! first_eq     /\%(=.*\)\@<!=[>=]\@!/l1c1l0
-    autocmd VimEnter * AddTabularPattern! first_rocket /\%(=>.*\)\@<!=>/l1c1l0
-    autocmd VimEnter * AddTabularPattern! first_key    /\v%(%(\h\w*|"[^"]+"):.*)@<!%(\h\w*|"[^"]+")\zs:/l0l1
-
-    " mark, select indent level, tabularize, go to mark
-    nmap <silent> <Leader>a= mT:Tabularize first_eq<CR>`T
-    nmap <silent> <Leader>a> mT:Tabularize first_rocket<CR>`T
-    nmap <silent> <Leader>a: mT:Tabularize first_key<CR>`T
-
-    vmap <silent> <Leader>a= :Tabularize first_eq<CR>gv
-    vmap <silent> <Leader>a> :Tabularize first_rocket<CR>gv
-    vmap <silent> <Leader>a: :Tabularize first_key<CR>gv
+    NeoBundle 'junegunn/vim-easy-align'
+    vmap <Enter>   <Plug>(EasyAlign)
+    nmap <Leader>a <Plug>(EasyAlign)
 
     NeoBundle 'tpope/vim-commentary'
     autocmd FileType clojure,clojurescript set commentstring=;\ %s
