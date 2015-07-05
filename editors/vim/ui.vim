@@ -32,9 +32,6 @@ syntax on
   set nostartofline             " Avoid moving cursor to BOL when jumping around
   set virtualedit=all           " Let cursor move past the last char
   set whichwrap=b,s,h,l,<,>,[,]
-  let mapleader = ','           " comma as leader key
-  " but be nice to people who are used to backslash:
-  nmap \ <Leader>
   set autoread                  " watch for file changes
   set mouse=a                   " mouse can be handy sometimes
   set ttymouse=xterm2           " Needed to get mouse working when in Tmux/screen
