@@ -1,6 +1,5 @@
 :link:
-  editors/emacs/init.el: ~/.emacs.d/init.el
-  editors/emacs/bjeanes: ~/.emacs.d/bjeanes
+  editors/emacs/spacemacs: ~/.spacemacs
   editors/vim: ~/.vim
   editors/vim/gvimrc: ~/.gvimrc
   editors/vim/vimrc: ~/.vimrc
