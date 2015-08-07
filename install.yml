@@ -9,6 +9,7 @@
   languages/ruby/irbrc: ~/.irbrc
   languages/ruby/rdebugrc: ~/.rdebugrc
   languages/ruby/railsrc: ~/.railsrc
+  languages/ruby/rspec: ~/.rspec
   misc/ackrc: ~/.ackrc
   misc/ctags: ~/.ctags
   misc/inputrc: ~/.inputrc

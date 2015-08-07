@@ -1,5 +1,5 @@
 [alias]
-	st = status -s -b
+	st = status
 	pl = pull --rebase
 	p = push
 	co = checkout
@@ -73,6 +73,18 @@
 [heroku]
 	account = heroku
 [push]
-	default = simple
+	default = current
 [advice]
 	statusHints = false
+[remote]
+	pushdefault = origin
+[status]
+	short = true
+	branch = true
+	showUntrackedFiles = all
+	submoduleSummary = 1
+[versionsort]
+	prereleaseSuffix = -rc
+	prereleaseSuffix = -pre
+	prereleaseSuffix = -alpha
+	prereleaseSuffix = -beta
