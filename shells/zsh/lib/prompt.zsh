@@ -91,26 +91,35 @@ function prompt_pwd_new() {
   echo "$path"
 }
 
+function default_precmd {
+  if [ -z $INSIDE_EMACS ]; then
+    vcs_info
+
+    local cwd="$pr_blue`prompt_pwd`$pr_reset"
+    local char="%0(?.$pr_green.$pr_red)♪$pr_reset"
+    # local time="$pr_grey⌚ %*$pr_reset"
+
+    local ruby
+    ruby="$(current_ruby)"
+    [ "x$ruby" != "x" ] && ruby="❖ $ruby"
+
+    local rev="$pr_grey$vcs_info_msg_0_$pr_reset"
+    rev="${rev/\(git\)/±}"
+    rev="${rev/\(hg\)/☿}"
+    rev="${rev/\(svn\)/↯}"
+
+    local left right
+    left=($(user_at_host) $cwd $char)
+    right=($rev $ruby $time)
+
+    PS1="$left  "
+    RPS1=" $right"
+  else
+    PS1="$ "
+    RPS1=""
+  fi
+}
+
 function precmd {
-  vcs_info
-
-  local cwd="$pr_blue`prompt_pwd`$pr_reset"
-  local char="%0(?.$pr_green.$pr_red)♪$pr_reset"
-  # local time="$pr_grey⌚ %*$pr_reset"
-
-  local ruby
-  ruby="$(current_ruby)"
-  [ "x$ruby" != "x" ] && ruby="❖ $ruby"
-
-  local rev="$pr_grey$vcs_info_msg_0_$pr_reset"
-  rev="${rev/\(git\)/±}"
-  rev="${rev/\(hg\)/☿}"
-  rev="${rev/\(svn\)/↯}"
-
-  local left right
-  left=($(user_at_host) $cwd $char)
-  right=($rev $ruby $time)
-
-  PS1="$left  "
-  RPS1=" $right"
+  default_precmd
 }
