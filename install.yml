@@ -31,3 +31,4 @@
   vcs/hg/hgrc: ~/.hgrc
 :copy:
   vcs/git/gitconfig.local: ~/.gitconfig.local
+  karabiner-ref.xml: ~/Library/Application Support/Karabiner/private.xml

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<root>
+  <modifierdef>YUBI_ENABLE</modifierdef>
+
+  <item>
+    <name>Ignore Yubikey key presses</name>
+    <appendix>Ideal for scenarios where you may accidentally touch the</appendix>
+    <appendix>Yubikey and output an unwanted code. This rule requires</appendix>
+    <appendix>double-pressing SHIFT_R, which enables the Yubikey for a</appendix>
+    <appendix>singe token output.</appendix>
+    <appendix></appendix>
+    <appendix>In addition, it always allows the Yubikey to work if a text</appendix>
+    <appendix>field is in focus or if the current application is a terminal.</appendix>
+
+    <identifier>private.yubikey_ignore</identifier>
+
+    <!-- temporarily lift the disabling -->
+    <autogen>
+      __DoublePressModifier__ KeyCode::SHIFT_R,
+
+      <!-- when pressed once -->
+      KeyCode::SHIFT_R,
+
+      <!-- when pressed twice -->
+      KeyCode::VK_LOCK_YUBI_ENABLE_FORCE_ON
+    </autogen>
+
+    <block>
+      <device_only>DeviceVendor::YUBICO</device_only>
+      <modifierlocked_not>ModifierFlag::YUBI_ENABLE</modifierlocked_not>
+
+      <!-- optional: don't require the temporary enabling in Terminal or in text fields -->
+      <not>TERMINAL</not>
+      <uielementrole_not>AXTextField</uielementrole_not>
+
+      <autogen>__KeyToKey__ KeyCode::A, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::B, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::C, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::D, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::E, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::F, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::G, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::H, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::I, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::J, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::K, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::L, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::M, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::N, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::O, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::P, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::Q, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::R, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::S, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::T, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::U, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::V, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::W, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::X, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::Y, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::Z, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::SEMICOLON, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::QUOTE, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::TAB, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::RETURN, KeyCode::VK_NONE</autogen>
+      <autogen>__KeyToKey__ KeyCode::SPACE, KeyCode::VK_NONE</autogen>
+    </block>
+
+    <block>
+      <device_only>DeviceVendor::YUBICO</device_only>
+      <modifierlocked>ModifierFlag::YUBI_ENABLE</modifierlocked>
+
+      <!-- after yubikey is entered, disable yubikey again -->
+      <autogen>
+        __KeyToKey__ KeyCode::RETURN, KeyCode::RETURN,
+
+        Option::KEYTOKEY_AFTER_KEYUP, KeyCode::VK_LOCK_YUBI_ENABLE_FORCE_OFF
+      </autogen>
+    </block>
+  </item>
+
+  <inputsourcedef>
+    <name>COLEMAK</name>
+    <inputsourceid_prefix>com.apple.keylayout.Colemak</inputsourceid_prefix>
+  </inputsourcedef>
+
+  <item>
+    <name>Yubikey from Colemak to QWERTY</name>
+    <appendix>If the system layout is set to Colemak, remap the Yubikey</appendix>
+    <appendix>back to QWERTY so that the tokens are correct.</appendix>
+    <identifier>private.yubikey_colemak_qwerty</identifier>
+    <device_only>DeviceVendor::YUBICO</device_only>
+    <inputsource_only>COLEMAK</inputsource_only>
+    <autogen>__KeyToKey__ KeyCode::F, KeyCode::E</autogen>
+    <autogen>__KeyToKey__ KeyCode::P, KeyCode::R</autogen>
+    <autogen>__KeyToKey__ KeyCode::G, KeyCode::T</autogen>
+    <autogen>__KeyToKey__ KeyCode::J, KeyCode::Y</autogen>
+    <autogen>__KeyToKey__ KeyCode::L, KeyCode::U</autogen>
+    <autogen>__KeyToKey__ KeyCode::U, KeyCode::I</autogen>
+    <autogen>__KeyToKey__ KeyCode::Y, KeyCode::O</autogen>
+    <autogen>__KeyToKey__ KeyCode::SEMICOLON, KeyCode::P</autogen>
+    <autogen>__KeyToKey__ KeyCode::R, KeyCode::S</autogen>
+    <autogen>__KeyToKey__ KeyCode::S, KeyCode::D</autogen>
+    <autogen>__KeyToKey__ KeyCode::T, KeyCode::F</autogen>
+    <autogen>__KeyToKey__ KeyCode::D, KeyCode::G</autogen>
+    <autogen>__KeyToKey__ KeyCode::N, KeyCode::J</autogen>
+    <autogen>__KeyToKey__ KeyCode::E, KeyCode::K</autogen>
+    <autogen>__KeyToKey__ KeyCode::I, KeyCode::L</autogen>
+    <autogen>__KeyToKey__ KeyCode::O, KeyCode::SEMICOLON</autogen>
+    <autogen>__KeyToKey__ KeyCode::K, KeyCode::N</autogen>
+  </item>
+</root>

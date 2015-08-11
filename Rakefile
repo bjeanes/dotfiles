@@ -16,5 +16,5 @@ task :install do
   plan = YAML.load_file(File.expand_path("install.yml", dot_files))
 
   install.call plan[:link], %w[ln -sinF]
-  install.call plan[:copy], %w[cp -n]
+  install.call plan[:copy], %w[cp -i]
 end
