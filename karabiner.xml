@@ -7,7 +7,7 @@
     <appendix>Ideal for scenarios where you may accidentally touch the</appendix>
     <appendix>Yubikey and output an unwanted code. This rule requires</appendix>
     <appendix>double-pressing SHIFT_R, which enables the Yubikey for a</appendix>
-    <appendix>singe token output.</appendix>
+    <appendix>single token output.</appendix>
     <appendix></appendix>
     <appendix>In addition, it always allows the Yubikey to work if a text</appendix>
     <appendix>field is in focus or if the current application is a terminal.</appendix>
