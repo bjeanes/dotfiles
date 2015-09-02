@@ -1,3 +1,18 @@
+function e() {
+    if [ "$#" -eq 0 ]; then
+        emacsclient -a '' -n -c .
+    else
+        emacsclient -a '' -n -c $@
+    fi
+}
+
+function ep() {
+    (
+        cdr # attempt to cd to root directory; fail silently
+        e   # open current directory using editor
+    ) 2>/dev/null
+}
+
 function GET() {
   curl -i -X GET -H "X-Requested-With: XMLHttpRequest" $*
 }
