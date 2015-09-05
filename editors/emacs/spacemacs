@@ -20,6 +20,7 @@
      auto-completion
      better-defaults
      clojure
+     javascript
      colors
      dash
      emacs-lisp
@@ -34,25 +35,24 @@
      rust
      smex
      sql
+     html
      ;; org
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-term-shell "/usr/local/bin/zsh")
      syntax-checking
-     version-control
-     )
+     version-control)
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages
-   '(
-     yaml-mode
+   '(yaml-mode
      haml-mode
      gitconfig
      ansi-color
-     )
+     aggressive-indent)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -91,7 +91,8 @@ before layers configuration."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '(;"Source Code Pro"
+                               "Inconsolata"
                                :size 13
                                :weight normal
                                :width normal
@@ -147,13 +148,13 @@ before layers configuration."
    ;; Transparency can be toggled through `toggle-transparency'.
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line.
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen.
    dotspacemacs-smooth-scrolling t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
-   dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smartparens-strict-mode t
    ;; Select a scope to highlight delimiters. Possible value is `all',
    ;; `current' or `nil'. Default is `all'
    dotspacemacs-highlight-delimiters 'all
@@ -180,6 +181,7 @@ layers configuration."
   (setq clojure-enable-fancify-symbols t)
 
   (add-hook 'prog-mode-hook 'linum-mode)
+  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
 
   ;; Load shell for commands (e.g. *compilation* buffers) so that correct
   ;; environment (chruby, etc) is sourced
