@@ -58,3 +58,13 @@ doc/tags
 ./node_modules
 node_modules
 TAGS
+.nrepl-port
+pom.xml
+pom.xml.asc
+*jar
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-*
+vendor/gems
