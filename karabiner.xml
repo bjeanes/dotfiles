@@ -109,4 +109,31 @@
     <autogen>__KeyToKey__ KeyCode::O, KeyCode::SEMICOLON</autogen>
     <autogen>__KeyToKey__ KeyCode::K, KeyCode::N</autogen>
   </item>
+
+  <item>
+    <name>Apple keyboard from Colemak to QWERTY</name>
+    <appendix>If the system layout is set to Colemak, remap the Yubikey</appendix>
+    <appendix>back to QWERTY so that the tokens are correct.</appendix>
+    <identifier>private.apple_colemak_qwerty</identifier>
+    <device_only>DeviceVendor::APPLE_INC, DeviceProduct::APPLE_EXTERNAL_KEYBOARD_0x021d</device_only>
+    <inputsource_only>COLEMAK</inputsource_only>
+    <autogen>__KeyToKey__ KeyCode::F, KeyCode::E</autogen>
+    <autogen>__KeyToKey__ KeyCode::P, KeyCode::R</autogen>
+    <autogen>__KeyToKey__ KeyCode::G, KeyCode::T</autogen>
+    <autogen>__KeyToKey__ KeyCode::J, KeyCode::Y</autogen>
+    <autogen>__KeyToKey__ KeyCode::L, KeyCode::U</autogen>
+    <autogen>__KeyToKey__ KeyCode::U, KeyCode::I</autogen>
+    <autogen>__KeyToKey__ KeyCode::Y, KeyCode::O</autogen>
+    <autogen>__KeyToKey__ KeyCode::SEMICOLON, KeyCode::P</autogen>
+    <autogen>__KeyToKey__ KeyCode::R, KeyCode::S</autogen>
+    <autogen>__KeyToKey__ KeyCode::S, KeyCode::D</autogen>
+    <autogen>__KeyToKey__ KeyCode::T, KeyCode::F</autogen>
+    <autogen>__KeyToKey__ KeyCode::D, KeyCode::G</autogen>
+    <autogen>__KeyToKey__ KeyCode::N, KeyCode::J</autogen>
+    <autogen>__KeyToKey__ KeyCode::E, KeyCode::K</autogen>
+    <autogen>__KeyToKey__ KeyCode::I, KeyCode::L</autogen>
+    <autogen>__KeyToKey__ KeyCode::O, KeyCode::SEMICOLON</autogen>
+    <autogen>__KeyToKey__ KeyCode::K, KeyCode::N</autogen>
+  </item>
+
 </root>
