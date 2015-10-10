@@ -6,7 +6,7 @@
 # windows but be looking at different ones individually
 
 # If we aren't in Tmux or emacs, set it up
-if [ -z "$TMUX" -a -z "$INSIDE_EMACS" ]; then
+if false && [ -z "$TMUX" -a -z "$INSIDE_EMACS" -a -z "$EMACS" ]; then
     if tty >/dev/null; then
         if which tmux 2>&1 >/dev/null; then
             if [ -z "$(tmux ls | grep 'login:')" ]; then
