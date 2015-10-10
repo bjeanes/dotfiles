@@ -36,7 +36,7 @@
      smex
      sql
      html
-     ;; org
+     org
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
@@ -134,7 +134,7 @@ before layers configuration."
    dotspacemacs-fullscreen-at-startup nil
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX."
-   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-fullscreen-use-non-native t
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (Emacs 24.4+ only)
@@ -216,9 +216,19 @@ layers configuration."
  '(ahs-idle-interval 0.25)
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
+ '(org-babel-process-comment-text (quote org-babel-trim))
+ '(org-export-babel-evaluate (quote inline-only))
  '(paradox-github-token t)
  '(projectile-use-git-grep t)
- '(ring-bell-function (quote ignore) t))
+ '(ring-bell-function (quote ignore) t)
+ '(safe-local-variable-values
+   (quote
+    ((org-babel-clojure-backend
+      (quote cider))
+     (org-export-htmlize-output-type
+      (quote css))
+     (org-export-html-style-include-default)
+     (org-export-html-style-include-scripts)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
