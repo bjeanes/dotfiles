@@ -22,7 +22,7 @@
       KeyCode::SHIFT_R,
 
       <!-- when pressed twice -->
-      KeyCode::VK_LOCK_YUBI_ENABLE_FORCE_ON
+      KeyCode::VK_LOCK_YUBI_ENABLE
     </autogen>
 
     <block>
