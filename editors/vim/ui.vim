@@ -7,10 +7,7 @@ syntax on
   set linespace=2
   set background=dark
   set laststatus=2
-  colorscheme tubster_bo
-
-  set rtp+=~/.config/vendor/powerline/powerline/bindings/vim
-
+  colorscheme hybrid
 
 " Tabs/Whitespace
   set tabstop=2                  " a Tab take up 2 spaces
@@ -34,7 +31,9 @@ syntax on
   set whichwrap=b,s,h,l,<,>,[,]
   set autoread                  " watch for file changes
   set mouse=a                   " mouse can be handy sometimes
-  set ttymouse=xterm2           " Needed to get mouse working when in Tmux/screen
+  if !has('nvim')
+    set ttymouse=xterm2         " Needed to get mouse working when in Tmux/screen
+  endif
   set fileformats=unix
   set history=1000
   set nohidden                  " unload a buffer when abandoned, please

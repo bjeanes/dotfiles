@@ -1,134 +1,94 @@
-augroup bundles
-  autocmd!
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
 
-  if has('vim_starting')
-    set nocompatible
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
-  endif
+call plug#begin('~/.vim/plugged')
 
-  call neobundle#rc(expand('~/.vim/bundle/'))
+Plug 'w0ng/vim-hybrid'
 
-  " Let NeoNeoBundle manage NeoBundle
-  NeoBundleFetch 'Shougo/neobundle.vim'
+Plug 'tpope/vim-sensible' " Sensible defaults, duh
 
-  NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-  \     'mac' : 'make -f make_mac.mak',
-  \     'unix' : 'make -f make_unix.mak',
-  \    },
-  \ }
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-endwise'  " Auto-add 'end' etc appropriately in various languages
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-repeat'
+"Plug 'tpope/vim-sleuth'   " auto-config indent and tabs etc based on other files
+Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
+Plug 'tpope/vim-vinegar'  " Nicer netrw
+Plug 'terryma/vim-expand-region'
+if has('signs')
+  Plug 'airblade/vim-gitgutter'
+endif
+Plug 'kana/vim-smartinput' " smart pairwise characters
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
+vmap <Enter>   <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
 
-  if has("mac") || has("macunix")
-    NeoBundle 'rizzatti/funcoo.vim'
-    NeoBundle 'rizzatti/dash.vim'
+Plug 'thisivan/vim-matchit'  " Extended % matching for HTML, LaTeX, and many other languages
+Plug 'kana/vim-textobj-user' " Create new text objects
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'argtextobj.vim'
 
-    nmap <silent> K <Plug>DashSearch
-  endif
 
-  NeoBundle 'tpope/vim-sleuth' " auto-config indent and tabs etc based on other files
+"let g:crystal_auto_format = 1
+Plug 'rhysd/vim-crystal' " polyglot doesn't include plugin dir, where much of plugin is set
+let g:polyglot_disabled = ['crystal']
+Plug 'sheerun/vim-polyglot'
 
-  NeoBundle 'tpope/vim-endwise' " Auto-add 'end' etc appropriately in various languages
-  NeoBundle 'kana/vim-smartinput'
-  NeoBundleLazy 'tpope/vim-vinegar', { 'autoload' : { 'filetypes' : ['netrw'] } }
+" I pretty much only work with Postgres SQL, so assume *.sql files belong to
+" that syntax:
+let g:sql_type_default = 'pgsql'
 
-  " Languages/Syntaxes/Frameworks {{{
-    NeoBundleLazy 'wting/rust.vim', { 'autoload' : { 'filetypes' : ['rust'] } }
-    au BufNewFile,BufRead *.rs set filetype=rust
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
+Plug 'thisivan/vim-ruby-matchit'
+Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 
-    NeoBundleLazy 'jnwhiteh/vim-golang', { 'autoload' : { 'filetypes' : ['go'] } }
-    au BufNewFile,BufRead *.go set filetype=go
-    au FileType go autocmd BufWritePre <buffer> Fmt
-    au FileType go set noexpandtab
+Plug 'Chiel92/vim-autoformat'
 
-    " Ruby {{{
-      NeoBundleLazy 'vim-ruby/vim-ruby'
-      NeoBundleLazy 'tpope/vim-rails'
-      NeoBundleLazy 'tpope/vim-rake'
-      NeoBundleLazy 'tpope/vim-bundler'
-      NeoBundleLazy 'thisivan/vim-ruby-matchit'
-      NeoBundleLazy 'nelstrom/vim-textobj-rubyblock', { 'depends' : ['kana/vim-textobj-user', 'thisivan/vim-matchit'] }
-      autocmd FileType ruby NeoBundleSource
-      \ vim-ruby
-      \ vim-rails  " <- how to maket his only load in rails projects?
-      \ vim-bundler
-      \ vim-rake
-      \ vim-haml
-      \ vim-ruby-matchit
-      \ vim-textobj-rubyblock
-    " }}}
+Plug 'janko-m/vim-test'
+let test#strategy = "dispatch"  " Run test using vim-dispatch
 
-    " Clojure(script) {{{
-      NeoBundleLazy 'guns/vim-clojure-static'
-      NeoBundleLazy 'guns/vim-sexp', { 'depends' : ['tpope/vim-repeat'] }
-      NeoBundleLazy 'tpope/vim-sexp-mappings-for-regular-people', { 'depends' : ['guns/vim-sexp'] }
-      NeoBundleLazy 'tpope/vim-dispatch'
-      NeoBundleLazy 'tpope/vim-leiningen', { 'depends' : ['tpope/vim-dispatch'] }
-      NeoBundleLazy 'tpope/vim-fireplace', { 'depends' : ['tpope/vim-leiningen']}
+Plug 'scrooloose/syntastic'
+let g:syntastic_enable_signs       = 1
+let g:syntastic_auto_loc_list      = 0
 
-      autocmd FileType clojure,clojurescript NeoBundleSource
-            \ vim-clojure-static
-            \ vim-sexp-mappings-for-regular-people
-            \ vim-fireplace
+Plug 'vim-airline/vim-airline'
+let g:airline_powerline_fonts = 1
 
-      autocmd FileType clojure,clojurescript set lispwords-='->'
-      autocmd FileType clojure,clojurescript set lispwords-='->>'
-    " }}}
+call plug#end()
 
-    NeoBundleLazy 'tpope/vim-markdown', { 'autoload' : { 'filetypes' : ['markdown'] } }
-
-    " HTML/CSS/Javascript {{{
-      NeoBundleLazy 'tpope/vim-haml',           { 'autoload' : { 'filetypes' : 'haml' } }
-      NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload' : { 'filetypes' : 'coffee' } }
-      NeoBundleLazy 'pangloss/vim-javascript',  { 'autoload' : { 'filetypes' : 'javascript' } }
-      NeoBundleLazy 'css3',                     { 'autoload' : { 'filetypes' : 'css' } }
-      NeoBundleLazy 'othree/html5-syntax.vim',  { 'autoload' : { 'filetypes' : 'html' } }
-      NeoBundleLazy 'slim-template/vim-slim',   { 'autoload' : { 'filetypes' : 'slim' } }
-    " }}}
-
-  " }}}
-
-  " Git {{{
-    NeoBundle 'tpope/vim-fugitive', { 'augroup': 'fugitive' }
-    NeoBundle 'tpope/vim-git'
-    NeoBundle 'tjennings/git-grep-vim'
-  " }}}
-
-  " Text objects {{{
-    NeoBundle 'michaeljsmith/vim-indent-object'
-    NeoBundle 'argtextobj.vim'
-  " }}}
-
-  " Utility {{{
-
-    NeoBundle 'tpope/vim-surround', { 'depends' : 'tpope/vim-repeat' }
-
-    NeoBundleLazy 'AutoComplPop', { 'autoload' : { 'insert' : 1 } }
-    let g:acp_enableAtStartup        = 0
-    let g:acp_completeoptPreview     = 1
-    let g:acp_behaviorKeywordLength  = 3
-    let g:acp_behaviorKeywordIgnores = [
-      \ 'the', 'def', 'end',
-      \ 'else', 'elsif', 'elif', 'endif', 'then',
-      \ 'case', 'done', 'do'
-      \ ]
-
-    NeoBundle 'junegunn/vim-easy-align'
-    vmap <Enter>   <Plug>(EasyAlign)
-    nmap <Leader>a <Plug>(EasyAlign)
-
-    NeoBundle 'tpope/vim-commentary'
-    autocmd FileType clojure,clojurescript set commentstring=;\ %s
-    nmap // <Plug>CommentaryLine
-    vmap // <Plug>Commentary
-
-    NeoBundle 'kien/ctrlp.vim'
-
-    NeoBundle 'Syntastic'
-    let g:syntastic_enable_signs       = 1
-    let g:syntastic_auto_loc_list      = 0
-  " }}}
-
-  filetype plugin indent on
-
-  NeoBundleCheck
-augroup END
+"     " Clojure(script) {{{
+"       NeoBundleLazy 'guns/vim-sexp', { 'depends' : ['tpope/vim-repeat'] }
+"       NeoBundleLazy 'tpope/vim-sexp-mappings-for-regular-people', { 'depends' : ['guns/vim-sexp'] }
+"       NeoBundleLazy 'tpope/vim-dispatch'
+"       NeoBundleLazy 'tpope/vim-leiningen', { 'depends' : ['tpope/vim-dispatch'] }
+"       NeoBundleLazy 'tpope/vim-fireplace', { 'depends' : ['tpope/vim-leiningen']}
+"
+"       autocmd FileType clojure,clojurescript NeoBundleSource
+"             \ vim-clojure-static
+"             \ vim-sexp-mappings-for-regular-people
+"             \ vim-fireplace
+"
+"       autocmd FileType clojure,clojurescript set lispwords-='->'
+"       autocmd FileType clojure,clojurescript set lispwords-='->>'
+"     " }}}
+"
+"   " }}}
+"
+"   " Git {{{
+"     NeoBundle 'tpope/vim-fugitive', { 'augroup': 'fugitive' }
+"     NeoBundle 'tpope/vim-git'
+"   " }}}
+"
+"
+"
+"   " }}}

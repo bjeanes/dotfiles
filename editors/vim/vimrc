@@ -1,8 +1,10 @@
 set nocompatible
 
+let mapleader = "\<Space>"
+
+source ~/.vim/bundles.vim
 source ~/.vim/ui.vim
 source ~/.vim/autocommands.vim
-source ~/.vim/bundles.vim
 source ~/.vim/ruby.vim
 
 set backupdir=~/.vim/dirs/backups       " store file backups here
@@ -29,4 +31,6 @@ map <Leader>.. :cd ~/.config<CR>:enew<CR>
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
+
+map <Leader><Leader> :Files<CR>
 

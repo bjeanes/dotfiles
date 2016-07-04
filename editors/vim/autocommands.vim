@@ -17,15 +17,17 @@ nmap <Leader>sw :call <SID>StripTrailingWhitespaces()<CR>
 augroup the_rest
   au!
 
-  " Attempted fix for Vim losing mouse support when inside Tmux
-  autocmd TermResponse,CursorHold,CursorHoldI * set ttymouse=xterm2
+  if !has('nvim')
+    " Attempted fix for Vim losing mouse support when inside Tmux
+    autocmd TermResponse,CursorHold,CursorHoldI * set ttymouse=xterm2
+  endif
 
   " Create parent directory if it doesn't exist before writing file
   " (http://stackoverflow.com/questions/4292733/vim-creating-parent-directories-on-save)
   autocmd BufWritePre * if expand("<afile>")!~#'^\w\+:/' && !isdirectory(expand("%:h")) | execute "silent! !mkdir -p ".shellescape(expand('%:h'), 1) | redraw! | endif
 
   " Source vimrc after saving it
-  autocmd BufWritePost .vimrc,vimrc source $MYVIMRC | NERDTreeToggle | NERDTreeToggle
+  autocmd BufWritePost .vimrc,vimrc source $MYVIMRC
 
   " Auto save files on window blur
   autocmd FocusLost * :silent! up

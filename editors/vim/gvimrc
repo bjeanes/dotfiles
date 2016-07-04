@@ -18,5 +18,5 @@ end
 
 " Source vimrc after saving it
 autocmd! BufWritePost .gvimrc,gvimrc source $MYGVIMRC
-autocmd! BufWritePost .vimrc,vimrc source $MYVIMRC | source $MYGVIMRC | NERDTreeToggle | NERDTreeToggle
+autocmd! BufWritePost .vimrc,vimrc source $MYVIMRC | source $MYGVIMRC
 
