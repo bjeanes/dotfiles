@@ -6,7 +6,7 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'w0ng/vim-hybrid'
+Plug 'w0ng/vim-hybrid' " color scheme
 
 Plug 'tpope/vim-sensible' " Sensible defaults, duh
 
@@ -52,10 +52,10 @@ Plug 'tpope/vim-rake'
 Plug 'thisivan/vim-ruby-matchit'
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 
-Plug 'Chiel92/vim-autoformat'
+" Plug 'Chiel92/vim-autoformat'
 
 Plug 'janko-m/vim-test'
-let test#strategy = "dispatch"  " Run test using vim-dispatch
+let test#strategy = "neovim"  " Run test using vim-dispatch
 
 Plug 'scrooloose/syntastic'
 let g:syntastic_enable_signs       = 1
@@ -80,15 +80,4 @@ call plug#end()
 "
 "       autocmd FileType clojure,clojurescript set lispwords-='->'
 "       autocmd FileType clojure,clojurescript set lispwords-='->>'
-"     " }}}
 "
-"   " }}}
-"
-"   " Git {{{
-"     NeoBundle 'tpope/vim-fugitive', { 'augroup': 'fugitive' }
-"     NeoBundle 'tpope/vim-git'
-"   " }}}
-"
-"
-"
-"   " }}}

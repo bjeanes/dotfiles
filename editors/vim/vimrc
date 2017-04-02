@@ -32,5 +32,8 @@ if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 
-map <Leader><Leader> :Files<CR>
+map <Leader><Leader> :GFiles<CR>
+map <Leader>t :Files<CR>
+
+hi Normal ctermbg=none
 

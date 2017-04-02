@@ -1,1 +1,1 @@
-/Users/bjeanes/.vimrc
+vimrc
