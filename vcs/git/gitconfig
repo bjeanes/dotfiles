@@ -3,8 +3,9 @@
 	pl = pull --rebase
 	p = push
 	co = checkout
-	c = commit
-	ca = commit -a
+	commit = commit -v
+	c = commit -v
+	ca = commit -v -a
 	diff = diff --word-diff
 	dc = diff --cached
 	lp = log --patch
