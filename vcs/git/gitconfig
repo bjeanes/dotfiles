@@ -65,9 +65,11 @@
 	algorithm = minimal
 	mnemonicprefix = true
 	renames = copies
-[merge]
-	conflictstyle = diff3
-	tool = Kaleidoscope
+	tool = ksdiff
+[difftool]
+	prompt = false
+[difftool "ksdiff"]
+  cmd = "ksdiff $LOCAL $REMOTE"
 [pull]
 	rebase = true
 [heroku]

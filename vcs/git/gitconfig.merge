@@ -2,7 +2,14 @@
 
 [merge]
 	summary = true
-	tool = opendiff
+	conflictstyle = diff3
+	tool = Kaleidoscope
+
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool]
+	prompt = false
 
 # http://bitfission.com/blog/2010/07/auto-merge-gemfile-lock.html
 [merge "bundlelock"]
