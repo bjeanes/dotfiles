@@ -11,6 +11,7 @@
   languages/ruby/railsrc: ~/.railsrc
   languages/ruby/rspec: ~/.rspec
   misc/ackrc: ~/.ackrc
+  misc/agignore: ~/.agignore
   misc/ctags: ~/.ctags
   misc/inputrc: ~/.inputrc
   misc/nanorc: ~/.nanorc
