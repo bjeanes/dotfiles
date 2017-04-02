@@ -12,6 +12,7 @@
 	shas = log --reverse --pretty=format:'%h' --abbrev-commit
 	me = !sh -c 'echo `git config user.name` \\<`git config user.email`\\>'
 	mine = !sh -c 'git lg --author=\"`git me`\"'
+	br = branch
 
   # TODO make this use selecta, when installed
 	f = "!git ls-files | grep -i"
@@ -30,7 +31,6 @@
 
 	# From https://github.com/garybernhardt/dotfiles/blob/master/bin/git-churn
 	churn = "!git log --all -M -C --name-only --format='format:' \"$@\" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print \"count\tfile\"} {print $1 \"\t\" $2}' | sort -g"
-	br = branch
 [apply]
 	whitespace = fix
 [color]
