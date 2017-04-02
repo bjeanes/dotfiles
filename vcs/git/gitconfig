@@ -74,8 +74,6 @@
   cmd = "ksdiff $LOCAL $REMOTE"
 [pull]
 	rebase = true
-[heroku]
-	account = heroku
 [push]
 	default = current
 [advice]
