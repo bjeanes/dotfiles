@@ -1,3 +1,10 @@
+function zeus() {
+  command zeus $*
+  st=$?
+  stty sane # zeus keeps screwing up the terminal sometimes
+  return $st
+}
+
 function e() {
     if [ "$#" -eq 0 ]; then
         emacsclient -a '' -n -c .
