@@ -1,0 +1,43 @@
+# vim: set ft=sh
+
+fresh freshshell/fresh bin/fresh --bin
+
+fresh languages/clojure/lein/profiles.clj --file=~/.lein/profiles.clj
+fresh-options --file # each file as is
+  fresh Brewfile
+
+  fresh languages/ruby/gemrc
+  fresh languages/ruby/irbrc
+
+  fresh misc/ackrc
+  fresh misc/agignore
+  fresh misc/ctags
+  fresh misc/inputrc
+  fresh misc/nanorc
+  fresh misc/psqlrc
+  fresh misc/tmux/tmux.conf
+
+  fresh vcs/git/gitattributes
+  fresh vcs/git/gitconfig
+  fresh vcs/git/gitconfig.merge
+  fresh vcs/git/gitconfig.pushurls
+  fresh vcs/git/gitignore
+fresh-options
+
+[ -f ~/.gitconfig.local ] || cp ~/.dotfiles/vcs/git/gitconfig.local ~/.gitconfig.local
+
+mkdir -p ~/.config
+ln -sfh ~/.dotfiles/editors/vim ~/.vim
+ln -sfh ~/.dotfiles/editors/vim ~/.config/nvim
+ln -sfh ~/.vim/vimrc            ~/.vimrc
+ln -sfh ~/.vim/gvimrc           ~/.gvimrc
+
+fresh-options --file=~/.zshrc --marker
+  fresh mathiasbynens/dotfiles .functions
+  fresh twe4ked/dotfiles shell/zsh/completion.zsh
+
+  fresh junegunn/fzf shell/completion.zsh
+  fresh junegunn/fzf shell/key-bindings.zsh
+fresh-options
+
+fresh garybernhardt/dotfiles bin/run-command-on-git-revisions --bin
