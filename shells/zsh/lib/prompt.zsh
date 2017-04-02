@@ -7,7 +7,7 @@ pr_grey="%B%F{black}"
 
 if [ "$(tput colors 2>/dev/null)" -eq 256 ]; then
   pr_red="%F{52}"
-  pr_blue="%F{25}"
+  pr_blue="%F{33}"
   pr_green="%F{28}"
   pr_grey="%F{59}"
 fi
