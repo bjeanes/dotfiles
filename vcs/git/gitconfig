@@ -33,6 +33,9 @@
 
 	# From https://github.com/garybernhardt/dotfiles/blob/master/bin/git-churn
 	churn = "!git log --all -M -C --name-only --format='format:' \"$@\" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print \"count\tfile\"} {print $1 \"\t\" $2}' | sort -g"
+
+	# Write directly to versioned file (as `fresh`-managed one will be read-only)
+	config = config --file ~/.dotfiles/vcs/git/gitconfig
 [apply]
 	whitespace = fix
 [color]
