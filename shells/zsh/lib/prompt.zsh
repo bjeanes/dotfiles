@@ -109,11 +109,11 @@ function default_precmd {
     rev="${rev/\(svn\)/↯}"
 
     local left right
-    left=($(user_at_host) $cwd $char)
+    left=($(user_at_host) $cwd)
     right=($rev $ruby $time)
 
-    PS1="$left  "
-    RPS1=" $right"
+    PS1=$left$'\n'$char'  '
+    RPS1="%{$(echotc UP 1)%}$right%{$(echotc DO 1)%}"
   else
     PS1="$ "
     RPS1=""
