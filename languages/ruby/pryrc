@@ -1,0 +1,41 @@
+if defined?(::Bundler)
+  pry_specs = ENV['GEM_PATH'].split(':').
+    flat_map { |path| Dir.glob("#{path}/specifications/{method_source,pry,coderay}-*.gemspec") }.
+    flat_map { |path| Gem::Specification.load(path) }
+
+  pry_specs = pry_specs.
+    sort_by(&:version).
+    reverse.
+    uniq(&:name)
+
+  pry_specs.each do |spec|
+    $LOAD_PATH << spec.lib_dirs_glob
+  end
+end
+
+begin
+  require('pry-inline')
+rescue LoadError
+end
+
+begin
+  require('pry-state')
+rescue LoadError
+end
+
+begin
+  #require('pry-syntax-hacks')
+rescue LoadError
+end
+
+if defined?(PryByebug)
+  Pry.commands.alias_command 'c', 'continue'
+  Pry.commands.alias_command 's', 'step'
+  Pry.commands.alias_command 'n', 'next'
+  Pry.commands.alias_command 'f', 'finish'
+  Pry.commands.alias_command 'u', 'up'
+end
+
+if defined?(Rails) && Rails.env
+  include Rails::ConsoleMethods
+end

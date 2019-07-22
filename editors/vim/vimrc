@@ -3,6 +3,7 @@ set nocompatible
 let mapleader = "\<Space>"
 
 source ~/.vim/bundles.vim
+source ~/.vim/coc.vim
 source ~/.vim/ui.vim
 source ~/.vim/autocommands.vim
 source ~/.vim/ruby.vim
@@ -12,6 +13,7 @@ set backupskip=/tmp/*,/private/tmp/*"   " don't use backups for tmp files
 set directory=~/.vim/dirs/swaps         " store swap files here
 set undofile                            " persistent undos
 set undodir=~/.vim/dirs/undos           " where to store undo histories
+set autoread
 
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
@@ -20,8 +22,8 @@ cmap w!! w !sudo tee % >/dev/null
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
 
-set pastetoggle=<Leader>p
-map <leader>p :set invpaste paste?<CR>
+"set pastetoggle=<Leader>pp
+nmap <leader>pp :set invpaste paste?<CR>
 
 " Quick editing of common dot-files
 map <Leader>vv :edit $MYVIMRC<CR>
@@ -34,6 +36,9 @@ endif
 
 map <Leader><Leader> :GFiles<CR>
 map <Leader>t :Files<CR>
+
+" For working on highlight/syntax rules
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 hi Normal ctermbg=none
 

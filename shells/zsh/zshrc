@@ -1,5 +1,15 @@
+bindkey -e
 CURRENT_SHELL="zsh"
 SHELL_FILES="${$(readlink $HOME/.zshrc):h}"
 DOT_FILES="${SHELL_FILES:h:h}"
 
 source $DOT_FILES/shells/bootstrap.sh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+
+if command fortune >/dev/null; then fortune oblique; fi
+

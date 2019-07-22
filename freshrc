@@ -27,17 +27,42 @@ fresh-options
 [ -f ~/.gitconfig.local ] || cp ~/.dotfiles/vcs/git/gitconfig.local ~/.gitconfig.local
 
 mkdir -p ~/.config
-ln -sfh ~/.dotfiles/editors/vim ~/.vim
-ln -sfh ~/.dotfiles/editors/vim ~/.config/nvim
-ln -sfh ~/.vim/vimrc            ~/.vimrc
-ln -sfh ~/.vim/gvimrc           ~/.gvimrc
+rm -rf ~/.vim ~/.config/nvim
+ln -sfn ~/.dotfiles/editors/vim ~/.vim
+ln -sfn ~/.dotfiles/editors/vim ~/.config/nvim
+ln -sfn ~/.vim/vimrc            ~/.vimrc
+ln -sfn ~/.vim/gvimrc           ~/.gvimrc
 
 fresh-options --file=~/.zshrc --marker
+  fresh shells/path.sh
+
+  fresh freshshell/fresh contrib/source-build.sh
+  fresh zsh-users/zsh-history-substring-search zsh-history-substring-search.zsh
+
   fresh mathiasbynens/dotfiles .functions
   fresh twe4ked/dotfiles shell/zsh/completion.zsh
 
   fresh junegunn/fzf shell/completion.zsh
   fresh junegunn/fzf shell/key-bindings.zsh
+
+  fresh shells/common/\*.sh
+  fresh shells/zsh/\*.zsh
+  fresh shells/zsh/lib/\*.zsh
 fresh-options
 
+fresh zsh-users/zsh-completions src --file=completion/
+fresh freshshell/fresh contrib/completion/fresh-completion.zsh --file=completion/_fresh
+
+fresh zsh-users/zsh-syntax-highlighting . --file=vendor/zsh-syntax-highlighting/
+
 fresh garybernhardt/dotfiles bin/run-command-on-git-revisions --bin
+
+fresh junegunn/fzf . --file=~/.fzf/
+~/.fresh/source/junegunn/fzf/install --bin
+fresh junegunn/fzf bin/fzf --bin
+fresh junegunn/fzf bin/fzf-tmux --bin
+
+fresh_after_build() {
+#	vim +PlugUpdate +PlugClean +qall
+	true
+}

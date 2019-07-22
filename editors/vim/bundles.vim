@@ -36,6 +36,8 @@ Plug 'kana/vim-textobj-user' " Create new text objects
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'argtextobj.vim'
 
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+
 
 "let g:crystal_auto_format = 1
 Plug 'rhysd/vim-crystal' " polyglot doesn't include plugin dir, where much of plugin is set
@@ -52,14 +54,21 @@ Plug 'tpope/vim-rake'
 Plug 'thisivan/vim-ruby-matchit'
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 
+Plug 'ap/vim-css-color'
+
 " Plug 'Chiel92/vim-autoformat'
 
 Plug 'janko-m/vim-test'
 let test#strategy = "neovim"  " Run test using vim-dispatch
 
-Plug 'scrooloose/syntastic'
-let g:syntastic_enable_signs       = 1
-let g:syntastic_auto_loc_list      = 0
+Plug 'w0rp/ale'
+let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 1
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\   'ruby': ['rubocop'],
+\}
 
 Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1

@@ -1,11 +1,16 @@
 brew 'mas'
 mas 'Annotate - Capture and Share', id: 918207447
+mas 'Slack', id: 803453959
+mas 'MindNode 5', id: 1289197285
 
 cask 'google-chrome'
 cask 'firefox'
 cask 'virtualbox'
 cask 'keepingyouawake'
 cask 'yakyak'
+cask 'iterm2'
+cask 'sonos'
+cask 'insomnia'
 
 # dev
 mas 'Kaleidoscope', id: 587512244
@@ -18,10 +23,9 @@ brew 'chruby'
 brew 'ruby-install'
 brew 'phantomjs'
 brew 'chromedriver'
-brew 'yarn'
 brew 'node'
-brew 'npm'
-brew 'multirust'
+brew 'yarn'
+#brew 'multirust'
 brew 'rust'
 brew 'crystal-lang'
 brew 'elixir'
@@ -39,6 +43,8 @@ brew 'wget'
 brew 'tree'
 brew 'coreutils'
 brew 'pv'
+brew 'tmux'
+brew 'htop'
 
 # shells
 brew 'zsh'

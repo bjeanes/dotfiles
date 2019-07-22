@@ -1,7 +1,7 @@
 require 'irb/ext/save-history'
 require 'irb/completion'
 
-ARGV.concat [ "--readline", "--prompt-mode", "simple" ]
+ARGV.concat %w[--readline --prompt-mode simple]
 
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb-save-history"
@@ -13,4 +13,34 @@ class Object
   def local_methods(obj = self)
     (obj.methods - obj.class.superclass.instance_methods).sort
   end
+end
+
+require 'rubygems'
+begin
+  require 'pry'
+  Pry.start
+  exit
+rescue LoadError
+  if defined?(::Bundler)
+    pry_specs = ENV['GEM_PATH'].split(':').
+      flat_map { |path| Dir.glob("#{path}/specifications/pry-*.gemspec") }.
+      flat_map { |path| Gem::Specification.load(path) }
+
+    pry_specs = pry_specs.
+      reverse_sort_by(&:version).
+      uniq_by(&:name)
+
+    pry_specs.each do |spec|
+      $LOAD_PATH << spec.lib_dirs_glob
+    end
+
+    begin
+      require 'pry'
+      Pry.start
+      exit
+    rescue LoadError => e
+      puts e
+    end
+  end
+
 end

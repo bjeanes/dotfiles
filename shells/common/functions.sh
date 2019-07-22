@@ -79,12 +79,12 @@ function extract() {
 # Custom "command not found" handling (ala method_missing):
 
 # Zsh
-function command_not_found_handler() {
+function __disabled__command_not_found_handler() {
   /usr/bin/env ruby $DOT_FILES/misc/method_missing.rb $*
 }
 
 # Bash (call Zsh version)
-function command_not_found_handle() {
+function __disabled__command_not_found_handle() {
   command_not_found_handler $*
   return $?
 }

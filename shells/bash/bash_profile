@@ -1,1 +1,6 @@
 source ~/.bashrc
+# added by oblique-fortunes
+if command fortune >/dev/null; then fortune oblique; fi
+
+
+export PATH="$HOME/.cargo/bin:$PATH"

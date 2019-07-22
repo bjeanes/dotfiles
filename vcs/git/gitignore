@@ -68,3 +68,10 @@ pom.xml.asc
 /checkouts/
 .lein-*
 vendor/gems
+.gem
+.gem/
+.yardoc/
+.terraform/
+.local/
+*.log
+.bash_history

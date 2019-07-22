@@ -429,7 +429,7 @@ function is_mac {
 }
 
 function install_homebrew {
-	which -s brew && return
+	command -v brew && return
 	is_mac || return
 
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"

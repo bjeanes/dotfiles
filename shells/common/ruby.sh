@@ -3,7 +3,10 @@ export IRBRC="$HOME/.irbrc"
 export RBXOPT="-Xrbc.db=/tmp/rbx -X19"
 export JRUBY_OPTS="--1.9"
 
-which=`which -a which | tail -n1` # avoid builtin
+# if [ -f $SHELL_FILES/../../languages/ruby/rubyrc.rb ]; then
+# 	echo setting RUBYOPT
+#   export RUBYOPT="-r$SHELL_FILES/../../languages/ruby/rubyrc"
+# fi
 
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
   source /usr/local/share/chruby/chruby.sh
@@ -16,13 +19,13 @@ if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
       return 1
     fi
   }
-elif $which -s rbenv; then
+elif command -v rbenv; then
   eval "$(rbenv init - $CURRENT_SHELL)"
 
   function current_ruby() {
     rbenv version-name
   }
-elif $which -s rvm; then
+elif command -v rvm; then
   source $HOME/.rvm/scripts/rvm
 
   function current_ruby() {
