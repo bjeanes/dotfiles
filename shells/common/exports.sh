@@ -1,5 +1,5 @@
-which vim &>/dev/null && editor="$(which vim)"
-which nvim &>/dev/null && editor="$(which nvim)"
+command -v vim &>/dev/null && editor="$(which vim)"
+command -v nvim &>/dev/null && editor="$(which nvim)"
 
 # Many editor integrations (linters, language server, etc) mess up Phoenix auto
 # reloading by compiling changed files themselves (causing Phoenix to think
