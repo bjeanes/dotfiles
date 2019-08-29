@@ -2,6 +2,16 @@
 
 fresh freshshell/fresh bin/fresh --bin
 
+fresh-options --file=~/.ctags
+  fresh misc/ctags
+
+  fresh romainl/ctags-patterns-for-javascript ctagsrc
+  fresh jb55/typescript-ctags .ctags
+  fresh rust-lang/rust.vim ctags/rust.ctags
+  fresh mmorearty/elixir-ctags .ctags
+  fresh https://gist.github.com/noisesmith/ebe8b3f185e34a7de04b1189b21ba59b.git .ctags # Clojure
+fresh-options
+
 fresh languages/clojure/lein/profiles.clj --file=~/.lein/profiles.clj
 fresh-options --file # each file as is
   fresh languages/ruby/gemrc
@@ -9,7 +19,6 @@ fresh-options --file # each file as is
 
   fresh misc/ackrc
   fresh misc/agignore
-  fresh misc/ctags
   fresh misc/inputrc
   fresh misc/nanorc
   fresh misc/psqlrc
@@ -30,7 +39,7 @@ fresh editors/vim/init.nvim --file ~/.config/nvim/init.vim
 fresh-options --file=~/.vimrc --marker='"'
   fresh editors/vim/vimrc
 fresh-options
- 
+
 fresh-options --file=~/.zshrc --marker
   fresh shells/path.sh
 
