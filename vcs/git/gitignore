@@ -75,3 +75,5 @@ vendor/gems
 .local/
 *.log
 .bash_history
+
+Session.vim
