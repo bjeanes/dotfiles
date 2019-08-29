@@ -254,7 +254,7 @@ syntax on
   set title                     " Show title in Terminal
 
 " Bells
-  set visualbell              " No blinking
+  set visualbell
   set noerrorbells              " No noise.
   set vb t_vb=                  " disable any beeps or flashes on error
 
