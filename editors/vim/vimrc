@@ -22,6 +22,8 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'scrooloose/nerdtree'
 let NERDTreeWinPos='right'
+nmap <leader>tt :NERDTreeToggle<CR>
+nmap <leader>fo :NERDTreeFind<CR>
 
 Plug 'mbbill/undotree', { 'on': ['UndotreeToggle', 'UndotreeFocus', 'UndotreeShow', 'UndotreeHide'] }
 let g:undotree_WindowLayout = 2
@@ -58,7 +60,6 @@ if executable('ag')
   let $FZF_DEFAULT_COMMAND = 'ag -l --hidden .'
 endif
 map <Leader><Leader> :GFiles<CR>
-map <Leader>t :Files<CR>
 map <C-p> :Files<CR>
 " autocmd FileType fzf nmap <buffer> <silent> <ESC> :q<CR>
 
@@ -235,7 +236,7 @@ syntax on
   set list
   set listchars=tab:⤑\ ,trail:·,eol:↵,nbsp:_
   set fillchars=vert:\ ,fold:-
-  nnoremap <Leader>c :set list!<CR>
+  nnoremap <Leader>tc :set list! list?<CR>
 
 " Misc
   set switchbuf=useopen         " Don't re-open already opened buffers
