@@ -1,7 +1,5 @@
 [alias]
 	st = status
-	pl = pull --rebase
-	p = push
 	co = checkout
 	commit = commit -v
 	c = commit -v
@@ -16,9 +14,6 @@
 	br = branch
 
   fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
-
-  # TODO make this use selecta, when installed
-	f = "!git ls-files | grep -i"
 
 	# Add file excluding whitespace changes (http://stackoverflow.com/a/7149602/56690)
 	addnw = !sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
