@@ -20,6 +20,7 @@ fresh-options --file # each file as is
   fresh vcs/git/gitconfig.merge
   fresh vcs/git/gitconfig.pushurls
   fresh vcs/git/gitignore
+  fresh --file=~/.git_template/ vcs/git/git_template
 fresh-options
 
 [ -f ~/.gitconfig.local ] || cp ~/.dotfiles/vcs/git/gitconfig.local ~/.gitconfig.local
