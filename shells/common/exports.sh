@@ -1,6 +1,11 @@
 command -v vim &>/dev/null && editor="$(which vim)"
 command -v nvim &>/dev/null && editor="$(which nvim)"
 
+if command -v ag &>/dev/null; then
+  # Ignore anything in .gitignore but still list other hidden files (e.g. .env)
+  export FZF_DEFAULT_COMMAND="ag -l --hidden --ignore .git/"
+fi
+
 # Many editor integrations (linters, language server, etc) mess up Phoenix auto
 # reloading by compiling changed files themselves (causing Phoenix to think
 # that the live version is up-to-date).
