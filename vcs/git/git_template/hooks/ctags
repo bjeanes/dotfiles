@@ -1,8 +1,14 @@
 #!/bin/sh
-
 # See http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
 
-new_tags_file="`mktemp -t ctags`"
-ctags --tag-relative -Rf "${new_tags_file}" --exclude=.git --languages=-javascript,sql
-mv "$new_tags_file" ".git/tags"
-
+set -e
+PATH="/usr/local/bin:$PATH"
+dir="`git rev-parse --git-dir`"
+trap 'rm -f "$dir/$$.tags"' EXIT
+git ls-files | \
+  ctags --tag-relative -L - \
+  -f"$dir/$$.tags" \
+  --exclude=.git \
+  # customize options per repo here:
+  --languages=-sql
+mv "$dir/$$.tags" "$dir/tags"
