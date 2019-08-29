@@ -381,6 +381,7 @@ set backupskip=/tmp/*,/private/tmp/*"   " don't use backups for tmp files
 
 set autoread
 
+set modeline
 set modelines=5
 
 " For when you forget to sudo.. Really Write the file.

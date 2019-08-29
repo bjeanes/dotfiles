@@ -1,4 +1,4 @@
-# vim: set ft=sh
+# vim: ft=sh
 
 fresh freshshell/fresh bin/fresh --bin
 
