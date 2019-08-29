@@ -4,8 +4,6 @@ fresh freshshell/fresh bin/fresh --bin
 
 fresh languages/clojure/lein/profiles.clj --file=~/.lein/profiles.clj
 fresh-options --file # each file as is
-  fresh Brewfile
-
   fresh languages/ruby/gemrc
   fresh languages/ruby/irbrc
 
