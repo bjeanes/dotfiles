@@ -471,8 +471,35 @@ nmap <silent> ]b :bnext<CR>
 nmap <silent> ]t :tprevious<CR>
 nmap <silent> [t :tnext<CR>
 
+set formatoptions=   " Clear so I can add with comments (see `:help fo-table`)
+set formatoptions+=c " Auto-wrap comments, inserting current comment leader
+set formatoptions+=r " Insert comment leader when hitting <Enter> within a comment
+set formatoptions+=j " Remove comment leader when joining comment lines
+set formatoptions+=o " Ditto except for when using o or O
+set formatoptions+=q " Allow formatting text with `gq`
+set formatoptions+=n " Recognise numbered lists for sake of indenting wrapped content
+
+set nojoinspaces " Don't insert 2 spaces after punctuation when joining jines
+
+hi ColorColumn guibg=#222222 ctermbg=235
+set colorcolumn=79,120
+set textwidth=79
+
 " Show incremental previews of commands (such as :s[ubstitute])
 set inccommand=nosplit
+
+" If there's no EOL at the end of the file, don't mess up the diff by adding
+" one
+set nofixeol
+
+set noautochdir
+
+" https://dougblack.io/words/a-good-vimrc.html
+set lazyredraw
+
+" Show current syntax item for position under cursor
+" https://vi.stackexchange.com/a/11877/11631
+nnoremap zS :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')), ' ')<CR>
 
 " Start elixir tooling with a custom MIX_ENV so that compilation by that
 " tooling doesn't negatively affect Phoenix auto-reloading
