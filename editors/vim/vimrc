@@ -144,7 +144,7 @@ let g:ale_completion_enabled = 1
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['eslint'],
-\   'ruby': ['rubocop'],
+\   'elixir': ['mix_format'],
 \}
 
 Plug 'vim-airline/vim-airline'
