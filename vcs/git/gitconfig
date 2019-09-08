@@ -90,3 +90,7 @@
 	prereleaseSuffix = -pre
 	prereleaseSuffix = -alpha
 	prereleaseSuffix = -beta
+[pager]
+	log = diffr | less -R
+	show = diffr | less -R
+	diff = diffr | less -R
