@@ -12,8 +12,19 @@ call plug#begin('~/.cache/vim/plugs')
 
 Plug 'w0ng/vim-hybrid' " color scheme
 Plug 'mhinz/vim-startify'
+let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
 let g:startify_fortune_use_unicode = 1
+let g:startify_update_oldfiles = 1
+let g:startify_change_to_vcs_root = 1
+let g:startify_change_to_dir = 0
+let g:startify_lists = [
+  \ { 'type': 'dir',       'header': ['   Recent '. getcwd()] },
+  \ { 'type': 'files',     'header': ['   Recent']            },
+  \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+  \ { 'type': 'sessions',  'header': ['   Sessions']       },
+  \ { 'type': 'commands',  'header': ['   Commands']       },
+  \ ]
 
 Plug 'tpope/vim-sensible' " Sensible defaults, duh
 
