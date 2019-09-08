@@ -70,12 +70,12 @@ fresh junegunn/fzf bin/fzf --bin
 fresh junegunn/fzf bin/fzf-tmux --bin
 
 fresh_after_build() {
-	# Fix executable bit
-	# https://github.com/freshshell/fresh/issues/159
-	chmod +x ~/.git_template/hooks/*
+  # Fix executable bit
+  # https://github.com/freshshell/fresh/issues/159
+  chmod +x ~/.git_template/hooks/*
 
-	# Install Vim plugins
-	vim='vim'
-	command -v nvim &>/dev/null && vim='nvim'
-	$vim +PlugUpdate +PlugClean +qall
+  # Install Vim plugins
+  vim='vim'
+  command -v nvim &>/dev/null && vim='nvim'
+  $vim +PlugUpdate +PlugClean +qall
 }
