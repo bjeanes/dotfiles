@@ -75,7 +75,9 @@ fresh_after_build() {
   chmod +x ~/.git_template/hooks/*
 
   # Install Vim plugins
-  vim='vim'
-  command -v nvim &>/dev/null && vim='nvim'
-  $vim +PlugUpdate +PlugClean +qall
+  if [ -z "$SKIP_VIM_PLUGINS" ]; then
+    vim='vim'
+    command -v nvim &>/dev/null && vim='nvim'
+    $vim +PlugUpdate +PlugClean +qall
+  fi
 }
