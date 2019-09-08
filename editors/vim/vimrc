@@ -147,6 +147,10 @@ let g:ale_fixers = {
 \   'elixir': ['mix_format'],
 \}
 
+" Change working directory to .git root
+Plug 'airblade/vim-rooter'
+let g:rooter_use_lcd = 1
+
 Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
