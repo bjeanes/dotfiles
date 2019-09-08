@@ -45,7 +45,8 @@
 	excludesfile = ~/.gitignore
 	whitespace = trailing-space,space-before-tab
 	precomposeunicode = true
-	editor = vim -u NONE +0 -c 'syntax on'
+	#editor = vim -u NONE +0 -c 'syntax on'
+	editor = vim +0 -c 'syntax on'
 [branch]
 	autosetupmerge = always
 	autosetuprebase = local

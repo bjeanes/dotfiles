@@ -62,6 +62,8 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-endwise'  " Auto-add 'end' etc appropriately in various languages
 Plug 'tpope/vim-fugitive'
+Plug 'rhysd/committia.vim' " More convenient UI when using Vim as EDITOR for `git commit`
+Plug 'hotwatermorning/auto-git-diff' " Show diffs in split when doing a `git rebase -i`
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'   " auto-config indent and tabs etc based on other files
