@@ -32,10 +32,17 @@ Plug 'tpope/vim-sensible' " Sensible defaults, duh
 " Out of the box support for many languages
 Plug 'sheerun/vim-polyglot'
 
+Plug 'octref/RootIgnore' " Populate wildignore option from local gitignores
+
 Plug 'scrooloose/nerdtree'
-let NERDTreeWinPos='right'
+let g:NERDTreeWinPos='right'
+let g:NERDTreeRespectWildIgnore=1 " Hide things from wildignore
+let g:NERDTreeMouseMode = 3 " Nerd tree: single clicks open file/dir
+let g:NERDTreeNaturalSort = 1
 nmap <leader>tt :NERDTreeToggle<CR>
 nmap <leader>fo :NERDTreeFind<CR>
+"Plug 'tpope/vim-vinegar'  " Nicer netrw
+let loaded_netrwPlugin=1 " Disable netrw completely http://stackoverflow.com/a/21687112
 
 Plug 'mbbill/undotree', { 'on': ['UndotreeToggle', 'UndotreeFocus', 'UndotreeShow', 'UndotreeHide'] }
 let g:undotree_WindowLayout = 2
@@ -59,7 +66,6 @@ Plug 'tpope/vim-git'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'   " auto-config indent and tabs etc based on other files
 Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
-Plug 'tpope/vim-vinegar'  " Nicer netrw
 Plug 'terryma/vim-expand-region'
 if has('signs')
   Plug 'airblade/vim-gitgutter'
