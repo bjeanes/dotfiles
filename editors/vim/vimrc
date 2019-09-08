@@ -423,7 +423,7 @@ cmap w!! w !sudo tee % >/dev/null
 
 " CTags
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
-set tags=tmp/tags;/,./tmp/tags;/,tags;/,./tags;/
+set tags=./.git/tags;./tmp/tags;/,./tags;/
 
 nmap <leader>tp :set invpaste paste?<CR>
 nmap <leader>tn :set invnumber number?<CR>
