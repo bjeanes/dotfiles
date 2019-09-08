@@ -30,11 +30,11 @@ let g:startify_lists = [
 Plug 'tpope/vim-sensible' " Sensible defaults, duh
 
 " Out of the box support for many languages
-Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot', { 'tag': '*' }
 
 Plug 'octref/RootIgnore' " Populate wildignore option from local gitignores
 
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'tag': '*' }
 let g:NERDTreeWinPos='right'
 let g:NERDTreeRespectWildIgnore=1 " Hide things from wildignore
 let g:NERDTreeMouseMode = 3 " Nerd tree: single clicks open file/dir
@@ -61,7 +61,7 @@ imap <C-_> <C-\><C-O>gcc
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-endwise'  " Auto-add 'end' etc appropriately in various languages
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive', {'tag': '*', 'branch': 'master'}
 Plug 'rhysd/committia.vim' " More convenient UI when using Vim as EDITOR for `git commit`
 Plug 'hotwatermorning/auto-git-diff' " Show diffs in split when doing a `git rebase -i`
 Plug 'tpope/vim-git'
