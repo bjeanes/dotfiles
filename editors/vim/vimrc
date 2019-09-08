@@ -32,8 +32,6 @@ Plug 'tpope/vim-sensible' " Sensible defaults, duh
 " Out of the box support for many languages
 Plug 'sheerun/vim-polyglot', { 'tag': '*' }
 
-Plug 'octref/RootIgnore' " Populate wildignore option from local gitignores
-
 Plug 'scrooloose/nerdtree', { 'tag': '*' }
 let g:NERDTreeWinPos='right'
 let g:NERDTreeRespectWildIgnore=1 " Hide things from wildignore
