@@ -68,6 +68,7 @@ Plug 'tpope/vim-git'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'   " auto-config indent and tabs etc based on other files
 Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
+Plug 'wellle/targets.vim'
 Plug 'terryma/vim-expand-region'
 if has('signs')
   Plug 'airblade/vim-gitgutter'
