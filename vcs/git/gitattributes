@@ -1,3 +1,5 @@
 *.rb diff=ruby
+*.ex diff=elixir
+*.exs diff=elixir
 db/schema.rb merge=railsschema
 Gemfile.lock merge=gemfilelock
