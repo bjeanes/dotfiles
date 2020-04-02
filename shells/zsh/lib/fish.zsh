@@ -1,13 +1,23 @@
 source $FRESH_PATH/build/vendor/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # source $FRESH_PATH/build/vendor/history-substring-search/zsh-history-substring-search.zsh
 
-# bind UP and DOWN arrow keys
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
 
-# bind UP and DOWN arrow keys in other terms (was needed in Windows Terminal)
-bindkey '^[OA' history-substring-search-up
-bindkey '^[OB' history-substring-search-down
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+# bind UP and DOWN arrow keys to prefix search history (diff keys for diff terms)
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[OA' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+bindkey '^[OB' down-line-or-beginning-search
+
+# bind SHIFT-UP / SHIFT-DOWN & PAGE UP / PAGE DOWN to search history matching current contents (non-prefix)
+bindkey '^[[5~' history-substring-search-up
+bindkey '^[[1;2A' history-substring-search-up
+bindkey '^[[6~' history-substring-search-down
+bindkey '^[[1;2B' history-substring-search-down
 
 # Bind control + LEFT and RIGHT arrow keys to jump by word
 bindkey "^[[1;5C" forward-word
