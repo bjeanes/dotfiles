@@ -1,6 +1,7 @@
 # vim: ft=sh
 
 fresh freshshell/fresh bin/fresh --bin
+fresh freshshell/fresh-open bin/fresh-open --bin
 
 fresh-options --file=~/.ctags
   fresh misc/ctags
@@ -66,6 +67,7 @@ fresh zsh-users/zsh-history-substring-search . --file=vendor/zsh-history-substri
 fresh zsh-users/zsh-autosuggestions . --file=vendor/zsh-autosuggestions/
 
 fresh garybernhardt/dotfiles bin/run-command-on-git-revisions --bin
+fresh sivel/speedtest-cli speedtest.py --bin=~/bin/speedtest
 
 fresh junegunn/fzf . --file=~/.fzf/
 
