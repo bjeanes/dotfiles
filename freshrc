@@ -58,6 +58,8 @@ fresh-options
 
 fresh zsh-users/zsh-completions src --file=completion/
 fresh freshshell/fresh contrib/completion/fresh-completion.zsh --file=completion/_fresh
+fresh thoughtbot/dotfiles zsh/completion/_ag --file=completion/_ag
+fresh shells/zsh/completions --file=completion/
 
 fresh zsh-users/zsh-syntax-highlighting . --file=vendor/zsh-syntax-highlighting/
 fresh zsh-users/zsh-history-substring-search . --file=vendor/zsh-history-substring-search/
