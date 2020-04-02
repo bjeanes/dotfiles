@@ -5,6 +5,10 @@ source $FRESH_PATH/build/vendor/zsh-syntax-highlighting/zsh-syntax-highlighting.
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
+# bind UP and DOWN arrow keys in other terms (was needed in Windows Terminal)
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
+
 # Bind control + LEFT and RIGHT arrow keys to jump by word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
