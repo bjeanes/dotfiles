@@ -44,7 +44,6 @@ fresh-options --file=~/.zshrc --marker
   fresh shells/path.sh
 
   fresh freshshell/fresh contrib/source-build.sh
-  fresh zsh-users/zsh-history-substring-search zsh-history-substring-search.zsh
 
   fresh mathiasbynens/dotfiles .functions
   fresh twe4ked/dotfiles shell/zsh/completion.zsh
@@ -61,6 +60,8 @@ fresh zsh-users/zsh-completions src --file=completion/
 fresh freshshell/fresh contrib/completion/fresh-completion.zsh --file=completion/_fresh
 
 fresh zsh-users/zsh-syntax-highlighting . --file=vendor/zsh-syntax-highlighting/
+fresh zsh-users/zsh-history-substring-search . --file=vendor/zsh-history-substring-search/
+fresh zsh-users/zsh-autosuggestions . --file=vendor/zsh-autosuggestions/
 
 fresh garybernhardt/dotfiles bin/run-command-on-git-revisions --bin
 

@@ -1,5 +1,6 @@
+source $FRESH_PATH/build/vendor/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $FRESH_PATH/build/vendor/zsh-history-substring-search/zsh-history-substring-search.zsh
 source $FRESH_PATH/build/vendor/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source $FRESH_PATH/build/vendor/history-substring-search/zsh-history-substring-search.zsh
 
 autoload -U up-line-or-beginning-search
 zle -N up-line-or-beginning-search
