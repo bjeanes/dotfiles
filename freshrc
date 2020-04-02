@@ -65,17 +65,16 @@ fresh zsh-users/zsh-syntax-highlighting . --file=vendor/zsh-syntax-highlighting/
 fresh garybernhardt/dotfiles bin/run-command-on-git-revisions --bin
 
 fresh junegunn/fzf . --file=~/.fzf/
-~/.fresh/source/junegunn/fzf/install --bin
-fresh junegunn/fzf bin/fzf --bin
-fresh junegunn/fzf bin/fzf-tmux --bin
 
 fresh_after_build() {
   # Fix executable bit
   # https://github.com/freshshell/fresh/issues/159
   chmod +x ~/.git_template/hooks/*
 
+  ~/.fresh/source/junegunn/fzf/install --bin
+
   # Install Vim plugins
-  if [ -z "$SKIP_VIM_PLUGINS" ]; then
+  if [ -z "${SKIP_VIM_PLUGINS:-}" ]; then
     vim='vim'
     command -v nvim &>/dev/null && vim='nvim'
     $vim +PlugUpdate +PlugClean +qall
