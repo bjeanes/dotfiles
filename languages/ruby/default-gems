@@ -1,0 +1,6 @@
+bundler
+pry
+gem-ctags
+rails
+rake
+pg

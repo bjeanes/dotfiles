@@ -18,6 +18,11 @@ fresh-options --file # each file as is
   fresh languages/ruby/gemrc
   fresh languages/ruby/irbrc
 
+  # asdf conf
+  fresh languages/asdfrc
+  fresh languages/tool-versions
+  fresh languages/ruby/default-gems # asdf-ruby only
+
   fresh misc/ackrc
   fresh misc/agignore
   fresh misc/inputrc
