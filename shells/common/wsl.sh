@@ -1,4 +1,4 @@
-if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqi microsoft /proc/sys/kernel/osrelease; then
+if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqiE 'WSL' /proc/sys/kernel/osrelease; then
     # # Talk to Windows' SSH-Agent when under WSL, using https://github.com/rupor-github/wsl-ssh-agent
     # # wsl-ssh-agent started with:
     # #
@@ -18,11 +18,11 @@ if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqi microsoft /proc/sys/kernel/osrelease
 
     if [ $? -ne 0 ]; then
         rm -f $SSH_AUTH_SOCK
-        ( 
+        (
             PATH="$NPIPERELAY_DIR:$PATH"
             setsid socat \
                 UNIX-LISTEN:$SSH_AUTH_SOCK,fork \
-                EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & 
+                EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork &
         ) >/dev/null 2>&1
     fi
 
