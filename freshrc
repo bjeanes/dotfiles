@@ -60,6 +60,7 @@ fresh-options --file=~/.zshrc --marker
   fresh shells/common/\*.sh
   fresh shells/zsh/\*.zsh
   fresh shells/zsh/lib/\*.zsh
+  fresh shells/local.zsh
 fresh-options
 
 fresh-options --file=~/.bashrc --marker
@@ -67,6 +68,7 @@ fresh-options --file=~/.bashrc --marker
   fresh shells/common/\*.sh
   fresh shells/bash/\*.bash
   fresh shells/bash/lib/\*.bash
+  fresh shells/local.bash
 fresh-options
 
 fresh zsh-users/zsh-completions src --file=completion/
