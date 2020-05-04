@@ -76,3 +76,4 @@ vendor/gems
 .bash_history
 
 Session.vim
+.vscode/
