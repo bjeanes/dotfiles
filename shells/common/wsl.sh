@@ -26,6 +26,6 @@ if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqi microsoft /proc/sys/kernel/osrelease
         ) >/dev/null 2>&1
     fi
 
-    # https://github.com/microsoft/WSL/issues/4166#issuecomment-604707989
-    sudo /etc/init.d/cron start &>/dev/null
+    # https://github.com/microsoft/WSL/issues/4166#issuecomment-618159162
+    [ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &>/dev/null
 fi
