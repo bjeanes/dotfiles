@@ -38,8 +38,6 @@ fresh-options --file # each file as is
   fresh --file=~/.git_template/ vcs/git/git_template
 fresh-options
 
-[ -f ~/.gitconfig.local ] || cp ~/.dotfiles/vcs/git/gitconfig.local ~/.gitconfig.local
-
 fresh editors/vim/init.nvim --file ~/.config/nvim/init.vim
 
 fresh-options --file=~/.vimrc --marker='"'
@@ -84,6 +82,9 @@ fresh garybernhardt/dotfiles bin/run-command-on-git-revisions --bin
 fresh sivel/speedtest-cli speedtest.py --bin=~/bin/speedtest
 
 fresh junegunn/fzf . --file=~/.fzf/
+
+[ -f ~/.gitconfig.local ] || cp ~/.dotfiles/vcs/git/gitconfig.local ~/.gitconfig.local
+
 
 fresh_after_build() {
   # Fix executable bit
