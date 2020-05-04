@@ -25,4 +25,7 @@ if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqi microsoft /proc/sys/kernel/osrelease
                 EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & 
         ) >/dev/null 2>&1
     fi
+
+    # https://github.com/microsoft/WSL/issues/4166#issuecomment-604707989
+    sudo /etc/init.d/cron start &>/dev/null
 fi
