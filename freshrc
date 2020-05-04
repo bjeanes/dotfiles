@@ -93,6 +93,17 @@ fresh_after_build() {
 
   ~/.fresh/source/junegunn/fzf/install --bin
 
+  # If WSL (Windows Subsystem for Linux)
+  if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqi microsoft /proc/sys/kernel/osrelease; then
+    if ! grep -qs '\[credential\]' ~/.gitconfig.local; then
+      cat >> ~/.gitconfig.local <<-EOF
+# https://liamederzeel.com/store-git-credentials-in-wsl/
+[credential]
+    helper = /mnt/c/Program\\\\ Files/Git/mingw64/libexec/git-core/git-credential-wincred.exe
+EOF
+    fi
+  fi
+
   # Install Vim plugins
   if [ -z "${SKIP_VIM_PLUGINS:-}" ]; then
     vim='vim'
