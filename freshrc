@@ -45,6 +45,8 @@ fresh-options --file=~/.vimrc --marker='"'
 fresh-options
 
 fresh-options --file=~/.zshrc --marker
+  fresh shells/zsh/p10k-instant-prompt.zsh
+
   fresh shells/path.sh
 
   fresh freshshell/fresh contrib/source-build.sh
@@ -56,8 +58,10 @@ fresh-options --file=~/.zshrc --marker
   fresh junegunn/fzf shell/key-bindings.zsh
 
   fresh shells/common/\*.sh
-  fresh shells/zsh/\*.zsh
   fresh shells/zsh/lib/\*.zsh
+
+  fresh shells/zsh/p10k.zsh
+
   fresh shells/local.zsh
 fresh-options
 
@@ -73,6 +77,8 @@ fresh zsh-users/zsh-completions src --file=completion/
 fresh freshshell/fresh contrib/completion/fresh-completion.zsh --file=completion/_fresh
 fresh thoughtbot/dotfiles zsh/completion/_ag --file=completion/_ag
 fresh shells/zsh/completions --file=completion/
+
+fresh romkatv/powerlevel10k . --file=vendor/powerlevel10k/
 
 fresh zdharma/fast-syntax-highlighting . --file=vendor/zsh-fast-syntax-highlighting/
 fresh zsh-users/zsh-history-substring-search . --file=vendor/zsh-history-substring-search/
