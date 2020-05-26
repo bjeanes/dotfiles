@@ -28,4 +28,5 @@ if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqiE 'WSL' /proc/sys/kernel/osrelease; t
 
     # https://github.com/microsoft/WSL/issues/4166#issuecomment-618159162
     [ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &>/dev/null
+    hash -d win=/mnt/c/Users/me
 fi
