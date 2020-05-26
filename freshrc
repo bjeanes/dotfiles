@@ -74,7 +74,7 @@ fresh freshshell/fresh contrib/completion/fresh-completion.zsh --file=completion
 fresh thoughtbot/dotfiles zsh/completion/_ag --file=completion/_ag
 fresh shells/zsh/completions --file=completion/
 
-fresh zsh-users/zsh-syntax-highlighting . --file=vendor/zsh-syntax-highlighting/
+fresh zdharma/fast-syntax-highlighting . --file=vendor/zsh-fast-syntax-highlighting/
 fresh zsh-users/zsh-history-substring-search . --file=vendor/zsh-history-substring-search/
 fresh zsh-users/zsh-autosuggestions . --file=vendor/zsh-autosuggestions/
 
