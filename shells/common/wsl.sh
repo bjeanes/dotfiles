@@ -1,4 +1,4 @@
-if [ -n ${WSL_DISTRO_NAME:-} ] || grep -sqiE 'WSL' /proc/sys/kernel/osrelease; then
+if [ -n "${WSL_DISTRO_NAME:-}" ] || grep -sqiE 'WSL' /proc/sys/kernel/osrelease; then
     # # Talk to Windows' SSH-Agent when under WSL, using https://github.com/rupor-github/wsl-ssh-agent
     # # wsl-ssh-agent started with:
     # #
