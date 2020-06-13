@@ -504,7 +504,7 @@ nnoremap zS :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:v
 " tooling doesn't negatively affect Phoenix auto-reloading
 "
 " https://github.com/phoenixframework/phoenix/issues/1165#issuecomment-437130681
-let $MIX_ENV='editor'
+let $MIX_ENV='test'
 
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local

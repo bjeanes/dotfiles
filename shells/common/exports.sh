@@ -13,10 +13,13 @@ fi
 # Each tool has various work-arounds to make this work, but the simplest thing
 # (for editors started from the terminal) is to simply change the environment
 # everything runs under by default.
-editor="env MIX_ENV=editor $editor"
+editor="env MIX_ENV=test $editor"
 
 export EDITOR="$editor -f"
 export VISUAL="$editor"
+
+# Enable shell history in IEx and Erlang REPLs
+export ERL_AFLAGS="-kernel shell_history enabled"
 
 export TERM=xterm-256color
 export CLICOLOR=1
