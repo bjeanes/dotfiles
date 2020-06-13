@@ -74,8 +74,8 @@ vendor/gems
 .local/
 *.log
 .bash_history
-
 Session.vim
 .vscode/
 SCRATCH
 /.env
+.tool-versions
