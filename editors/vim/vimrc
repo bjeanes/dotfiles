@@ -144,6 +144,7 @@ let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['eslint'],
 \   'elixir': ['mix_format'],
+\   'rust': ['rustfmt'],
 \}
 
 " Change working directory to .git root
