@@ -12,6 +12,11 @@ alias colorslist="set | egrep 'COLOR_\w*'"  # lists all the colors
 
 alias jsonify='python -mjson.tool'
 
+if [ `uname` = "Linux" ]; then
+  alias pbcopy='xclip -selection clipboard'
+  alias pbpaste='xclip -selection clipboard -o'
+fi
+
 if [ -n "$SSH_CONNECTION" ]; then
   # Never open GUI vim when SSHd into a box
   alias mvim='vim'
