@@ -1,0 +1,31 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": [
+    "html",
+    "json",
+    "css",
+    "markdown",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "rust"
+  ],
+  "coc.preferences.colorSupport": true,
+
+  "diagnostic.displayByAle": true,
+
+  "suggest.echodocSupport": true,
+
+  "codeLens.separator": "👓",
+  "codeLens.enable": true,
+
+  "tsserver.enableJavascript": false,
+
+  "solargraph.autoformat": true,
+  "solargraph.formatting": true,
+
+  "html.autoClosingTags": true,
+
+  "languageserver": {
+  }
+}

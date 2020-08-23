@@ -123,6 +123,21 @@ nnoremap <M-r> :%s/<C-r>///g<Left><Left>
 Plug 'thinca/vim-visualstar'
 
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release', 'do': { -> coc#util#install()}}
+let g:coc_global_extensions = [
+\   'coc-actions',
+\   'coc-css',
+\   'coc-highlight',
+\   'coc-html',
+\   'coc-json',
+\   'coc-lists',
+\   'coc-rust-analyzer',
+\   'coc-snippets',
+\   'coc-solargraph',
+\   'coc-tabnine',
+\   'coc-tailwindcss',
+\   'coc-tsserver',
+\   'coc-vimlsp',
+\]
 
 Plug 'liuchengxu/vim-which-key' ", { 'on': ['WhichKey', 'WhichKey!'] }
 set timeoutlen=300
@@ -137,15 +152,24 @@ Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 
 Plug 'gko/vim-coloresque'
 
-Plug 'w0rp/ale'
-let g:ale_fix_on_save = 1
+Plug 'dense-analysis/ale'
 let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 1
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['eslint'],
 \   'elixir': ['mix_format'],
-\   'rust': ['rustfmt'],
+\   'rust': [],
+\   'ruby': [],
 \}
+let g:ale_lint_on_save = 1
+let g:ale_linters = {
+\   'rust': [],
+\   'ruby': [],
+\}
+
+" https://github.com/dense-analysis/ale#faq-coc-nvim
+let g:ale_disable_lsp = 1
 
 " Change working directory to .git root
 Plug 'airblade/vim-rooter'
