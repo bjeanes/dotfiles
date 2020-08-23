@@ -515,8 +515,8 @@ set formatoptions+=n " Recognise numbered lists for sake of indenting wrapped co
 set nojoinspaces " Don't insert 2 spaces after punctuation when joining jines
 
 hi ColorColumn guibg=#222222 ctermbg=235
-set colorcolumn=79,120
-set textwidth=79
+set colorcolumn=79,120,150
+set textwidth=119
 
 " Show incremental previews of commands (such as :s[ubstitute])
 set inccommand=nosplit
