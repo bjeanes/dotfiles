@@ -64,6 +64,7 @@
 	user = bjeanes
 [init]
 	templatedir = ~/.git_template
+	defaultBranch = main
 [include]
 	path = .gitconfig.github
 	path = .gitconfig.pushurls
