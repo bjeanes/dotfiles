@@ -14,6 +14,13 @@ fresh-options --file=~/.ctags
 fresh-options
 
 fresh languages/clojure/lein/profiles.clj --file=~/.lein/profiles.clj
+
+fresh-options --file=~/.rubocop.yml
+  # # disabled because it relies on custom cops and specific rubocop versions:
+  # fresh testdouble/standard config/base.yml
+  fresh languages/ruby/rubocop.yml
+fresh-options
+
 fresh-options --file # each file as is
   fresh languages/ruby/gemrc
   fresh languages/ruby/irbrc

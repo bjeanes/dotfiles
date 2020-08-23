@@ -1,0 +1,283 @@
+# In general, we should care more about consistency and avoidance of
+# bike-shedding than any specific aesthetic choice on code quality.
+#
+# However, in some cases, the default Rubocop rules merit changing where their
+# defaults don't optimally live up to some additional values:
+#
+# 1. Correctness
+#
+#    If a certain style will generally result in fewer errors, it should be
+#    preferred. E.g.: using attr_readers instead of @ivars will produce
+#    noticeable exceptions vs un-noticed nils; prefixed access modifiers to
+#    method definitions prevent accidental scope changes as methods are moved.
+#
+# 2. Focused diffs
+#
+#    Trailing commas, aligning relative to indentation level (params,
+#    conditional assignment, etc), minimising whitespace changes, "flat" module
+#    namespacing, all produce less whitespace noise in diffs as they change and
+#    evolve.
+#
+# 3. Code clarity
+#
+#    Access modifier prefixes and allowing for some flexibility in formatting
+#    numbers improve the ability to communicate intent and context in code.
+#    Likewise, choosing whether to use guard clauses or conditionals is a
+#    matter of readability that a developer can judge better than a linter.
+#
+# 4. Pragmatism
+#
+#    Formatting code for easy paste-ability into IRB/Pry is a good example of
+#    this.
+#
+# 5. Appropriate subjectivity
+#
+#    Certain choices are best made by a human code reviewer, not a linter.
+#    While consistency is important, it can sometimes be in conflict with
+#    clarity or other team values.
+
+AllCops:
+  TargetRubyVersion: ~
+  ExtraDetails: true
+
+Metrics/AbcSize:
+  Enabled: false
+
+# Disable code "length" metrics other than line length, as they are somewhat
+# subjective and not directly great measures of code complexity (though are
+# often pretty decent trailing indicators)
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+
+# Discourage methods with many _unnamed_ arguments (as parameter ordering can
+# be confusing), but allow many named arguments.
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Layout/DefEndAlignment:
+  AutoCorrect: true
+
+# An explicit return (e.g. deep within conditionals) can be both clearer and
+# more resilient to bugs from refactoring, where the return is no longer in
+# tail position of the method.
+Style/RedundantReturn:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+# Use trailing method dots, because it maximises paste-ability into REPLs
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+# Prefer:
+#
+#   some_method 'foo',
+#     'bar',
+#     'baz'
+#
+# over:
+#
+#
+#   some_method 'foo',
+#               'bar',
+#               'baz'
+#
+# because renaming a method reduce irrelevant indentation changes.
+#
+# Generally, put positional arguments on the first line, and kwargs on
+# subsequent lines, but this isn't universally the best choice.
+#
+# Better yet, if parameters must be spread over multiple lines, prefer the
+# following (for which there is not a rule):
+#
+#   some_method(
+#     'foo',
+#     'bar',
+#     'baz',
+#   )
+#
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+# Encourage trailing commas on multi-line lists to allow easy re-ordering and
+# clearer diffs on changes.
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+# This cop does not work consistently and often interprets non-multi-line calls
+# as multi-line adding commas where it shouldn't! Since argument lists are
+# generally fixed length and rarely re-ordered, the arguments above for
+# hash/array literal commas is not as strong and we will instead never have
+# trailing commas in method calls.
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: no_comma
+
+# The "new_line" style for this is close to what we want, but it behaves poorly
+# in cases where an argument is an array or hash and is spread across multiple
+# lines.
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+# Rewrite long lines
+Layout/LineLength:
+  Enabled: true
+  AutoCorrect: true
+
+# In-lining access modifiers removes risk of accidentally changing access level
+# when re-ordering methods and improves clarity about method access
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
+
+# It is better to have deterministic booleans in some cases, and `!!` is the
+# most precise way to coerce truthy values (`!x.nil?` is NOT the same thing).
+Style/DoubleNegation:
+  Enabled: false
+
+# Prefer:
+#
+#   foo =
+#     if foo?
+#       bar
+#     else
+#       baz
+#     end
+#
+# over alternatives, as it offers the right balance between: consistent
+# indentation, minimising unnecessary diff churn (e.g. when renaming the
+# variable), and shorter line length.
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    # Describe blocks in particular can be quite large
+    - '**/*_spec.rb'
+
+# Well-named classes are more important than documentation
+Style/Documentation:
+  Enabled: false
+
+Style/BlockDelimiters:
+  AutoCorrect: false # Best caught in code review
+  EnforcedStyle: semantic
+  BracesRequiredMethods: ['sig'] # Sorbet
+  IgnoredMethods: ['expect', 'let', 'let!', 'subject', 'it', 'fit', 'xit', 'before', 'after']
+  Exclude:
+    - '**/*_spec.rb'
+
+# Prefer namespaced class definitions on single line to:
+#
+# 1. allow renaming/re-organizing namespaces without superfluous diffs full of
+#    whitespace changes;
+# 3. have consistent consant lookup, relative to self or top-level
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+# Don't autocorrect to allow alternative underscoring,
+# ie 2017_12_25
+Style/NumericLiterals:
+  Enabled: true
+  AutoCorrect: false
+
+# Leave it to the coder to make this decision
+Style/GuardClause:
+  Enabled: false
+
+# Default style prefers usage of a global function (Kernel#format). % is "ugly"
+# and a named method would be preferred, but not over a global which may be
+# overridden in the current class or not available (e.g. in BasicObject)
+Style/FormatString:
+  EnforcedStyle: 'percent'
+
+# Disable this performance optimization - it can make the code less clear, and
+# the =~ operator introduces global variables
+#Performance/RedundantMatch:
+#  Enabled: false
+
+# We have several comments discussing unicode normalization. This rule doesn't
+# particularly seem useful for code quality or team practices, so disabling.
+Style/AsciiComments:
+  Enabled: false
+
+# An explicit self can provide clarity in some situations, even if technically
+# redundant. Appropriate usage of self is better caught in code review by
+# peers.
+Style/RedundantSelf:
+  Enabled: false
+
+# A specialized exception class will take one or more arguments and construct
+# the message from it. Both variants make sense.
+Style/RaiseArgs:
+  Enabled: false
+
+# Consistency is best, so since we definitely need double quotes often, let's
+# just use them everywhere.
+Style/StringLiterals:
+  EnforcedStyle: 'double_quotes'
+
+# This feels subjective and best left to code review to determine what is
+# suitable on a case by case basis.
+Style/EmptyCaseCondition:
+  Enabled: false
+
+# Just because you _can_ fix a conditional on the same line, doesn't mean you
+# should. Postfix conditionals are great for guards and other simple cases,
+# but in other cases this can obscure intent.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# This doesn't take into account sorbet typed: comments
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+  EnforcedStyleForEmptyBraces: no_space
+
+Style/FrozenStringLiteralComment:
+  AutoCorrect: true
+  Enabled: false
+
+# Ideally we'd have a rule here with more options as this is not perfect
+# either, but this is added to prevent situations such as:
+#
+#   validate :email,
+#            presence: true,
+#            email: true
+#
+# Instead:
+#
+#   validate :email,
+#     presence: true,
+#     email: true
+#
+# But ideally:
+#
+#   validate :email, {
+#     presence: true,
+#     email: true
+#   }
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
