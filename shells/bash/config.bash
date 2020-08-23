@@ -15,6 +15,6 @@ shopt -s checkwinsize histappend cdable_vars extglob nullglob cdspell cmdhist ho
 # Bash 4 and above only
 shopt -s globstar autocd checkjobs 2>/dev/null
 
-complete -C $DOT_FILES/bash/rake-completion.rb -o default rake}
+complete -C $HOME/.dotfiles/bash/rake-completion.rb -o default rake}
 
 alias reload="source ~/.bashrc"

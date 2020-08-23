@@ -80,7 +80,7 @@ function extract() {
 
 # Zsh
 function __disabled__command_not_found_handler() {
-  /usr/bin/env ruby $DOT_FILES/misc/method_missing.rb $*
+  /usr/bin/env ruby $HOME/.dotfiles/misc/method_missing.rb $*
 }
 
 # Bash (call Zsh version)
