@@ -303,7 +303,7 @@ syntax on
   nnoremap <Leader>tc :set list! list?<CR>
 
 " Misc
-  set switchbuf=useopen         " Don't re-open already opened buffers
+  set switchbuf=usetab,newtab   " Open new buffers in tab, switch to existing tab if already open
   set nostartofline             " Avoid moving cursor to BOL when jumping around
   set virtualedit=all           " Let cursor move past the last char
   set whichwrap=b,s,h,l,<,>,[,]
@@ -342,7 +342,9 @@ syntax on
   set wildmode=list:longest,list:full
   set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
 
-" Directories for swp files
+  map <TAB> >
+  map <S-TAB> <
+  nmap <C-t> :tabnew<CR>
 
 " Navigate cursor up/down by lines on screen, not lines in file
   nmap j gj
