@@ -173,7 +173,7 @@ let g:ale_disable_lsp = 1
 
 " Change working directory to .git root
 Plug 'airblade/vim-rooter'
-let g:rooter_use_lcd = 1
+let g:rooter_cd_cmd="lcd"
 
 Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
