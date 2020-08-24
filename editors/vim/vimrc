@@ -172,6 +172,13 @@ let g:ale_linters = {
 " https://github.com/dense-analysis/ale#faq-coc-nvim
 let g:ale_disable_lsp = 1
 
+Plug 'vim-test/vim-test'
+nmap <silent> <Leader>tn :TestNearest<CR>
+nmap <silent> <Leader>tf :TestFile<CR>
+nmap <silent> <Leader>ts :TestSuite<CR>
+nmap <silent> <Leader>tl :TestLast<CR>
+nmap <silent> <Leader>tg :TestVisit<CR>
+
 " Change working directory to .git root
 Plug 'airblade/vim-rooter'
 let g:rooter_cd_cmd="lcd"
