@@ -122,6 +122,7 @@ nnoremap <M-r> :%s/<C-r>///g<Left><Left>
 " default behaviour of searching for current word)
 Plug 'thinca/vim-visualstar'
 
+Plug 'honza/vim-snippets' " Contains snippets that coc-snippets can expand
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release', 'do': { -> coc#util#install()}}
 let g:coc_global_extensions = [
 \   'coc-actions',
