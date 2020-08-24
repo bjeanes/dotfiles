@@ -225,6 +225,9 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " Coc only does snippet and additional edit on confirm.
 "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " NOTE: above mapping disabled due to https://github.com/tpope/vim-endwise/issues/22#issuecomment-446042476
+let g:endwise_no_mappings = v:true
+inoremap <expr> <Plug>CustomCocCR pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
 
 " Use `[c` and `]c` for navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
@@ -343,8 +346,6 @@ syntax on
   set wildmode=list:longest,list:full
   set wildignore+=*.o,*.obj,.git,*.rbc,*.swp
 
-  map <TAB> >
-  map <S-TAB> <
   nmap <C-t> :tabnew<CR>
 
 " Navigate cursor up/down by lines on screen, not lines in file
