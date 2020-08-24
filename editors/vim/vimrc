@@ -94,7 +94,7 @@ vmap <Enter> <Plug>(EasyAlign)
 " When re-opening a file, start cursor on last edit location
 Plug 'farmergreg/vim-lastplace'
 
-Plug 'thisivan/vim-matchit' " extended  matching for html, latex, and many other languages
+Plug 'thisivan/vim-matchit' " extended matching for html, latex, and many other languages
 Plug 'kana/vim-textobj-user' " Create new text objects
 Plug 'michaeljsmith/vim-indent-object'
 
@@ -233,7 +233,8 @@ inoremap <silent><expr> <c-space> coc#refresh()
 "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " NOTE: above mapping disabled due to https://github.com/tpope/vim-endwise/issues/22#issuecomment-446042476
 let g:endwise_no_mappings = v:true
-inoremap <expr> <Plug>CustomCocCR pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <expr> <Plug>CustomCocCR pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <expr> <Plug>CustomCocCR pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
 
 " Use `[c` and `]c` for navigate diagnostics
