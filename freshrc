@@ -125,5 +125,7 @@ EOF
     $vim +PlugUpdate +PlugClean +qall
   fi
 
-  [ -d ~/.asdf/installs ] && find ~/.asdf/installs -maxdepth 2 -mindepth 2 -type d -printf '%P\n' | sort -Vru -t/ -k1,1 | tr / ' ' > ~/.tool-versions
+  if [ -d ~/.asdf/installs ]; then
+    find ~/.asdf/installs -maxdepth 2 -mindepth 2 -type d -printf '%P\n' | sort -Vru -t/ -k1,1 | tr / ' ' > ~/.tool-versions
+  fi
 }
