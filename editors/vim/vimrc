@@ -529,7 +529,9 @@ set colorcolumn=79,120,150
 set textwidth=119
 
 " Show incremental previews of commands (such as :s[ubstitute])
-set inccommand=nosplit
+if has('nvim')
+  set inccommand=nosplit
+endif
 
 " If there's no EOL at the end of the file, don't mess up the diff by adding
 " one
