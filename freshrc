@@ -54,6 +54,7 @@ fresh-options --file=~/.zshrc --marker
   fresh shells/zsh/p10k-instant-prompt.zsh
 
   fresh shells/path.sh
+  fresh shells/tmux.sh
 
   fresh freshshell/fresh contrib/source-build.sh
 
@@ -73,6 +74,7 @@ fresh-options
 
 fresh-options --file=~/.bashrc --marker
   fresh shells/path.sh
+  fresh shells/tmux.sh
   fresh shells/common/\*.sh
   fresh shells/bash/\*.bash
   fresh shells/bash/lib/\*.bash

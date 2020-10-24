@@ -6,11 +6,11 @@
 # windows but be looking at different ones individually
 
 # If we aren't in Tmux or emacs, set it up
-if false && [ -z "$TMUX" -a -z "$INSIDE_EMACS" -a -z "$EMACS" ]; then
+if command -v tmux &>/dev/null && [ "$SSH_CONNECTION" -a -z "$TMUX" -a -z "$INSIDE_EMACS" -a -z "$EMACS" -a -z "$VIM" -a -z "$VIMRUNTIME" ]; then
     if tty >/dev/null; then
         if which tmux 2>&1 >/dev/null; then
             if [ -z "$(tmux ls | grep 'login:')" ]; then
-                tmux new-session -d -s login # Create a detached session called login
+                tmux new-session -d -s login $SHELL # Create a detached session called login
                 tmux new-session -t login    # Create a *new* session bound to the same windows
             else
                 last_session="$(tmux list-windows -t login | tail -n1 | cut -d: -f1)"
