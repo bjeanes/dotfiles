@@ -15,6 +15,7 @@ function __append_path {
 }
 
 [ -d "$HOME/bin" ]          && __prepend_path "PATH" "$HOME/bin"
+[ -d "$HOME/.local/bin" ]   && __prepend_path "PATH" "$HOME/.local/bin"
 [ -d "$HOME/.cargo/bin" ]   && __prepend_path "PATH" "$HOME/.cargo/bin"
 [ -d "$HOME/.emacs.d/bin" ] && __prepend_path "PATH" "$HOME/.emacs.d/bin"
 [ -d "$HOME/.dotfiles/bin" ]     && __prepend_path "PATH" "$HOME/.dotfiles/bin"
