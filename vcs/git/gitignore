@@ -49,6 +49,7 @@ doc/tags
 .bundle/*
 .rbx/
 .netrwhist
+jard_errors.txt
 
 # emacs
 .#*
