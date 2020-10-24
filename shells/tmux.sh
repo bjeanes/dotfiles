@@ -8,17 +8,15 @@
 # If we aren't in Tmux or emacs, set it up
 if command -v tmux &>/dev/null && [ "$SSH_CONNECTION" -a -z "$TMUX" -a -z "$INSIDE_EMACS" -a -z "$EMACS" -a -z "$VIM" -a -z "$VIMRUNTIME" ]; then
     if tty >/dev/null; then
-        if which tmux 2>&1 >/dev/null; then
-            if [ -z "$(tmux ls | grep 'login:')" ]; then
-                tmux new-session -d -s login $SHELL # Create a detached session called login
-                tmux new-session -t login    # Create a *new* session bound to the same windows
-            else
-                last_session="$(tmux list-windows -t login | tail -n1 | cut -d: -f1)"
-                tmux new-session -t login \; new-window -a -t $last_session # Create a *new* session bound to "login" and create a new window
-            fi
-
-            # When Tmux exits, we exit
-            exit
+        if [ -z "$(tmux ls | grep 'login:')" ]; then
+            tmux new-session -d -s login # Create a detached session called login
+            tmux new-session -t login    # Create a *new* session bound to the same windows
+        else
+            last_session="$(tmux list-windows -t login | tail -n1 | cut -d: -f1)"
+            tmux new-session -t login \; new-window -a -t $last_session # Create a *new* session bound to "login" and create a new window
         fi
+
+        # When Tmux exits, we exit
+        exit
     fi
 fi

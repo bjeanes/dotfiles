@@ -51,10 +51,10 @@ fresh-options --file=~/.vimrc --marker='"'
 fresh-options
 
 fresh-options --file=~/.zshrc --marker
-  fresh shells/zsh/p10k-instant-prompt.zsh
+  fresh shells/path.sh # this must come first so we can check for tmux
+  fresh shells/tmux.sh # this must happen before p10k to guarantee it has tty
 
-  fresh shells/path.sh
-  fresh shells/tmux.sh
+  fresh shells/zsh/p10k-instant-prompt.zsh
 
   fresh freshshell/fresh contrib/source-build.sh
 
