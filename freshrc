@@ -27,7 +27,6 @@ fresh-options --file # each file as is
 
   # asdf conf
   fresh languages/asdfrc
-  fresh languages/tool-versions
   fresh languages/ruby/default-gems # asdf-ruby only
 
   fresh misc/ackrc
@@ -123,4 +122,6 @@ EOF
     command -v nvim &>/dev/null && vim='nvim'
     $vim +PlugUpdate +PlugClean +qall
   fi
+
+  find ~/.asdf/installs -maxdepth 2 -mindepth 2 -type d -printf '%P\n' | sort -Vru -t/ -k1,1 | tr / ' ' > ~/.tool-versions
 }
