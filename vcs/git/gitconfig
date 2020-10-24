@@ -40,6 +40,8 @@
 	diff = auto
 	status = auto
 	ui = auto
+[log]
+	follow = true
 [core]
 	attributesfile = ~/.gitattributes
 	excludesfile = ~/.gitignore
