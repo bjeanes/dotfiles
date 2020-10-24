@@ -446,6 +446,8 @@ augroup the_rest
   autocmd BufRead,BufNewFile gitconfig set ft=gitconfig
 
   " Strip trailing whitespace on save
+  " TODO: do not do this for all file types. In particular, bypass this for git patchsets (i.e. from `git add -p`) as
+  " it can fuck with cleanly applying patches
   autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 augroup end
 
