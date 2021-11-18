@@ -88,7 +88,7 @@ fresh shells/zsh/completions --file=completion/
 
 fresh romkatv/powerlevel10k . --file=vendor/powerlevel10k/
 
-fresh zdharma/fast-syntax-highlighting . --file=vendor/zsh-fast-syntax-highlighting/
+fresh zdharma-continuum/fast-syntax-highlighting . --file=vendor/zsh-fast-syntax-highlighting/
 fresh zsh-users/zsh-history-substring-search . --file=vendor/zsh-history-substring-search/
 fresh zsh-users/zsh-autosuggestions . --file=vendor/zsh-autosuggestions/
 
