@@ -2,6 +2,12 @@
 
 Please explore and/or suggest!
 
+## Initial setup
+
+```sh
+$ FRESH_LOCAL_SOURCE=bjeanes/dot-files bash -c "`curl -sL https://get.freshshell.com`"
+```
+
 # LICENSE
 
 Copyright (c) 2008-2013 Bodaniel Jeanes
