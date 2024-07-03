@@ -54,7 +54,7 @@
 	# pager = diffr | less -R
 
 	# https://github.com/dandavison/delta
-	pager = delta --theme='Monokai Extended Bright'
+	pager = delta --syntax-theme='Monokai Extended Bright'
 [interactive]
 	diffFilter = delta --color-only
 [branch]
