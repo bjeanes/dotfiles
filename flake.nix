@@ -217,10 +217,10 @@
                   programs.git.delta.enable = true;
                   programs.git.delta.package = pkgs.delta;
                   programs.bash.bashrcExtra = /* bash */ ''
-                    eval $(${pkgs.delta}/bin/delta --generate-completion bash)
+                    eval "$(${pkgs.delta}/bin/delta --generate-completion bash)"
                   '';
                   programs.zsh.initExtra = /* zsh */ ''
-                    eval $(${pkgs.delta}/bin/delta --generate-completion zsh)
+                    eval "$(${pkgs.delta}/bin/delta --generate-completion zsh)"
                   '';
 
                   programs.zsh = {
