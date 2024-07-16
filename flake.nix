@@ -179,10 +179,49 @@
                       me = "!sh -c 'echo `git config user.name` \\<`git config user.email`\\>'";
                       mine = "!sh -c 'git lg --author=\"`git me`\"'";
                     };
+
+                    extraConfig = {
+                      apply.whitespace = "fix";
+
+                      color = {
+                        ui = "auto";
+                        branch = "auto";
+                        diff = "auto";
+                        status = "auto";
+                      };
+
+                      branch = {
+                        autosetupmerge = "always";
+                        autosetuprebase = "local";
+                      };
+
+                      pull.rebase = true;
+                      push.default = "current";
+                      remote.pushDefault = "origin";
+
+                      status = {
+                        short = true;
+                        branch = true;
+                        showUntrackedFiles = "all";
+                      };
+                    };
                   };
                   programs.starship.enable = true;
                   programs.bash.enable = true;
                   programs.bash.shellAliases = shellAliases;
+
+                  # difftastic will show syntactical/structural changes in diffs
+                  # programs.git.difftastic.enable = true;
+
+                  # delta will show diffs with language-aware syntax highlighting
+                  programs.git.delta.enable = true;
+                  programs.git.delta.package = pkgs.delta;
+                  programs.bash.bashrcExtra = /* bash */ ''
+                    eval $(${pkgs.delta}/bin/delta --generate-completion bash)
+                  '';
+                  programs.zsh.initExtra = /* zsh */ ''
+                    eval $(${pkgs.delta}/bin/delta --generate-completion zsh)
+                  '';
 
                   programs.zsh = {
                     enable = true;
