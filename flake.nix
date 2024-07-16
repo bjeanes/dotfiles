@@ -168,9 +168,16 @@
                   programs.git = {
                     enable = true;
                     aliases = {
-                      c = "commit";
+                      br = "branch";
+                      c = "commit -v";
                       co = "checkout";
+                      commit = "commit -v";
+                      lg = "log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative";
                       st = "status";
+                      unadd = "reset HEAD";
+
+                      me = "!sh -c 'echo `git config user.name` \\<`git config user.email`\\>'";
+                      mine = "!sh -c 'git lg --author=\"`git me`\"'";
                     };
                   };
                   programs.starship.enable = true;
