@@ -36,9 +36,6 @@
       (
         let
           myUsername = "bjeanes";
-          mkNvim = system: inputs.nixvim.legacyPackages."${system}".makeNixvim {
-            plugins.lsp.enable = true;
-          };
         in
         {
           systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
@@ -89,9 +86,6 @@
             nixosModules = {
               # Common nixos/nix-darwin configuration shared between Linux and macOS.
               common = { pkgs, system, ... }:
-                let
-                  nvim = mkNvim system;
-                in
                 {
                   home-manager.backupFileExtension = "bak-hm";
                   home-manager.useUserPackages = true;
@@ -99,10 +93,7 @@
 
                   nixpkgs.config.allowUnfree = true;
 
-                  environment.variables = {
-                    # EDITOR = "${nvim}/bin/nvim";
-                    # VISUAL = "${nvim}/bin/nvim";
-                  };
+                  environment.variables = { };
 
                   environment.systemPackages = with pkgs; [
                     git
@@ -112,11 +103,19 @@
 
               # NixOS specific configuration
               linux = { pkgs, ... }: {
+                imports = [
+                  inputs.nixvim.nixosModules.nixvim
+                ];
+
                 users.users.${myUsername}.isNormalUser = true;
               };
 
               # nix-darwin specific configuration
               darwin = { pkgs, ... }: {
+                imports = [
+                  inputs.nixvim.nixDarwinModules.nixvim
+                ];
+
                 nix = {
                   useDaemon = true;
 
@@ -165,6 +164,18 @@
                   };
                 in
                 {
+                  imports = [
+                    inputs.nixvim.homeManagerModules.nixvim
+                  ];
+
+                  programs.nixvim = {
+                    enable = true;
+                    defaultEditor = true;
+
+                    viAlias = true;
+                    vimAlias = true;
+                  };
+
                   programs.git = {
                     enable = true;
                     aliases = {
@@ -246,7 +257,10 @@
               linux = { };
 
               # home-manager config specific to Darwin
-              darwin = { };
+              darwin = {
+                # Yank/paste in Neovim to/from macOS clipboard by default
+                programs.nixvim.clipboard.register = "unnamedplus";
+              };
             };
           };
 
