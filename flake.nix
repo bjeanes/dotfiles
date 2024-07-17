@@ -155,18 +155,17 @@
             homeModules = {
               # Common home-manager configuration shared between Linux and macOS.
               common = { pkgs, system, ... }:
-                let
-                  shellAliases = {
+                {
+                  imports = [
+                    inputs.nixvim.homeManagerModules.nixvim
+                  ];
+
+                  home.shellAliases = {
                     "g" = "git";
                     "l" = "ls";
                     "ll" = "ls -la";
                     "arst" = "asdf"; # Colemak home row
                   };
-                in
-                {
-                  imports = [
-                    inputs.nixvim.homeManagerModules.nixvim
-                  ];
 
                   programs.nixvim = {
                     enable = true;
@@ -219,7 +218,6 @@
                   };
                   programs.starship.enable = true;
                   programs.bash.enable = true;
-                  programs.bash.shellAliases = shellAliases;
 
                   # difftastic will show syntactical/structural changes in diffs
                   # programs.git.difftastic.enable = true;
@@ -240,7 +238,6 @@
                     autocd = true;
                     syntaxHighlighting.enable = true;
                     autosuggestion.enable = true;
-                    inherit shellAliases;
                   };
 
                   programs.direnv.enable = true;
