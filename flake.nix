@@ -85,7 +85,7 @@
             # All nixos/nix-darwin configurations are kept here.
             nixosModules = {
               # Common nixos/nix-darwin configuration shared between Linux and macOS.
-              common = { pkgs, system, ... }:
+              common = { pkgs, ... }:
                 {
                   home-manager.backupFileExtension = "bak-hm";
                   home-manager.useUserPackages = true;
@@ -154,7 +154,7 @@
             # i.e. `foo = true` is equivalent to `home-manager.users.bjeanes.foo = true`.
             homeModules = {
               # Common home-manager configuration shared between Linux and macOS.
-              common = { pkgs, system, ... }:
+              common = { pkgs, ... }:
                 {
                   imports = [
                     inputs.nixvim.homeManagerModules.nixvim
