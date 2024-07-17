@@ -227,7 +227,7 @@
                   # delta will show diffs with language-aware syntax highlighting
                   programs.git.delta.enable = true;
                   programs.git.delta.package = pkgs.delta;
-                  programs.bash.bashrcExtra = /* bash */ ''
+                  programs.bash.initExtra = /* bash */ ''
                     eval "$(${pkgs.delta}/bin/delta --generate-completion bash)"
                   '';
                   programs.zsh.initExtra = /* zsh */ ''
@@ -256,7 +256,11 @@
                     syntaxHighlighting.enable = true;
                     autosuggestion.enable = true;
                   };
-                  programs.bash.enable = true;
+                  programs.bash = {
+                    enable = true;
+                    enableCompletion = true;
+                    enableVteIntegration = true;
+                  };
                   programs.starship.enable = true;
 
                   programs.direnv.enable = true;
