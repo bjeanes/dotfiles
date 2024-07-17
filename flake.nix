@@ -161,10 +161,11 @@
                   ];
 
                   home.shellAliases = {
-                    "g" = "git";
-                    "l" = "ls";
-                    "ll" = "ls -la";
-                    "arst" = "asdf"; # Colemak home row
+                    g = "git";
+                    l = "ls";
+                    ll = "ls -la";
+                    arst = "asdf"; # Colemak home row
+                    cat = "bat";
                   };
 
                   programs.nixvim = {
@@ -267,6 +268,14 @@
                   programs.direnv.enableZshIntegration = true;
                   programs.direnv.enableBashIntegration = true;
                   programs.direnv.nix-direnv.enable = true;
+
+                  programs.bat.enable = true;
+                  programs.bat.config = {
+                    map-syntax = [
+                      "flake.lock:JSON"
+                    ];
+                  };
+
 
                   home.packages = with pkgs; [
                     asdf
