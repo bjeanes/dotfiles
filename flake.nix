@@ -216,8 +216,6 @@
                       };
                     };
                   };
-                  programs.starship.enable = true;
-                  programs.bash.enable = true;
 
                   # difftastic will show syntactical/structural changes in diffs
                   # programs.git.difftastic.enable = true;
@@ -239,6 +237,8 @@
                     syntaxHighlighting.enable = true;
                     autosuggestion.enable = true;
                   };
+                  programs.bash.enable = true;
+                  programs.starship.enable = true;
 
                   programs.direnv.enable = true;
                   programs.direnv.enableZshIntegration = true;
