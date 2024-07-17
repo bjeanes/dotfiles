@@ -276,12 +276,34 @@
                     ];
                   };
 
+                  # By default, this integration also hooks into shell ^R for history search, but atuin is better
+                  # and fortunately appears to take precedence when both are enabled
                   programs.fzf.enable = true;
                   programs.fzf.enableZshIntegration = true;
                   programs.fzf.enableBashIntegration = true;
                   programs.fzf.fileWidgetOptions = [
                     "--preview '${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :500 {}'"
                   ];
+
+
+                  # Shell history recording + UI
+                  programs.atuin.enable = true;
+                  programs.atuin.enableZshIntegration = true;
+                  programs.atuin.enableBashIntegration = true;
+                  programs.atuin.settings = {
+                    dialect = "uk";
+                    filter_mode_shell_up_key_binding = "session";
+                    workspaces = true;
+                    style = "compact";
+                    inline_height = 20;
+                    enter_accept = false;
+                    ctrl_n_shortcuts = true;
+
+                    stats.common_prefix = [
+                      "sudo"
+                      "time"
+                    ];
+                  };
 
                   home.packages = with pkgs; [
                     asdf
