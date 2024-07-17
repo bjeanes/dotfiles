@@ -215,6 +215,10 @@
                         showUntrackedFiles = "all";
                       };
                     };
+
+                    ignores = [
+                      "*.swp"
+                    ];
                   };
 
                   # difftastic will show syntactical/structural changes in diffs
