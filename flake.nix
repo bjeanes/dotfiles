@@ -306,7 +306,8 @@
                   };
 
                   home.packages = with pkgs; [
-                    asdf
+                    # TODO: https://gist.github.com/axelbdt/0de9f5f9ba8a2100326b793f7bfb8658?permalink_comment_id=4977667#gistcomment-4977667
+                    asdf-vm
                   ];
                 };
 
