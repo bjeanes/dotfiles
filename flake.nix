@@ -24,6 +24,13 @@
       };
     };
 
+    # https://developer.1password.com/docs/cli/shell-plugins/nix/
+    _1password-shell-plugins = {
+      url = "github:1Password/shell-plugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "nixvim/devshell/flake-utils";
+    };
+
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -158,6 +165,7 @@
                 {
                   imports = [
                     inputs.nixvim.homeManagerModules.nixvim
+                    inputs._1password-shell-plugins.hmModules.default
                   ];
 
                   home.shellAliases = {
@@ -302,6 +310,18 @@
                     stats.common_prefix = [
                       "sudo"
                       "time"
+                    ];
+                  };
+
+                  programs._1password-shell-plugins = {
+                    enable = true;
+
+                    plugins = with pkgs; [
+                      gh # github
+                      cargo
+                      heroku
+                      tea # gitea
+                      glab # gitlab
                     ];
                   };
 
