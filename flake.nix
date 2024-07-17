@@ -223,6 +223,10 @@
                         branch = true;
                         showUntrackedFiles = "all";
                       };
+
+                      commit.gpgsign = true;
+                      gpg.format = "ssh";
+                      user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
                     };
 
                     ignores = [
@@ -338,6 +342,8 @@
               darwin = {
                 # Yank/paste in Neovim to/from macOS clipboard by default
                 programs.nixvim.clipboard.register = "unnamedplus";
+
+                programs.git.extraConfig."gpg \"ssh\"".program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
               };
             };
           };
