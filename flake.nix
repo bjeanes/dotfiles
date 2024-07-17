@@ -8,7 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixos-flake.url = "github:bjeanes/nixos-flake";
+    nixos-flake.url = "github:srid/nixos-flake";
 
     # Neovim
     nixvim = {
