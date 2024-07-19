@@ -262,6 +262,14 @@
                     os.editPreset = "nvim";
                   };
 
+                  programs.gh.enable = true;
+                  programs.gh.settings.aliases = {
+                    # https://cli.github.com/manual/gh_alias_set
+                    configure-repo-squash = "api repos/{owner}/{repo} --method PATCH -f allow_squash_merge=true -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY";
+                    configure-repo-delete-merged = "api repos/{owner}/{repo} --method PATCH -f delete_branch_on_merge=true";
+                    configure-repo = "!gh configure-repo-squash && gh configure-repo-delete-merged";
+                  };
+
                   programs.zsh = {
                     enable = true;
                     enableCompletion = true;
