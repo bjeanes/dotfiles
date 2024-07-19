@@ -339,24 +339,22 @@
               linux = { };
 
               # home-manager config specific to Darwin
-              darwin = let
-                addBrewPath = ''
-                  # Apple Silicon
-                  [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:$PATH"
-                  [ -d /opt/homebrew/sbin ] && export PATH="/opt/homebrew/sbin:$PATH"
-
-                  # Intel
-                  [ -d /usr/local/bin ] && export PATH="/usr/local/bin:$PATH"
-                  [ -d /usr/local/sbin ] && export PATH="/usr/local/sbin:$PATH"
-                '';
-              in {
+              darwin = { pkgs, ... }: {
                 # Yank/paste in Neovim to/from macOS clipboard by default
                 programs.nixvim.clipboard.register = "unnamedplus";
 
                 programs.git.extraConfig."gpg \"ssh\"".program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
 
-                programs.bash.initExtra = addBrewPath;
-                programs.zsh.initExtra = addBrewPath;
+                home.sessionVariables =
+                  let
+                    brewPrefix =
+                      if pkgs.stdenv.hostPlatform.isAarch64
+                      then "/opt/homebrew"
+                      else "/usr/local";
+                  in
+                  {
+                    PATH = "${brewPrefix}/bin:${brewPrefix}/sbin:$PATH";
+                  };
               };
             };
           };
