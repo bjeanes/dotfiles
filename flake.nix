@@ -154,6 +154,9 @@
                 };
 
                 homebrew.enable = true;
+                homebrew.brews = [
+                  "terrastruct/tap/tala" # proprietary layout engine for D2
+                ];
 
                 # This needs to be here in addition to the home-manager configuration below in order to write /etc/zshenv to correctly configure ZSH. This is confusing, but...
                 # https://github.com/LnL7/nix-darwin/issues/1003
@@ -349,6 +352,8 @@
                   home.packages = with pkgs; [
                     # TODO: https://gist.github.com/axelbdt/0de9f5f9ba8a2100326b793f7bfb8658?permalink_comment_id=4977667#gistcomment-4977667
                     asdf-vm
+
+                    # d2 # does not include proprietary Tala layout engine, and installing it with brew auto-installs brew's version of d2
                   ];
                 };
 
