@@ -354,6 +354,8 @@
                     # TODO: https://gist.github.com/axelbdt/0de9f5f9ba8a2100326b793f7bfb8658?permalink_comment_id=4977667#gistcomment-4977667
                     asdf-vm
 
+                    git-absorb # https://github.com/tummychow/git-absorb
+
                     # d2 # does not include proprietary Tala layout engine, and installing it with brew auto-installs brew's version of d2
                   ];
                 };
