@@ -1,0 +1,14 @@
+{
+    "nix.enableLanguageServer": true,
+    "nix.formatterPath": "nixpkgs-fmt",
+    "nix.serverSettings": {
+        "nil": {
+            "formatting": {
+                "command": [
+                    "nixpkgs-fmt"
+                ],
+            }
+        }
+    },
+    "direnv.restart.automatic": true,
+}

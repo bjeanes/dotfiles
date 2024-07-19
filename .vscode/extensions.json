@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "jeff-hykin.better-nix-syntax",
+        "pinage404.nix-extension-pack",
+        "mkhl.direnv"
+    ]
+}

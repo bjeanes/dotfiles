@@ -36,6 +36,12 @@
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "nixvim/devshell/flake-utils";
+    };
   };
 
   outputs = inputs@{ self, ... }:
@@ -383,6 +389,14 @@
             treefmt.config = {
               projectRootFile = "flake.lock";
               programs.nixpkgs-fmt.enable = true;
+              programs.nixpkgs-fmt.package = pkgs.nixpkgs-fmt;
+            };
+
+            devShells.default = pkgs.mkShell {
+              nativeBuildInputs = with pkgs; [
+                inputs.nil.packages.${system}.nil
+                nixpkgs-fmt
+              ];
             };
           };
         }
