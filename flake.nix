@@ -155,6 +155,7 @@
 
                 homebrew.enable = true;
                 homebrew.brews = [
+                  "exoscale/tap/exoscale-cli"
                   "terrastruct/tap/tala" # proprietary layout engine for D2
                 ];
 
