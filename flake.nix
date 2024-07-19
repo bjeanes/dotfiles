@@ -355,6 +355,7 @@
                     asdf-vm
 
                     git-absorb # https://github.com/tummychow/git-absorb
+                    mkcert
 
                     # d2 # does not include proprietary Tala layout engine, and installing it with brew auto-installs brew's version of d2
                   ];
