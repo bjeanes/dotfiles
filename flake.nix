@@ -143,6 +143,8 @@
                   settings = {
                     trusted-users = [ "root" myUsername ];
                     allowed-users = [ "root" myUsername "@nixbld" ];
+
+                    auto-optimise-store = true; # https://daiderd.com/nix-darwin/manual/index.html#opt-nix.settings.auto-optimise-store
                   };
 
                   extraOptions = ''
