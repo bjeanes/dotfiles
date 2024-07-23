@@ -65,6 +65,8 @@
 
             # Configurations for macOS machines
             darwinConfigurations = {
+              # Work M3 Max MBP
+              Jabberwocky = self.darwinConfigurations.Bandersnatch;
 
               # Personal M1 Max MBP
               Bandersnatch = self.nixos-flake.lib.mkMacosSystem {
