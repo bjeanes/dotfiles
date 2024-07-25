@@ -369,6 +369,16 @@
                     enableZshIntegration = true;
                   };
 
+                  programs.kitty = {
+                    enable = true;
+                    extraConfig = ''
+                      background_opacity 0.8
+                      background_blur 10
+                      enable_audio_bell no
+                    '';
+                    theme = "Tomorrow Night Eighties";
+                  };
+
                   programs._1password-shell-plugins = {
                     enable = true;
 
