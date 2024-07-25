@@ -202,6 +202,7 @@
                     ll = "ls -la";
                     arst = "asdf"; # Colemak home row
                     cat = "bat";
+                    lg = "lazygit";
                   };
 
                   programs.nixvim = {
