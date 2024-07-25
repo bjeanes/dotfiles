@@ -131,8 +131,11 @@
                   inputs.nixvim.nixDarwinModules.nixvim
                 ];
 
+                nix.useDaemon = true;
+                services.nix-daemon.enable = true;
+                services.nix-daemon.enableSocketListener = true;
+
                 nix = {
-                  useDaemon = true;
                   configureBuildUsers = true;
 
                   ## Control the version of Nix that nix-darwin uses. At time of writing, it defaults to 2.18.x, but latest is 2.23.3.
