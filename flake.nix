@@ -203,6 +203,7 @@
                     arst = "asdf"; # Colemak home row
                     cat = "bat";
                     lg = "lazygit";
+                    cd = "z";
                   };
 
                   programs.nixvim = {
@@ -354,6 +355,11 @@
                     ];
                   };
 
+                  programs.zoxide = {
+                    enable = true;
+                    enableBashIntegration = true;
+                    enableZshIntegration = true;
+                  };
                   programs._1password-shell-plugins = {
                     enable = true;
 
