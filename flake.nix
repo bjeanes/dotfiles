@@ -360,6 +360,15 @@
                     enableBashIntegration = true;
                     enableZshIntegration = true;
                   };
+
+                  programs.eza = {
+                    enable = true;
+                    git = true;
+                    icons = true;
+                    enableBashIntegration = true;
+                    enableZshIntegration = true;
+                  };
+
                   programs._1password-shell-plugins = {
                     enable = true;
 
