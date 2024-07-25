@@ -190,6 +190,18 @@
             homeModules = {
               # Common home-manager configuration shared between Linux and macOS.
               common = { pkgs, ... }:
+                let
+                  code-font = "MesloLGMDZ Nerd Font Mono";
+                  nerdfonts = (pkgs.nerdfonts.override {
+                    fonts = [
+                      "BitstreamVeraSansMono"
+                      "Meslo"
+                      "SourceCodePro"
+                      "Monaspace" # Monaspace Argon, specifically
+                      "FiraCode"
+                    ];
+                  });
+                in
                 {
                   imports = [
                     inputs.nixvim.homeManagerModules.nixvim
@@ -377,6 +389,11 @@
                       enable_audio_bell no
                     '';
                     theme = "Tomorrow Night Eighties";
+                    font = {
+                      package = nerdfonts;
+                      name = code-font;
+                      size = 13;
+                    };
                   };
 
                   programs._1password-shell-plugins = {
@@ -391,7 +408,14 @@
                     ];
                   };
 
+                  fonts.fontconfig.enable = true;
+                  fonts.fontconfig.defaultFonts.monospace = [
+                    code-font
+                  ];
+
                   home.packages = with pkgs; [
+                    nerdfonts
+
                     # TODO: https://gist.github.com/axelbdt/0de9f5f9ba8a2100326b793f7bfb8658?permalink_comment_id=4977667#gistcomment-4977667
                     asdf-vm
 
