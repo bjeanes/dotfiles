@@ -113,6 +113,11 @@
                   environment.systemPackages = with pkgs; [
                     git
                     bat
+
+                    # In system packages so VSCode more reliably finds these
+                    direnv
+                    nil
+                    nixpkgs-fmt
                   ];
                 };
 
