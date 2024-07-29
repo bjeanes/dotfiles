@@ -399,6 +399,8 @@
                     };
                   };
 
+                  programs.ripgrep.enable = true;
+
                   programs._1password-shell-plugins = {
                     enable = true;
 
