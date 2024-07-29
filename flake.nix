@@ -258,6 +258,7 @@
                         autosetuprebase = "local";
                       };
 
+                      rebase.autostash = true;
                       pull.rebase = true;
                       push.default = "current";
                       remote.pushDefault = "origin";
