@@ -199,6 +199,9 @@
                   finder.ShowPathbar = true;
                   finder.ShowStatusBar = true;
 
+                  # Disable quarantine for downloaded files
+                  LaunchServices.LSQuarantine = false;
+
                   # Switch light/dark style of OS automatically based on time
                   NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
 
