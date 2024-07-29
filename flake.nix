@@ -202,6 +202,8 @@
                   # Disable guest logins
                   loginwindow.GuestEnabled = false;
 
+                  loginwindow.autoLoginUser = myUsername;
+
                   # Disable quarantine for downloaded files
                   LaunchServices.LSQuarantine = false;
 
