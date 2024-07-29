@@ -182,6 +182,9 @@
 
                 security.pam.enableSudoTouchIdAuth = true;
                 users.users.${myUsername}.home = "/Users/${myUsername}";
+
+                system.keyboard.enableKeyMapping = true;
+                system.keyboard.remapCapsLockToControl = true;
               };
             };
 
