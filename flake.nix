@@ -199,6 +199,12 @@
                   finder.ShowPathbar = true;
                   finder.ShowStatusBar = true;
 
+                  # Disable press-and-hold keyboard for alt characters; this messes with key repeat and I am already used to Option+key for special characters
+                  NSGlobalDomain.ApplePressAndHoldEnabled = false;
+
+                  NSGlobalDomain.InitialKeyRepeat = 15;
+                  NSGlobalDomain.KeyRepeat = 5;
+
                   # use expanded save panel by default
                   NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
                   NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
