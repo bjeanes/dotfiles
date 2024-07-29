@@ -198,6 +198,10 @@
 
                   finder.ShowPathbar = true;
                   finder.ShowStatusBar = true;
+
+                  # use expanded save panel by default
+                  NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
+                  NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
                 };
               };
             };
