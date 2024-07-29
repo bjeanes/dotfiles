@@ -185,6 +185,20 @@
 
                 system.keyboard.enableKeyMapping = true;
                 system.keyboard.remapCapsLockToControl = true;
+
+                system.defaults = {
+                  # Show file extensions in Finder
+                  finder.AppleShowAllExtensions = true;
+
+                  # Default to column view in Finder
+                  finder.FXPreferredViewStyle = "clmv";
+
+                  # Allow quitting Finder from the menu
+                  finder.QuitMenuItem = true;
+
+                  finder.ShowPathbar = true;
+                  finder.ShowStatusBar = true;
+                };
               };
             };
 
