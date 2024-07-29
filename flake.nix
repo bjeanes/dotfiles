@@ -244,6 +244,8 @@
                     extraConfig = {
                       apply.whitespace = "fix";
 
+                      init.defaultbranch = "main";
+
                       color = {
                         ui = "auto";
                         branch = "auto";
