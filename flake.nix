@@ -199,6 +199,9 @@
                   finder.ShowPathbar = true;
                   finder.ShowStatusBar = true;
 
+                  # Disable guest logins
+                  loginwindow.GuestEnabled = false;
+
                   # Disable quarantine for downloaded files
                   LaunchServices.LSQuarantine = false;
 
