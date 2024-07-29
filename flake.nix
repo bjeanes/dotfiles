@@ -199,6 +199,9 @@
                   finder.ShowPathbar = true;
                   finder.ShowStatusBar = true;
 
+                  # Switch light/dark style of OS automatically based on time
+                  NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
+
                   # Disable press-and-hold keyboard for alt characters; this messes with key repeat and I am already used to Option+key for special characters
                   NSGlobalDomain.ApplePressAndHoldEnabled = false;
 
