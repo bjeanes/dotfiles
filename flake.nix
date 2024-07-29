@@ -205,6 +205,13 @@
                   NSGlobalDomain.InitialKeyRepeat = 15;
                   NSGlobalDomain.KeyRepeat = 5;
 
+                  # Disable certain text substitutions
+                  NSGlobalDomain.NSAutomaticQuoteSubstitutionEnabled = false; # smart quotes
+                  NSGlobalDomain.NSAutomaticPeriodSubstitutionEnabled = false; # period after double-space
+                  NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
+                  NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
+                  NSGlobalDomain.NSAutomaticDashSubstitutionEnabled = true;
+
                   # use expanded save panel by default
                   NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
                   NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
