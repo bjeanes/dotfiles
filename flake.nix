@@ -399,6 +399,7 @@
                     };
                   };
 
+                  # TODO: https://news.ycombinator.com/item?id=31010090 for wiring together `rg`+`fzf`+`bat`
                   programs.ripgrep.enable = true;
 
                   programs._1password-shell-plugins = {
