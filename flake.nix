@@ -225,6 +225,9 @@
                   NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
                   NSGlobalDomain.NSAutomaticDashSubstitutionEnabled = true;
 
+                  # Jump to the spot that’s clicked on the scroll bar
+                  NSGlobalDomain.AppleScrollerPagingBehavior = true;
+
                   # use expanded save panel by default
                   NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
                   NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
