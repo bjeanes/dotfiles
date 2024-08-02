@@ -210,6 +210,8 @@
                   # Switch light/dark style of OS automatically based on time
                   NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
 
+                  NSGlobalDomain.AppleMetricUnits = 1;
+
                   # Disable press-and-hold keyboard for alt characters; this messes with key repeat and I am already used to Option+key for special characters
                   NSGlobalDomain.ApplePressAndHoldEnabled = false;
 
