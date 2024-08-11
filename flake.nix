@@ -170,6 +170,25 @@
                   '';
                 };
 
+                launchd.user.agents.gc-downloads =
+                  let
+                    # shell = "${pkgs.bash}/bin/bash";
+                    find = "${pkgs.findutils}/bin/find";
+                    downloads = "/Users/${myUsername}/Downloads";
+                  in
+                  {
+                    serviceConfig = {
+                      ProcessType = "Background";
+                      RunAtLoad = true;
+                      StartInterval = 6 * 60 * 60; # every 6 hours
+                    };
+
+                    script = ''
+                      ${find} ${downloads} -type f -mtime +30 -print -delete
+                      ${find} ${downloads} -type d -not -wholename "${downloads}" -empty -print -delete
+                    '';
+                  };
+
                 homebrew.enable = true;
                 homebrew.taps = [
                   "exoscale/tap"
