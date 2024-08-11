@@ -193,6 +193,12 @@
                 system.keyboard.enableKeyMapping = true;
                 system.keyboard.remapCapsLockToControl = true;
 
+                # https://archive.is/KBa2w
+                system.activationScripts.postUserActivation.text = ''
+                  # Following line should allow us to avoid a logout/login cycle
+                  /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+                '';
+
                 system.defaults = {
                   # Show file extensions in Finder
                   finder.AppleShowAllExtensions = true;
