@@ -172,7 +172,6 @@
 
                 launchd.user.agents.gc-downloads =
                   let
-                    # shell = "${pkgs.bash}/bin/bash";
                     find = "${pkgs.findutils}/bin/find";
                     downloads = "/Users/${myUsername}/Downloads";
                   in
