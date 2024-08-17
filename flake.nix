@@ -314,7 +314,10 @@
                   programs.git = {
                     enable = true;
                     aliases = {
-                      br = "branch";
+                      br = "branch --format='%(color:red)%(committerdate:iso8601)%(color:reset) %(align:8)(%(ahead-behind:HEAD))%(end) %(color:blue)%(align:40)%(refname:short)%(end)%(color:reset) %(color:white)%(contents:subject) %(color:yellow)(%(committerdate:relative))%(color:reset)' --sort=-creatordate";
+                      oldestb = "br --sort=committerdate";
+                      newestb = "br --sort=-committerdate";
+
                       c = "commit -v";
                       co = "checkout";
                       commit = "commit -v";
