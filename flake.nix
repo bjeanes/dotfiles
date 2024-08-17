@@ -417,10 +417,13 @@
                   };
                   programs.starship.enable = true;
 
-                  programs.direnv.enable = true;
-                  programs.direnv.enableZshIntegration = true;
-                  programs.direnv.enableBashIntegration = true;
-                  programs.direnv.nix-direnv.enable = true;
+                  programs.direnv = {
+                    enable = true;
+                    config.global.hide_env_diff = true;
+                    enableZshIntegration = true;
+                    enableBashIntegration = true;
+                    nix-direnv.enable = true;
+                  };
 
                   programs.bat.enable = true;
                   programs.bat.config = {
