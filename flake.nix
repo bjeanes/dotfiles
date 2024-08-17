@@ -235,8 +235,15 @@
 
                   loginwindow.autoLoginUser = myUsername;
 
+                  menuExtraClock.ShowDayOfMonth = true;
+                  menuExtraClock.ShowDayOfWeek = true;
+
                   # Disable quarantine for downloaded files
                   LaunchServices.LSQuarantine = false;
+
+                  # Disable swiping for backwards/forwards
+                  NSGlobalDomain.AppleEnableSwipeNavigateWithScrolls = false;
+                  NSGlobalDomain.AppleEnableMouseSwipeNavigateWithScrolls = false;
 
                   # Switch light/dark style of OS automatically based on time
                   NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
