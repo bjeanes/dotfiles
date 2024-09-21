@@ -1,0 +1,95 @@
+
+
+typeset -U path cdpath fpath manpath
+
+for profile in ${(z)NIX_PROFILES}; do
+  fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
+done
+
+# Oh-My-Zsh/Prezto calls compinit during initialization,
+# calling it twice causes slight start up slowdown
+# as all $fpath entries will be traversed again.
+autoload -U compinit && compinit
+source $HOME/.local/share/dotfiles/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_STRATEGY=(history)
+
+
+
+
+
+
+
+# History options should be set in .zshrc and after oh-my-zsh sourcing.
+# See https://github.com/nix-community/home-manager/issues/177.
+HISTSIZE="10000"
+SAVEHIST="10000"
+
+HISTFILE="$HOME/.zsh_history"
+mkdir -p "$(dirname "$HISTFILE")"
+
+setopt HIST_FCNTL_LOCK
+unsetopt APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+unsetopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+unsetopt HIST_EXPIRE_DUPS_FIRST
+setopt SHARE_HISTORY
+unsetopt EXTENDED_HISTORY
+setopt autocd
+
+if [[ $options[zle] = on ]]; then
+  eval "$(fzf --zsh)"
+fi
+
+eval "$(delta --generate-completion zsh)"
+
+eval "$(zoxide init zsh )"
+
+source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
+
+if [[ $TERM != "dumb" ]]; then
+  eval "$(/etc/profiles/per-user/bjeanes/bin/starship init zsh)"
+fi
+
+if test -n "$KITTY_INSTALLATION_DIR"; then
+  export KITTY_SHELL_INTEGRATION="no-rc"
+  autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+  kitty-integration
+  unfunction kitty-integration
+fi
+
+eval "$(direnv hook zsh)"
+
+if [[ $options[zle] = on ]]; then
+  eval "$(atuin init zsh )"
+fi
+
+
+# Aliases
+alias -- arst=asdf
+alias -- cargo='op plugin run -- cargo'
+alias -- cat=bat
+alias -- cd=z
+alias -- eza='eza --icons --git'
+alias -- g=git
+alias -- gh='op plugin run -- gh'
+alias -- glab='op plugin run -- glab'
+alias -- heroku='op plugin run -- heroku'
+alias -- l=ls
+alias -- la='eza -a'
+alias -- lg=lazygit
+alias -- ll='ls -la'
+alias -- lla='eza -la'
+alias -- ls=eza
+alias -- lt='eza --tree'
+alias -- tea='op plugin run -- tea'
+
+# Named Directory Hashes
+
+
+source $HOME/.local/share/dotfiles/zsh-syntax-highlighting/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+ZSH_HIGHLIGHT_HIGHLIGHTERS+=()
+
+
+
+
