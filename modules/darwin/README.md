@@ -1,0 +1,1 @@
+- https://nixcademy.com/posts/nix-on-macos/
