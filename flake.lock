@@ -337,6 +337,26 @@
         "type": "github"
       }
     },
+    "nixpkgs-firefox-darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1726880020,
+        "narHash": "sha256-cdsGyngIPxzHB4gLMDToLeA9OdciR1/CDvCMaCZXPQ4=",
+        "owner": "bandithedoge",
+        "repo": "nixpkgs-firefox-darwin",
+        "rev": "09dff24a481fbf742fca58a741a00271b72df39c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bandithedoge",
+        "repo": "nixpkgs-firefox-darwin",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1725233747,
@@ -410,6 +430,23 @@
         "type": "github"
       }
     },
+    "phoenix": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726951003,
+        "narHash": "sha256-rbu1C42FJlJnOiHoNSUvPFMVUQW7fUdsWvg3UPETkSo=",
+        "ref": "refs/heads/main",
+        "rev": "96c46af0e07aac2e35f70bf5cb4d33dfb2cc770c",
+        "shallow": true,
+        "type": "git",
+        "url": "https://codeberg.org/celenity/Phoenix.git"
+      },
+      "original": {
+        "shallow": true,
+        "type": "git",
+        "url": "https://codeberg.org/celenity/Phoenix.git"
+      }
+    },
     "root": {
       "inputs": {
         "_1password-shell-plugins": "_1password-shell-plugins",
@@ -418,7 +455,9 @@
         "home-manager": "home-manager",
         "nil": "nil",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",
         "nixvim": "nixvim",
+        "phoenix": "phoenix",
         "snowfall-flake": "snowfall-flake",
         "snowfall-lib": "snowfall-lib_2",
         "treefmt-nix": "treefmt-nix"

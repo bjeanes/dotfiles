@@ -40,11 +40,19 @@
       inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
     };
 
+    nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
+    nixpkgs-firefox-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
     # nix-index-database.url = "github:nix-community/nix-index-database";
     # nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    phoenix = {
+      url = "git+https://codeberg.org/celenity/Phoenix.git?shallow=1";
+      flake = false;
+    };
 
     nil = {
       url = "github:oxalica/nil";
@@ -65,6 +73,7 @@
       overlays = with inputs; [
         darwin.overlays.default
         snowfall-flake.overlays.default
+        nixpkgs-firefox-darwin.overlay
       ];
 
       systems.modules.darwin = with inputs; [
