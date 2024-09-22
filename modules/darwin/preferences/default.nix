@@ -64,10 +64,6 @@
       # use expanded save panel by default
       NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
       NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
-
-      CustomSystemPreferences = {
-        "io.tailscale.ipn.macos"."FileSharingConfiguration" = "show";
-      };
     };
   };
 }
