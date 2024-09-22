@@ -1,5 +1,10 @@
-{ config, namespace, ... }:
+{ ... }:
 {
+  imports = [
+    ./finder.nix
+    ./clock.nix
+  ];
+
   options = { };
 
   config = {
@@ -14,24 +19,11 @@
       /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     '';
 
+    system.startup.chime = false;
+
     system.defaults = {
-      # Show file extensions in Finder
-      finder.AppleShowAllExtensions = true;
-
-      # Default to column view in Finder
-      finder.FXPreferredViewStyle = "clmv";
-
-      # Allow quitting Finder from the menu
-      finder.QuitMenuItem = true;
-
-      finder.ShowPathbar = true;
-      finder.ShowStatusBar = true;
-
       # Disable guest logins
       loginwindow.GuestEnabled = false;
-
-      menuExtraClock.ShowDayOfMonth = true;
-      menuExtraClock.ShowDayOfWeek = true;
 
       # Disable quarantine for downloaded files
       LaunchServices.LSQuarantine = false;
@@ -60,10 +52,6 @@
 
       # Jump to the spot that’s clicked on the scroll bar
       NSGlobalDomain.AppleScrollerPagingBehavior = true;
-
-      # use expanded save panel by default
-      NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
-      NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
     };
   };
 }
