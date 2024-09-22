@@ -7,5 +7,6 @@ pkgs.mkShell {
     python310Packages.mdformat
     shfmt
     inputs.nil.packages.${system}.nil
+    inputs.nixos-generators.packages.${system}.nixos-generate
   ];
 }
