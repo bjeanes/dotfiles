@@ -14,5 +14,10 @@
       # being able to set policies with a custom overlay.
       policies = { };
     };
+
+    home.packages = with pkgs; [
+      firefox-devedition-bin
+      firefox-bin
+    ];
   };
 }

@@ -14,13 +14,16 @@ let
     postInstall = ''
       dest="$(find "$out" -name application.ini -exec dirname {} \; | head -n 1)"
       mkdir -p "$dest"/defaults/pref "$dest"/distribution
+      chmod 755 "$dest"/defaults/pref "$dest"/distribution
 
-      ln -s ${phoenix}/mozilla.cfg "$dest"/
-      ln -s ${phoenix}/defaults/pref/local-settings.js "$dest"/defaults/pref/
-      ln -s ${phoenix}/policies/Policies/policies.json "$dest"/distribution/
+      set -ex
+      cp -v ${phoenix}/mozilla.cfg "$dest"/
+      cp -v ${phoenix}/defaults/pref/local-settings.js "$dest"/defaults/pref/
+      cp -v ${phoenix}/policies/Policies/policies.json "$dest"/distribution/
     '';
   });
 in
 {
   firefox-bin = prev.firefox-bin.overrideAttrs applyPhoenix;
+  firefox-devedition-bin = prev.firefox-devedition-bin.overrideAttrs applyPhoenix;
 }
