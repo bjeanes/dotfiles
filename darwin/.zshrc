@@ -41,6 +41,8 @@ if [[ $options[zle] = on ]]; then
   eval "$(fzf --zsh)"
 fi
 
+eval "$(mise activate zsh)"
+
 eval "$(delta --generate-completion zsh)"
 
 eval "$(zoxide init zsh )"
@@ -66,7 +68,6 @@ fi
 
 
 # Aliases
-alias -- arst=asdf
 alias -- cargo='op plugin run -- cargo'
 alias -- cat=bat
 alias -- cd=z
