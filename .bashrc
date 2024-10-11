@@ -12,7 +12,6 @@ shopt -s extglob
 shopt -s globstar
 shopt -s checkjobs
 
-alias arst=asdf
 alias cargo='op plugin run -- cargo'
 alias cat=bat
 alias cd=z
@@ -33,6 +32,8 @@ alias tea='op plugin run -- tea'
 if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
   eval "$(fzf --bash)"
 fi
+
+eval "$(mise activate bash)"
 
 eval "$(delta --generate-completion bash)"
 
