@@ -35,9 +35,13 @@
           autosetuprebase = "local";
         };
 
+        push = {
+          autosetupremote = true;
+          default = "current";
+        };
+
         rebase.autostash = true;
         pull.rebase = true;
-        push.default = "current";
         remote.pushDefault = "origin";
 
         status = {
