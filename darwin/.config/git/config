@@ -49,6 +49,7 @@
 	rebase = true
 
 [push]
+	autosetupremote = true
 	default = "current"
 
 [rebase]
