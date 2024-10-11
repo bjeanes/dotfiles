@@ -13,6 +13,16 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    mise = {
+      url = "github:jdx/mise";
+
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
+      };
+    };
+
+
     snowfall-lib = {
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";

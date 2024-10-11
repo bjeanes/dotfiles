@@ -1,9 +1,8 @@
 { pkgs, ... }: {
-  imports = [ ./git.nix ./vim.nix ./terminal.nix ./monospace.nix ];
+  imports = [ ./git.nix ./vim.nix ./terminal.nix ./monospace.nix ./mise.nix ];
 
   config = {
     home.packages = with pkgs; [
-      asdf-vm
       git
       git-absorb # https://github.com/tummychow/git-absorb
       mkcert

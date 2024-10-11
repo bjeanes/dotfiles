@@ -295,6 +295,31 @@
         "type": "github"
       }
     },
+    "mise": {
+      "inputs": {
+        "flake-utils": [
+          "snowfall-lib",
+          "flake-utils-plus",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1727399252,
+        "narHash": "sha256-mCU2oqzbtSqRjNZBynthYXny0Gym/QTwMM4g+WSc82s=",
+        "owner": "jdx",
+        "repo": "mise",
+        "rev": "2281145431e35d04559c20780d46c41a1863c34e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jdx",
+        "repo": "mise",
+        "type": "github"
+      }
+    },
     "nil": {
       "inputs": {
         "flake-utils": [
@@ -489,6 +514,7 @@
         "darwin": "darwin",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
+        "mise": "mise",
         "nil": "nil",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",

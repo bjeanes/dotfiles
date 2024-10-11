@@ -4,7 +4,6 @@
       g = "git";
       l = "ls";
       ll = "ls -la";
-      arst = "${pkgs.asdf-vm}/bin/asdf"; # Colemak home row
       cat = "${pkgs.bat}/bin/bat";
       lg = "${pkgs.lazygit}/bin/lazygit";
       cd = "z";
