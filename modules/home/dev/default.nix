@@ -10,6 +10,7 @@
       treefmt
       direnv
       nixpkgs-fmt
+      nil
       snowfallorg.flake
     ];
 
