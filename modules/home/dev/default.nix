@@ -12,6 +12,7 @@
       nixpkgs-fmt
       nil
       snowfallorg.flake
+      jq
     ];
 
     # TODO: https://news.ycombinator.com/item?id=31010090 for wiring together `rg`+`fzf`+`bat`
