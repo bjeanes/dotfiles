@@ -66,6 +66,7 @@ if [[ $options[zle] = on ]]; then
   eval "$(atuin init zsh )"
 fi
 
+. $HOME/.local/share/dotfiles/watch-defaults.sh
 
 # Aliases
 alias -- cargo='op plugin run -- cargo'

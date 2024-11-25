@@ -67,5 +67,6 @@ if [[ $(type -t __vte_prompt_command) = function ]]; then
 fi
 unset __HM_PROMPT_COMMAND
 
+. $HOME/.local/share/dotfiles/watch-defaults.sh
 eval "$(direnv hook bash)"
 
