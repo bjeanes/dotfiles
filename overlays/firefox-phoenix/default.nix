@@ -25,4 +25,5 @@ let
 in
 {
   firefox-bin = prev.firefox-bin.overrideAttrs applyPhoenix;
+  firefox-devedition-bin = prev.firefox-devedition-bin.overrideAttrs applyPhoenix;
 }
