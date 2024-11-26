@@ -1,5 +1,7 @@
 { pkgs, ... }: {
   config = {
+    # TODO: https://nixos.asia/en/tips/git-profiles
+
     programs.git = {
       enable = true;
       aliases = {
