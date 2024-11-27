@@ -23,8 +23,6 @@
       package = pkgs.lix;
 
       settings = {
-        auto-optimise-store = true; # https://daiderd.com/nix-darwin/manual/index.html#opt-nix.settings.auto-optimise-store
-
         substituters = [
           "https://nix-community.cachix.org"
         ];
