@@ -13,6 +13,12 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/release-2.91.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
+    };
+
     mise = {
       url = "github:jdx/mise";
 
@@ -89,6 +95,7 @@
         darwin.overlays.default
         snowfall-flake.overlays.default
         nixpkgs-firefox-darwin.overlay
+        lix-module.overlays.default
       ];
 
       systems.modules.darwin = with inputs; [

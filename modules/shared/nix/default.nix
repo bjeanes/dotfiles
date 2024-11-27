@@ -19,9 +19,6 @@
         automatic = true;
       };
 
-      # Use Lix (a Nix-compatible lang -- https://lix.systems)
-      package = pkgs.lix;
-
       settings = {
         substituters = [
           "https://nix-community.cachix.org"
