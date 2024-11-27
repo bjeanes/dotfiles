@@ -15,7 +15,7 @@ shopt -s checkjobs
 alias cargo='op plugin run -- cargo'
 alias cat=bat
 alias cd=z
-alias eza='eza --icons --git'
+alias eza='eza --icons auto --git'
 alias g=git
 alias gh='op plugin run -- gh'
 alias glab='op plugin run -- glab'
@@ -29,6 +29,8 @@ alias ls=eza
 alias lt='eza --tree'
 alias tea='op plugin run -- tea'
 
+eval "$(zoxide init bash )"
+
 if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
   eval "$(fzf --bash)"
 fi
@@ -36,8 +38,6 @@ fi
 eval "$(mise activate bash)"
 
 eval "$(delta --generate-completion bash)"
-
-eval "$(zoxide init bash )"
 
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 

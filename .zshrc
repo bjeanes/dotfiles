@@ -72,7 +72,7 @@ fi
 alias -- cargo='op plugin run -- cargo'
 alias -- cat=bat
 alias -- cd=z
-alias -- eza='eza --icons --git'
+alias -- eza='eza --icons auto --git'
 alias -- g=git
 alias -- gh='op plugin run -- gh'
 alias -- glab='op plugin run -- glab'
