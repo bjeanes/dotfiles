@@ -85,6 +85,7 @@ alias -- lla='eza -la'
 alias -- ls=eza
 alias -- lt='eza --tree'
 alias -- tea='op plugin run -- tea'
+alias -- vimdiff='nvim -d'
 
 # Named Directory Hashes
 
