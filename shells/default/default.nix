@@ -2,6 +2,7 @@
 
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
+    inputs.self.packages.${system}.nvim
     treefmt
     alejandra
     python310Packages.mdformat
