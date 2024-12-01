@@ -40,6 +40,10 @@
       configure-repo-delete-merged = "api repos/{owner}/{repo} --method PATCH -f delete_branch_on_merge=true";
       configure-repo = "!gh configure-repo-squash && gh configure-repo-delete-merged";
     };
-  };
 
+    programs.ssh = {
+      enable = true;
+      addKeysToAgent = "confirm 1h";
+    };
+  };
 }
