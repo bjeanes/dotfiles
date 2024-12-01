@@ -44,6 +44,9 @@
     programs.ssh = {
       enable = true;
       addKeysToAgent = "confirm 1h";
+      includes = [
+        "~/.orbstack/ssh/config"
+      ];
     };
   };
 }
