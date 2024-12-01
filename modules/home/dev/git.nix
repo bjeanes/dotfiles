@@ -40,6 +40,7 @@
         push = {
           autosetupremote = true;
           default = "current";
+          gpgSign = "if-asked";
         };
 
         rebase.autostash = true;
