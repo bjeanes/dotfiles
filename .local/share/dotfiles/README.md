@@ -48,7 +48,6 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/diffview.nvim` | https://github.com/sindrets/diffview.nvim/tree/4516612fe98ff56ae0415a259ff6361a89419b0a |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/fastaction.nvim` | https://github.com/Chaitanyabsprip/fastaction.nvim/tree/a55feac91f39b83aa21b9ef3df1e465d9122753c |
-| `~/.local/share/nvim/site/pack/dotfiles/start/firenvim` | https://github.com/glacambre/firenvim/tree/64f9389b88c8b0c7667d45c171a5f25c42d852fb |
 | `~/.local/share/nvim/site/pack/dotfiles/start/friendly-snippets` | https://github.com/rafamadriz/friendly-snippets/tree/de8fce94985873666bd9712ea3e49ee17aadb1ed |
 | `~/.local/share/nvim/site/pack/dotfiles/start/git-conflict.nvim` | https://github.com/akinsho/git-conflict.nvim/tree/4dc906855751096aaeba2edde7c2cdc7bb881c98 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/git-worktree.nvim` | https://github.com/ThePrimeagen/git-worktree.nvim/tree/f247308e68dab9f1133759b05d944569ad054546 |
