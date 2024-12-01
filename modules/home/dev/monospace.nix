@@ -24,6 +24,12 @@ in
     };
   };
 
+  programs.wezterm.extraConfig = /* lua */ ''
+    config.font = wezterm.font_with_fallback({
+      "${code-font}",
+    })
+  '';
+
   fonts.fontconfig.enable = true;
   fonts.fontconfig.defaultFonts.monospace = [
     code-font

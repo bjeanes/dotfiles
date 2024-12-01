@@ -1,4 +1,4 @@
-{ ... }: {
+{ lib, ... }: {
   config = {
     programs.kitty = {
       enable = true;
@@ -12,7 +12,19 @@
 
     programs.wezterm = {
       enable = true;
-      extraConfig = builtins.readFile ./wezterm.lua;
+      extraConfig = lib.mkMerge [
+        (lib.mkBefore /* lua */ ''
+          local config = wezterm.config_builder()
+          local act = wezterm.action
+
+          -- TODO: Keep this here until this issue is resolved: https://github.com/wez/wezterm/issues/5990
+          config.front_end = "WebGpu"
+        '')
+        (builtins.readFile ./wezterm/keys.lua)
+        (builtins.readFile ./wezterm/wezterm.lua)
+        (lib.mkAfter /* lua */ "return config")
+      ];
+
     };
   };
 }
