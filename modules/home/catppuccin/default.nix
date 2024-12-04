@@ -2,12 +2,12 @@
 {
   catppuccin = {
     enable = lib.mkDefault true;
-    flavor = lib.mkDefault "macchiato";
+    flavor = lib.mkDefault "mocha";
   };
 
   programs.wezterm.extraConfig = # lua
     ''
-      config.color_scheme = "Catppuccin Macchiato"
+      config.color_scheme = "Catppuccin Mocha"
     '';
 
 }
