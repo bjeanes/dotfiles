@@ -9,8 +9,11 @@ Your package manager may have it under the same name.
 
 | Path | Source |
 | --- | --- |
+| `~/.config/bat/themes/Catppuccin Macchiato.tmTheme` | source source |
 | `~/.local/share/dotfiles/bash-preexec` | bash-preexec 0.5.0 |
 | `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2024-08-14 |
+| `~/.local/share/dotfiles/source` | source source |
+| `~/.local/share/dotfiles/source-2` | source source |
 | `~/.local/share/dotfiles/vte` | vte 0.78.1 |
 | `~/.local/share/dotfiles/wezterm` | wezterm 20240203-110809-5046fc22 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.0 |

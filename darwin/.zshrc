@@ -41,6 +41,8 @@ if [[ $options[zle] = on ]]; then
   eval "$(fzf --zsh)"
 fi
 
+source "$HOME/.local/share/dotfiles/source-2/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh"
+
 eval "$(mise activate zsh)"
 
 eval "$(delta --generate-completion zsh)"

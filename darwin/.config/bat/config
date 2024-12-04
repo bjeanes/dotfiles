@@ -1,1 +1,2 @@
 --map-syntax=flake.lock:JSON
+--theme='Catppuccin Macchiato'
