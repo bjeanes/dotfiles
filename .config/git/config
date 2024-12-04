@@ -36,6 +36,9 @@
 [credential "https://github.com"]
 	helper = "gh auth git-credential"
 
+[delta]
+	features = "catppuccin-macchiato"
+
 [gpg]
 	format = "ssh"
 
@@ -65,3 +68,6 @@
 
 [user]
 	signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
+
+[include]
+	path = "~/.local/share/dotfiles/source/catppuccin.gitconfig"
