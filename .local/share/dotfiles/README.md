@@ -9,7 +9,7 @@ Your package manager may have it under the same name.
 
 | Path | Source |
 | --- | --- |
-| `~/.config/bat/themes/Catppuccin Macchiato.tmTheme` | source source |
+| `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | source source |
 | `~/.local/share/dotfiles/bash-preexec` | bash-preexec 0.5.0 |
 | `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2024-08-14 |
 | `~/.local/share/dotfiles/source` | source source |

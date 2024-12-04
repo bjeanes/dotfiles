@@ -34,6 +34,6 @@ config.keys = {
 }
 
 
-config.color_scheme = "Catppuccin Macchiato"
+config.color_scheme = "Catppuccin Mocha"
 
 return config
