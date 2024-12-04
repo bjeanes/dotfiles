@@ -41,7 +41,7 @@ if [[ $options[zle] = on ]]; then
   eval "$(fzf --zsh)"
 fi
 
-source "$HOME/.local/share/dotfiles/source-2/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh"
+source "$HOME/.local/share/dotfiles/source-2/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 
 eval "$(mise activate zsh)"
 

@@ -37,7 +37,7 @@
 	helper = "gh auth git-credential"
 
 [delta]
-	features = "catppuccin-macchiato"
+	features = "catppuccin-mocha"
 
 [gpg]
 	format = "ssh"
