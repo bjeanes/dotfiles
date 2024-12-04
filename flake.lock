@@ -41,6 +41,21 @@
         "type": "github"
       }
     },
+    "catppuccin": {
+      "locked": {
+        "lastModified": 1733001911,
+        "narHash": "sha256-uX/9m0TbdhEzuWA0muM5mI/AaWcLiDLjCCyu5Qr9MRk=",
+        "owner": "catppuccin",
+        "repo": "nix",
+        "rev": "a817009ebfd2cca7f70a77884e5098d0a8c83f8e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -835,6 +850,7 @@
     "root": {
       "inputs": {
         "_1password-shell-plugins": "_1password-shell-plugins",
+        "catppuccin": "catppuccin",
         "darwin": "darwin",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",

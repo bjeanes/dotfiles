@@ -7,7 +7,6 @@
         background_blur 10
         enable_audio_bell no
       '';
-      themeFile = "Tomorrow_Night_Eighties";
     };
 
     programs.wezterm = {

@@ -28,6 +28,7 @@
       };
     };
 
+    catppuccin.url = "github:catppuccin/nix";
 
     snowfall-lib = {
       url = "github:snowfallorg/lib";
@@ -92,10 +93,13 @@
 
       systems.modules.darwin = [ ];
 
-      systems.modules.nixos = [ ];
+      systems.modules.nixos = with inputs; [
+        catppuccin.nixosModules.catppuccin
+      ];
 
       homes.modules = with inputs; [
         _1password-shell-plugins.hmModules.default
+        catppuccin.homeManagerModules.catppuccin
       ];
 
       alias = {
