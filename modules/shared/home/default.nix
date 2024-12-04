@@ -1,5 +1,4 @@
-{ ... }: {
-  options = { };
+{
 
   config = {
     home-manager.backupFileExtension = "bak-hm";
