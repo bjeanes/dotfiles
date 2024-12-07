@@ -1,5 +1,4 @@
 {
-
   config = {
     home-manager.backupFileExtension = "bak-hm";
     home-manager.useUserPackages = true;

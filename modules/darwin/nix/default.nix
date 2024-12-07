@@ -1,4 +1,9 @@
-{ system, lib, pkgs, config, ... }:
+{
+  system,
+  lib,
+  pkgs,
+  ...
+}:
 let
   adminGroup = if pkgs.stdenv.isDarwin then "admin" else "wheel";
 in
@@ -17,15 +22,26 @@ in
 
       linux-builder.enable = system == "aarch64-darwin";
 
-      gc.interval = { Weekday = 0; Hour = 0; Minute = 0; };
+      gc.interval = {
+        Weekday = 0;
+        Hour = 0;
+        Minute = 0;
+      };
 
       optimise.interval = {
         Hour = 6;
       };
 
       settings = {
-        trusted-users = [ "root" "@${adminGroup}" ];
-        allowed-users = [ "root" "@${adminGroup}" "@nixbld" ];
+        trusted-users = [
+          "root"
+          "@${adminGroup}"
+        ];
+        allowed-users = [
+          "root"
+          "@${adminGroup}"
+          "@nixbld"
+        ];
       };
     };
   };

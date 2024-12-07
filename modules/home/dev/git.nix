@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   config = {
     # TODO: https://nixos.asia/en/tips/git-profiles
 
@@ -60,6 +61,7 @@
 
       ignores = [
         "*.swp"
+        ".DS_Store"
       ];
     };
 
@@ -69,12 +71,14 @@
     # delta will show diffs with language-aware syntax highlighting
     programs.git.delta.enable = true;
     programs.git.delta.package = pkgs.delta;
-    programs.bash.initExtra = /* bash */ ''
-      eval "$(${pkgs.delta}/bin/delta --generate-completion bash)"
-    '';
-    programs.zsh.initExtra = /* zsh */ ''
-      eval "$(${pkgs.delta}/bin/delta --generate-completion zsh)"
-    '';
+    programs.bash.initExtra = # bash
+      ''
+        eval "$(${pkgs.delta}/bin/delta --generate-completion bash)"
+      '';
+    programs.zsh.initExtra = # zsh
+      ''
+        eval "$(${pkgs.delta}/bin/delta --generate-completion zsh)"
+      '';
 
     programs.lazygit.enable = true;
     programs.lazygit.settings = {

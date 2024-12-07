@@ -40,10 +40,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixvim = {
+      url = "github:nix-community/nixvim";
+
+      # nixvim has a lot of inputs we are using, so pin them to same version
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix-darwin.follows = "darwin";
+        home-manager.follows = "home-manager";
+        flake-parts.follows = "flake-parts";
+        treefmt-nix.follows = "treefmt-nix";
+        flake-compat.follows = "snowfall-lib/flake-compat";
+      };
+    };
+
     khanelivim = {
       url = "github:khaneliman/khanelivim";
       inputs.snowfall-lib.follows = "snowfall-lib";
       inputs.snowfall-flake.follows = "snowfall-flake";
+      inputs.nixvim.follows = "nixvim";
     };
 
     # https://developer.1password.com/docs/cli/shell-plugins/nix/

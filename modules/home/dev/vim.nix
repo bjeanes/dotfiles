@@ -1,6 +1,11 @@
-{ inputs, system, lib, ... }:
+{
+  inputs,
+  system,
+  lib,
+  ...
+}:
 let
-  nvim = inputs.self.packages.${system}.nvim.extend {
+  nvim = inputs.self.packages.${system}.kvim.extend {
     viAlias = lib.mkForce true;
     vimAlias = lib.mkForce true;
   };
