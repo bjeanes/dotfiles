@@ -43,9 +43,9 @@ fi
 
 source "$HOME/.local/share/dotfiles/source-2/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 
-eval "$(mise activate zsh)"
-
 eval "$(delta --generate-completion zsh)"
+
+eval "$(mise activate zsh)"
 
 eval "$(zoxide init zsh )"
 
