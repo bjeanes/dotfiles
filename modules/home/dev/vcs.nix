@@ -1,8 +1,11 @@
 { pkgs, ... }:
+let
+  user.name = "Bo Jeanes";
+  user.email = "me@bjeanes.com";
+in
 {
   config = {
     # TODO: https://nixos.asia/en/tips/git-profiles
-
     programs.git = {
       enable = true;
       aliases = {
@@ -22,6 +25,10 @@
       };
 
       extraConfig = {
+        user = {
+          inherit (user) name email;
+        };
+
         apply.whitespace = "fix";
 
         init.defaultbranch = "main";
@@ -94,5 +101,18 @@
 
       os.editPreset = "nvim";
     };
+
+    # TODO https://gist.github.com/ilyagr/5d6339fb7dac5e7ab06fe1561ec62d45 programs.jujutsu.enable = true;
+    programs.jujutsu = {
+      enable = true;
+      settings = {
+        inherit user;
+      };
+    };
+
+    home.packages = with pkgs; [
+      gg-jj
+      lazyjj
+    ];
   };
 }
