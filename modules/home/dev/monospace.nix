@@ -1,24 +1,19 @@
 { pkgs, ... }:
 let
   code-font = "MesloLGMDZ Nerd Font Mono";
-  nerdfonts = (pkgs.nerdfonts.override {
-    fonts = [
-      "BitstreamVeraSansMono"
-      "Meslo"
-      "SourceCodePro"
-      "Monaspace" # Monaspace Argon, specifically
-      "FiraCode"
-    ];
-  });
 in
 {
-  home.packages = [
-    nerdfonts
+  home.packages = with pkgs.nerd-fonts; [
+    bitstream-vera-sans-mono
+    meslo-lg
+    sauce-code-pro
+    monaspace # Monaspace Argon, specifically
+    fira-code
   ];
 
   programs.kitty = {
     font = {
-      package = nerdfonts;
+      package = pkgs.nerd-fonts.meslo-lg;
       name = code-font;
       size = 13;
     };
