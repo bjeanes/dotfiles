@@ -1,3 +1,11 @@
+[diff]
+tool = "delta"
+
+[ui]
+pager = "delta"
+[ui.diff]
+format = "git"
+
 [user]
 email = "me@bjeanes.com"
 name = "Bo Jeanes"
