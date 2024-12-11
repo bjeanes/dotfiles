@@ -107,6 +107,10 @@ in
       enable = true;
       settings = {
         inherit user;
+
+        diff.tool = "delta";
+        ui.pager = "delta";
+        ui.diff.format = "git";
       };
     };
 
