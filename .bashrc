@@ -36,9 +36,9 @@ if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
   eval "$(fzf --bash)"
 fi
 
-eval "$(mise activate bash)"
-
 eval "$(delta --generate-completion bash)"
+
+eval "$(mise activate bash)"
 
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
