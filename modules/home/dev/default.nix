@@ -1,5 +1,5 @@
-{ pkgs, ... }: {
-  imports = [ ./git.nix ./vim.nix ./terminal.nix ./monospace.nix ./mise.nix ];
+{ pkgs, lib, ... }: {
+  imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./.);
 
   config = {
     home.packages = with pkgs; [
