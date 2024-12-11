@@ -6,10 +6,6 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 local act = wezterm.action
 
-config.font = wezterm.font_with_fallback({
-  "MesloLGMDZ Nerd Font Mono",
-})
-
 config.keys = {
   -- Rebind OPT-Left, OPT-Right as ALT-b, ALT-f respectively to match Terminal.app behavior
   {
@@ -36,6 +32,10 @@ config.window_decorations = "INTEGRATED_BUTTONS|RESIZE|MACOS_FORCE_ENABLE_SHADOW
 
 -- TODO: Keep this here until this issue is resolved: https://github.com/wez/wezterm/issues/5990
 config.front_end = "WebGpu"
+
+config.font = wezterm.font_with_fallback({
+  "MesloLGMDZ Nerd Font Mono",
+})
 
 config.color_scheme = "Catppuccin Mocha"
 
