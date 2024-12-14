@@ -1,4 +1,4 @@
-{
+{ config, lib, ...}: {
   plugins.snacks = {
     settings.dashboard = {
       enabled = true;
@@ -99,4 +99,20 @@
       ];
     };
   };
+
+  autoCmd = lib.mkIf (config.plugins.snacks.settings.dashboard.enabled && config.plugins.mini.enable && lib.hasAttr "indentscope" config.plugins.mini.modules)
+    [
+      {
+        event = [ "User" ];
+        pattern = [
+          "SnacksDashboardOpened"
+        ];
+        callback.__raw = ''
+          function()
+            require('snacks.notify').info("Test FileType hook")
+            vim.b.miniindentscope_disable = true
+          end
+        '';
+      }
+    ];
 }
