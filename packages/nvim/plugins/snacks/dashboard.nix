@@ -96,7 +96,6 @@
         ];
         callback.__raw = ''
           function()
-            require('snacks.notify').info("Test FileType hook")
             vim.b.miniindentscope_disable = true
           end
         '';
