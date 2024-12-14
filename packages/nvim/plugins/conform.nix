@@ -144,9 +144,28 @@
         nixfmt = {
           command = lib.getExe pkgs.nixfmt-rfc-style;
         };
-        mdformat = {
-          command = lib.getExe pkgs.mdformat;
-        };
+        mdformat =
+          let
+            pyPkgs = pkgs.python312Packages;
+          in
+          {
+            command = lib.getExe (pkgs.writeShellApplication {
+              name = "mdformat";
+
+              runtimeInputs = [
+                pyPkgs.mdformat
+                pyPkgs.mdformat-tables
+                pyPkgs.mdformat-gfm
+                pyPkgs.mdformat-gfm-alerts
+                pyPkgs.mdformat-frontmatter
+                # pyPkgs.mdformat-obsidian
+              ];
+
+              text = ''
+                mdformat "$@"
+              '';
+            });
+          };
         prettierd = {
           command = lib.getExe pkgs.prettierd;
         };
