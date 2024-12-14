@@ -144,7 +144,7 @@
         nixfmt = {
           command = lib.getExe pkgs.nixfmt-rfc-style;
         };
-        mdformatat = {
+        mdformat = {
           command = lib.getExe pkgs.mdformat;
         };
         prettierd = {
