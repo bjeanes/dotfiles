@@ -106,7 +106,10 @@
         };
         json = [ "jq" ];
         lua = [ "stylua" ];
-        markdown = [ "mdformat" ];
+        markdown = [
+          "injected"
+          "mdformat"
+        ];
         nix = [ "nixfmt" ];
         rust = [ "rustfmt" ];
         sh = [
