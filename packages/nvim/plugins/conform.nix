@@ -64,7 +64,7 @@
               end
             end
 
-            return { timeout_ms = 200, lsp_format = "last" }, on_format
+            return { timeout_ms = 300, lsp_format = "last" }, on_format
            end
         '';
 
