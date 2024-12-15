@@ -4,7 +4,15 @@
 {
   snowfallorg.users.bjeanes = { };
 
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
   system.stateVersion = "24.11";
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  time.timeZone = "Australia/Melbourne";
 
   users.mutableUsers = true;
   users.users.bjeanes = {
@@ -19,7 +27,7 @@
 
   networking.networkmanager.enable = true;
 
-  services.ssh.enable = true;
+  services.openssh.enable = true;
 
   services.tailscale = {
     enable = true;

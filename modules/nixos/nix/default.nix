@@ -5,9 +5,10 @@
 
   config = {
     nix.gc.dates = "weekly";
+
+    users.users.root.shell = pkgs.zsh;
+
+    services.openssh.settings.PasswordAuthentication = false;
   };
 
-  users.users.root.shell = pkgs.zsh;
-
-  services.openssh.settings.PasswordAuthentication = false;
 }
