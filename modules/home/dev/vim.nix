@@ -5,7 +5,7 @@
   ...
 }:
 let
-  nvim = inputs.self.packages.${system}.kvim.extend {
+  nvim = inputs.self.packages.${system}.nvim.extend {
     viAlias = lib.mkForce true;
     vimAlias = lib.mkForce true;
   };
