@@ -1,6 +1,12 @@
 # OptiPlex 7070 SFF
 #
-{ pkgs, ... }:
+{
+  pkgs,
+  inputs,
+  system,
+  lib,
+  ...
+}:
 {
   snowfallorg.users.bjeanes = { };
 
@@ -38,7 +44,12 @@
     joinNetworks = [ "17d709436c21ca93" ];
   };
 
-  environment.systemPackages = [ ];
+  environment.systemPackages = [
+    (inputs.self.packages.${system}.nvim.extend {
+      viAlias = lib.mkForce true;
+      vimAlias = lib.mkForce true;
+    })
+  ];
 
   programs.git.enable = true;
 
@@ -47,9 +58,8 @@
     syntaxHighlighting.enable = true;
   };
 
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 }
