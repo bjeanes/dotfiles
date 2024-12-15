@@ -1,0 +1,76 @@
+[alias]
+	br = "branch --format='%(color:red)%(committerdate:iso8601)%(color:reset) %(align:8)(%(ahead-behind:HEAD))%(end) %(color:blue)%(align:40)%(refname:short)%(end)%(color:reset) %(color:white)%(contents:subject) %(color:yellow)(%(committerdate:relative))%(color:reset)' --sort=-creatordate"
+	c = "commit -v"
+	co = "checkout"
+	commit = "commit -v"
+	lg = "log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+	me = "!sh -c 'echo `git config user.name` \\<`git config user.email`\\>'"
+	mine = "!sh -c 'git lg --author=\"`git me`\"'"
+	newestb = "br --sort=-committerdate"
+	oldestb = "br --sort=committerdate"
+	st = "status"
+	unadd = "reset HEAD"
+
+[apply]
+	whitespace = "fix"
+
+[branch]
+	autosetupmerge = "always"
+	autosetuprebase = "local"
+
+[color]
+	branch = "auto"
+	diff = "auto"
+	status = "auto"
+	ui = "auto"
+
+[commit]
+	gpgsign = true
+
+[core]
+	pager = "delta"
+
+[credential "https://gist.github.com"]
+	helper = "gh auth git-credential"
+
+[credential "https://github.com"]
+	helper = "gh auth git-credential"
+
+[delta]
+	features = "catppuccin-mocha"
+
+[gpg]
+	format = "ssh"
+
+[init]
+	defaultbranch = "main"
+
+[interactive]
+	diffFilter = "delta --color-only"
+
+[pull]
+	rebase = true
+
+[push]
+	autosetupremote = true
+	default = "current"
+	gpgSign = "if-asked"
+
+[rebase]
+	autostash = true
+
+[remote]
+	pushDefault = "origin"
+
+[status]
+	branch = true
+	short = true
+	showUntrackedFiles = "all"
+
+[user]
+	email = "me@bjeanes.com"
+	name = "Bo Jeanes"
+	signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
+
+[include]
+	path = "~/.local/share/dotfiles/source/catppuccin.gitconfig"

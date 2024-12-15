@@ -1,0 +1,2 @@
+--map-syntax=flake.lock:JSON
+--theme='Catppuccin Mocha'
