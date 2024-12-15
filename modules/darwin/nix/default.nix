@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-let
-  adminGroup = if pkgs.stdenv.isDarwin then "admin" else "wheel";
-in
 {
 
   # h/t @khaneliman https://github.com/khaneliman/khanelinix/blob/7bf538d/modules/nixos/nix/default.nix#L13
@@ -30,18 +27,6 @@ in
 
       optimise.interval = {
         Hour = 6;
-      };
-
-      settings = {
-        trusted-users = [
-          "root"
-          "@${adminGroup}"
-        ];
-        allowed-users = [
-          "root"
-          "@${adminGroup}"
-          "@nixbld"
-        ];
       };
     };
   };
