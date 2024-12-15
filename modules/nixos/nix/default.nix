@@ -8,4 +8,6 @@
   };
 
   users.users.root.shell = pkgs.zsh;
+
+  services.openssh.settings.PasswordAuthentication = false;
 }
