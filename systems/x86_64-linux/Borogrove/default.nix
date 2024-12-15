@@ -44,6 +44,8 @@
     joinNetworks = [ "17d709436c21ca93" ];
   };
 
+  services.glances.enable = true;
+
   environment.systemPackages = [
     (inputs.self.packages.${system}.nvim.extend {
       viAlias = lib.mkForce true;
