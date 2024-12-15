@@ -1,9 +1,10 @@
 # https://cmacr.ae/blog/managing-firefox-on-macos-with-nix/
 
-{ pkgs, ... }: {
+{ pkgs, lib, ... }:
+{
   config = {
     programs.firefox = {
-      enable = true;
+      enable = lib.mkDefault false;
       package = pkgs.firefox-bin;
 
       # These don't work in Darwin because home-manager just skips applying the policies altogether
