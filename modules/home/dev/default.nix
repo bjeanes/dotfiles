@@ -1,4 +1,5 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./.);
 
   config = {
@@ -39,15 +40,6 @@
       configure-repo-squash = "api repos/{owner}/{repo} --method PATCH -f allow_squash_merge=true -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY";
       configure-repo-delete-merged = "api repos/{owner}/{repo} --method PATCH -f delete_branch_on_merge=true";
       configure-repo = "!gh configure-repo-squash && gh configure-repo-delete-merged";
-    };
-
-    programs.ssh = {
-      enable = true;
-      addKeysToAgent = "confirm 1h";
-      includes = [
-        "~/.orbstack/ssh/config"
-        "~/.ssh/config.d/*"
-      ];
     };
   };
 }
