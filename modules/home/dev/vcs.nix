@@ -5,6 +5,17 @@ let
 in
 {
   config = {
+    programs.ssh = {
+      matchBlocks = {
+        "*" = {
+          setEnv = {
+            GIT_AUTHOR_NAME = user.name;
+            GIT_AUTHOR_EMAIL = user.email;
+          };
+        };
+      };
+    };
+
     # TODO: https://nixos.asia/en/tips/git-profiles
     programs.git = {
       enable = true;
