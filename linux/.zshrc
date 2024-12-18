@@ -6,6 +6,9 @@ for profile in ${(z)NIX_PROFILES}; do
   fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
 done
 
+path+="$HOME/.zsh/plugins/fzf-tab"
+fpath+="$HOME/.zsh/plugins/fzf-tab"
+
 # Oh-My-Zsh/Prezto calls compinit during initialization,
 # calling it twice causes slight start up slowdown
 # as all $fpath entries will be traversed again.
@@ -17,6 +20,9 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 
 
+if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
+fi
 
 
 # History options should be set in .zshrc and after oh-my-zsh sourcing.
