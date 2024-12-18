@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   config = {
     home.shellAliases = {
@@ -27,12 +27,7 @@
         }
         {
           name = "cd-ls";
-          src = pkgs.fetchFromGitHub {
-            owner = "zshzoo";
-            repo = "cd-ls";
-            rev = "main";
-            sha256 = "QUnZBb0X6F42FcvNxq65zq2oB8cn1Ym4SuU8MXpIfN4=";
-          };
+          src = inputs.zsh-cd-ls;
         }
       ];
     };

@@ -87,6 +87,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
     };
+
+    zsh-cd-ls = {
+      url = "github:zshzoo/cd-ls";
+      flake = false;
+    };
   };
 
   outputs =
