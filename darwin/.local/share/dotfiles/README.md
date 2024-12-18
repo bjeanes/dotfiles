@@ -13,11 +13,9 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/bash-preexec` | bash-preexec 0.5.0 |
 | `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2024-08-14 |
 | `~/.local/share/dotfiles/source` | source source |
-| `~/.local/share/dotfiles/source-2` | source source |
 | `~/.local/share/dotfiles/vte` | vte 0.78.2 |
 | `~/.local/share/dotfiles/wezterm` | wezterm 20240203-110809-5046fc22 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.0 |
-| `~/.local/share/dotfiles/zsh-syntax-highlighting` | zsh-syntax-highlighting 0.8.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/faf15ab0201b564b6368ffa47b56feefc92ce3f4 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/d2fdcc3fa48cf2f2696f13730a5c74f97a7e9677 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
@@ -35,4 +33,5 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/e25cd0f2e5922f1f4d3cd969f92e35a9a327ffb0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-sleuth` | https://github.com/tpope/vim-sleuth/tree/be69bff86754b1aa5adcbb527d7fcd1635a84080 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/which-key.nvim` | https://github.com/folke/which-key.nvim/tree/9b365a6428a9633e3eeb34dbef1b791511c54f70 |
+| `~/.zsh/plugins/F-Sy-H` | zsh-f-sy-h 1.67 |
 | `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.1.2 |

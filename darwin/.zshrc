@@ -8,6 +8,8 @@ done
 
 path+="$HOME/.zsh/plugins/fzf-tab"
 fpath+="$HOME/.zsh/plugins/fzf-tab"
+path+="$HOME/.zsh/plugins/F-Sy-H"
+fpath+="$HOME/.zsh/plugins/F-Sy-H"
 
 # Oh-My-Zsh/Prezto calls compinit during initialization,
 # calling it twice causes slight start up slowdown
@@ -22,6 +24,9 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
+fi
+if [[ -f "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh"
 fi
 
 
@@ -46,8 +51,6 @@ setopt autocd
 if [[ $options[zle] = on ]]; then
   eval "$(fzf --zsh)"
 fi
-
-source "$HOME/.local/share/dotfiles/source-2/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 
 eval "$(delta --generate-completion zsh)"
 
@@ -96,10 +99,6 @@ alias -- tea='op plugin run -- tea'
 alias -- vimdiff='nvim -d'
 
 # Named Directory Hashes
-
-
-source $HOME/.local/share/dotfiles/zsh-syntax-highlighting/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-ZSH_HIGHLIGHT_HIGHLIGHTERS+=()
 
 
 
