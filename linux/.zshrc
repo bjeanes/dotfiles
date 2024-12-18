@@ -10,6 +10,8 @@ path+="$HOME/.zsh/plugins/fzf-tab"
 fpath+="$HOME/.zsh/plugins/fzf-tab"
 path+="$HOME/.zsh/plugins/F-Sy-H"
 fpath+="$HOME/.zsh/plugins/F-Sy-H"
+path+="$HOME/.zsh/plugins/cd-ls"
+fpath+="$HOME/.zsh/plugins/cd-ls"
 
 # Oh-My-Zsh/Prezto calls compinit during initialization,
 # calling it twice causes slight start up slowdown
@@ -27,6 +29,9 @@ if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
 fi
 if [[ -f "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh"
+fi
+if [[ -f "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh"
 fi
 
 
