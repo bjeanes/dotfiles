@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   config = {
     home.shellAliases = {
       g = "git";
@@ -15,6 +16,13 @@
       autocd = true;
       syntaxHighlighting.enable = true;
       autosuggestion.enable = true;
+
+      plugins = [
+        {
+          name = "fzf-tab";
+          src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+        }
+      ];
     };
     programs.bash = {
       enable = true;
@@ -45,7 +53,6 @@
     programs.fzf.fileWidgetOptions = [
       "--preview '${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :500 {}'"
     ];
-
 
   };
 }
