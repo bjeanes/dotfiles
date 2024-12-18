@@ -34,5 +34,5 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-sleuth` | https://github.com/tpope/vim-sleuth/tree/be69bff86754b1aa5adcbb527d7fcd1635a84080 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/which-key.nvim` | https://github.com/folke/which-key.nvim/tree/9b365a6428a9633e3eeb34dbef1b791511c54f70 |
 | `~/.zsh/plugins/F-Sy-H` | zsh-f-sy-h 1.67 |
-| `~/.zsh/plugins/cd-ls` | source source |
+| `~/.zsh/plugins/cd-ls` | https://github.com/zshzoo/cd-ls/tree/f26c86baf50ca0e92b454753dc6f1d25228e67bf |
 | `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.1.2 |
