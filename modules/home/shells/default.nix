@@ -29,6 +29,10 @@
           name = "cd-ls";
           src = inputs.zsh-cd-ls;
         }
+        {
+          name = "zsh-ssh";
+          src = inputs.zsh-ssh;
+        }
       ];
     };
     programs.bash = {

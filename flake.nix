@@ -92,6 +92,11 @@
       url = "github:zshzoo/cd-ls";
       flake = false;
     };
+
+    zsh-ssh = {
+      url = "github:sunlei/zsh-ssh";
+      flake = false;
+    };
   };
 
   outputs =

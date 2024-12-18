@@ -794,7 +794,8 @@
         "snowfall-flake": "snowfall-flake",
         "snowfall-lib": "snowfall-lib_2",
         "treefmt-nix": "treefmt-nix",
-        "zsh-cd-ls": "zsh-cd-ls"
+        "zsh-cd-ls": "zsh-cd-ls",
+        "zsh-ssh": "zsh-ssh"
       }
     },
     "rust-overlay": {
@@ -949,6 +950,22 @@
       "original": {
         "owner": "zshzoo",
         "repo": "cd-ls",
+        "type": "github"
+      }
+    },
+    "zsh-ssh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1732780527,
+        "narHash": "sha256-jFcSIv4T1ZNBOujGZ2NLp6Ou3aDrXT76cR9bVbMMJhM=",
+        "owner": "sunlei",
+        "repo": "zsh-ssh",
+        "rev": "f73b78bc8f0b40dc939e2819348b83afada09ba9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sunlei",
+        "repo": "zsh-ssh",
         "type": "github"
       }
     }
