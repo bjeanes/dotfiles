@@ -25,6 +25,15 @@
           name = "F-Sy-H";
           src = "${pkgs.zsh-f-sy-h}/share/zsh/site-functions";
         }
+        {
+          name = "cd-ls";
+          src = pkgs.fetchFromGitHub {
+            owner = "zshzoo";
+            repo = "cd-ls";
+            rev = "main";
+            sha256 = "QUnZBb0X6F42FcvNxq65zq2oB8cn1Ym4SuU8MXpIfN4=";
+          };
+        }
       ];
     };
     programs.bash = {
