@@ -14,13 +14,16 @@
       enable = true;
       enableCompletion = true;
       autocd = true;
-      syntaxHighlighting.enable = true;
       autosuggestion.enable = true;
 
       plugins = [
         {
           name = "fzf-tab";
           src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+        }
+        {
+          name = "F-Sy-H";
+          src = "${pkgs.zsh-f-sy-h}/share/zsh/site-functions";
         }
       ];
     };
