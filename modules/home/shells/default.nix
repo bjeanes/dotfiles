@@ -48,6 +48,10 @@
           name = "zsh-ssh";
           src = inputs.zsh-ssh;
         }
+        {
+          name = "zsh-autopair";
+          src = inputs.zsh-autopair;
+        }
       ];
     };
     programs.bash = {
