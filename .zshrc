@@ -6,6 +6,8 @@ for profile in ${(z)NIX_PROFILES}; do
   fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
 done
 
+path+="$HOME/.zsh/plugins/zsh-abbr"
+fpath+="$HOME/.zsh/plugins/zsh-abbr"
 path+="$HOME/.zsh/plugins/fzf-tab"
 fpath+="$HOME/.zsh/plugins/fzf-tab"
 path+="$HOME/.zsh/plugins/F-Sy-H"
@@ -26,6 +28,9 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 
 
+if [[ -f "$HOME/.zsh/plugins/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.plugin.zsh"
+fi
 if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
 fi
