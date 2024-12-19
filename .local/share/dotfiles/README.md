@@ -36,4 +36,5 @@ Your package manager may have it under the same name.
 | `~/.zsh/plugins/F-Sy-H` | zsh-f-sy-h 1.67 |
 | `~/.zsh/plugins/cd-ls` | https://github.com/zshzoo/cd-ls/tree/f26c86baf50ca0e92b454753dc6f1d25228e67bf |
 | `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.1.2 |
+| `~/.zsh/plugins/zsh-abbr` | zsh-abbr 5.8.3 |
 | `~/.zsh/plugins/zsh-ssh` | https://github.com/sunlei/zsh-ssh/tree/f73b78bc8f0b40dc939e2819348b83afada09ba9 |
