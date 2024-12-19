@@ -37,4 +37,5 @@ Your package manager may have it under the same name.
 | `~/.zsh/plugins/cd-ls` | https://github.com/zshzoo/cd-ls/tree/f26c86baf50ca0e92b454753dc6f1d25228e67bf |
 | `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.1.2 |
 | `~/.zsh/plugins/zsh-abbr` | zsh-abbr 5.8.3 |
+| `~/.zsh/plugins/zsh-autopair` | https://github.com/hlissner/zsh-autopair/tree/449a7c3d095bc8f3d78cf37b9549f8bb4c383f3d |
 | `~/.zsh/plugins/zsh-ssh` | https://github.com/sunlei/zsh-ssh/tree/f73b78bc8f0b40dc939e2819348b83afada09ba9 |
