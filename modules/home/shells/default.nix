@@ -1,12 +1,18 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  lib,
+  config,
+  ...
+}:
 {
   config = {
     home.shellAliases = {
       g = "git";
       l = "ls";
       ll = "ls -la";
-      cat = "${pkgs.bat}/bin/bat";
-      lg = "${pkgs.lazygit}/bin/lazygit";
+      cat = "bat";
+      lg = "lazygit";
       cd = "z";
     };
 
@@ -15,6 +21,15 @@
       enableCompletion = true;
       autocd = true;
       autosuggestion.enable = true;
+
+      zsh-abbr.enable = true;
+      zsh-abbr.abbreviations =
+        with lib;
+        config.home.shellAliases
+        // config.programs.zsh.shellAliases
+        // (concatMapAttrs (n: v: { "git ${n}" = "git ${v}"; }) (
+          filterAttrs (n: v: !hasPrefix "!" v) config.programs.git.aliases
+        ));
 
       plugins = [
         {
