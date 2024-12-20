@@ -10,4 +10,5 @@
       config.color_scheme = "Catppuccin Mocha"
     '';
 
+  programs.bat.config.theme = "Catppuccin Mocha";
 }
