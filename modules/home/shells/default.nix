@@ -6,6 +6,8 @@
   ...
 }:
 {
+  imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./zsh-plugins);
+
   config = {
     home.shellAliases = {
       g = "git";
@@ -22,36 +24,7 @@
       autocd = true;
       autosuggestion.enable = true;
 
-      zsh-abbr.enable = true;
-      zsh-abbr.abbreviations =
-        with lib;
-        config.home.shellAliases
-        // config.programs.zsh.shellAliases
-        // (concatMapAttrs (n: v: { "git ${n}" = "git ${v}"; }) (
-          filterAttrs (n: v: !hasPrefix "!" v) config.programs.git.aliases
-        ));
-
       plugins = [
-        {
-          name = "fzf-tab";
-          src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
-        }
-        {
-          name = "F-Sy-H";
-          src = "${pkgs.zsh-f-sy-h}/share/zsh/site-functions";
-        }
-        {
-          name = "cd-ls";
-          src = inputs.zsh-cd-ls;
-        }
-        {
-          name = "zsh-ssh";
-          src = inputs.zsh-ssh;
-        }
-        {
-          name = "zsh-autopair";
-          src = inputs.zsh-autopair;
-        }
       ];
     };
     programs.bash = {
