@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  my-servers = {
+  myHosts = {
     nas.hostnames = [
       "10.144.70.159" # ZeroTier
       "100.120.117.10" # Tailscale
@@ -44,7 +44,17 @@ in
 
       matchBlocks =
         with lib;
-        attrsets.concatMapAttrs (
+        let
+          allHosts = naturalSort (
+            concatLists (mapAttrsToList (name: { hostnames, ... }: [ name ] ++ hostnames) myHosts)
+          );
+        in
+        {
+          ${concatStringsSep " " allHosts} = {
+            forwardAgent = true;
+          };
+        }
+        // concatMapAttrs (
           host:
           {
             hostnames ? [ ],
@@ -53,12 +63,8 @@ in
             ${host} = {
               hostname = (builtins.head hostnames);
             };
-
-            "${host} ${strings.concatStringsSep " " hostnames}" = {
-              forwardAgent = true;
-            };
           }
-        ) my-servers;
+        ) myHosts;
     };
   };
 }
