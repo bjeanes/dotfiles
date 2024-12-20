@@ -6,18 +6,18 @@ for profile in ${(z)NIX_PROFILES}; do
   fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
 done
 
-path+="$HOME/.zsh/plugins/zsh-abbr"
-fpath+="$HOME/.zsh/plugins/zsh-abbr"
-path+="$HOME/.zsh/plugins/fzf-tab"
-fpath+="$HOME/.zsh/plugins/fzf-tab"
-path+="$HOME/.zsh/plugins/F-Sy-H"
-fpath+="$HOME/.zsh/plugins/F-Sy-H"
-path+="$HOME/.zsh/plugins/cd-ls"
-fpath+="$HOME/.zsh/plugins/cd-ls"
 path+="$HOME/.zsh/plugins/zsh-ssh"
 fpath+="$HOME/.zsh/plugins/zsh-ssh"
 path+="$HOME/.zsh/plugins/zsh-autopair"
 fpath+="$HOME/.zsh/plugins/zsh-autopair"
+path+="$HOME/.zsh/plugins/fzf-tab"
+fpath+="$HOME/.zsh/plugins/fzf-tab"
+path+="$HOME/.zsh/plugins/cd-ls"
+fpath+="$HOME/.zsh/plugins/cd-ls"
+path+="$HOME/.zsh/plugins/F-Sy-H"
+fpath+="$HOME/.zsh/plugins/F-Sy-H"
+path+="$HOME/.zsh/plugins/zsh-abbr"
+fpath+="$HOME/.zsh/plugins/zsh-abbr"
 
 # Oh-My-Zsh/Prezto calls compinit during initialization,
 # calling it twice causes slight start up slowdown
@@ -30,23 +30,23 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 
 
-if [[ -f "$HOME/.zsh/plugins/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh"
-fi
 if [[ -f "$HOME/.zsh/plugins/zsh-ssh/zsh-ssh.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/zsh-ssh/zsh-ssh.plugin.zsh"
 fi
 if [[ -f "$HOME/.zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh"
+fi
+if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
+fi
+if [[ -f "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh"
+fi
+if [[ -f "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh"
+fi
+if [[ -f "$HOME/.zsh/plugins/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.plugin.zsh"
 fi
 
 
