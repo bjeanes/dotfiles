@@ -43,14 +43,6 @@ in
       ];
 
       matchBlocks =
-        let
-          extraOptions = {
-            # Works around https://github.com/sunlei/zsh-ssh/issues/34 by
-            # tricking Home Manager into outputting blank lines between Host
-            # entries
-            "" = "";
-          };
-        in
         with lib;
         attrsets.concatMapAttrs (
           host:
@@ -60,12 +52,10 @@ in
           {
             ${host} = {
               hostname = (builtins.head hostnames);
-              inherit extraOptions;
             };
 
             "${host} ${strings.concatStringsSep " " hostnames}" = {
               forwardAgent = true;
-              inherit extraOptions;
             };
           }
         ) my-servers;

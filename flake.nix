@@ -93,11 +93,6 @@
       flake = false;
     };
 
-    zsh-ssh = {
-      url = "github:sunlei/zsh-ssh";
-      flake = false;
-    };
-
     zsh-autopair = {
       url = "github:hlissner/zsh-autopair";
       flake = false;
