@@ -6,6 +6,8 @@ for profile in ${(z)NIX_PROFILES}; do
   fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
 done
 
+path+="$HOME/.zsh/plugins/zsh-vi-mode"
+fpath+="$HOME/.zsh/plugins/zsh-vi-mode"
 path+="$HOME/.zsh/plugins/zsh-ssh"
 fpath+="$HOME/.zsh/plugins/zsh-ssh"
 path+="$HOME/.zsh/plugins/zsh-autopair"
@@ -30,6 +32,9 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 
 
+if [[ -f "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+fi
 if [[ -f "$HOME/.zsh/plugins/zsh-ssh/zsh-ssh.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/zsh-ssh/zsh-ssh.plugin.zsh"
 fi
