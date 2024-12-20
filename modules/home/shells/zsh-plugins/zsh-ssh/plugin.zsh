@@ -23,11 +23,15 @@ SSH_CONFIG_FILE="${SSH_CONFIG_FILE:-$HOME/.ssh/config}"
 
 function _zsh_ssh_config_process_includes {
   local file="${1:-$SSH_CONFIG_FILE}"
+  if [[ ! -r "$file" ]]; then
+    return
+  fi
   while IFS= read -r line; do
     if echo "$line" | grep -iq '^[[:space:]]*Include[[:space:]]\+'; then
       local includes=($(echo "$line" | sed -E 's/^[[:space:]]*Include[[:space:]]+//I; s/[[:space:]]+/ /g'))
       for include in "${includes[@]}"; do
-        for included_file in $~include; do
+        eval "included_files=($include)" 2>/dev/null
+        for included_file in "${included_files[@]}"; do
           _zsh_ssh_config_process_includes "$included_file"
         done
       done
