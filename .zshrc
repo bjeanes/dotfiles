@@ -36,8 +36,8 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 if [[ -f "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 fi
-if [[ -f "$HOME/.zsh/plugins/zsh-ssh/zsh-ssh.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/zsh-ssh/zsh-ssh.plugin.zsh"
+if [[ -f "$HOME/.zsh/plugins/zsh-ssh/plugin.zsh" ]]; then
+  source "$HOME/.zsh/plugins/zsh-ssh/plugin.zsh"
 fi
 if [[ -f "$HOME/.zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh"
