@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{ pkgs
+, inputs
+, system
+, ...
+}:
 let
   adminGroup = if pkgs.stdenv.isDarwin then "admin" else "wheel";
 in
@@ -40,5 +44,9 @@ in
         ];
       };
     };
+
+    environment.systemPackages = [
+      inputs.agenix.packages.${system}.default
+    ];
   };
 }

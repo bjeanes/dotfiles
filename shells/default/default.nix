@@ -1,14 +1,23 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  system,
+  ...
+}:
 
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
-    inputs.self.packages.${system}.nvim
-    treefmt
-    alejandra
-    python310Packages.mdformat
-    shfmt
-    inputs.nil.packages.${system}.nil
-    inputs.snowfall-flake.packages.${system}.flake
-    inputs.nixos-generators.packages.${system}.nixos-generate
-  ];
+  nativeBuildInputs =
+    (with pkgs; [
+      treefmt
+      alejandra
+      python310Packages.mdformat
+      shfmt
+    ])
+    ++ (with inputs; [
+      self.packages.${system}.nvim
+      nil.packages.${system}.nil
+      snowfall-flake.packages.${system}.flake
+      nixos-generators.packages.${system}.nixos-generate
+      agenix.packages.${system}.default
+    ]);
 }

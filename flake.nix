@@ -11,6 +11,9 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    agenix.url = "github:yaxitech/ragenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     lix-module = {
@@ -101,6 +104,19 @@
 
   outputs =
     inputs:
+    let
+      secrets = { lib, ... }: {
+        age.secrets = with lib;
+          listToAttrs (map
+            (name: {
+              name = removeSuffix ".age" name;
+              value = {
+                file = (snowfall.fs.get-file "secrets/${name}");
+              };
+            })
+            (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix"))));
+      };
+    in
     (inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
@@ -116,15 +132,22 @@
         lix-module.overlays.default
       ];
 
-      systems.modules.darwin = [ ];
+      systems.modules.darwin = with inputs; [
+        agenix.darwinModules.default
+        secrets
+      ];
 
       systems.modules.nixos = with inputs; [
         catppuccin.nixosModules.catppuccin
+        agenix.nixosModules.default
+        secrets
       ];
 
       homes.modules = with inputs; [
         _1password-shell-plugins.hmModules.default
         catppuccin.homeManagerModules.catppuccin
+        agenix.homeManagerModules.default
+        secrets
       ];
 
       alias = {

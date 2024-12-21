@@ -1,10 +1,11 @@
 # OptiPlex 7070 SFF
 #
 {
-  pkgs,
+  config,
   inputs,
-  system,
   lib,
+  pkgs,
+  system,
   ...
 }:
 {
@@ -37,6 +38,10 @@
 
   services.tailscale = {
     enable = true;
+    authKeyFile = config.age.secrets.tailscale-auth.path;
+    extraUpFlags = [
+      "--advertise-tags=tag:home,tag:server"
+    ];
   };
 
   services.zerotierone = {
