@@ -2,7 +2,7 @@
 let
   myHosts =
     lib.concatMapAttrs
-      (host: { addresses ? [ ], aliases ? [ ] }: {
+      (host: { addresses ? [ ], aliases ? [ ], ... }: {
         "${lib.concatStringsSep " " ([host] ++ aliases)}" = {
           hostnames = addresses;
         };
