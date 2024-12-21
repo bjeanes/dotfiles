@@ -13,6 +13,7 @@
 
   imports = [
     ./hardware-configuration.nix
+    ./nas-nfs.nix
   ];
 
   system.stateVersion = "24.11";
