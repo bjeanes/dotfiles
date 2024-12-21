@@ -32,6 +32,7 @@
     hashedPasswordFile = config.age.secrets.default-password.path;
   };
 
+  networking.hostId = "cc8e939c";
   networking.networkmanager.enable = true;
 
   services.openssh.enable = true;
