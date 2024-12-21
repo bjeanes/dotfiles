@@ -1,19 +1,17 @@
 # OptiPlex 7070 SFF
 #
-{
-  config,
-  inputs,
-  lib,
-  pkgs,
-  system,
-  ...
+{ config
+, inputs
+, lib
+, pkgs
+, system
+, ...
 }:
 {
   snowfallorg.users.bjeanes = { };
 
   imports = [
     ./hardware-configuration.nix
-    ./nas-nfs.nix
   ];
 
   system.stateVersion = "24.11";
