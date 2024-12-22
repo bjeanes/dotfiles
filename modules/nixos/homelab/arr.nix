@@ -1,10 +1,9 @@
 { lib, config, ... }:
 let
-  cfg = config.homelab;
   mkArr = name: serviceConfig:
     let
       backend = config.virtualisation.oci-containers.backend;
-      cfg = cfg.services.${name};
+      cfg = config.homelab.services.${name};
       configDir = "/var/lib/homelab/${name}";
       uid = lib.mkIf (builtins.isInt cfg.user) cfg.user (config.users.users."${cfg.user}".uid);
       gid = lib.mkIf (builtins.isInt cfg.group) cfg.group (config.users.group."${cfg.group}".gid);
