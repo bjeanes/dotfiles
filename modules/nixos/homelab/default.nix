@@ -7,7 +7,7 @@ let
   };
 in
 {
-  imports = [ (lib.snowfall.fs.get-non-default-nix-files-recursive ./.) ];
+  imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./.);
 
   options = {
     timeZone = lib.mkOption {
