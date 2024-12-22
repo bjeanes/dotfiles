@@ -43,6 +43,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim";
 
@@ -138,6 +143,7 @@
       ];
 
       systems.modules.nixos = with inputs; [
+        comin.nixosModules.comin
         catppuccin.nixosModules.catppuccin
         agenix.nixosModules.default
         secrets

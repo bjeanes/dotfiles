@@ -120,6 +120,26 @@
         "type": "github"
       }
     },
+    "comin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1731534082,
+        "narHash": "sha256-n8yVzBixxaj0Qn6SV655t6QUtKSOJ+sR4AEoq0Vqb/0=",
+        "owner": "nlewo",
+        "repo": "comin",
+        "rev": "9afca855518f79b5bff3d2a9663b2e6f81dd361a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nlewo",
+        "repo": "comin",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1725409566,
@@ -906,6 +926,7 @@
         "_1password-shell-plugins": "_1password-shell-plugins",
         "agenix": "agenix",
         "catppuccin": "catppuccin",
+        "comin": "comin",
         "darwin": "darwin_2",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager_2",
