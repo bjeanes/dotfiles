@@ -87,7 +87,6 @@ let
             } // lib.optionalAttrs cfg.tailscale.enable {
               "${name}-tailscale" = {
                 enable = true;
-                network = "homelab";
               };
             };
           };
