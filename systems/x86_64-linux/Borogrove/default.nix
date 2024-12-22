@@ -36,4 +36,7 @@
   networking.networkmanager.enable = true;
 
   services.glances.enable = true;
+
+  homelab.sonarr.enable = true;
+  virtualisation.oci-containers.backend = "docker";
 }
