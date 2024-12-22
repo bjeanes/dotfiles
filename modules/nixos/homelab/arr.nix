@@ -1,6 +1,6 @@
 { lib, config, ... }:
 let
-  mkArr = name: serviceConfig:
+  mkArr = name: config: serviceConfig:
     {
       options.homelab = {
         "services.${name}" = {
@@ -97,7 +97,7 @@ let
 in
 {
   imports = [
-    (mkArr "sonarr" { })
-    (mkArr "radarr" { })
+    (mkArr "sonarr" config { })
+    (mkArr "radarr" config { })
   ];
 }
