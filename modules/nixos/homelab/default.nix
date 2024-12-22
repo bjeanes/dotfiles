@@ -1,4 +1,4 @@
-{ lib, config }:
+{ lib, config, ... }:
 let
   # https://github.com/NixOS/nixpkgs/blob/1c6e20d/nixos/modules/config/locale.nix#L11C2-L13C5
   nospace = str: lib.filter (c: c == " ") (lib.stringToCharacters str) == [ ];
