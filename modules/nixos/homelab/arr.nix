@@ -162,7 +162,8 @@ let
                 };
                 script = ''
                   set -eu
-                  ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${name}/
+                  ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
+                    ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${name}/
                 '';
               };
             })
