@@ -40,14 +40,14 @@ let
     {
       options.homelab.services.${name} = {
         enable = lib.mkOption {
-          default = false;
+          default = config.homelab.services.arrs.enable;
           type = lib.types.bool;
           description = "Enable ${name}";
         };
 
         tailscale = {
           enable = lib.mkOption {
-            default = config.homelab.tailscale.enable;
+            default = config.homelab.services.arrs.tailscale.enable;
             type = lib.types.bool;
             description = "Enable Tailscale for ${name}";
           };
@@ -245,4 +245,20 @@ in
       needsMedia = false;
     })
   ];
+
+  options.homelab.services.arrs = {
+    enable = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = "Enable the *arr suite";
+    };
+
+    tailscale = {
+      enable = lib.mkOption {
+        default = config.homelab.tailscale.enable;
+        type = lib.types.bool;
+        description = "Enable Tailscale for enabled *arr software, by default";
+      };
+    };
+  };
 }
