@@ -37,7 +37,12 @@
 
   services.glances.enable = true;
 
-  homelab.services.sonarr.enable = true;
-  homelab.services.radarr.enable = true;
   virtualisation.oci-containers.backend = "docker";
+  homelab.services = {
+    prowlarr.enable = true;
+    sonarr.enable = true;
+    radarr.enable = true;
+    lidarr.enable = true;
+    bazarr.enable = true;
+  };
 }

@@ -7,7 +7,7 @@
 let
   coalesce = val: default: if (val == null) then default else val;
   tsnet = "griffin-climb.ts.net"; # TODO find this a new home
-  mkArr = name: svcCfg: {
+  mkArr = name: { needsMedia ? true, ... }@svcCfg: {
     options.homelab.services.${name} = {
       enable = lib.mkOption {
         default = false;
@@ -87,8 +87,8 @@ let
         users.groups.${cfg.group} = { };
 
         systemd.services = {
-          "${name}" = {
-            requires = [ "nas-media.automount" ];
+          ${name} = {
+            requires = lib.optionals needsMedia [ "nas-media.automount" ];
           };
         };
 
@@ -106,6 +106,8 @@ let
                     "--network=container:${tsName}"
                   ];
                   volumes = [
+                    "${cfg.configDir}:/config"
+                  ] ++ lib.optionals needsMedia [
                     "/nas/media:/data"
                   ];
                   environment = {
@@ -162,7 +164,28 @@ let
 in
 {
   imports = [
+    # TV Shows
     (mkArr "sonarr" { port = 8989; })
+
+    # Movies
     (mkArr "radarr" { port = 7878; })
+
+    # Music
+    (mkArr "lidarr" { port = 8686; })
+
+    # Subtitles
+    (mkArr "bazarr" { port = 6767; })
+
+    # Indexer aggregation
+    (mkArr "prowlarr" { port = 9696; needsMedia = false; })
+
+    # # Managing media requests
+    # (mkArr "overseer" { port = 5055; needsMedia = false; })
+
+    # # Reliably unpacking media
+    # (mkArr "unpackerr" { port = 5656; execAsUser = true; })
+
+    # Subscribe to private tracker IRC announce channels and auto-download certain torrents
+    (mkArr "autobrr" { port = 7474; needsMedia = false; })
   ];
 }
