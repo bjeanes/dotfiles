@@ -10,34 +10,37 @@ in
   imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./.);
 
   options = {
-    timeZone = lib.mkOption {
-      default = config.time.timeZone;
-      type = timezone;
-      description = ''
-        Time zone to be used for the homelab services
-      '';
-    };
+    homelab = {
+      timeZone = lib.mkOption {
+        default = config.time.timeZone;
+        type = timezone;
+        description = ''
+          Time zone to be used for the homelab services
+        '';
+      };
 
-    # user = lib.mkOption {
-    #   type = with lib.types; either int str;
-    #   description = ''
-    #     User to run the homelab services as
-    #   '';
-    # };
+      user = lib.mkOption {
+        default = null;
+        type = with lib.types; nullOr str;
+        description = ''
+          User to run the homelab services as
+        '';
+      };
 
-    group = lib.mkOption {
-      default = "homelab";
-      type = with lib.types; either int str;
-      description = ''
-        Group to run the homelab services as
-      '';
-    };
+      group = lib.mkOption {
+        default = "homelab";
+        type = lib.types.str;
+        description = ''
+          Group to run the homelab services as
+        '';
+      };
 
-    tailscale = {
-      enable = lib.mkOption {
-        default = true;
-        type = lib.types.bool;
-        description = "Enable Tailscale for homelab services";
+      tailscale = {
+        enable = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+          description = "Enable Tailscale for homelab services";
+        };
       };
     };
   };

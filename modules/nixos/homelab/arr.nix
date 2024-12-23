@@ -1,103 +1,122 @@
 { lib, config, ... }:
 let
-  mkArr = name: config: serviceConfig:
-    {
-      options.homelab = {
-        "services.${name}" = {
-          enable = lib.mkOption {
-            default = false;
-            type = lib.types.bool;
-            description = "Enable ${name}";
-          };
+  coalesce = val: default: if (val == null) then default else val;
+  mkArr = name: {
+    options.homelab.services.${name} = {
+      enable = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = "Enable ${name}";
+      };
 
-          tailscale = {
-            enable = lib.mkOption {
-              default = config.homelab.tailscale;
-              type = lib.types.bool;
-              description = "Enable Tailscale for ${name}";
-            };
-          };
-
-          user = lib.mkOption {
-            default = name;
-            type = with lib.types; either int str;
-            description = ''
-              User to run ${name} services as
-            '';
-          };
-
-          group = lib.mkOption {
-            default = config.homelab.group;
-            type = with lib.types; either int str;
-            description = ''
-              Group to run the homelab services as
-            '';
-          };
+      tailscale = {
+        enable = lib.mkOption {
+          default = config.homelab.tailscale.enable;
+          type = lib.types.bool;
+          description = "Enable Tailscale for ${name}";
         };
       };
 
-      config =
-        let
-          backend = config.virtualisation.oci-containers.backend;
-          cfg = config.homelab.services.${name};
-          configDir = "/var/lib/homelab/${name}";
-          uid = lib.mkIf (builtins.isInt cfg.user) cfg.user (config.users.users."${cfg.user}".uid);
-          gid = lib.mkIf (builtins.isInt cfg.group) cfg.group (config.users.group."${cfg.group}".gid);
-        in
-        lib.optionalAttrs cfg.enable {
-          systemd.tmpfiles.rules = map (x: "d ${x} 0775 ${uid} ${gid} - -") [
-            configDir
-          ];
+      user = lib.mkOption {
+        default = coalesce config.homelab.user name;
+        type = lib.types.str;
+        description = ''
+          User to run ${name} services as
+        '';
+      };
 
-          users.users = lib.optionalAttrs (lib.isString cfg.user) {
-            ${cfg.user} = {
-              isSystemUser = true;
-              group = cfg.group;
-            };
-          };
+      group = lib.mkOption {
+        default = config.homelab.group;
+        type = lib.types.str;
+        description = ''
+          Group to run the homelab services as
+        '';
+      };
 
-          # `virtualisation.oci-containers` options don't allow for setting dependencies on non-docker services
-          # But we need this to depend on our NFS mounts to the NAS.
-          systemd.services = {
-            "${backend}-${name}" = {
-              requires = [ "nas-media.automount" ];
-            };
-          };
+      image = lib.mkOption {
+        default = "lscr.io/linuxserver/${name}:latest";
+        type = lib.types.str;
+        description = "Docker image for ${name}";
+      };
 
-          virtualisation.oci-containers = {
-            containers = {
-              ${name} = {
-                image = serviceConfig.image or "lscr.io/linuxserver/${name}:latest";
-                autoStart = true;
-                extraOptions = [
-                  "--pull=newer"
-                ] + lib.options cfg.tailscale.enable [
-                  "--network=container:${name}-tailscale"
-                ];
-                volumes = [
-                  "/nas/media:/data"
-                ];
-                environment = {
-                  TZ = cfg.timeZone;
-                  PUID = uid;
-                  GUID = gid;
-                  UMASK = "002";
-                };
+      configDir = lib.mkOption {
+        default = "/var/lib/homelab/${name}";
+        example = "/var/lib/homelab/${name}";
+        type = lib.types.str;
+        description = "Location to store service config";
+      };
 
-                dependsOn = lib.optionals cfg.tailscale.enable [ "${name}-tailscale" ];
-              } // lib.optionalAttrs cfg.tailscale.enable {
-                "${name}-tailscale" = {
-                  enable = true;
-                };
-              };
-            };
+      timeZone = lib.mkOption {
+        default = config.homelab.timeZone;
+        type = lib.types.str;
+        description = "Time zone for ${name}";
+      };
+    };
+
+    config = lib.mkIf config.homelab.services.${name}.enable (
+      let
+        cfg = config.homelab.services.${name};
+      in
+      {
+        # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
+        systemd.tmpfiles.rules =
+          lib.concatMap
+            (dir: [
+              # Ensure config directory exists, owned by user
+              "d ${dir} 0775 ${cfg.user} ${cfg.group} - -"
+
+              # Ensure directory and contents belong to specified owner and group
+              "Z ${dir} - ${cfg.user} ${cfg.group} - -"
+            ])
+            [
+              cfg.configDir
+            ];
+
+        users.users = {
+          "${cfg.user}" = {
+            isSystemUser = true;
+            group = config.homelab.services.${name}.group;
           };
         };
-    };
+        users.groups.${cfg.group} = { };
+
+        systemd.services = {
+          "${name}" = {
+            requires = [ "nas-media.automount" ];
+          };
+        };
+
+        virtualisation.oci-containers = {
+          containers.${name} = {
+            image = cfg.image;
+            autoStart = true;
+            extraOptions =
+              [
+                "--pull=newer"
+              ]
+              ++ lib.optionals cfg.tailscale.enable [
+                "--network=container:${name}-tailscale"
+              ];
+            volumes = [
+              "/nas/media:/data"
+            ];
+            environment = {
+              TZ = cfg.timeZone;
+              PUID = cfg.user;
+              GUID = cfg.group;
+              UMASK = "002";
+            };
+
+            dependsOn = lib.optionals cfg.tailscale.enable [ "${name}-tailscale" ];
+          };
+        };
+      }
+    );
+  };
 in
 {
   imports = [
-    (mkArr "sonarr" config { })
-    (mkArr "radarr" config { })
+    (mkArr "sonarr")
+    (mkArr "radarr")
   ];
 }
