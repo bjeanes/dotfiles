@@ -33,6 +33,7 @@ let
     name:
     {
       needsMedia ? true,
+      image ? "lscr.io/linuxserver/${name}:latest",
       port,
       ...
     }:
@@ -69,7 +70,7 @@ let
         };
 
         image = lib.mkOption {
-          default = "lscr.io/linuxserver/${name}:latest";
+          default = image;
           type = lib.types.str;
           description = "OCI image for ${name}";
         };
@@ -239,6 +240,7 @@ in
 
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
     (mkArr "autobrr" {
+      image = "ghcr.io/autobrr/autobrr:latest";
       port = 7474;
       needsMedia = false;
     })

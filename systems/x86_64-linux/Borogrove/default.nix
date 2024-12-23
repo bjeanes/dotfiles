@@ -44,5 +44,6 @@
     radarr.enable = true;
     lidarr.enable = false;
     bazarr.enable = false;
+    autobrr.enable = true;
   };
 }
