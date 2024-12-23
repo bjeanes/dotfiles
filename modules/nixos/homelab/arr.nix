@@ -162,7 +162,7 @@ let
                 };
                 script = ''
                   set -eu
-                  ${pkgs.rsync}/bin/rsync -avuP ${lib.escapeShellArg configDir}/* /nas/docker/media/${name}/
+                  ${pkgs.rsync}/bin/rsync -avuP ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${name}/
                 '';
               };
             })
