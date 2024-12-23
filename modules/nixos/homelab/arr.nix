@@ -86,6 +86,12 @@ let
           type = lib.types.str;
           description = "Time zone for ${name}";
         };
+
+        backupToNAS = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+          description = "Back up configDir to legacy location on NAS";
+        };
       };
 
       config =
@@ -143,6 +149,19 @@ let
                 "${svcName name}" = {
                   requires = lib.optionals needsMedia [ "nas-media.automount" ];
                 };
+              };
+            })
+            (lib.mkIf cfg.backupToNAS {
+              systemd.services."backup-${name}-to-NAS" = {
+                requires = [ "nas-docker.automount" ];
+                startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
+                serviceConfig = {
+                  Type = "oneshot";
+                };
+                script = ''
+                  set -eu
+                  ${pkgs.rsync}/bin/rsync -avuP ${lib.escapeShellArg configDir}/* /nas/docker/media/${name}/
+                '';
               };
             })
             (lib.mkIf cfg.tailscale.enable ({
