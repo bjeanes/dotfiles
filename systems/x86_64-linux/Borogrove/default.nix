@@ -42,7 +42,7 @@
     prowlarr.enable = true;
     sonarr.enable = true;
     radarr.enable = true;
-    lidarr.enable = true;
-    bazarr.enable = true;
+    lidarr.enable = false;
+    bazarr.enable = false;
   };
 }
