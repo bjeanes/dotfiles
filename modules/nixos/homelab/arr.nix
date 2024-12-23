@@ -6,147 +6,168 @@
 }:
 let
   coalesce = val: default: if (val == null) then default else val;
-  tsnet = "griffin-climb.ts.net"; # TODO find this a new home
-  mkArr = name: { needsMedia ? true, ... }@svcCfg: {
-    options.homelab.services.${name} = {
-      enable = lib.mkOption {
-        default = false;
-        type = lib.types.bool;
-        description = "Enable ${name}";
-      };
+  svcName = name: "${config.virtualisation.oci-containers.backend}-${name}";
 
-      tailscale = {
-        enable = lib.mkOption {
-          default = config.homelab.tailscale.enable;
-          type = lib.types.bool;
-          description = "Enable Tailscale for ${name}";
-        };
-      };
+  # Some images expect secrets as ENV vars, but
+  # `virtualisation.oci-containers.containers.*` does not have API surface area
+  # for doing this. To avoid overridng `entrypoint` on arbitrary images (which
+  # may depend on their entrypoint), this takes advantage of the way that NixOS
+  # creates systemd services for each Docker container, and modifies the start
+  # script and the container definition to allow setting the environment
+  # variable to a value from a file, before allowing the container to inherit
+  # it.
+  setEnvFromFilesForContainer =
+    name: vars: with lib; {
+      # Add `-e VAR` to add var to container from context environment
+      virtualisation.oci-containers.containers.${name}.extraOptions = map (n: "-e=${escapeShellArg n}") (
+        builtins.attrNames vars
+      );
 
-      user = lib.mkOption {
-        default = coalesce config.homelab.user name;
-        type = lib.types.str;
-        description = ''
-          User to run ${name} services as
-        '';
-      };
-
-      group = lib.mkOption {
-        default = config.homelab.group;
-        type = lib.types.str;
-        description = ''
-          Group to run the homelab services as
-        '';
-      };
-
-      image = lib.mkOption {
-        default = "lscr.io/linuxserver/${name}:latest";
-        type = lib.types.str;
-        description = "Docker image for ${name}";
-      };
-
-      configDir = lib.mkOption {
-        default = "/var/lib/homelab/${name}";
-        example = "/var/lib/homelab/${name}";
-        type = lib.types.str;
-        description = "Location to store service config";
-      };
-
-      timeZone = lib.mkOption {
-        default = config.homelab.timeZone;
-        type = lib.types.str;
-        description = "Time zone for ${name}";
-      };
+      systemd.services.${svcName name}.script = mkBefore (
+        concatStringsSep " \\\n  " (
+          mapAttrsToList (k: v: ''export ${escapeShellArg k}="$(cat ${escapeShellArg v})"'') vars
+        )
+      );
     };
-
-    config =
-      let
-        cfg = config.homelab.services.${name};
-      in
-      (lib.mkIf cfg.enable {
-        # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
-        systemd.tmpfiles.rules =
-          lib.concatMap
-            (dir: [
-              # Ensure config directory exists, owned by user
-              "d ${dir} 0775 ${cfg.user} ${cfg.group} - -"
-
-              # Ensure directory and contents belong to specified owner and group
-              "Z ${dir} - ${cfg.user} ${cfg.group} - -"
-            ])
-            [
-              cfg.configDir
-            ];
-
-        users.users = {
-          "${cfg.user}" = {
-            isSystemUser = true;
-            group = config.homelab.services.${name}.group;
-          };
+  mkArr =
+    name:
+    {
+      needsMedia ? true,
+      port,
+      ...
+    }:
+    {
+      options.homelab.services.${name} = {
+        enable = lib.mkOption {
+          default = false;
+          type = lib.types.bool;
+          description = "Enable ${name}";
         };
-        users.groups.${cfg.group} = { };
 
-        systemd.services = {
-          ${name} = {
-            requires = lib.optionals needsMedia [ "nas-media.automount" ];
+        tailscale = {
+          enable = lib.mkOption {
+            default = config.homelab.tailscale.enable;
+            type = lib.types.bool;
+            description = "Enable Tailscale for ${name}";
           };
         };
 
-        virtualisation.oci-containers =
-          let
-            tsName = "${name}-tailscale";
-          in
-          {
-            containers =
-              {
+        user = lib.mkOption {
+          default = coalesce config.homelab.user name;
+          type = lib.types.str;
+          description = ''
+            User to run ${name} services as
+          '';
+        };
+
+        group = lib.mkOption {
+          default = config.homelab.group;
+          type = lib.types.str;
+          description = ''
+            Group to run the homelab services as
+          '';
+        };
+
+        image = lib.mkOption {
+          default = "lscr.io/linuxserver/${name}:latest";
+          type = lib.types.str;
+          description = "OCI image for ${name}";
+        };
+
+        configDir = lib.mkOption {
+          default = "/var/lib/homelab/${name}";
+          example = "/var/lib/homelab/${name}";
+          type = lib.types.str;
+          description = "Location to store service config";
+        };
+
+        timeZone = lib.mkOption {
+          default = config.homelab.timeZone;
+          type = lib.types.str;
+          description = "Time zone for ${name}";
+        };
+      };
+
+      config =
+        let
+          cfg = config.homelab.services.${name};
+          tsnet = "griffin-climb.ts.net";
+          tsName = "${name}-tailscale";
+        in
+        lib.mkIf cfg.enable (
+          lib.mkMerge [
+            {
+              # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
+              systemd.tmpfiles.rules =
+                lib.concatMap
+                  (dir: [
+                    # Ensure config directory exists, owned by user
+                    "d ${dir} 0775 ${cfg.user} ${cfg.group} - -"
+
+                    # Ensure directory and contents belong to specified owner and group
+                    "Z ${dir} - ${cfg.user} ${cfg.group} - -"
+                  ])
+                  [
+                    cfg.configDir
+                  ];
+
+              users.users = {
+                "${cfg.user}" = {
+                  isSystemUser = true;
+                  group = config.homelab.services.${name}.group;
+                };
+              };
+              users.groups.${cfg.group} = { };
+
+              virtualisation.oci-containers = {
+                containers = {
+                  ${name} = {
+                    image = cfg.image;
+                    autoStart = true;
+                    volumes = [ "${cfg.configDir}:/config" ];
+                    environment = {
+                      TZ = cfg.timeZone;
+                      PUID = cfg.user;
+                      GUID = cfg.group;
+                      UMASK = "002";
+                    };
+                  };
+                };
+              };
+            }
+            (lib.optionalAttrs needsMedia {
+              virtualisation.oci-containers.containers.${name}.volumes = [
+                "/nas/media:/data"
+              ];
+              systemd.services = {
+                "${svcName name}" = {
+                  requires = lib.optionals needsMedia [ "nas-media.automount" ];
+                };
+              };
+            })
+            (lib.mkIf cfg.tailscale.enable ({
+              virtualisation.oci-containers.containers = {
+                # Set up main service container to use and depend on the network container for Tailscale
                 ${name} = {
-                  image = cfg.image;
-                  autoStart = true;
                   extraOptions = lib.optionals cfg.tailscale.enable [
                     "--network=container:${tsName}"
                   ];
-                  volumes = [
-                    "${cfg.configDir}:/config"
-                  ] ++ lib.optionals needsMedia [
-                    "/nas/media:/data"
-                  ];
-                  environment = {
-                    TZ = cfg.timeZone;
-                    PUID = cfg.user;
-                    GUID = cfg.group;
-                    UMASK = "002";
-                  };
-
-                  dependsOn = lib.optionals cfg.tailscale.enable [ tsName ];
+                  dependsOn = [ tsName ];
                 };
-              }
-              // lib.optionalAttrs cfg.tailscale.enable {
+
                 ${tsName} =
                   let
-                    secretPath = config.age.secrets.tailscale-auth-service.path;
-                    entrypoint =
-                      # Tailscale docker image only accepts the auth key as an environment variable,
-                      # but we have it exposed as a file via agenix; this custom entrypoint will read
-                      # that file (mounted in) and export the contents as an environmetn variable.
-                      pkgs.writeScript "custom-publish-authkey-entrypoint.sh" # bash
-                        ''
-                          #!/bin/sh
-                          export TS_AUTHKEY="$(cat ${secretPath})";
-                          exec /usr/local/bin/containerboot
-                        '';
                     serve = pkgs.writers.writeJSON "ts-serve.json" {
                       TCP."443".HTTPS = true;
-                      Web."${name}.${tsnet}:443".Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString svcCfg.port}";
+                      Web."${name}.${tsnet}:443".Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString port}";
                     };
                   in
                   {
                     image = "tailscale/tailscale:latest";
+                    hostname = name;
                     volumes = [
-                      "${entrypoint}:/entrypoint.sh"
-                      "${secretPath}:${secretPath}"
                       "${serve}:${serve}"
                     ];
-                    entrypoint = "/entrypoint.sh";
                     extraOptions = [
                       "--cap-add=net_admin"
                       "--cap-add=sys_module"
@@ -158,9 +179,15 @@ let
                     };
                   };
               };
-          };
-      });
-  };
+            }))
+            (lib.mkIf cfg.tailscale.enable (
+              setEnvFromFilesForContainer tsName {
+                TS_AUTHKEY = config.age.secrets.tailscale-auth-service.path;
+              }
+            ))
+          ]
+        );
+    };
 in
 {
   imports = [
@@ -177,7 +204,10 @@ in
     (mkArr "bazarr" { port = 6767; })
 
     # Indexer aggregation
-    (mkArr "prowlarr" { port = 9696; needsMedia = false; })
+    (mkArr "prowlarr" {
+      port = 9696;
+      needsMedia = false;
+    })
 
     # # Managing media requests
     # (mkArr "overseer" { port = 5055; needsMedia = false; })
@@ -186,6 +216,9 @@ in
     # (mkArr "unpackerr" { port = 5656; execAsUser = true; })
 
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
-    (mkArr "autobrr" { port = 7474; needsMedia = false; })
+    (mkArr "autobrr" {
+      port = 7474;
+      needsMedia = false;
+    })
   ];
 }
