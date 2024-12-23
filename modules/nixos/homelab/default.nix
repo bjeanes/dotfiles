@@ -37,7 +37,7 @@ in
 
       tailscale = {
         enable = lib.mkOption {
-          default = true;
+          default = config.services.tailscale.enable;
           type = lib.types.bool;
           description = "Enable Tailscale for homelab services";
         };

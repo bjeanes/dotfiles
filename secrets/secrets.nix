@@ -4,11 +4,19 @@ let
   bjeanes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
 
   users = [ bjeanes ];
-  systems = [ borogrove brillig ];
+  systems = [
+    borogrove
+    brillig
+  ];
 
   all = systems ++ users;
 in
 {
   "default-password.age".publicKeys = all;
-  "tailscale-auth.age".publicKeys = all;
+
+  # non-ephemeral tailscale services tagged with tag:home,tag:server
+  "tailscale-auth-server.age".publicKeys = all;
+
+  # ephemeral tailscale services tagged with tag:home,tag:service
+  "tailscale-auth-service.age".publicKeys = all;
 }
