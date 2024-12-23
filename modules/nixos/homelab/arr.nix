@@ -117,6 +117,8 @@ let
                     cfg.configDir
                   ];
 
+              systemd.services."${svcName name}".aliases = [ "${name}.service" ];
+
               users.users = {
                 "${cfg.user}" = {
                   isSystemUser = true;
