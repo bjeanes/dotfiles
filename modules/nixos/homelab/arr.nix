@@ -2,33 +2,15 @@
   lib,
   config,
   pkgs,
+  namespace,
   ...
 }:
 let
   coalesce = val: default: if (val == null) then default else val;
-  svcName = name: "${config.virtualisation.oci-containers.backend}-${name}";
+  myLib = lib.${namespace};
 
-  # Some images expect secrets as ENV vars, but
-  # `virtualisation.oci-containers.containers.*` does not have API surface area
-  # for doing this. To avoid overridng `entrypoint` on arbitrary images (which
-  # may depend on their entrypoint), this takes advantage of the way that NixOS
-  # creates systemd services for each Docker container, and modifies the start
-  # script and the container definition to allow setting the environment
-  # variable to a value from a file, before allowing the container to inherit
-  # it.
-  setEnvFromFilesForContainer =
-    name: vars: with lib; {
-      # Add `-e VAR` to add var to container from context environment
-      virtualisation.oci-containers.containers.${name}.extraOptions = map (n: "-e=${escapeShellArg n}") (
-        builtins.attrNames vars
-      );
+  setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
 
-      systemd.services.${svcName name}.script = mkBefore (
-        concatStringsSep " \\\n  " (
-          mapAttrsToList (k: v: ''export ${escapeShellArg k}="$(cat ${escapeShellArg v})"'') vars
-        )
-      );
-    };
   mkArr =
     name:
     {
@@ -37,6 +19,9 @@ let
       port,
       ...
     }:
+    let
+      svcName = myLib.containerSvcName config name;
+    in
     {
       options.homelab.services.${name} = {
         enable = lib.mkOption {
@@ -118,7 +103,7 @@ let
                     cfg.configDir
                   ];
 
-              systemd.services."${svcName name}".aliases = [ "${name}.service" ];
+              systemd.services.${svcName}.aliases = [ "${name}.service" ];
 
               users.users = {
                 "${cfg.user}" = {
@@ -149,7 +134,7 @@ let
                 "/nas/media:/data"
               ];
               systemd.services = {
-                "${svcName name}" = {
+                ${svcName} = {
                   requires = lib.optionals needsMedia [ "nas-media.automount" ];
                 };
               };
@@ -222,6 +207,12 @@ in
 
     # Music
     (mkArr "lidarr" { port = 8686; })
+
+    # Books - disabled because it's pretty shit; will look at alternatives
+    # (mkArr "readarr" {
+    #   port = 8787;
+    #   image = "lscr.io/linuxserver/readarr:develop";
+    # })
 
     # Subtitles
     (mkArr "bazarr" { port = 6767; })
