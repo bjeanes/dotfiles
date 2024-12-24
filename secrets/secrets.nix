@@ -19,4 +19,12 @@ in
 
   # ephemeral tailscale services tagged with tag:home,tag:service
   "tailscale-auth-service.age".publicKeys = all;
+
+  "sonarr-api-key.age".publicKeys = all;
+  "radarr-api-key.age".publicKeys = all;
+  "lidarr-api-key.age".publicKeys = all;
+  "prowlarr-api-key.age".publicKeys = all;
+  "homeassistant-api-key.age".publicKeys = all;
+  "plex-token.age".publicKeys = all;
+  "tautulli-api-key.age".publicKeys = all;
 }
