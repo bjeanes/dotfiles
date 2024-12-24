@@ -6,6 +6,7 @@
   ...
 }:
 let
+  tsnet = "griffin-climb.ts.net";
   coalesce = val: default: if (val == null) then default else val;
   myLib = lib.${namespace};
 
@@ -17,12 +18,26 @@ let
       needsMedia ? true,
       image ? "lscr.io/linuxserver/${name}:latest",
       port,
+      module ? (_: { }),
       ...
     }:
     let
       svcName = myLib.containerSvcName config name;
     in
     {
+      imports = [
+        (
+          args:
+          let
+            submodule = (module args);
+          in
+          {
+            options.homelab.services.${name} = submodule.options or { };
+            config = submodule.config or { };
+          }
+        )
+      ];
+
       options.homelab.services.${name} = {
         enable = lib.mkOption {
           default = config.homelab.services.arrs.enable;
@@ -83,7 +98,6 @@ let
       config =
         let
           cfg = config.homelab.services.${name};
-          tsnet = "griffin-climb.ts.net";
           tsName = "${name}-tailscale";
         in
         lib.mkIf cfg.enable (
@@ -226,8 +240,72 @@ in
     # # Managing media requests
     # (mkArr "overseer" { port = 5055; needsMedia = false; })
 
-    # # Reliably unpacking media
-    # (mkArr "unpackerr" { port = 5656; execAsUser = true; })
+    # Reliably unpacking media
+    (mkArr "unpackerr" {
+      image = "ghcr.io/unpackerr/unpackerr:latest";
+      port = 5656;
+      module =
+        { config, lib, ... }:
+        let
+          svcs = [
+            "sonarr"
+            "radarr"
+            "lidarr"
+            # "readarr"
+          ];
+          cfg = config.homelab.services.unpackerr;
+        in
+        {
+          options = lib.mergeAttrsList (
+            lib.map (arr: {
+              ${arr} = {
+                enable = lib.mkOption {
+                  default = config.homelab.services.${arr}.enable;
+                  type = lib.types.bool;
+                  description = "Enable unpackerr on ${arr}";
+                };
+
+                url = lib.mkOption {
+                  default =
+                    if config.homelab.services.${arr}.tailscale.enable then "https://${arr}.${tsnet}" else null;
+                  type = lib.types.str;
+                  description = "URL for Unpacker to use for ${arr}";
+                };
+
+                apiKeyFile = lib.mkOption {
+                  default = config.age.secrets."${arr}-api-key".path;
+                  type = lib.types.str;
+                  description = "File with contents for Unpacker to use as API key for ${arr}";
+                };
+              };
+            }) svcs
+          );
+
+          config = lib.mkIf cfg.enable (
+            lib.mkMerge (
+              lib.map (
+                arr:
+
+                let
+                  cfg = config.homelab.services.unpackerr.${arr};
+                in
+                lib.mkIf cfg.enable (
+                  lib.mkMerge [
+                    {
+                      virtualisation.oci-containers.containers.unpackerr.environment = lib.traceValSeq {
+                        "UN_${lib.toUpper arr}_0_URL" = cfg.url; # TODO: make this not coupled to Tailscale
+                      };
+                    }
+                    (setEnvFromFilesForContainer "unpackerr" {
+                      "UN_${lib.toUpper arr}_0_API_KEY" = cfg.apiKeyFile;
+                    })
+                  ]
+                )
+              ) svcs
+            )
+          );
+        };
+    })
 
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
     (mkArr "autobrr" {
