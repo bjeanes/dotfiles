@@ -299,7 +299,7 @@ in
                 lib.mkIf cfg.enable (
                   lib.mkMerge [
                     {
-                      virtualisation.oci-containers.containers.unpackerr.environment = lib.traceValSeq {
+                      virtualisation.oci-containers.containers.unpackerr.environment = {
                         "UN_${lib.toUpper arr}_0_URL" = cfg.url; # TODO: make this not coupled to Tailscale
                       };
                     }
