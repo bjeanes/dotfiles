@@ -18,7 +18,7 @@ let
     {
       needsMedia ? true,
       image ? "lscr.io/linuxserver/${name}:latest",
-      port,
+      port ? null,
       module ? (_: { }),
       ...
     }:
@@ -184,6 +184,22 @@ let
                   dependsOn = [ tsName ];
                 };
 
+                ${tsName} = {
+                  image = "tailscale/tailscale:latest";
+                  hostname = name;
+                  extraOptions = [
+                    "--cap-add=net_admin"
+                    "--cap-add=sys_module"
+                  ];
+                  environment = {
+                    TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:service";
+                    TS_HOSTNAME = name;
+                  };
+                };
+              };
+            }))
+            (lib.mkIf (cfg.tailscale.enable && port != null) {
+              virtualisation.oci-containers.containers = {
                 ${tsName} =
                   let
                     serve = pkgs.writers.writeJSON "ts-serve.json" {
@@ -192,23 +208,15 @@ let
                     };
                   in
                   {
-                    image = "tailscale/tailscale:latest";
-                    hostname = name;
                     volumes = [
                       "${serve}:${serve}"
                     ];
-                    extraOptions = [
-                      "--cap-add=net_admin"
-                      "--cap-add=sys_module"
-                    ];
                     environment = {
                       TS_SERVE_CONFIG = "${serve}";
-                      TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:service";
-                      TS_HOSTNAME = name;
                     };
                   };
               };
-            }))
+            })
             (lib.mkIf cfg.tailscale.enable (
               setEnvFromFilesForContainer tsName {
                 TS_AUTHKEY = config.age.secrets.tailscale-auth-service.path;
@@ -250,7 +258,7 @@ in
     # Reliably unpacking media
     (mkArr "unpackerr" {
       image = "ghcr.io/unpackerr/unpackerr:latest";
-      port = 5656;
+      # port = 5656; # this is only for Prometheus metrics, so not using
       module =
         { config, lib, ... }:
         let
