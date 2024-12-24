@@ -11,6 +11,7 @@ let
   myLib = lib.${namespace};
 
   setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
+  setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
 
   mkArr =
     name:
@@ -135,14 +136,20 @@ let
                     volumes = [ "${cfg.configDir}:/config" ];
                     environment = {
                       TZ = cfg.timeZone;
-                      PUID = cfg.user;
-                      GUID = cfg.group;
                       UMASK = "002";
                     };
                   };
                 };
               };
             }
+            # Nix expressions give us no way to derive the UID from a user at
+            # evaluation time, so this delays resolution of user/group names
+            # to UID/GID at service start time, by modifying the
+            # systemd.service record for the docker container.
+            (setEnvFromCommandsForContainer name {
+              PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+              PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+            })
             (lib.optionalAttrs needsMedia {
               virtualisation.oci-containers.containers.${name}.volumes = [
                 "/nas/media:/data"
