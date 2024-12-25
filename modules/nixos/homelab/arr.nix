@@ -21,6 +21,7 @@ let
       port ? null,
       runsAsUser ? false,
       configMount ? "/config",
+      funnel ? false,
       ...
     }:
     let
@@ -207,10 +208,16 @@ let
               virtualisation.oci-containers.containers = {
                 ${tsName} =
                   let
-                    serve = pkgs.writers.writeJSON "ts-serve.json" {
-                      TCP."443".HTTPS = true;
-                      Web."${name}.${tsnet}:443".Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString port}";
-                    };
+                    endpoint = "${name}.${tsnet}:443";
+                    serve = pkgs.writers.writeJSON "ts-serve.json" (
+                      {
+                        TCP."443".HTTPS = true;
+                        Web.${endpoint}.Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString port}";
+                      }
+                      // (lib.optionalAttrs funnel {
+                        AllowFunnel.${endpoint} = true;
+                      })
+                    );
                   in
                   {
                     volumes = [
@@ -263,6 +270,7 @@ in
       port = 5055;
       needsMedia = false;
       configMount = "/app/config";
+      funnel = true;
       # runsAsUser = true;
     })
 
