@@ -285,6 +285,12 @@ in
       port = 7474;
       needsMedia = false;
     })
+
+    (mkArr "tautulli" {
+      image = "ghcr.io/tautulli/tautulli";
+      port = 8181;
+      needsMedia = false;
+    })
   ];
 
   options.homelab.services.arrs = {
