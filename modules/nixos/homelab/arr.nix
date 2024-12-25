@@ -28,7 +28,9 @@ let
       svcName = myLib.containerSvcName config name;
     in
     {
-      imports = builtins.filter (f: lib.snowfall.fs.is-file-kind f) [ ./arr/${name}.nix ];
+      imports = builtins.filter (f: lib.hasSuffix "/${name}.nix" f) (
+        lib.snowfall.fs.get-non-default-nix-files-recursive ./arr
+      );
 
       options.homelab.services.${name} = {
         enable = lib.mkOption {
