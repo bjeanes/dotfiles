@@ -19,6 +19,8 @@ let
       needsMedia ? true,
       image ? "lscr.io/linuxserver/${name}:latest",
       port ? null,
+      runsAsUser ? false,
+      configMount ? "/config",
       ...
     }:
     let
@@ -121,7 +123,7 @@ let
                   ${name} = {
                     image = cfg.image;
                     autoStart = true;
-                    volumes = [ "${cfg.configDir}:/config" ];
+                    volumes = [ "${cfg.configDir}:${configMount}" ];
                     environment = {
                       TZ = cfg.timeZone;
                       UMASK = "002";
@@ -130,14 +132,29 @@ let
                 };
               };
             }
-            # Nix expressions give us no way to derive the UID from a user at
-            # evaluation time, so this delays resolution of user/group names
-            # to UID/GID at service start time, by modifying the
-            # systemd.service record for the docker container.
-            (setEnvFromCommandsForContainer name {
-              PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
-              PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+            (lib.mkIf runsAsUser {
+              virtualisation.oci-containers.containers.${name} = {
+                # FIXME: this causes:
+                #           docker: Error response from daemon: unable to find user overseer: no matching entries in passwd file.
+                #        even though:
+                #           ❯ getent passwd overseerr
+                #           overseerr:x:985:992::/var/empty:/run/current-system/sw/bin/nologin
+                #        I guess this requires it to be in /etc/passwd _in_ the container...
+                #        I might need to do similar thing as `setEnvFromCommandsForContainer` to set the --user arg directly as UID/GID?
+                #        alt: switch to podman which has `--hostuser` option that might allow for this?
+                # user = "${cfg.user}:${cfg.group}";
+              };
             })
+            (lib.mkIf (!runsAsUser) (
+              # Nix expressions give us no way to derive the UID from a user at
+              # evaluation time, so this delays resolution of user/group names
+              # to UID/GID at service start time, by modifying the
+              # systemd.service record for the docker container.
+              setEnvFromCommandsForContainer name {
+                PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+                PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+              }
+            ))
             (lib.optionalAttrs needsMedia {
               virtualisation.oci-containers.containers.${name}.volumes = [
                 "/nas/media:/data"
@@ -240,8 +257,14 @@ in
       needsMedia = false;
     })
 
-    # # Managing media requests
-    # (mkArr "overseer" { port = 5055; needsMedia = false; })
+    # Managing media requests
+    (mkArr "overseerr" {
+      image = "sctx/overseerr:latest";
+      port = 5055;
+      needsMedia = false;
+      configMount = "/app/config";
+      # runsAsUser = true;
+    })
 
     # Reliably unpacking media
     (mkArr "unpackerr" {
