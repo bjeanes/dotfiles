@@ -18,9 +18,7 @@ rec {
       );
 
       systemd.services."${containerSvcName config name}".script = mkBefore (
-        concatStringsSep " \\\n  " (
-          mapAttrsToList (k: cmd: ''export ${escapeShellArg k}="$(${cmd})"'') vars
-        )
+        concatStringsSep "\n" (mapAttrsToList (k: cmd: ''export ${escapeShellArg k}="$(${cmd})"'') vars)
       );
     };
 }
