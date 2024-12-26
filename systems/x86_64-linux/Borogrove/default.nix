@@ -37,6 +37,11 @@
 
   services.glances.enable = true;
 
-  virtualisation.oci-containers.backend = "docker";
   homelab.services.arrs.enable = true;
+
+  virtualisation.oci-containers.backend = "podman";
+  virtualisation.podman = {
+    autoPrune.enable = true;
+    dockerCompat = true;
+  };
 }
