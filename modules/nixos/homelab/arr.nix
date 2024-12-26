@@ -271,6 +271,8 @@ in
       needsMedia = false;
     })
 
+    # Collect statistics about what is getting watched in Plex, so that I can
+    # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
       image = "ghcr.io/tautulli/tautulli";
       port = 8181;
