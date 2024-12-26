@@ -21,6 +21,7 @@ let
       port ? null,
       configMount ? "/config",
       funnel ? false,
+      forceUser ? null,
       ...
     }:
     let
@@ -31,62 +32,65 @@ let
         lib.snowfall.fs.get-non-default-nix-files-recursive ./arr
       );
 
-      options.homelab.services.${name} = {
-        enable = lib.mkOption {
-          default = config.homelab.services.arrs.enable;
-          type = lib.types.bool;
-          description = "Enable ${name}";
-        };
-
-        tailscale = {
+      options.homelab.services.${name} =
+        {
           enable = lib.mkOption {
-            default = config.homelab.services.arrs.tailscale.enable;
+            default = config.homelab.services.arrs.enable;
             type = lib.types.bool;
-            description = "Enable Tailscale for ${name}";
+            description = "Enable ${name}";
           };
-        };
 
-        user = lib.mkOption {
-          default = coalesce config.homelab.user name;
-          type = lib.types.str;
-          description = ''
-            User to run ${name} services as
-          '';
-        };
+          tailscale = {
+            enable = lib.mkOption {
+              default = config.homelab.services.arrs.tailscale.enable;
+              type = lib.types.bool;
+              description = "Enable Tailscale for ${name}";
+            };
+          };
 
-        group = lib.mkOption {
-          default = config.homelab.group;
-          type = lib.types.str;
-          description = ''
-            Group to run the homelab services as
-          '';
-        };
+          image = lib.mkOption {
+            default = image;
+            type = lib.types.str;
+            description = "OCI image for ${name}";
+          };
 
-        image = lib.mkOption {
-          default = image;
-          type = lib.types.str;
-          description = "OCI image for ${name}";
-        };
+          configDir = lib.mkOption {
+            default = "/var/lib/homelab/${name}";
+            example = "/var/lib/homelab/${name}";
+            type = lib.types.str;
+            description = "Location to store service config";
+          };
 
-        configDir = lib.mkOption {
-          default = "/var/lib/homelab/${name}";
-          example = "/var/lib/homelab/${name}";
-          type = lib.types.str;
-          description = "Location to store service config";
-        };
+          timeZone = lib.mkOption {
+            default = config.homelab.timeZone;
+            type = lib.types.str;
+            description = "Time zone for ${name}";
+          };
 
-        timeZone = lib.mkOption {
-          default = config.homelab.timeZone;
-          type = lib.types.str;
-          description = "Time zone for ${name}";
-        };
+          backupToNAS = lib.mkOption {
+            default = true;
+            type = lib.types.bool;
+            description = "Back up configDir to legacy location on NAS";
+          };
+        }
+        // (lib.optionalAttrs (forceUser == null) {
+          user = lib.mkOption {
+            default = coalesce config.homelab.user name;
+            type = lib.types.str;
+            description = ''
+              User to run ${name} services as
+            '';
+          };
 
-        backupToNAS = lib.mkOption {
-          default = true;
-          type = lib.types.bool;
-          description = "Back up configDir to legacy location on NAS";
-        };
-      };
+          group = lib.mkOption {
+            default = config.homelab.group;
+            type = lib.types.str;
+            description = ''
+              Group to run the homelab services as
+            '';
+          };
+
+        });
 
       config =
         let
@@ -96,29 +100,7 @@ let
         lib.mkIf cfg.enable (
           lib.mkMerge [
             {
-              # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
-              systemd.tmpfiles.rules =
-                lib.concatMap
-                  (dir: [
-                    # Ensure config directory exists, owned by user
-                    "d ${dir} 0775 ${cfg.user} ${cfg.group} - -"
-
-                    # Ensure directory and contents belong to specified owner and group
-                    "Z ${dir} - ${cfg.user} ${cfg.group} - -"
-                  ])
-                  [
-                    cfg.configDir
-                  ];
-
               systemd.services.${svcName}.aliases = [ "${name}.service" ];
-
-              users.users = {
-                "${cfg.user}" = {
-                  isSystemUser = true;
-                  group = config.homelab.services.${name}.group;
-                };
-              };
-              users.groups.${cfg.group} = { };
 
               virtualisation.oci-containers = {
                 containers = {
@@ -134,14 +116,46 @@ let
                 };
               };
             }
-            # Nix expressions give us no way to derive the UID from a user at
-            # evaluation time, so this delays resolution of user/group names
-            # to UID/GID at service start time, by modifying the
-            # systemd.service record for the docker container.
-            (setEnvFromCommandsForContainer name {
-              PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
-              PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
-            })
+            {
+              # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
+              systemd.tmpfiles.rules =
+                with lib;
+                let
+                  user = if forceUser == null then cfg.user else head (splitString ":" forceUser);
+                  group = if forceUser == null then cfg.group else head (reverseList (splitString ":" forceUser));
+                in
+                concatMap
+                  (dir: ([
+                    # Ensure config directory exists, owned by user
+                    "d ${dir} 0775 ${user} ${group} - -"
+
+                    # Ensure directory and contents belong to specified owner and group
+                    "Z ${dir} - ${user} ${group} - -"
+                  ]))
+                  [
+                    cfg.configDir
+                  ];
+            }
+            (lib.optionalAttrs (forceUser == null) (
+              {
+                users.users = {
+                  "${cfg.user}" = {
+                    isSystemUser = true;
+                    group = config.homelab.services.${name}.group;
+                  };
+                };
+                users.groups.${cfg.group} = { };
+              }
+              //
+                # Nix expressions give us no way to derive the UID from a user at
+                # evaluation time, so this delays resolution of user/group names
+                # to UID/GID at service start time, by modifying the
+                # systemd.service record for the docker container.
+                (setEnvFromCommandsForContainer name {
+                  PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+                  PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+                })
+            ))
             (lib.optionalAttrs needsMedia {
               virtualisation.oci-containers.containers.${name}.volumes = [
                 "/nas/media:/data"
@@ -284,6 +298,13 @@ in
       port = 6246;
       needsMedia = false;
       configMount = "/opt/data";
+      forceUser = "1000:1000";
+    })
+
+    (mkArr "recyclarr" {
+      image = "ghcr.io/recyclarr/recyclarr:latest";
+      needsMedia = false;
+      forceUser = "1000:1000";
     })
   ];
 
