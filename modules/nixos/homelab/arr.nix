@@ -108,6 +108,7 @@ let
                     image = cfg.image;
                     autoStart = true;
                     volumes = [ "${cfg.configDir}:${configMount}" ];
+                    extraOptions = [ "--pull=always" ];
                     environment = {
                       TZ = cfg.timeZone;
                       UMASK = "002";
@@ -184,7 +185,7 @@ let
               virtualisation.oci-containers.containers = {
                 # Set up main service container to use and depend on the network container for Tailscale
                 ${name} = {
-                  extraOptions = lib.optionals cfg.tailscale.enable [
+                  extraOptions = [
                     "--network=container:${tsName}"
                   ];
                   dependsOn = [ tsName ];
@@ -196,6 +197,7 @@ let
                   extraOptions = [
                     "--cap-add=net_admin"
                     "--cap-add=sys_module"
+                    "--pull=always"
                   ];
                   environment = {
                     TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:service";
@@ -288,7 +290,7 @@ in
     # Collect statistics about what is getting watched in Plex, so that I can
     # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
-      image = "ghcr.io/tautulli/tautulli";
+      image = "ghcr.io/tautulli/tautulli:latest";
       port = 8181;
       needsMedia = false;
     })
