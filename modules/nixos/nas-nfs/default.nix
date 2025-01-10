@@ -1,6 +1,6 @@
 { lib, namespace, ... }:
 let
-  nas = lib.${namespace}.hosts.nas.zt;
+  nas = lib.${namespace}.hosts.nas.lan;
   mounts = {
     media = "/volume1/media";
     docker = "/volume1/docker";
