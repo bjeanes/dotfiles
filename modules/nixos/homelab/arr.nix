@@ -142,7 +142,7 @@ let
                 users.users = {
                   "${cfg.user}" = {
                     isSystemUser = true;
-                    group = config.homelab.services.${name}.group;
+                    group = cfg.group;
                   };
                 };
                 users.groups.${cfg.group} = { };
