@@ -6,7 +6,6 @@
   ...
 }:
 let
-  tsnet = "griffin-climb.ts.net";
   coalesce = val: default: if (val == null) then default else val;
   myLib = lib.${namespace};
 
@@ -223,7 +222,7 @@ let
               virtualisation.oci-containers.containers = {
                 ${tsName} =
                   let
-                    endpoint = "${name}.${tsnet}:443";
+                    endpoint = "${name}.${myLib.tailnet}:443";
                     serve = pkgs.writers.writeJSON "ts-serve.json" (
                       {
                         TCP."443".HTTPS = true;
