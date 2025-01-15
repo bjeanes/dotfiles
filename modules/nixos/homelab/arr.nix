@@ -86,7 +86,7 @@ let
             default = config.homelab.group;
             type = lib.types.str;
             description = ''
-              Group to run the homelab services as
+              Group to run the ${name} services as
             '';
           };
 
