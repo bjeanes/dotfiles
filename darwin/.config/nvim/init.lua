@@ -443,6 +443,7 @@ do
             mode = "n",
             options = { desc = "Resume last picker" },
         },
+        { action = "<cmd>Pick files<CR>", key = "<Leader>f", mode = "n", options = { desc = "File picker" } },
         { action = "<Cmd>w<CR>", key = "<Leader>w", mode = "n", options = { desc = "Save" } },
         { action = "<cmd>noh<CR>", key = "<esc>", mode = "n" },
         { action = "y$", key = "Y", mode = "n" },
