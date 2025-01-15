@@ -21,6 +21,10 @@ in
         action = "<cmd>Pick grep_live<CR>";
         options.desc = "Live grep";
       };
+      "<Leader>f" = {
+        action = "<cmd>Pick files<CR>";
+        options.desc = "File picker";
+      };
       "<C-Space>" = {
         action = "<cmd>Pick files<CR>";
         options.desc = "File picker";
