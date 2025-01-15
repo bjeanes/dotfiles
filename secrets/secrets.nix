@@ -27,4 +27,17 @@ in
   "homeassistant-api-key.age".publicKeys = all;
   "plex-token.age".publicKeys = all;
   "tautulli-api-key.age".publicKeys = all;
+
+  "wg-private-key.age".publicKeys = [
+    bjeanes
+    borogrove
+  ];
+  "wg-preshared-key.age".publicKeys = [
+    bjeanes
+    borogrove
+  ];
+  "wg-addresses.age".publicKeys = [
+    bjeanes
+    borogrove
+  ];
 }

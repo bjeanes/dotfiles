@@ -38,6 +38,7 @@
   services.glances.enable = true;
 
   homelab.services.arrs.enable = true;
+  homelab.services.qbittorrent.enable = true;
 
   virtualisation.oci-containers.backend = "podman";
   virtualisation.podman = {
