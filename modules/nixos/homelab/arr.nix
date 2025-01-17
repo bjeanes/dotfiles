@@ -25,7 +25,6 @@ let
     }:
     let
       svcName = myLib.containerSvcName config name;
-      qbLocal = "--add-host=qb.home.bjeanes.com:${myLib.hosts.nas.lan}";
     in
     {
       imports = builtins.filter (f: lib.hasSuffix "/${name}.nix" f) (
@@ -185,13 +184,6 @@ let
                 '';
               };
             })
-            (lib.mkIf (!cfg.tailscale.enable) {
-              virtualisation.oci-containers.containers = {
-                ${name} = {
-                  extraOptions = [ qbLocal ];
-                };
-              };
-            })
             (lib.mkIf cfg.tailscale.enable ({
               virtualisation.oci-containers.containers = {
                 # Set up main service container to use and depend on the network container for Tailscale
@@ -206,7 +198,6 @@ let
                   image = "tailscale/tailscale:latest";
                   hostname = name;
                   extraOptions = [
-                    qbLocal
                     "--cap-add=net_admin"
                     "--cap-add=sys_module"
                     "--pull=always"
