@@ -1,6 +1,4 @@
 {
-  tailnet = "griffin-climb.ts.net";
-
   hosts = {
     nas = rec {
       zt = "10.144.70.159";

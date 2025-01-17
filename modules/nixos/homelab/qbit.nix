@@ -171,10 +171,10 @@ in
 
               qbittorrent-tailscale =
                 let
-                  endpoint = "qbittorrent.${myLib.tailnet}:443";
                   serve = pkgs.writers.writeJSON "ts-serve.json" ({
                     TCP."443".HTTPS = true;
-                    Web.${endpoint}.Handlers."/".Proxy = "http://localhost:${builtins.toString cfg.webUiPort}";
+                    Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy =
+                      "http://localhost:${builtins.toString cfg.webUiPort}";
                   });
                 in
                 {

@@ -222,7 +222,7 @@ let
               virtualisation.oci-containers.containers = {
                 ${tsName} =
                   let
-                    endpoint = "${name}.${myLib.tailnet}:443";
+                    endpoint = "\${TS_CERT_DOMAIN}:443";
                     serve = pkgs.writers.writeJSON "ts-serve.json" (
                       {
                         TCP."443".HTTPS = true;
