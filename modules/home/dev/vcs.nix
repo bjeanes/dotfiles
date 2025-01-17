@@ -2,6 +2,8 @@
 let
   user.name = "Bo Jeanes";
   user.email = "me@bjeanes.com";
+
+  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
 in
 {
   config = {
@@ -74,7 +76,7 @@ in
 
         commit.gpgsign = true;
         gpg.format = "ssh";
-        user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
+        user.signingkey = signingKey;
       };
 
       ignores = [
@@ -116,9 +118,18 @@ in
     # TODO https://gist.github.com/ilyagr/5d6339fb7dac5e7ab06fe1561ec62d45 programs.jujutsu.enable = true;
     programs.jujutsu = {
       enable = true;
+
+      # https://github.com/jj-vcs/jj/blob/main/docs/config.md
       settings = {
         inherit user;
 
+        signing = {
+          sign-all = true;
+          backend = "ssh";
+          key = signingKey;
+        };
+
+        # git.sign-on-push = true;
         diff.tool = "delta";
         ui.pager = "delta";
         ui.diff.format = "git";
