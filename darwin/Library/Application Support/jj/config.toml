@@ -1,6 +1,11 @@
 [diff]
 tool = "delta"
 
+[signing]
+backend = "ssh"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
+sign-all = true
+
 [ui]
 pager = "delta"
 [ui.diff]
