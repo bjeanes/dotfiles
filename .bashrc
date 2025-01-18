@@ -30,6 +30,10 @@ alias lt='eza --tree'
 alias tea='op plugin run -- tea'
 alias vimdiff='nvim -d'
 
+if [[ -n "${GHOSTTY_RESOURCES_DIR}" ]]; then
+  builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
+
 eval "$(zoxide init bash )"
 
 if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
