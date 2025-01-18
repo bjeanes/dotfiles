@@ -11,6 +11,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    ghostty.url = "github:ghostty-org/ghostty";
+    ghostty.inputs.nixpkgs-unstable.follows = "nixpkgs";
+    ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
+
     agenix.url = "github:yaxitech/ragenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -178,8 +182,10 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
+      "https://ghostty.cachix.org"
     ];
     extra-trusted-public-keys = [
+      "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

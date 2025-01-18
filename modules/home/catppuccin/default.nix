@@ -11,4 +11,6 @@
     '';
 
   programs.bat.config.theme = "Catppuccin Mocha";
+
+  programs.ghostty.settings.theme = "dark:catppuccin-mocha,light:catppuccin-latte";
 }
