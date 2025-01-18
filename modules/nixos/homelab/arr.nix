@@ -77,7 +77,7 @@ let
             default = coalesce config.homelab.user name;
             type = lib.types.str;
             description = ''
-              User to run ${name} services as
+              User to run ${name} service as
             '';
           };
 
@@ -85,7 +85,7 @@ let
             default = config.homelab.group;
             type = lib.types.str;
             description = ''
-              Group to run the ${name} services as
+              Group to run the ${name} service as
             '';
           };
 
