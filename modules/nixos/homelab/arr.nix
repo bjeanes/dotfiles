@@ -107,7 +107,7 @@ let
                     image = cfg.image;
                     autoStart = true;
                     volumes = [ "${cfg.configDir}:${configMount}" ];
-                    extraOptions = [ "--pull=always" ];
+                    # extraOptions = [ "--pull=always" ];
                     environment = {
                       TZ = cfg.timeZone;
                       UMASK = "002";
@@ -200,7 +200,7 @@ let
                   extraOptions = [
                     "--cap-add=net_admin"
                     "--cap-add=sys_module"
-                    "--pull=always"
+                    # "--pull=always"
                   ];
                   environment = {
                     TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:service";
