@@ -95,11 +95,16 @@ in
             aliases = [ "qbittorrent-vpn.service" ];
           };
 
+          systemd.services.${myLib.containerSvcName config "qbittorrent-tailscale"} = {
+            aliases = [ "qbittorrent-tailscale.service" ];
+            partOf = [ "qbittorrent.service" ];
+          };
+
           systemd.services.${svcName} = {
             aliases = [ "qbittorrent.service" ];
             requires = [ "nas-media.automount" ];
             after = [ "nas-media.automount" ];
-            bindsTo = [
+            upheldBy = [
               "qbittorrent-vpn.service"
               "nas-media.automount"
             ];
@@ -114,7 +119,8 @@ in
             in
             [
               # Ensure config directory exists, owned by user
-              "d ${cfg.configDir} 0775 ${user} ${group} - -"
+              "d ${cfg.configDir}    0775 ${user} ${group} - -"
+              "d ${cfg.configDir}/ts 0775 ${user} ${group} - -"
 
               # Ensure directory and contents belong to specified owner and group
               "Z ${cfg.configDir} - ${user} ${group} - -"
@@ -191,11 +197,13 @@ in
                   ];
                   volumes = [
                     "${serve}:${serve}"
+                    "${cfg.configDir}/ts:/var/lib/tailscale"
                   ];
                   environment = {
                     TS_SERVE_CONFIG = "${serve}";
-                    TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:service --accept-dns=false";
-                    TS_HOSTNAME = "qbittorrent";
+                    TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:server --accept-dns=false";
+                    TS_HOSTNAME = "qb";
+                    TS_STATE_DIR = "/var/lib/tailscale";
                   };
                 };
             };
@@ -203,7 +211,7 @@ in
         }
 
         (setEnvFromFilesForContainer "qbittorrent-tailscale" {
-          TS_AUTHKEY = config.age.secrets.tailscale-auth-service.path;
+          TS_AUTHKEY = config.age.secrets.tailscale-auth-server.path;
         })
 
         # Nix expressions give us no way to derive the UID from a user at
