@@ -101,7 +101,7 @@ in
               let
                 serve = pkgs.writers.writeJSON "ts-serve.json" ({
                   TCP."443".HTTPS = true;
-                  TCP."22".TCPForward = "localhost:222";
+                  TCP."22".TCPForward = "localhost:2222";
                   Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:3000";
                 });
               in
