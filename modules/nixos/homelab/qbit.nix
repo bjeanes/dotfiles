@@ -7,20 +7,21 @@
   ...
 }:
 let
+  svc = "qbittorrent";
   coalesce = val: default: if (val == null) then default else val;
 in
 {
-  options.homelab.services.qbittorrent = {
+  options.homelab.services.${svc} = {
     enable = lib.mkOption {
       default = false;
       type = lib.types.bool;
-      description = "Enable qbittorrent";
+      description = "Enable ${svc}";
     };
 
     image = lib.mkOption {
       default = "lscr.io/linuxserver/qbittorrent:4.6.7";
       type = lib.types.str;
-      description = "OCI image for qBittorrent";
+      description = "OCI image for ${svc}";
     };
 
     torrentPort = lib.mkOption {
@@ -32,12 +33,12 @@ in
     webUiPort = lib.mkOption {
       default = 8080;
       type = lib.types.port;
-      description = "Port used for qBittorrent's Web UI";
+      description = "Port used for ${svc}'s Web UI";
     };
 
     configDir = lib.mkOption {
-      default = "/var/lib/homelab/qbittorrent";
-      example = "/var/lib/homelab/qbittorrent";
+      default = "/var/lib/homelab/${svc}";
+      example = "/var/lib/homelab/${svc}";
       type = lib.types.str;
       description = "Location to store service config";
     };
@@ -45,14 +46,14 @@ in
     timeZone = lib.mkOption {
       default = config.homelab.timeZone;
       type = lib.types.str;
-      description = "Time zone for qBittorrent";
+      description = "Time zone for ${svc}";
     };
 
     user = lib.mkOption {
-      default = coalesce config.homelab.user "qbittorrent";
+      default = coalesce config.homelab.user svc;
       type = lib.types.str;
       description = ''
-        User to run qbittorrent service as
+        User to run ${svc} service as
       '';
     };
 
@@ -60,12 +61,12 @@ in
       default = config.homelab.group;
       type = lib.types.str;
       description = ''
-        Group to run the qbittorrent service as
+        Group to run the ${svc} service as
       '';
     };
 
     backupToNAS = lib.mkOption {
-      default = false; # TODO until confirmed working correctly
+      default = true;
       type = lib.types.bool;
       description = "Back up configDir to legacy location on NAS";
     };
@@ -74,8 +75,8 @@ in
   config =
     let
       myLib = lib.${namespace};
-      cfg = config.homelab.services.qbittorrent;
-      svcName = myLib.containerSvcName config "qbittorrent";
+      cfg = config.homelab.services.${svc};
+      svcName = myLib.containerSvcName config svc;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
       setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
       secrets = config.age.secrets;
@@ -91,20 +92,20 @@ in
           };
           users.groups.${cfg.group} = { };
 
-          systemd.services.${myLib.containerSvcName config "qbittorrent-vpn"} = {
-            aliases = [ "qbittorrent-vpn.service" ];
+          systemd.services.${myLib.containerSvcName config "${svc}-vpn"} = {
+            aliases = [ "${svc}-vpn.service" ];
           };
 
-          systemd.services.${myLib.containerSvcName config "qbittorrent-tailscale"} = {
-            partOf = [ "qbittorrent.service" ];
+          systemd.services.${myLib.containerSvcName config "${svc}-tailscale"} = {
+            partOf = [ "${svc}.service" ];
           };
 
           systemd.services.${svcName} = {
-            aliases = [ "qbittorrent.service" ];
+            aliases = [ "${svc}.service" ];
             requires = [ "nas-media.automount" ];
             after = [ "nas-media.automount" ];
             upheldBy = [
-              "qbittorrent-vpn.service"
+              "${svc}.service"
               "nas-media.automount"
             ];
             serviceConfig = {
@@ -127,7 +128,7 @@ in
 
           virtualisation.oci-containers = {
             containers = {
-              qbittorrent-vpn = {
+              "${svc}-vpn" = {
                 image = "ghcr.io/qdm12/gluetun:v3";
                 extraOptions = [
                   "--cap-add=net_admin"
@@ -151,17 +152,17 @@ in
                 ];
               };
 
-              qbittorrent = {
+              ${svc} = {
                 image = cfg.image;
                 autoStart = true;
-                dependsOn = [ "qbittorrent-vpn" ];
+                dependsOn = [ "${svc}-vpn" ];
                 volumes = [
                   "${cfg.configDir}:/config"
                   "/nas/media:/data"
                 ];
                 extraOptions = [
                   "--pull=always"
-                  "--network=container:qbittorrent-vpn"
+                  "--network=container:${svc}-vpn"
                   # "--stop-timeout=-1" # -1 is Docker only, but we are running Podman
                   "--stop-timeout=7200" # 2 hours
                 ];
@@ -177,7 +178,23 @@ in
           };
         }
 
-        (myLib.mkTailscaleContainer pkgs config "qbittorrent-tailscale" {
+        (lib.mkIf cfg.backupToNAS {
+          systemd.services."backup-${svc}-to-NAS" = {
+            requires = [ "nas-docker.mount" ];
+            after = [ "nas-docker.mount" ];
+            startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
+            serviceConfig = {
+              Type = "oneshot";
+            };
+            script = ''
+              set -eu
+              ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${svc}/
+            '';
+          };
+        })
+
+        (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
           hostname = "qb";
           serve = {
             TCP."443".HTTPS = true;
@@ -185,10 +202,10 @@ in
               "http://localhost:${builtins.toString cfg.webUiPort}";
           };
           extra = {
-            extraOptions = [ "--network=container:qbittorrent-vpn" ];
+            extraOptions = [ "--network=container:${svc}-vpn" ];
             dependsOn = [
-              "qbittorrent-vpn"
-              "qbittorrent"
+              "${svc}-vpn"
+              svc
             ];
           };
         })
@@ -197,7 +214,7 @@ in
         # evaluation time, so this delays resolution of user/group names
         # to UID/GID at service start time, by modifying the
         # systemd.service record for the docker container.
-        (setEnvFromCommandsForContainer "qbittorrent" {
+        (setEnvFromCommandsForContainer svc {
           PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
           PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
         })
