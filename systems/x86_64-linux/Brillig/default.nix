@@ -35,4 +35,6 @@
 
   networking.hostId = "cc8e939c";
   networking.networkmanager.enable = true;
+
+  homelab.services.plex.enable = true;
 }
