@@ -162,17 +162,16 @@ let
               ];
               systemd.services = {
                 ${svcName} = {
-                  requires = [ "nas-media.automount" ];
-                  bindsTo = [ "nas-media.automount" ];
-                  after = [ "nas-media.automount" ];
+                  requires = [ "nas-media.mount" ];
+                  upheldBy = [ "nas-media.mount" ];
+                  after = [ "nas-media.mount" ];
                 };
               };
             })
             (lib.mkIf cfg.backupToNAS {
               systemd.services."backup-${name}-to-NAS" = {
-                requires = [ "nas-docker.automount" ];
-                bindsTo = [ "nas-docker.automount" ];
-                after = [ "nas-docker.automount" ];
+                requires = [ "nas-docker.mount" ];
+                after = [ "nas-docker.mount" ];
                 startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
                 serviceConfig = {
                   Type = "oneshot";
