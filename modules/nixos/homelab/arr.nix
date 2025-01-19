@@ -183,6 +183,17 @@ let
                 '';
               };
             })
+            (lib.mkIf cfg.tailscale.enable {
+              virtualisation.oci-containers.containers = {
+                # Set up main service container to use and depend on the network container for Tailscale
+                ${name} = {
+                  extraOptions = [
+                    "--network=container:${tsName}"
+                  ];
+                  dependsOn = [ tsName ];
+                };
+              };
+            })
             (lib.mkIf cfg.tailscale.enable (
               myLib.mkTailscaleContainer pkgs config tsName {
                 hostname = name;
