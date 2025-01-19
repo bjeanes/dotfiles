@@ -96,7 +96,6 @@ in
           };
 
           systemd.services.${myLib.containerSvcName config "qbittorrent-tailscale"} = {
-            aliases = [ "qbittorrent-tailscale.service" ];
             partOf = [ "qbittorrent.service" ];
           };
 
@@ -174,44 +173,24 @@ in
                   LOGS_TO_STDOUT = "/config/qBittorrent/logs/qbittorrent.log";
                 };
               };
-
-              qbittorrent-tailscale =
-                let
-                  serve = pkgs.writers.writeJSON "ts-serve.json" ({
-                    TCP."443".HTTPS = true;
-                    Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy =
-                      "http://localhost:${builtins.toString cfg.webUiPort}";
-                  });
-                in
-                {
-                  image = "tailscale/tailscale:latest";
-                  dependsOn = [
-                    "qbittorrent-vpn"
-                    "qbittorrent"
-                  ];
-                  extraOptions = [
-                    "--cap-add=net_admin"
-                    "--cap-add=sys_module"
-                    "--network=container:qbittorrent-vpn"
-                    #"--pull=always"
-                  ];
-                  volumes = [
-                    "${serve}:${serve}"
-                    "${cfg.configDir}/ts:/var/lib/tailscale"
-                  ];
-                  environment = {
-                    TS_SERVE_CONFIG = "${serve}";
-                    TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:server --accept-dns=false";
-                    TS_HOSTNAME = "qb";
-                    TS_STATE_DIR = "/var/lib/tailscale";
-                  };
-                };
             };
           };
         }
 
-        (setEnvFromFilesForContainer "qbittorrent-tailscale" {
-          TS_AUTHKEY = config.age.secrets.tailscale-auth-server.path;
+        (myLib.mkTailscaleContainer pkgs config "qbittorrent-tailscale" {
+          hostname = "qb";
+          serve = {
+            TCP."443".HTTPS = true;
+            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy =
+              "http://localhost:${builtins.toString cfg.webUiPort}";
+          };
+          extra = {
+            extraOptions = [ "--network=container:qbittorrent-vpn" ];
+            dependsOn = [
+              "qbittorrent-vpn"
+              "qbittorrent"
+            ];
+          };
         })
 
         # Nix expressions give us no way to derive the UID from a user at

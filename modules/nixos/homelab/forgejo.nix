@@ -25,6 +25,7 @@ in
       myLib = lib.${namespace};
       svcName = myLib.containerSvcName config svc;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
+      mkTailscaleContainer = myLib.mkTailscaleContainer pkgs config;
     in
     # setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
     # secrets = config.age.secrets;
@@ -43,7 +44,6 @@ in
           systemd.tmpfiles.rules = [
             # Ensure config directory exists, owned by user
             "d ${cfg.configDir}/data   0775 ${svc} homelab - -"
-            "d ${cfg.configDir}/ts     0775 ${svc} homelab - -"
             "d ${cfg.configDir}/pgdata 0775 ${svc} homelab - -"
 
             # Ensure directory and contents belong to specified owner and group
@@ -96,33 +96,6 @@ in
                 "${cfg.configDir}/pgdata-17:/var/lib/postgresql/data"
               ];
             };
-
-            "${svc}-tailscale" =
-              let
-                serve = pkgs.writers.writeJSON "ts-serve.json" ({
-                  TCP."443".HTTPS = true;
-                  TCP."22".TCPForward = "localhost:2222";
-                  Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:3000";
-                });
-              in
-              {
-                image = "tailscale/tailscale:latest";
-                extraOptions = [
-                  "--cap-add=net_admin"
-                  "--cap-add=sys_module"
-                  # "--pull=always"
-                ];
-                volumes = [
-                  "${serve}:${serve}"
-                  "${cfg.configDir}/ts:/var/lib/tailscale"
-                ];
-                environment = {
-                  TS_SERVE_CONFIG = "${serve}";
-                  TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:server";
-                  TS_HOSTNAME = svc;
-                  TS_STATE_DIR = "/var/lib/tailscale";
-                };
-              };
           };
         }
 
@@ -133,6 +106,16 @@ in
         (setEnvFromCommandsForContainer svc {
           USER_UID = "${pkgs.coreutils}/bin/id -u ${svc}";
           GROUP_GID = "${pkgs.getent}/bin/getent group homelab | cut -d: -f3";
+        })
+
+        (mkTailscaleContainer "${svc}-tailscale" {
+          storePath = "${cfg.configDir}/ts";
+          hostname = svc;
+          serve = {
+            TCP."443".HTTPS = true;
+            TCP."22".TCPForward = "localhost:2222";
+            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:2283";
+          };
         })
       ]
     );

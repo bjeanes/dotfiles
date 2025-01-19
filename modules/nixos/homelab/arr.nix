@@ -184,59 +184,28 @@ let
                 '';
               };
             })
-            (lib.mkIf cfg.tailscale.enable ({
-              virtualisation.oci-containers.containers = {
-                # Set up main service container to use and depend on the network container for Tailscale
-                ${name} = {
-                  extraOptions = [
-                    "--network=container:${tsName}"
-                  ];
-                  dependsOn = [ tsName ];
-                };
-
-                ${tsName} = {
-                  image = "tailscale/tailscale:latest";
-                  hostname = name;
-                  extraOptions = [
-                    "--cap-add=net_admin"
-                    "--cap-add=sys_module"
-                    # "--pull=always"
-                  ];
-                  environment = {
-                    TS_EXTRA_ARGS = "--advertise-tags=tag:home,tag:service";
-                    TS_HOSTNAME = name;
-                  };
-                };
-              };
-            }))
-            (lib.mkIf (cfg.tailscale.enable && port != null) {
-              virtualisation.oci-containers.containers = {
-                ${tsName} =
-                  let
-                    endpoint = "\${TS_CERT_DOMAIN}:443";
-                    serve = pkgs.writers.writeJSON "ts-serve.json" (
-                      {
-                        TCP."443".HTTPS = true;
-                        Web.${endpoint}.Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString port}";
-                      }
-                      // (lib.optionalAttrs funnel {
-                        AllowFunnel.${endpoint} = true;
-                      })
-                    );
-                  in
-                  {
-                    volumes = [
-                      "${serve}:${serve}"
-                    ];
-                    environment = {
-                      TS_SERVE_CONFIG = "${serve}";
-                    };
-                  };
-              };
-            })
             (lib.mkIf cfg.tailscale.enable (
-              setEnvFromFilesForContainer tsName {
-                TS_AUTHKEY = config.age.secrets.tailscale-auth-service.path;
+              myLib.mkTailscaleContainer pkgs config tsName {
+                hostname = name;
+                serve = (
+                  lib.optionalAttrs (port != null) (
+                    let
+                      endpoint = "\${TS_CERT_DOMAIN}:443";
+                    in
+                    {
+                      TCP."443".HTTPS = true;
+                      Web.${endpoint}.Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString port}";
+                    }
+                    # the lib.optionalAttrs _shouldn't_ be necessary, but
+                    # because of
+                    # https://github.com/tailscale/tailscale/issues/14682 it
+                    # results in Tailscale dashboard misleadingly saying the
+                    # machine has a funnel.
+                    // (lib.optionalAttrs funnel {
+                      AllowFunnel.${endpoint} = funnel;
+                    })
+                  )
+                );
               }
             ))
           ]
