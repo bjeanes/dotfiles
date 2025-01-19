@@ -27,8 +27,6 @@ in
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
       mkTailscaleContainer = myLib.mkTailscaleContainer pkgs config;
     in
-    # setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
-    # secrets = config.age.secrets;
     lib.mkIf cfg.enable (
       lib.mkMerge [
         {
