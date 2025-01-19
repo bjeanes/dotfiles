@@ -162,9 +162,9 @@ let
               ];
               systemd.services = {
                 ${svcName} = {
-                  requires = [ "nas-media.mount" ];
-                  upheldBy = [ "nas-media.mount" ];
-                  after = [ "nas-media.mount" ];
+                  requires = [ "nas-media.automount" ];
+                  upheldBy = [ "nas-media.automount" ];
+                  after = [ "nas-media.automount" ];
                 };
               };
             })
