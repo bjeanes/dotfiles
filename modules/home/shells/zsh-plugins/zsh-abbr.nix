@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
   programs.zsh = {
-    zsh-abbr.enable = true;
+    zsh-abbr.enable = false;
     zsh-abbr.abbreviations =
       with lib;
       config.home.shellAliases
