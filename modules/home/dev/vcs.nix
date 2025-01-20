@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   user.name = "Bo Jeanes";
   user.email = "me@bjeanes.com";
@@ -29,7 +29,14 @@ in
         c = "commit -v";
         co = "checkout";
         commit = "commit -v";
-        lg = "log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative";
+        lg = lib.concatStringsSep " " [
+          "log --decorate --graph"
+          "--pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'"
+          "--abbrev-commit"
+          "--date=relative"
+          "--decorate-refs-exclude='refs/jj/keep/*'"
+          "--exclude='refs/jj/keep/*'"
+        ];
         st = "status";
         unadd = "reset HEAD";
 
