@@ -84,6 +84,23 @@ in
 
           users.groups.${cfg.group} = { };
 
+          networking.firewall = {
+            allowedTCPPorts = [
+              32400
+              3005
+              8324
+              32469
+            ];
+            allowedUDPPorts = [
+              1900
+              5353
+              32410
+              32412
+              32413
+              32414
+            ];
+          };
+
           systemd.tmpfiles.rules =
             let
               # According to tmpfiles.d man page, we should use C-style escapes here.
