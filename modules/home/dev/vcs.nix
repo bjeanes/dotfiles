@@ -137,6 +137,9 @@ in
         };
 
         # git.sign-on-push = true;
+
+        git.push-new-bookmarks = true; # Don't require --allow-new;
+
         diff.tool = "delta";
         ui.pager = "delta";
         ui.diff.format = "git";
