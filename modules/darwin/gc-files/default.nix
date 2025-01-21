@@ -23,6 +23,24 @@
           '';
         };
 
+      launchd.user.agents.gc-trash =
+        let
+          trash = "$HOME/.Trash";
+          age = "7";
+        in
+        {
+          serviceConfig = {
+            ProcessType = "Background";
+            RunAtLoad = true;
+            StartInterval = 6 * 60 * 60; # every 6 hours
+          };
+
+          script = ''
+            ${find} ${trash} -type f -atime +${age} -print -delete
+            ${find} ${trash} -type d -not -wholename "${trash}" -empty -print -delete
+          '';
+        };
+
       launchd.user.agents.gc-screenshots =
         let
           desktop = "$HOME/Desktop";
