@@ -25,9 +25,6 @@ let
         {
           wantedBy = [ "multi-user.target" ];
           where = "/mnt/nfs/${at}/${name}";
-          automountConfig = {
-            TimeoutIdleSec = "600";
-          };
         }
       ];
     }) mounts);
