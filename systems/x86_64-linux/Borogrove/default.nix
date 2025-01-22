@@ -37,9 +37,12 @@
 
   services.glances.enable = true;
 
-  homelab.services.arrs.enable = true;
-  homelab.services.qbittorrent.enable = true;
-  homelab.services.forgejo.enable = true;
+  homelab.services = {
+    arrs.enable = true;
+    qbittorrent.enable = true;
+    forgejo.enable = true;
+    silverbullet.enable = true;
+  };
 
   virtualisation.oci-containers.backend = "podman";
   virtualisation.podman = {
