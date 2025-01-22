@@ -58,7 +58,7 @@ in
       setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
       secrets = config.age.secrets;
 
-      nasConfigPath = "/nas/docker/media/plex";
+      nasConfigPath = "/mnt/nfs/nas/docker/media/plex";
       pmsPath = "Library/Application Support/Plex Media Server";
       databasePath = "${pmsPath}/Plug-in Support/Databases";
       databaseBackupPath = "${databasePath}/Backups";
@@ -145,7 +145,7 @@ in
 
                   "${transcodePath}:/transcode"
 
-                  "/nas/media:/data"
+                  "/mnt/nfs/nas/media:/data"
 
                   # Mount the config from NAS first, so that big files like media thumbnails and previews are stored on the NAS
                   "${nasConfigPath}:/config"
@@ -175,16 +175,16 @@ in
               aliases = [ "plex.service" ];
 
               requires = [
-                "nas-media.automount"
-                "nas-docker.automount"
+                "mnt-nfs-nas-media.mount"
+                "mnt-nfs-nas-docker.mount"
               ];
               upheldBy = [
-                "nas-media.automount"
-                "nas-docker.automount"
+                "mnt-nfs-nas-media.mount"
+                "mnt-nfs-nas-docker.mount"
               ];
               after = [
-                "nas-media.automount"
-                "nas-docker.automount"
+                "mnt-nfs-nas-media.mount"
+                "mnt-nfs-nas-docker.mount"
               ];
             };
           };
@@ -201,8 +201,8 @@ in
 
         (lib.mkIf cfg.backupToNAS {
           systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "nas-docker.mount" ];
-            after = [ "nas-docker.mount" ];
+            requires = [ "mnt-nfs-nas-docker.mount" ];
+            after = [ "mnt-nfs-nas-docker.mount" ];
             startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
             serviceConfig = {
               Type = "oneshot";
@@ -210,7 +210,7 @@ in
             script = ''
               set -eu
               ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${svc}/
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${svc}/
             '';
           };
         })

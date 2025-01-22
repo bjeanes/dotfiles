@@ -102,11 +102,11 @@ in
 
           systemd.services.${svcName} = {
             aliases = [ "${svc}.service" ];
-            requires = [ "nas-media.automount" ];
-            after = [ "nas-media.automount" ];
+            requires = [ "mnt-nfs-nas-media.mount" ];
+            after = [ "mnt-nfs-nas-media.mount" ];
             upheldBy = [
               "${svc}.service"
-              "nas-media.automount"
+              "mnt-nfs-nas-media.mount"
             ];
             serviceConfig = {
               TimeoutStopSec = lib.mkForce "2h";
@@ -158,7 +158,7 @@ in
                 dependsOn = [ "${svc}-vpn" ];
                 volumes = [
                   "${cfg.configDir}:/config"
-                  "/nas/media:/data"
+                  "/mnt/nfs/nas/media:/data"
                 ];
                 extraOptions = [
                   "--pull=always"
@@ -180,8 +180,8 @@ in
 
         (lib.mkIf cfg.backupToNAS {
           systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "nas-docker.mount" ];
-            after = [ "nas-docker.mount" ];
+            requires = [ "mnt-nfs-nas-docker.mount" ];
+            after = [ "mnt-nfs-nas-docker.mount" ];
             startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
             serviceConfig = {
               Type = "oneshot";
@@ -189,7 +189,7 @@ in
             script = ''
               set -eu
               ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${svc}/
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${svc}/
             '';
           };
         })

@@ -158,20 +158,20 @@ let
             ))
             (lib.optionalAttrs needsMedia {
               virtualisation.oci-containers.containers.${name}.volumes = [
-                "/nas/media:/data"
+                "/mnt/nfs/nas/media:/data"
               ];
               systemd.services = {
                 ${svcName} = {
-                  requires = [ "nas-media.automount" ];
-                  upheldBy = [ "nas-media.automount" ];
-                  after = [ "nas-media.automount" ];
+                  requires = [ "mnt-nfs-nas-media.mount" ];
+                  upheldBy = [ "mnt-nfs-nas-media.mount" ];
+                  after = [ "mnt-nfs-nas-media.mount" ];
                 };
               };
             })
             (lib.mkIf cfg.backupToNAS {
               systemd.services."backup-${name}-to-NAS" = {
-                requires = [ "nas-docker.mount" ];
-                after = [ "nas-docker.mount" ];
+                requires = [ "mnt-nfs-nas-docker.mount" ];
+                after = [ "mnt-nfs-nas-docker.mount" ];
                 startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
                 serviceConfig = {
                   Type = "oneshot";
@@ -179,7 +179,7 @@ let
                 script = ''
                   set -eu
                   ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                    ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /nas/docker/media/${name}/
+                    ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${name}/
                 '';
               };
             })
