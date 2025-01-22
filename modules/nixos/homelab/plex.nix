@@ -114,8 +114,10 @@ in
               "d ${e cfg.configDir}/${e logsPath}     0775 ${cfg.user} ${cfg.group} 4w -" # expire logs
               "d ${e transcodePath}                   0775 ${cfg.user} ${cfg.group} 2d -" # expire transcode artifacts
 
-              # If the databases directory doesn't exist, create it and copy latest from NAS
-              "C ${e cfg.configDir}/${e databasePath} 0775 ${cfg.user} ${cfg.group} - ${nasConfigPath}/${databasePath}"
+              # NOTE: disabled because trying to copy from the network in tmpfiles.d will cause boot to hang indefinitely if the mount isn't ready
+              # # If the databases directory doesn't exist, create it and copy latest from NAS
+              # "C ${e cfg.configDir}/${e databasePath} 0775 ${cfg.user} ${cfg.group} - ${nasConfigPath}/${databasePath}"
+              "d ${e cfg.configDir}/${e databasePath} 0775 ${cfg.user} ${cfg.group} - -" # replacement until I can think of a way to manage this more smoothly, maybe adding a timeout to the tmpfiles service?
 
               # Ensure directory and contents belong to specified owner and group
               "Z ${e cfg.configDir}                   -    ${cfg.user} ${cfg.group} - -"
