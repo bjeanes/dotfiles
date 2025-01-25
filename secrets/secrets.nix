@@ -42,7 +42,4 @@ in
     bjeanes
     borogrove
   ];
-
-  "qbittorrent-password.age".publicKeys = all;
-  "nextdns-api-key.age".publicKeys = all;
 }
