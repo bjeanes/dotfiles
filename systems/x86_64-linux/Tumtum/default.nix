@@ -32,7 +32,7 @@
     hashedPasswordFile = config.age.secrets.default-password.path;
   };
 
-  # networking.hostId = "TODO";
+  networking.hostId = "45fc3250";
   networking.networkmanager.enable = true;
 
   homelab.services.plex.enable = true;

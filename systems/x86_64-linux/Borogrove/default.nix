@@ -33,6 +33,7 @@
     hashedPasswordFile = config.age.secrets.default-password.path;
   };
 
+  networking.hostId = "4942dfbd";
   networking.networkmanager.enable = true;
 
   services.glances.enable = true;
