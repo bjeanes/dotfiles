@@ -11,6 +11,7 @@ Your package manager may have it under the same name.
 | --- | --- |
 | `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | source source |
 | `~/.local/share/dotfiles/bash-preexec` | bash-preexec 0.5.0 |
+| `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main |
 | `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2024-08-14 |
 | `~/.local/share/dotfiles/source` | source source |
 | `~/.local/share/dotfiles/vte` | vte 0.78.2 |
