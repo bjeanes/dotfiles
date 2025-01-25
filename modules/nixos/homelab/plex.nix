@@ -20,6 +20,14 @@ in
       description = "Location to store ${svc} config";
     };
 
+    tailscale = {
+      enable = lib.mkOption {
+        default = config.homelab.tailscale.enable;
+        type = lib.types.bool;
+        description = "Enable Tailscale for ${svc}";
+      };
+    };
+
     timeZone = lib.mkOption {
       default = config.homelab.timeZone;
       type = lib.types.str;
@@ -52,6 +60,7 @@ in
   config =
     let
       cfg = config.homelab.services.${svc};
+      tsName = "${svc}-tailscale";
       myLib = lib.${namespace};
       svcName = myLib.containerSvcName config svc;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
@@ -71,6 +80,38 @@ in
 
       logsPath = "${pmsPath}/Logs";
       transcodePath = "/tmp/plex-transcoding";
+
+      firewallPorts = {
+        tcp = [
+          32400 # PMS
+          # 8324 # Plex for Roku via Plex Companion
+          32469 # Plex DLNA Server
+        ];
+        udp = [
+          1900 # Plex DLNA Server
+          5353 # older Bonjour/Avahi discovery
+          32410 # GDM network discovery
+          32412 # GDM network discovery
+          32413 # GDM network discovery
+          32414 # GDM network discovery
+        ];
+      };
+
+      toDockerPorts =
+        {
+          tcp ? [ ],
+          udp ? [ ],
+        }:
+        let
+          build = proto: port: "${toString port}:${toString port}/${proto}";
+        in
+        (
+
+          (map (build "tcp") tcp) ++ (map (build "udp") udp)
+        );
+
+      dockerPorts = toDockerPorts firewallPorts;
+
     in
     lib.mkIf cfg.enable (
       lib.mkMerge [
@@ -83,23 +124,6 @@ in
           };
 
           users.groups.${cfg.group} = { };
-
-          networking.firewall = {
-            allowedTCPPorts = [
-              32400
-              3005
-              8324
-              32469
-            ];
-            allowedUDPPorts = [
-              1900
-              5353
-              32410
-              32412
-              32413
-              32414
-            ];
-          };
 
           systemd.tmpfiles.rules =
             let
@@ -130,10 +154,6 @@ in
           virtualisation.oci-containers.containers = {
             ${svc} = {
               image = "lscr.io/linuxserver/plex:latest";
-
-              extraOptions = [
-                "--network=host"
-              ];
 
               # TODO: instead of interleaving mounts between local and NAS, have a single
               # MergerFS mount point and regularly move large / irregularly accessed files like
@@ -233,6 +253,42 @@ in
             '';
           };
         })
+
+        (lib.mkIf cfg.tailscale.enable {
+          virtualisation.oci-containers.containers = {
+            # Set up main service container to use and depend on the network container for Tailscale
+            ${svc} = {
+              extraOptions = [
+                "--network=container:${tsName}"
+              ];
+              dependsOn = [ tsName ];
+            };
+          };
+        })
+
+        (lib.mkIf (!cfg.tailscale.enable) {
+          virtualisation.oci-containers.containers = {
+            # Set up main service container to use and depend on the network container for Tailscale
+            ${svc}.ports = dockerPorts;
+          };
+        })
+
+        (lib.mkIf cfg.tailscale.enable (
+          myLib.mkTailscaleContainer pkgs config tsName {
+            hostname = svc;
+            container.ports = dockerPorts;
+            serve = (
+              let
+                endpoint = "\${TS_CERT_DOMAIN}:443";
+              in
+              {
+                TCP."443".HTTPS = true;
+                Web.${endpoint}.Handlers."/".Proxy = "http://127.0.0.1:32400";
+              }
+            );
+          }
+        ))
+
       ]
     );
 
