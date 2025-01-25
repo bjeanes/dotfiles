@@ -220,6 +220,22 @@
         "type": "github"
       }
     },
+    "docker-inspect-run-cmd-fmt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1684261371,
+        "narHash": "sha256-adqfUcFTeie4UwxqJV98qtIvTH+28sjY2o0qHnvjDdY=",
+        "ref": "refs/heads/master",
+        "rev": "d469d2c60eb631fb9e226a6e67d0eb74b11ad0fd",
+        "revCount": 16,
+        "type": "git",
+        "url": "https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -951,6 +967,7 @@
         "catppuccin": "catppuccin",
         "comin": "comin",
         "darwin": "darwin_2",
+        "docker-inspect-run-cmd-fmt": "docker-inspect-run-cmd-fmt",
         "flake-parts": "flake-parts",
         "ghostty": "ghostty",
         "home-manager": "home-manager_2",

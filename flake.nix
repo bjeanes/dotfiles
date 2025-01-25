@@ -15,6 +15,12 @@
     ghostty.inputs.nixpkgs-unstable.follows = "nixpkgs";
     ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
 
+    docker-inspect-run-cmd-fmt = {
+      url = "https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main";
+      flake = false;
+      type = "git";
+    };
+
     agenix.url = "github:yaxitech/ragenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
