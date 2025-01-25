@@ -40,6 +40,37 @@ if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
   eval "$(fzf --bash)"
 fi
 
+# Generic handler to intercept `docker foo` to check if there is a `docker-foo` to call instead.
+# Idea from https://stackoverflow.com/questions/26530234/create-your-own-docker-sub-commands
+docker () {
+  if [ $# -eq 0 ]; then
+    command docker
+    return
+  fi
+
+  local subcmd="$1"
+  shift
+
+
+  if command -v "docker-$subcmd" >/dev/null 2>&1; then
+    docker-$subcmd "$@"
+  else
+    command docker $subcmd "$@"
+  fi
+}
+
+
+# From https://stackoverflow.com/a/38077377/56690
+# Fucking genius.
+docker-describe() {
+  if [ $# -lt 1 ]; then
+    echo "Usage: docker describe CONTAINER"
+    return 1
+  fi
+
+  docker inspect --format "$(cat $HOME/.local/share/dotfiles/docker-inspect-run-cmd-fmt/run.tpl)" "$1"
+}
+
 eval "$(delta --generate-completion bash)"
 
 eval "$(mise activate bash)"
