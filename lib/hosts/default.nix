@@ -26,6 +26,7 @@
     borogrove = rec {
       zt = "10.144.230.45";
       ts = "100.125.176.115";
+      lan = "10.10.10.104";
       addresses = [
         zt
         ts
@@ -35,6 +36,7 @@
     brillig = rec {
       zt = "10.144.152.237";
       ts = "100.86.7.22";
+      lan = "10.10.10.246";
       addresses = [
         zt
         ts
