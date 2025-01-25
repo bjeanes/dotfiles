@@ -11,5 +11,9 @@
 - First time run:
 
   ```sh-session
+  sudo nixos-rebuild switch --flake github:bjeanes/dotfiles#<hostname>
+
+  # or (if hostname already matches one defined)
+
   nix run --extra-experimental-features "nix-command flakes"
   ```
