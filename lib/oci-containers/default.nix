@@ -34,7 +34,7 @@ rec {
         "tag:service"
       ],
       serve ? { },
-      extra ? { },
+      container ? { },
     }:
     with lib;
     mkMerge [
@@ -53,7 +53,7 @@ rec {
         };
       }
       {
-        virtualisation.oci-containers.containers.${name} = extra;
+        virtualisation.oci-containers.containers.${name} = container;
       }
       (mkIf ephemeral {
         virtualisation.oci-containers.containers.${name}.environment = {

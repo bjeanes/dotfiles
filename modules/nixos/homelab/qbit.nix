@@ -201,7 +201,7 @@ in
             Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy =
               "http://localhost:${builtins.toString cfg.webUiPort}";
           };
-          extra = {
+          container = {
             extraOptions = [ "--network=container:${svc}-vpn" ];
             dependsOn = [
               "${svc}-vpn"
