@@ -80,19 +80,11 @@
       inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
     };
 
-    nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
-    nixpkgs-firefox-darwin.inputs.nixpkgs.follows = "nixpkgs";
-
     # nix-index-database.url = "github:nix-community/nix-index-database";
     # nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    phoenix = {
-      url = "git+https://codeberg.org/celenity/Phoenix.git?shallow=1";
-      flake = false;
-    };
 
     nil = {
       url = "github:oxalica/nil";
@@ -114,17 +106,20 @@
   outputs =
     inputs:
     let
-      secrets = { lib, ... }: {
-        age.secrets = with lib;
-          listToAttrs (map
-            (name: {
-              name = removeSuffix ".age" name;
-              value = {
-                file = (snowfall.fs.get-file "secrets/${name}");
-              };
-            })
-            (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix"))));
-      };
+      secrets =
+        { lib, ... }:
+        {
+          age.secrets =
+            with lib;
+            listToAttrs (
+              map (name: {
+                name = removeSuffix ".age" name;
+                value = {
+                  file = (snowfall.fs.get-file "secrets/${name}");
+                };
+              }) (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix")))
+            );
+        };
     in
     (inputs.snowfall-lib.mkFlake {
       inherit inputs;
@@ -137,7 +132,6 @@
       overlays = with inputs; [
         darwin.overlays.default
         snowfall-flake.overlays.default
-        nixpkgs-firefox-darwin.overlay
         lix-module.overlays.default
       ];
 
@@ -164,7 +158,8 @@
         packages.default = "switch";
       };
 
-      outputs-builder = channels:
+      outputs-builder =
+        channels:
         # let
         #   system = channels.nixpkgs.system;
         #   treefmtEval = inputs.treefmt-nix.lib.evalModule channels.nixpkgs ./treefmt.nix;
