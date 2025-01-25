@@ -1,4 +1,4 @@
-# OptiPlex 7070 SFF
+# Intel NUC Hades Canyon
 #
 {
   config,
@@ -21,7 +21,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
   time.timeZone = "Australia/Melbourne";
 
-  users.mutableUsers = true;
   users.users.bjeanes = {
     isNormalUser = true;
     group = "users";
@@ -33,6 +32,8 @@
     hashedPasswordFile = config.age.secrets.default-password.path;
   };
 
-  networking.hostId = "cc8e939c";
+  # networking.hostId = "TODO";
   networking.networkmanager.enable = true;
+
+  homelab.services.plex.enable = true;
 }
