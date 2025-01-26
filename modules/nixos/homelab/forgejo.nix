@@ -140,7 +140,7 @@ in
           serve = {
             TCP."443".HTTPS = true;
             TCP."22".TCPForward = "localhost:2222";
-            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:2283";
+            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:3000";
           };
         })
       ]
