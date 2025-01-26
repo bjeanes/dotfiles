@@ -6,6 +6,8 @@ for profile in ${(z)NIX_PROFILES}; do
   fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
 done
 
+ZSH_SSH_AWK="gawk"
+
 path+="$HOME/.zsh/plugins/zsh-vi-mode"
 fpath+="$HOME/.zsh/plugins/zsh-vi-mode"
 path+="$HOME/.zsh/plugins/zsh-ssh"
