@@ -158,20 +158,20 @@ let
             ))
             (lib.optionalAttrs needsMedia {
               virtualisation.oci-containers.containers.${name}.volumes = [
-                "/mnt/nfs/nas/media:/data"
+                "/mnt/nfs/tempnas/media:/data"
               ];
               systemd.services = {
                 ${svcName} = {
-                  requires = [ "mnt-nfs-nas-media.mount" ];
-                  upheldBy = [ "mnt-nfs-nas-media.mount" ];
-                  after = [ "mnt-nfs-nas-media.mount" ];
+                  requires = [ "mnt-nfs-tempnas-media.mount" ];
+                  upheldBy = [ "mnt-nfs-tempnas-media.mount" ];
+                  after = [ "mnt-nfs-tempnas-media.mount" ];
                 };
               };
             })
             (lib.mkIf cfg.backupToNAS {
               systemd.services."backup-${name}-to-NAS" = {
-                requires = [ "mnt-nfs-nas-docker.mount" ];
-                after = [ "mnt-nfs-nas-docker.mount" ];
+                requires = [ "mnt-nfs-tempnas-docker.mount" ];
+                after = [ "mnt-nfs-tempnas-docker.mount" ];
                 startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
                 serviceConfig = {
                   Type = "oneshot";
@@ -179,7 +179,7 @@ let
                 script = ''
                   set -eu
                   ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                    ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${name}/
+                    ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/tempnas/docker/media/${name}/
                 '';
               };
             })

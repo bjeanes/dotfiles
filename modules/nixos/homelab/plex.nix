@@ -67,7 +67,7 @@ in
       setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
       secrets = config.age.secrets;
 
-      nasConfigPath = "/mnt/nfs/nas/docker/media/plex";
+      nasConfigPath = "/mnt/nfs/tempnas/docker/media/plex";
       pmsPath = "Library/Application Support/Plex Media Server";
       databasePath = "${pmsPath}/Plug-in Support/Databases";
       databaseBackupPath = "${databasePath}/Backups";
@@ -165,7 +165,7 @@ in
                   "${secrets.plex-token.path}:/run/secrets/plex-claim"
                   "${transcodePath}:/transcode"
 
-                  "/mnt/nfs/nas/media:/data" # TV Shows, Movies, Music, etc
+                  "/mnt/nfs/tempnas/media:/data" # TV Shows, Movies, Music, etc
 
                   # Base config is local, in particular /config/Library, which
                   # LSIO's Plex checks owner. If it doesn't match it performs
@@ -218,16 +218,16 @@ in
               aliases = [ "plex.service" ];
 
               requires = [
-                "mnt-nfs-nas-media.mount"
-                "mnt-nfs-nas-docker.mount"
+                "mnt-nfs-tempnas-media.mount"
+                "mnt-nfs-tempnas-docker.mount"
               ];
               upheldBy = [
-                "mnt-nfs-nas-media.mount"
-                "mnt-nfs-nas-docker.mount"
+                "mnt-nfs-tempnas-media.mount"
+                "mnt-nfs-tempnas-docker.mount"
               ];
               after = [
-                "mnt-nfs-nas-media.mount"
-                "mnt-nfs-nas-docker.mount"
+                "mnt-nfs-tempnas-media.mount"
+                "mnt-nfs-tempnas-docker.mount"
               ];
             };
           };
@@ -240,8 +240,8 @@ in
 
         (lib.mkIf cfg.backupToNAS {
           systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "mnt-nfs-nas-docker.mount" ];
-            after = [ "mnt-nfs-nas-docker.mount" ];
+            requires = [ "mnt-nfs-tempnas-docker.mount" ];
+            after = [ "mnt-nfs-tempnas-docker.mount" ];
             startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
             serviceConfig = {
               Type = "oneshot";
@@ -249,7 +249,7 @@ in
             script = ''
               set -eu
               ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${svc}/
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/tempnas/docker/media/${svc}/
             '';
           };
         })
