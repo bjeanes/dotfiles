@@ -50,6 +50,7 @@ rec {
             TS_EXTRA_ARGS = "--advertise-tags=${concatStringsSep "," tags}";
             TS_HOSTNAME = hostname;
             TS_ACCEPT_DNS = "true";
+            TS_AUTH_ONCE = "true";
           };
         };
       }
