@@ -72,13 +72,6 @@
       };
     };
 
-    khanelivim = {
-      url = "github:khaneliman/khanelivim";
-      inputs.snowfall-lib.follows = "snowfall-lib";
-      inputs.snowfall-flake.follows = "snowfall-flake";
-      inputs.nixvim.follows = "nixvim";
-    };
-
     # https://developer.1password.com/docs/cli/shell-plugins/nix/
     _1password-shell-plugins = {
       url = "github:1Password/shell-plugins";
