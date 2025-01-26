@@ -30,17 +30,6 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    # According to cache.lix.systems:
-    #
-    #   > there is no caching for any builds of Lix except the ones for the
-    #   > exact nixpkgs that release versions of Lix were released with, so you
-    #   > will probably not get a cache hit. This is not a bug.
-    #
-    # So, we will NOT `follow` our unstable nixpkgs
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
-    };
-
     catppuccin.url = "github:catppuccin/nix";
 
     snowfall-lib = {
@@ -131,7 +120,6 @@
       overlays = with inputs; [
         darwin.overlays.default
         snowfall-flake.overlays.default
-        lix-module.overlays.default
       ];
 
       systems.modules.darwin = with inputs; [
@@ -176,12 +164,10 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
-      "https://cache.lix.systems"
       "https://ghostty.cachix.org"
     ];
     extra-trusted-public-keys = [
       "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
-      "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
