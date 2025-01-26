@@ -17,6 +17,12 @@ in
       type = lib.types.str;
       description = "Location to store ${svc} config";
     };
+
+    timeZone = lib.mkOption {
+      default = config.homelab.timeZone;
+      type = lib.types.str;
+      description = "Time zone for ${svc}";
+    };
   };
 
   config =
@@ -62,7 +68,7 @@ in
                 "--network=container:${svc}-tailscale"
               ];
               environment = {
-                TZ = "Australia/Melbourne";
+                TZ = cfg.timeZone;
                 FORGEJO_database_DB_TYPE = "postgres";
                 FORGEJO_database_HOST = "localhost"; # "${svc}-db";
                 FORGEJO_database_USER = "gitea"; # "${svc}";
