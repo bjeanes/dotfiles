@@ -23,6 +23,12 @@ in
       type = lib.types.str;
       description = "Time zone for ${svc}";
     };
+
+    backupToNAS = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Back up configDir to legacy location on NAS";
+    };
   };
 
   config =
@@ -102,6 +108,22 @@ in
             };
           };
         }
+
+        (lib.mkIf cfg.backupToNAS {
+          systemd.services."backup-${svc}-to-NAS" = {
+            requires = [ "mnt-nfs-tempnas-docker.mount" ];
+            after = [ "mnt-nfs-tempnas-docker.mount" ];
+            startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
+            serviceConfig = {
+              Type = "oneshot";
+            };
+            script = ''
+              set -eu
+              ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/tempnas/docker/${svc}/
+            '';
+          };
+        })
 
         # Nix expressions give us no way to derive the UID from a user at
         # evaluation time, so this delays resolution of user/group names
