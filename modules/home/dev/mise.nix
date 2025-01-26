@@ -1,7 +1,8 @@
-{ inputs, system, ... }: {
+{ inputs, pkgs, ... }:
+{
   config =
     let
-      mise = inputs.mise.packages.${system}.mise;
+      mise = pkgs.mise;
     in
     {
       home.packages = [ mise ];

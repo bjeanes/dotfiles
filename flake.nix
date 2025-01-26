@@ -41,15 +41,6 @@
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
     };
 
-    mise = {
-      url = "github:jdx/mise";
-
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
-      };
-    };
-
     catppuccin.url = "github:catppuccin/nix";
 
     snowfall-lib = {

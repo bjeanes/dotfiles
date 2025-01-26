@@ -610,31 +610,6 @@
         "url": "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz"
       }
     },
-    "mise": {
-      "inputs": {
-        "flake-utils": [
-          "snowfall-lib",
-          "flake-utils-plus",
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1737853322,
-        "narHash": "sha256-UvKOnICHrAzlj1V45qSEXa6pL9T2kZErUqsCeabkGFw=",
-        "owner": "jdx",
-        "repo": "mise",
-        "rev": "3463ef185d2c6026a62260217d07273a5326cc1b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jdx",
-        "repo": "mise",
-        "type": "github"
-      }
-    },
     "nil": {
       "inputs": {
         "flake-utils": [
@@ -831,7 +806,6 @@
         "ghostty": "ghostty",
         "home-manager": "home-manager_2",
         "lix-module": "lix-module",
-        "mise": "mise",
         "nil": "nil",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_2",
