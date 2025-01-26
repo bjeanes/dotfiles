@@ -118,10 +118,33 @@ in
           };
         }
 
+        # {
+        #   systemd.tmpfiles.rules = [
+        #     # Add ACLs to Silverbullet config directory for Resilio
+        #     "A+ ${cfg.configDir} - - - - group:rslsync:rwx,default:group:rslsync:rwx"
+        #   ];
+        #
+        #   services.resilio = {
+        #     enable = true;
+        #     sharedFolders = [
+        #       {
+        #         directory = cfg.configDir;
+        #         secretFile = secrets.silverbullet-resilio-sync-key.path;
+        #         knownHosts = [ ];
+        #         searchLAN = true;
+        #         useDHT = false;
+        #         useRelayServer = true;
+        #         useSyncTrash = true;
+        #         useTracker = true;
+        #       }
+        #     ];
+        #   };
+        # }
+
         (lib.mkIf cfg.backupToNAS {
           systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "mnt-nfs-tempnas-docker.mount" ];
-            after = [ "mnt-nfs-tempnas-docker.mount" ];
+            requires = [ "mnt-nfs-tempnas-backups.mount" ];
+            after = [ "mnt-nfs-tempnas-backups.mount" ];
             startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
             serviceConfig = {
               Type = "oneshot";
