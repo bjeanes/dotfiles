@@ -38,7 +38,7 @@ function _zsh_ssh_config_process_includes {
     else
       echo "$line"
     fi
-  done <"$file"
+  done < "$file" < <(echo)
 }
 
 function _zsh_ssh_config_host_list {
