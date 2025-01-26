@@ -20,6 +20,7 @@
 setopt no_beep # don't beep
 
 SSH_CONFIG_FILE="${SSH_CONFIG_FILE:-$HOME/.ssh/config}"
+ZSH_SSH_AWK="${ZSH_SSH_AWK:-gawk}"
 
 function _zsh_ssh_config_process_includes {
   local file="${1:-$SSH_CONFIG_FILE}"
@@ -44,7 +45,7 @@ function _zsh_ssh_config_process_includes {
 function _zsh_ssh_config_host_list {
   local file="${1:-$SSH_CONFIG_FILE}"
 
-  _zsh_ssh_config_process_includes "$file" | awk '
+  _zsh_ssh_config_process_includes "$file" | $ZSH_SSH_AWK '
     BEGIN { in_match = 0; IGNORECASE = 1; }
     /^\s*Host\s+/ {
         in_match = 0;
@@ -67,7 +68,7 @@ function _zsh_ssh_config_host_list {
             print hosts[i];
         }
     }
-  ' | awk '
+  ' | $ZSH_SSH_AWK '
     /^[a-zA-Z]/ { print $0 | "sort -u" }
     /^[0-9]/ { numbers[NR] = $0 }
     END {
@@ -94,8 +95,8 @@ Host|Destination|User
 
   for host in "${hosts[@]}"; do
     local config=$(comm -13 <(echo $default_config) <(ssh -G "$host" 2>/dev/null | sort))
-    local destination=$(echo "$config" | awk '/^hostname / {print $2}')
-    local user=$(echo "$config" | awk '/^user / {print $2}')
+    local destination=$(echo "$config" | $ZSH_SSH_AWK '/^hostname / {print $2}')
+    local user=$(echo "$config" | $ZSH_SSH_AWK '/^user / {print $2}')
 
     [[ "$destination" == "$host" ]] && destination=""
 
@@ -110,7 +111,7 @@ Host|Destination|User
 function _zsh_ssh__column {
   fs=${1:-"|"}
   sp=${2:-"5"}
-  awk -F$fs '
+  $ZSH_SSH_AWK -F$fs '
     {
       if (NF > max_fields) max_fields = NF
       for (i = 1; i <= NF; i++) {
@@ -168,9 +169,9 @@ function fzf_complete_ssh {
       --query="${query[@]}" \
       --no-separator \
       --bind 'shift-tab:up,tab:down,bspace:backward-delete-char/eof' \
-      --preview 'comm -13 <(ssh -T -Fnone -G 'bogus.$RANDOM' | sort) <(ssh -T -G $(cut -f 1 -d " " <<< {}) | sort) | awk '\''{printf "%-20s %s\n", $1, substr($0, index($0,$2))}'\'' ' \
+      --preview 'comm -13 <(ssh -T -Fnone -G 'bogus.$RANDOM' | sort) <(ssh -T -G $(cut -f 1 -d " " <<< {}) | sort) | '$ZSH_SSH_AWK' '\''{printf "%-20s %s\n", $1, substr($0, index($0,$2))}'\'' ' \
       --preview-window=right:40% | \
-      awk '{print $1}'
+      $ZSH_SSH_AWK '{print $1}'
     )
 
     if [[ -n "$result" ]]; then
