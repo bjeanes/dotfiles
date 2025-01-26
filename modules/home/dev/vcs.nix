@@ -148,7 +148,6 @@ in
 
     home.packages = with pkgs; [
       gg-jj
-      lazyjj
     ];
   };
 }

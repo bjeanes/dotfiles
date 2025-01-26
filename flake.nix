@@ -1,6 +1,10 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # To update nixpkgs (and thus NixOS), pick the nixos-unstable rev from
+    # https://status.nixos.org/
+    #
+    # This ensures that we always use the official nix cache.
+    nixpkgs.url = "github:nixos/nixpkgs/ecd26a469ac56357fd333946a99086e992452b6a";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -26,10 +30,15 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    # According to cache.lix.systems:
+    #
+    #   > there is no caching for any builds of Lix except the ones for the
+    #   > exact nixpkgs that release versions of Lix were released with, so you
+    #   > will probably not get a cache hit. This is not a bug.
+    #
+    # So, we will NOT `follow` our unstable nixpkgs
     lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/release-2.91.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
     };
 
     mise = {
