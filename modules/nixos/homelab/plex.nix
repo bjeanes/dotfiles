@@ -67,7 +67,7 @@ in
       setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
       secrets = config.age.secrets;
 
-      nasConfigPath = "/mnt/nfs/tempnas/docker/media/plex";
+      nasConfigPath = "/mnt/nfs/nas/docker/media/plex";
       pmsPath = "Library/Application Support/Plex Media Server";
       databasePath = "${pmsPath}/Plug-in Support/Databases";
       databaseBackupPath = "${databasePath}/Backups";
@@ -219,15 +219,15 @@ in
 
               requires = [
                 "mnt-nfs-tempnas-media.mount"
-                "mnt-nfs-tempnas-docker.mount"
+                "mnt-nfs-nas-docker.mount"
               ];
               upheldBy = [
                 "mnt-nfs-tempnas-media.mount"
-                "mnt-nfs-tempnas-docker.mount"
+                "mnt-nfs-nas-docker.mount"
               ];
               after = [
                 "mnt-nfs-tempnas-media.mount"
-                "mnt-nfs-tempnas-docker.mount"
+                "mnt-nfs-nas-docker.mount"
               ];
             };
           };
@@ -240,8 +240,8 @@ in
 
         (lib.mkIf cfg.backupToNAS {
           systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "mnt-nfs-tempnas-docker.mount" ];
-            after = [ "mnt-nfs-tempnas-docker.mount" ];
+            requires = [ "mnt-nfs-nas-docker.mount" ];
+            after = [ "mnt-nfs-nas-docker.mount" ];
             startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
             serviceConfig = {
               Type = "oneshot";
@@ -249,7 +249,7 @@ in
             script = ''
               set -eu
               ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/tempnas/docker/media/${svc}/
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${svc}/
             '';
           };
         })
