@@ -143,8 +143,8 @@ in
 
         (lib.mkIf cfg.backupToNAS {
           systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "mnt-nfs-tempnas-backups.mount" ];
-            after = [ "mnt-nfs-tempnas-backups.mount" ];
+            requires = [ "mnt-nfs-nas-backups.mount" ];
+            after = [ "mnt-nfs-nas-backups.mount" ];
             startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
             serviceConfig = {
               Type = "oneshot";
@@ -152,7 +152,7 @@ in
             script = ''
               set -eu
               ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/tempnas/backups/${svc}/
+                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/backups/${svc}/
             '';
           };
         })
