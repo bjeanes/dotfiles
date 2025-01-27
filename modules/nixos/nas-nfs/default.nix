@@ -73,7 +73,7 @@ in
   imports =
     (mountModules lib.${namespace}.hosts.nas.lan "nas" {
       media = "/volume1/media";
-      docker = "/volume1/docker";
+      docker = "/volume2/docker";
       backups = "/volume1/backups";
     })
     ++ (mountModules "10.10.10.14" "tempnas" {
