@@ -142,7 +142,7 @@ in
                   SERVER_REGIONS = "Oceania";
                   FIREWALL_VPN_INPUT_PORTS = toString cfg.torrentPort;
                   FIREWALL_INPUT_PORTS = toString cfg.webUiPort;
-                  FIREWALL_OUTBOUND_SUBNETS = "10.10.10.0/24";
+                  FIREWALL_OUTBOUND_SUBNETS = myLib.lanSubnet;
                 };
                 volumes = [
                   # "${secrets.wg-conf.path}/run/secrets/wireguard_conf"
