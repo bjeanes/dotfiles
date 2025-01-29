@@ -162,6 +162,7 @@ in
         ];
 
         diff.tool = "delta";
+        ui.default-command = "log";
         ui.pager = "delta";
         ui.diff.format = "git";
 
