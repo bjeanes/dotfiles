@@ -139,6 +139,7 @@ in
         # git.sign-on-push = true;
 
         git.push-new-bookmarks = true; # Don't require --allow-new;
+        git.push-bookmark-prefix = "bjeanes/";
 
         # Any commit matching any of these revset expressions will be treated
         # as "private" and will not be pushable (without `--allow-private`)
