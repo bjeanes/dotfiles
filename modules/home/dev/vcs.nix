@@ -143,6 +143,22 @@ in
         diff.tool = "delta";
         ui.pager = "delta";
         ui.diff.format = "git";
+
+        # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
+        aliases.mon = [
+          "util"
+          "exec"
+          "--"
+          "watch"
+          "-t"
+          "-n"
+          "0.5"
+          "--color"
+          "jj"
+          "--ignore-working-copy"
+          "log"
+          "--color=always"
+        ];
       };
     };
 
