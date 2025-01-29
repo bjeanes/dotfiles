@@ -140,6 +140,27 @@ in
 
         git.push-new-bookmarks = true; # Don't require --allow-new;
 
+        # Any commit matching any of these revset expressions will be treated
+        # as "private" and will not be pushable (without `--allow-private`)
+        #
+        # commits with empty messages are already blocked for pushing (without
+        # `--allow-empty-description`) so no need to specify that here.
+        git.private-commits = lib.concatMapStringsSep " | " (t: "( ${t} )") [
+          # Any commit with description of "wip", "priv", "private", either as a prefix or whole message
+          "description(exact-i:'wip')"
+          "description(exact-i:'private')"
+          "description(exact-i:'priv')"
+          "description(glob-i:'wip:')"
+          "description(glob-i:'priv:')"
+          "description(glob-i:'private:')"
+
+          # commits with conflicts
+          "conflicts()"
+
+          # empty commits, except root commit and merges
+          "empty() ~ (root() | merges())"
+        ];
+
         diff.tool = "delta";
         ui.pager = "delta";
         ui.diff.format = "git";
