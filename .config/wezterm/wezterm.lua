@@ -37,6 +37,21 @@ config.font = wezterm.font_with_fallback({
   "MesloLGMDZ Nerd Font Mono",
 })
 
-config.color_scheme = "Catppuccin Mocha"
+function get_appearance()
+  if wezterm.gui then
+    return wezterm.gui.get_appearance()
+  end
+  return 'Dark'
+end
+
+function scheme_for_appearance(appearance)
+  if appearance:find 'Dark' then
+    return 'Catppuccin Mocha'
+  else
+    return 'Catppuccin Latte'
+  end
+end
+
+config.color_scheme = scheme_for_appearance(get_appearance())
 
 return config
