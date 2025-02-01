@@ -122,6 +122,15 @@ in
       os.editPreset = "nvim";
     };
 
+    home.shellAliases.jj = "jj --config-file=$HOME/.jj.local.toml";
+
+    home.activation.local-jj = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ ! -f $HOME/.jj.local.toml ]; then
+        cp ${./jj.local.toml} ~/.jj.local.toml
+        chmod 755 ~/.jj.local.toml
+      fi
+    '';
+
     # TODO https://gist.github.com/ilyagr/5d6339fb7dac5e7ab06fe1561ec62d45 programs.jujutsu.enable = true;
     programs.jujutsu = {
       enable = true;

@@ -1,0 +1,5 @@
+# Example
+[[--scope]]
+--when.repositories = ["~/Code/AcmeCorp"]
+[--scope.user]
+email = "bo@acme.corp"
