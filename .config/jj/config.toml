@@ -29,6 +29,7 @@ key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fA
 sign-all = true
 
 [template-aliases]
+"format_short_signature(signature)" = "signature.email().local() ++ \"@\""
 "format_timestamp(timestamp)" = "timestamp.ago()"
 
 [ui]
