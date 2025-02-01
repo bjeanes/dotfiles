@@ -20,6 +20,7 @@ alias g=git
 alias gh='op plugin run -- gh'
 alias glab='op plugin run -- glab'
 alias heroku='op plugin run -- heroku'
+alias jj='jj --config-file=$HOME/.jj.local.toml'
 alias l=ls
 alias la='eza -a'
 alias lg=lazygit
