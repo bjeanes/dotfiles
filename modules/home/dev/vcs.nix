@@ -148,6 +148,8 @@ in
         template-aliases = {
           # Relative timestamp rendered as "x days/hours/seconds ago"
           "format_timestamp(timestamp)" = "timestamp.ago()";
+
+          "format_short_signature(signature)" = ''signature.email().local() ++ "@"'';
         };
 
         git.sign-on-push = true;
