@@ -146,6 +146,11 @@ in
         };
 
         # git.sign-on-push = true;
+        template-aliases = {
+          # Relative timestamp rendered as "x days/hours/seconds ago"
+          "format_timestamp(timestamp)" = "timestamp.ago()";
+        };
+
 
         git.push-new-bookmarks = true; # Don't require --allow-new;
         git.push-bookmark-prefix = "bjeanes/";
