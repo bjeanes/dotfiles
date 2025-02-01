@@ -158,13 +158,13 @@ let
             ))
             (lib.optionalAttrs needsMedia {
               virtualisation.oci-containers.containers.${name}.volumes = [
-                "/mnt/nfs/tempnas/media:/data"
+                "/mnt/nfs/nas/media:/data"
               ];
               systemd.services = {
                 ${svcName} = {
-                  requires = [ "mnt-nfs-tempnas-media.mount" ];
-                  upheldBy = [ "mnt-nfs-tempnas-media.mount" ];
-                  after = [ "mnt-nfs-tempnas-media.mount" ];
+                  requires = [ "mnt-nfs-nas-media.mount" ];
+                  upheldBy = [ "mnt-nfs-nas-media.mount" ];
+                  after = [ "mnt-nfs-nas-media.mount" ];
                 };
               };
             })

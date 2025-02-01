@@ -70,31 +70,13 @@ let
     };
 in
 {
-  imports =
-    (mountModules lib.${namespace}.hosts.nas.lan "nas" {
+  imports = (
+    mountModules lib.${namespace}.hosts.nas.lan "nas" {
       media = "/volume1/media";
       docker = "/volume2/docker";
       backups = "/volume1/backups";
-    })
-    ++ (mountModules "10.10.10.14" "tempnas" {
-      media = "/volume2/slow";
-      docker = "/volume2/docker";
-      backups = "/volume1/backups";
-    })
-    ++ [
-      (mergerfsModule "/mnt/merged/media" [
-        "/mnt/nfs/nas/media"
-        "/mnt/nfs/tempnas/media"
-      ])
-      (mergerfsModule "/mnt/merged/docker" [
-        "/mnt/nfs/nas/docker"
-        "/mnt/nfs/tempnas/docker"
-      ])
-      (mergerfsModule "/mnt/merged/backups" [
-        "/mnt/nfs/nas/backups"
-        "/mnt/nfs/tempnas/backups"
-      ])
-    ];
+    }
+  );
 
   config = {
     services.rpcbind.enable = true; # needed for NFS

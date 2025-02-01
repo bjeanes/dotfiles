@@ -102,11 +102,11 @@ in
 
           systemd.services.${svcName} = {
             aliases = [ "${svc}.service" ];
-            requires = [ "mnt-nfs-tempnas-media.mount" ];
-            after = [ "mnt-nfs-tempnas-media.mount" ];
+            requires = [ "mnt-nfs-nas-media.mount" ];
+            after = [ "mnt-nfs-nas-media.mount" ];
             upheldBy = [
               "${svc}.service"
-              "mnt-nfs-tempnas-media.mount"
+              "mnt-nfs-nas-media.mount"
             ];
             serviceConfig = {
               TimeoutStopSec = lib.mkForce "2h";
@@ -158,7 +158,7 @@ in
                 dependsOn = [ "${svc}-vpn" ];
                 volumes = [
                   "${cfg.configDir}:/config"
-                  "/mnt/nfs/tempnas/media:/data"
+                  "/mnt/nfs/nas/media:/data"
                 ];
                 extraOptions = [
                   "--pull=always"

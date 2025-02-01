@@ -165,7 +165,7 @@ in
                   "${secrets.plex-token.path}:/run/secrets/plex-claim"
                   "${transcodePath}:/transcode"
 
-                  "/mnt/nfs/tempnas/media:/data" # TV Shows, Movies, Music, etc
+                  "/mnt/nfs/nas/media:/data" # TV Shows, Movies, Music, etc
 
                   # Base config is local, in particular /config/Library, which
                   # LSIO's Plex checks owner. If it doesn't match it performs
@@ -218,15 +218,15 @@ in
               aliases = [ "plex.service" ];
 
               requires = [
-                "mnt-nfs-tempnas-media.mount"
+                "mnt-nfs-nas-media.mount"
                 "mnt-nfs-nas-docker.mount"
               ];
               upheldBy = [
-                "mnt-nfs-tempnas-media.mount"
+                "mnt-nfs-nas-media.mount"
                 "mnt-nfs-nas-docker.mount"
               ];
               after = [
-                "mnt-nfs-tempnas-media.mount"
+                "mnt-nfs-nas-media.mount"
                 "mnt-nfs-nas-docker.mount"
               ];
             };
