@@ -54,6 +54,104 @@ vim.diagnostic.config({
 
 vim.cmd([[colorscheme catppuccin
 ]])
+
+require("mini.ai").setup({})
+
+require("mini.animate").setup({
+    close = { enable = false },
+    cursor = { enable = false },
+    open = { enable = false },
+    resize = {
+        -- Animate only for 100ms
+        timing = require("mini.animate").gen_timing.linear({
+            duration = 100,
+            unit = "total",
+        }),
+    },
+    scroll = {
+        -- Animate only for 100ms
+        timing = require("mini.animate").gen_timing.linear({
+            duration = 100,
+            unit = "total",
+        }),
+    },
+})
+
+require("mini.basics").setup({ mappings = { option_toggle_prefix = "<Leader>t" }, options = { extra_ui = true } })
+
+require("mini.bracketed").setup({})
+
+require("mini.bufremove").setup({})
+
+require("mini.comment").setup({})
+
+require("mini.cursorword").setup({})
+
+require("mini.extra").setup({})
+
+require("mini.hipatterns").setup({
+    fixme = { group = "MiniHipatternsFixme", pattern = "%f[%w]()FIXME()%f[%W]" },
+    hack = { group = "MiniHipatternsHack", pattern = "%f[%w]()HACK()%f[%W]" },
+    -- Highlight hex color strings (`#rrggbb`) using that color
+    hex_color = require("mini.hipatterns").gen_highlighter.hex_color(),
+    note = { group = "MiniHipatternsNote", pattern = "%f[%w]()NOTE()%f[%W]" },
+    todo = { group = "MiniHipatternsTodo", pattern = "%f[%w]()TODO()%f[%W]" },
+})
+
+require("mini.icons").setup({})
+
+require("mini.indentscope").setup({
+    draw = { animation = require("mini.indentscope").gen_animation.none() },
+    options = { try_as_border = true },
+})
+
+require("mini.jump").setup({})
+
+require("mini.move").setup({})
+
+require("mini.pairs").setup({})
+
+require("mini.pick").setup({})
+
+require("mini.surround").setup({ mappings = { add = "S", delete = "ds", replace = "cs" } })
+MiniIcons.mock_nvim_web_devicons()
+
+vim.ui.select = require("mini.pick").ui_select
+
+-- LSP {{{
+do
+    local __lspServers = {}
+    -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
+    _M.lspOnAttach = function(client, bufnr) end
+    local __lspCapabilities = function()
+        capabilities = vim.lsp.protocol.make_client_capabilities()
+
+        return capabilities
+    end
+
+    local __setup = {
+        on_attach = _M.lspOnAttach,
+        capabilities = __lspCapabilities(),
+    }
+
+    for i, server in ipairs(__lspServers) do
+        if type(server) == "string" then
+            require("lspconfig")[server].setup(__setup)
+        else
+            local options = server.extraOptions
+
+            if options == nil then
+                options = __setup
+            else
+                options = vim.tbl_extend("keep", options, __setup)
+            end
+
+            require("lspconfig")[server.name].setup(options)
+        end
+    end
+end
+-- }}}
+
 require("which-key").setup({})
 
 require("treesitter-context").setup({ max_lines = 4, min_window_height = 40, separator = "-" })
@@ -126,69 +224,6 @@ require("snacks").setup({
 })
 
 require("nvim-navic").setup({ lsp = { auto_attach = true } })
-
-require("mini.ai").setup({})
-
-require("mini.animate").setup({
-    close = { enable = false },
-    cursor = { enable = false },
-    open = { enable = false },
-    resize = {
-        -- Animate only for 100ms
-        timing = require("mini.animate").gen_timing.linear({
-            duration = 100,
-            unit = "total",
-        }),
-    },
-    scroll = {
-        -- Animate only for 100ms
-        timing = require("mini.animate").gen_timing.linear({
-            duration = 100,
-            unit = "total",
-        }),
-    },
-})
-
-require("mini.basics").setup({ mappings = { option_toggle_prefix = "<Leader>t" }, options = { extra_ui = true } })
-
-require("mini.bracketed").setup({})
-
-require("mini.bufremove").setup({})
-
-require("mini.comment").setup({})
-
-require("mini.cursorword").setup({})
-
-require("mini.extra").setup({})
-
-require("mini.hipatterns").setup({
-    fixme = { group = "MiniHipatternsFixme", pattern = "%f[%w]()FIXME()%f[%W]" },
-    hack = { group = "MiniHipatternsHack", pattern = "%f[%w]()HACK()%f[%W]" },
-    -- Highlight hex color strings (`#rrggbb`) using that color
-    hex_color = require("mini.hipatterns").gen_highlighter.hex_color(),
-    note = { group = "MiniHipatternsNote", pattern = "%f[%w]()NOTE()%f[%W]" },
-    todo = { group = "MiniHipatternsTodo", pattern = "%f[%w]()TODO()%f[%W]" },
-})
-
-require("mini.icons").setup({})
-
-require("mini.indentscope").setup({
-    draw = { animation = require("mini.indentscope").gen_animation.none() },
-    options = { try_as_border = true },
-})
-
-require("mini.jump").setup({})
-
-require("mini.move").setup({})
-
-require("mini.pairs").setup({})
-
-require("mini.pick").setup({})
-
-require("mini.surround").setup({ mappings = { add = "S", delete = "ds", replace = "cs" } })
-MiniIcons.mock_nvim_web_devicons()
-
-vim.ui.select = require("mini.pick").ui_select
 
 require("gitblame").setup({ virtual_text_column = 60 })
 
@@ -293,50 +328,6 @@ require("conform").setup({
         yaml = { "yamlfmt" },
     },
 })
-
--- LSP {{{
-do
-    local __lspServers = {}
-    -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
-    _M.lspOnAttach = function(client, bufnr) end
-    local __lspCapabilities = function()
-        capabilities = vim.lsp.protocol.make_client_capabilities()
-
-        return capabilities
-    end
-
-    local __setup = {
-        on_attach = _M.lspOnAttach,
-        capabilities = __lspCapabilities(),
-    }
-
-    for i, server in ipairs(__lspServers) do
-        if type(server) == "string" then
-            require("lspconfig")[server].setup(__setup)
-        else
-            local options = server.extraOptions
-
-            if options == nil then
-                options = __setup
-            else
-                options = vim.tbl_extend("keep", options, __setup)
-            end
-
-            require("lspconfig")[server.name].setup(options)
-        end
-    end
-end
--- }}}
-
-local __ignored_variables = {}
-for ignoredVariable, shouldIgnore in ipairs(__ignored_variables) do
-    require("nix-develop").ignored_variables[ignoredVariable] = shouldIgnore
-end
-
-local __separated_variables = {}
-for variable, separator in ipairs(__separated_variables) do
-    require("nix-develop").separated_variables[variable] = separator
-end
 
 require("neo-tree").setup({
     close_if_last_window = true,
@@ -473,19 +464,7 @@ end
 do
     local __nixvim_autocommands = {
         {
-            command = "setlocal spell spelllang=en_au,en_gb,en_us",
-            event = "FileType",
-            pattern = { "markdown", "gitcommit" },
-        },
-        {
-            callback = function()
-                vim.b.miniindentscope_disable = true
-            end,
-            event = { "User" },
-            pattern = { "SnacksDashboardOpened" },
-        },
-        {
-            callback = function()
+            callback = function(args)
                 do
                     local __nixvim_binds = {
                         {
@@ -519,14 +498,28 @@ do
                             options = { desc = "Lsp buf type_definition", silent = false },
                         },
                     }
+
                     for i, map in ipairs(__nixvim_binds) do
-                        vim.keymap.set(map.mode, map.key, map.action, map.options)
+                        local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+                        vim.keymap.set(map.mode, map.key, map.action, options)
                     end
                 end
             end,
             desc = "Load keymaps for LspAttach",
             event = "LspAttach",
             group = "nixvim_binds_LspAttach",
+        },
+        {
+            command = "setlocal spell spelllang=en_au,en_gb,en_us",
+            event = "FileType",
+            pattern = { "markdown", "gitcommit" },
+        },
+        {
+            callback = function()
+                vim.b.miniindentscope_disable = true
+            end,
+            event = { "User" },
+            pattern = { "SnacksDashboardOpened" },
         },
     }
 
