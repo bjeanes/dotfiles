@@ -1,4 +1,5 @@
 [aliases]
+gpa = ["git", "push", "-r", "remote_bookmarks(remote=origin).."]
 mon = [
     "util",
     "exec",
@@ -29,7 +30,7 @@ key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fA
 sign-all = true
 
 [template-aliases]
-"format_short_signature(signature)" = "signature.email().local() ++ \"@\""
+"format_short_signature(signature)" = "if(\n  signature.email().domain() == \"users.noreply.github.com\",\n  signature.email().local() ++ \"@GH\",\n  if(\n    signature.email().local() == \"me\" ||\n      signature.email().local() == \"hello\" ||\n      signature.email().local() == \"dev\" ||\n      signature.email().local() == \"git\",\n    signature.email().domain(),\n    signature.email().local() ++ \"@\"\n  )\n)\n"
 "format_timestamp(timestamp)" = "timestamp.ago()"
 
 [ui]
