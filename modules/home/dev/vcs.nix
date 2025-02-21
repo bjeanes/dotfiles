@@ -149,7 +149,21 @@ in
           # Relative timestamp rendered as "x days/hours/seconds ago"
           "format_timestamp(timestamp)" = "timestamp.ago()";
 
-          "format_short_signature(signature)" = ''signature.email().local() ++ "@"'';
+          # TODO: find a way to strip the `(\d+)\+` prefix from users.noreply.github.com email addresses
+          "format_short_signature(signature)" = ''
+            if(
+              signature.email().domain() == "users.noreply.github.com",
+              signature.email().local() ++ "@GH",
+              if(
+                signature.email().local() == "me" ||
+                  signature.email().local() == "hello" ||
+                  signature.email().local() == "dev" ||
+                  signature.email().local() == "git",
+                signature.email().domain(),
+                signature.email().local() ++ "@"
+              )
+            )
+          '';
         };
 
         git.sign-on-push = true;
@@ -197,6 +211,21 @@ in
           "--ignore-working-copy"
           "log"
           "--color=always"
+        ];
+
+        # When editing an earlier commit, `jj git push` won't push later
+        # rebased commits because:
+        #
+        #     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
+        #
+        # This provides a different revset that doesn't is open ended (`..` vs
+        # `..@`) which will push all sideways bookmarks, regardless of current
+        # working commit.
+        aliases."gpa" = [
+          "git"
+          "push"
+          "-r"
+          "remote_bookmarks(remote=origin).." # default would end in `..@`
         ];
       };
     };
