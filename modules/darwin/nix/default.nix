@@ -5,12 +5,10 @@
   ...
 }:
 {
-  services.nix-daemon.enable = true;
   services.nix-daemon.enableSocketListener = true;
 
   nix = {
-    useDaemon = true;
-    configureBuildUsers = true;
+    enable = true;
 
     linux-builder.enable = system == "aarch64-darwin";
 

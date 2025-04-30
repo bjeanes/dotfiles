@@ -46,7 +46,7 @@
             '';
       in
       {
-        programs.zsh.initExtra = docker-describe;
+        programs.zsh.initContent = docker-describe;
         programs.bash.initExtra = docker-describe;
       }
     )

@@ -152,22 +152,24 @@
             pyPkgs = pkgs.python312Packages;
           in
           {
-            command = lib.getExe (pkgs.writeShellApplication {
-              name = "mdformat";
+            command = lib.getExe (
+              pkgs.writeShellApplication {
+                name = "mdformat";
 
-              runtimeInputs = [
-                pyPkgs.mdformat
-                pyPkgs.mdformat-tables
-                pyPkgs.mdformat-gfm
-                pyPkgs.mdformat-gfm-alerts
-                pyPkgs.mdformat-frontmatter
-                # pyPkgs.mdformat-obsidian
-              ];
+                runtimeInputs = [
+                  pyPkgs.mdformat
+                  pyPkgs.mdformat-tables
+                  pyPkgs.mdformat-gfm
+                  # pyPkgs.mdformat-gfm-alerts
+                  pyPkgs.mdformat-frontmatter
+                  # pyPkgs.mdformat-obsidian
+                ];
 
-              text = ''
-                mdformat "$@"
-              '';
-            });
+                text = ''
+                  mdformat "$@"
+                '';
+              }
+            );
           };
         prettierd = {
           command = lib.getExe pkgs.prettierd;

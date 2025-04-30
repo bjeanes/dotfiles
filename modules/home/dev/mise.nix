@@ -11,7 +11,7 @@
         eval "$(${mise}/bin/mise activate bash)"
       '';
 
-      programs.zsh.initExtra = ''
+      programs.zsh.initContent = ''
         eval "$(${mise}/bin/mise activate zsh)"
       '';
     };

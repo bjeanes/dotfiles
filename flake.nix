@@ -4,7 +4,7 @@
     # https://status.nixos.org/
     #
     # This ensures that we always use the official nix cache.
-    nixpkgs.url = "github:nixos/nixpkgs/fa35a3c8e17a3de613240fea68f876e5b4896aec";
+    nixpkgs.url = "github:nixos/nixpkgs/fbc071e5c11e23fba50037de37268e3d8a1858eb";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -53,11 +53,7 @@
       # nixvim has a lot of inputs we are using, so pin them to same version
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        nix-darwin.follows = "darwin";
-        home-manager.follows = "home-manager";
         flake-parts.follows = "flake-parts";
-        treefmt-nix.follows = "treefmt-nix";
-        flake-compat.follows = "snowfall-lib/flake-compat";
       };
     };
 
@@ -136,7 +132,7 @@
 
       homes.modules = with inputs; [
         _1password-shell-plugins.hmModules.default
-        catppuccin.homeManagerModules.catppuccin
+        catppuccin.homeModules.catppuccin
         agenix.homeManagerModules.default
         secrets
       ];

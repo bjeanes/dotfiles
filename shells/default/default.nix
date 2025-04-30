@@ -10,7 +10,7 @@ pkgs.mkShell {
     (with pkgs; [
       treefmt
       alejandra
-      python310Packages.mdformat
+      # python310Packages.mdformat
       shfmt
     ])
     ++ (with inputs; [

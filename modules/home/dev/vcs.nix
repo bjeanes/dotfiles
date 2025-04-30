@@ -102,7 +102,7 @@ in
       ''
         eval "$(${pkgs.delta}/bin/delta --generate-completion bash)"
       '';
-    programs.zsh.initExtra = # zsh
+    programs.zsh.initContent = # zsh
       ''
         eval "$(${pkgs.delta}/bin/delta --generate-completion zsh)"
       '';
