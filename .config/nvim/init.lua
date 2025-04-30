@@ -118,8 +118,10 @@ MiniIcons.mock_nvim_web_devicons()
 
 vim.ui.select = require("mini.pick").ui_select
 
--- LSP {{{
+-- nvim-lspconfig {{{
 do
+    -- inlay hint
+
     local __lspServers = {}
     -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
     _M.lspOnAttach = function(client, bufnr) end
@@ -135,19 +137,15 @@ do
     }
 
     for i, server in ipairs(__lspServers) do
-        if type(server) == "string" then
-            require("lspconfig")[server].setup(__setup)
+        local options = server.extraOptions
+
+        if options == nil then
+            options = __setup
         else
-            local options = server.extraOptions
-
-            if options == nil then
-                options = __setup
-            else
-                options = vim.tbl_extend("keep", options, __setup)
-            end
-
-            require("lspconfig")[server.name].setup(options)
+            options = vim.tbl_extend("keep", options, __setup)
         end
+
+        require("lspconfig")[server.name].setup(options)
     end
 end
 -- }}}
