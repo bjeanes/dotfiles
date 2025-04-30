@@ -2,6 +2,29 @@ disableStartupPopups: true
 git:
   paging:
     pager: delta --paging=never
+gui:
+  authorColors:
+    '*': '#b4befe'
+  theme:
+    activeBorderColor:
+    - '#cba6f7'
+    - bold
+    cherryPickedCommitBgColor:
+    - '#45475a'
+    cherryPickedCommitFgColor:
+    - '#cba6f7'
+    defaultFgColor:
+    - '#cdd6f4'
+    inactiveBorderColor:
+    - '#a6adc8'
+    optionsTextColor:
+    - '#89b4fa'
+    searchingActiveBorderColor:
+    - '#f9e2af'
+    selectedLineBgColor:
+    - '#313244'
+    unstagedChangesColor:
+    - '#f38ba8'
 os:
   editPreset: nvim
 update:

@@ -9,34 +9,38 @@ Your package manager may have it under the same name.
 
 | Path | Source |
 | --- | --- |
-| `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.0.2 |
-| `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | source source |
+| `~/.config/atuin/themes/catppuccin-mocha-mauve.toml` | catppuccin-atuin 0-unstable-2025-04-22 |
+| `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.1.4 |
+| `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | catppuccin-bat 0-unstable-2024-12-23 |
+| `~/.config/ghostty/themes/catppuccin-mocha` | catppuccin-ghostty 0-unstable-2025-02-11 |
 | `~/.local/share/dotfiles/bash-preexec` | bash-preexec 0.5.0 |
+| `~/.local/share/dotfiles/catppuccin-delta` | catppuccin-delta 0 |
+| `~/.local/share/dotfiles/catppuccin-wezterm` | catppuccin-wezterm 0 |
+| `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main |
 | `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2024-08-14 |
-| `~/.local/share/dotfiles/source` | source source |
-| `~/.local/share/dotfiles/vte` | vte 0.78.3 |
-| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2025-01-24 |
+| `~/.local/share/dotfiles/vte` | vte 0.78.4 |
+| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2025-02-23 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/f67b886d65a029f12ffa298701fb8f1efd89295d |
-| `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/363243c03102a531a8203311d4f2ae704c620d9b |
+| `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/5b5e3aef9ad7af84f463d17b5479f06b87d5c429 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/372fc521f8421b7830ea6db4d6ea3bae1c77548c |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/git-blame.nvim` | https://github.com/f-person/git-blame.nvim/tree/2883a7460f611c2705b23f12d58d398d5ce6ec00 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/git-blame.nvim` | https://github.com/f-person/git-blame.nvim/tree/8503b199edf9a666fe7b1a989cf14e3c26b2eb03 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/hmts.nvim` | https://github.com/calops/hmts.nvim/tree/c7ff4c3ad96cd05664b18fb5bbbe2abbd7682dd2 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/echasnovski/mini.nvim/tree/1f782e38109e3380fc339b794183019ac957fd21 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/521bb4253b1adc2a1ff6c584bc839eba9bc99c0b |
+| `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/echasnovski/mini.nvim/tree/088d67751584e4168f35bca89bad70ada7ea4636 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/299e174c3b8373c9c1f9be0bc3967c852712d0f3 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/afea026f5c478c000a8af8de87f7b711676387ab |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/637293ce23c6a965d2f11dfbf92f604bb1978052 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/8649f694d3e76ee10c19255dece6411c29206a54 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/61a385d74f822dcd1d223f42f1267d1317aaa2d0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/bece284c5322ddf6946fa4bdc383a2bc033269d7 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/2e74354b2752cb4980fca35c451792908c186f2f |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/39231352aec0d1e09cebbffdd9dc20a5dc691ffe |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/4c7509e7b06cea99065e8d4a20d30e6a2e5cd924 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/6daca3ad780f045550b820f262002f35175a6c04 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-refactor` | https://github.com/nvim-treesitter/nvim-treesitter-refactor/tree/d8b74fa87afc6a1e97b18da23e762efb032dc270 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/b96bd540f785c725289f9f15f0147b1b2dac5a35 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/e25cd0f2e5922f1f4d3cd969f92e35a9a327ffb0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/bc0630e43be5699bb94dadc302c0d21615421d93 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/7235c7ce2cea530cb6b59bc3e46d4bfe917d15c8 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-sleuth` | https://github.com/tpope/vim-sleuth/tree/be69bff86754b1aa5adcbb527d7fcd1635a84080 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/which-key.nvim` | https://github.com/folke/which-key.nvim/tree/6cebd86917df559a88de0f806b2989799c6e6423 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/which-key.nvim` | https://github.com/folke/which-key.nvim/tree/370ec46f710e058c9c1646273e6b225acf47cbed |
 | `~/.zsh/plugins/F-Sy-H` | zsh-f-sy-h 1.67 |
 | `~/.zsh/plugins/cd-ls` | https://github.com/zshzoo/cd-ls/tree/f26c86baf50ca0e92b454753dc6f1d25228e67bf |
-| `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.1.2 |
+| `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.2.0 |
 | `~/.zsh/plugins/zsh-autopair` | https://github.com/hlissner/zsh-autopair/tree/449a7c3d095bc8f3d78cf37b9549f8bb4c383f3d |
 | `~/.zsh/plugins/zsh-vi-mode` | zsh-vi-mode 0.11.0 |
