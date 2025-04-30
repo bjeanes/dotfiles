@@ -8,3 +8,6 @@ workspaces = true
 
 [stats]
 common_prefix = ["sudo", "time"]
+
+[theme]
+name = "catppuccin-mocha-mauve"

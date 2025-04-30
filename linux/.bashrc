@@ -35,8 +35,6 @@ if [[ -n "${GHOSTTY_RESOURCES_DIR}" ]]; then
   builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
 fi
 
-eval "$(zoxide init bash )"
-
 if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
   eval "$(fzf --bash)"
 fi
@@ -79,7 +77,7 @@ eval "$(mise activate bash)"
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
 if [[ $TERM != "dumb" ]]; then
-  eval "$(/etc/profiles/per-user/bjeanes/bin/starship init bash --print-full-init)"
+  eval "$(starship init bash --print-full-init)"
 fi
 
 if test -n "$KITTY_INSTALLATION_DIR"; then
@@ -105,4 +103,6 @@ fi
 unset __HM_PROMPT_COMMAND
 
 eval "$(direnv hook bash)"
+
+eval "$(zoxide init bash )"
 
