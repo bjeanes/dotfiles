@@ -49,6 +49,8 @@ in
           inherit (user) name email;
         };
 
+        rerere.enabled = true;
+
         apply.whitespace = "fix";
 
         init.defaultbranch = "main";
