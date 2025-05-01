@@ -65,6 +65,9 @@
 [remote]
 	pushDefault = "origin"
 
+[rerere]
+	enabled = true
+
 [status]
 	branch = true
 	short = true
