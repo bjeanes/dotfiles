@@ -202,15 +202,9 @@ in
           "util"
           "exec"
           "--"
-          "watch"
-          "-t"
-          "-n"
-          "0.5"
-          "--color"
-          "jj"
-          "--ignore-working-copy"
-          "log"
-          "--color=always"
+          "sh"
+          "-c"
+          "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"
         ];
 
         # When editing an earlier commit, `jj git push` won't push later
