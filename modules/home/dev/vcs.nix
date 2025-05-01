@@ -140,7 +140,7 @@ in
         inherit user;
 
         signing = {
-          sign-all = true;
+          behaviour = "own";
           backend = "ssh";
           key = signingKey;
         };
