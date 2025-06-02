@@ -85,11 +85,6 @@ if test -n "$KITTY_INSTALLATION_DIR"; then
   source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
 fi
 
-if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
-  source "$HOME/.local/share/dotfiles/bash-preexec/share/bash/bash-preexec.sh"
-  eval "$(atuin init bash )"
-fi
-
 __HM_PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__hm_vte_prompt_command"
 . $HOME/.local/share/dotfiles/vte/etc/profile.d/vte.sh
 if [[ $(type -t __vte_prompt_command) = function ]]; then
