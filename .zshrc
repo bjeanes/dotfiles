@@ -120,10 +120,6 @@ fi
 
 eval "$(direnv hook zsh)"
 
-if [[ $options[zle] = on ]]; then
-  eval "$(atuin init zsh )"
-fi
-
 alias -- cargo='op plugin run -- cargo'
 alias -- cat=bat
 alias -- cd=z

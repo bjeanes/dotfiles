@@ -9,11 +9,9 @@ Your package manager may have it under the same name.
 
 | Path | Source |
 | --- | --- |
-| `~/.config/atuin/themes/catppuccin-mocha-mauve.toml` | catppuccin-atuin 0-unstable-2025-04-22 |
 | `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.1.4 |
 | `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | catppuccin-bat 0-unstable-2024-12-23 |
 | `~/.config/ghostty/themes/catppuccin-mocha` | catppuccin-ghostty 0-unstable-2025-02-11 |
-| `~/.local/share/dotfiles/bash-preexec` | bash-preexec 0.5.0 |
 | `~/.local/share/dotfiles/catppuccin-delta` | catppuccin-delta 0 |
 | `~/.local/share/dotfiles/catppuccin-wezterm` | catppuccin-wezterm 0 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
