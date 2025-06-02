@@ -120,10 +120,6 @@ fi
 
 eval "$(direnv hook zsh)"
 
-if [[ $options[zle] = on ]]; then
-  eval "$(atuin init zsh )"
-fi
-
 . $HOME/.local/share/dotfiles/watch-defaults.sh
 alias -- cargo='op plugin run -- cargo'
 alias -- cat=bat
