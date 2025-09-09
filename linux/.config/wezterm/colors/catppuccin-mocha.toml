@@ -38,6 +38,7 @@ visual_bell = "#313244"
 [colors.colors.tab_bar]
 background = "#11111b"
 inactive_tab_edge = "#313244"
+
 [colors.colors.tab_bar.active_tab]
 bg_color = "#cba6f7"
 fg_color = "#11111b"

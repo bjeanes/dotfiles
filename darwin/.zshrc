@@ -37,21 +37,29 @@ done
 ZSH_SSH_AWK="gawk"
 path+="$HOME/.zsh/plugins/zsh-vi-mode"
 fpath+="$HOME/.zsh/plugins/zsh-vi-mode"
+
 path+="$HOME/.zsh/plugins/zsh-ssh"
 fpath+="$HOME/.zsh/plugins/zsh-ssh"
+
 path+="$HOME/.zsh/plugins/zsh-autopair"
 fpath+="$HOME/.zsh/plugins/zsh-autopair"
+
 path+="$HOME/.zsh/plugins/fzf-tab"
 fpath+="$HOME/.zsh/plugins/fzf-tab"
+
 path+="$HOME/.zsh/plugins/cd-ls"
 fpath+="$HOME/.zsh/plugins/cd-ls"
+
 path+="$HOME/.zsh/plugins/F-Sy-H"
 fpath+="$HOME/.zsh/plugins/F-Sy-H"
+
 
 autoload -U compinit && compinit
 source $HOME/.local/share/dotfiles/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_STRATEGY=(history)
 
+
+eval "$(zoxide init zsh )"
 
 if [[ -f "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
@@ -71,6 +79,7 @@ fi
 if [[ -f "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh" ]]; then
   source "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh"
 fi
+
 # History options should be set in .zshrc and after oh-my-zsh sourcing.
 # See https://github.com/nix-community/home-manager/issues/177.
 HISTSIZE="10000"
@@ -92,7 +101,7 @@ unsetopt EXTENDED_HISTORY
 setopt autocd
 
 if [[ $options[zle] = on ]]; then
-  eval "$(fzf --zsh)"
+  source <(fzf --zsh)
 fi
 
 source "$HOME/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting/catppuccin_mocha-zsh-syntax-highlighting.zsh"
@@ -101,6 +110,7 @@ eval "$(delta --generate-completion zsh)"
 
 eval "$(mise activate zsh)"
 
+. $HOME/.local/share/dotfiles/watch-defaults.sh
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
 if [[ $TERM != "dumb" ]]; then
@@ -120,7 +130,6 @@ fi
 
 eval "$(direnv hook zsh)"
 
-. $HOME/.local/share/dotfiles/watch-defaults.sh
 alias -- cargo='op plugin run -- cargo'
 alias -- cat=bat
 alias -- cd=z
@@ -139,4 +148,3 @@ alias -- ls=eza
 alias -- lt='eza --tree'
 alias -- tea='op plugin run -- tea'
 alias -- vimdiff='nvim -d'
-eval "$(zoxide init zsh )"
