@@ -168,10 +168,15 @@ in
           '';
         };
 
+        templates = {
+          git_push_bookmark = ''
+            "bjeanes/" ++ change_id.short()
+          '';
+        };
+
         git.sign-on-push = true;
 
         git.push-new-bookmarks = true; # Don't require --allow-new;
-        git.push-bookmark-prefix = "bjeanes/";
 
         # Any commit matching any of these revset expressions will be treated
         # as "private" and will not be pushable (without `--allow-private`)
@@ -197,7 +202,7 @@ in
         diff.tool = "delta";
         ui.default-command = "log";
         ui.pager = "delta";
-        ui.diff.format = "git";
+        ui.diff-formatter = "git";
 
         # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
         aliases.mon = [
@@ -227,7 +232,7 @@ in
     };
 
     home.packages = with pkgs; [
-      gg-jj
+      # gg-jj  # seems broken on latest due to Tauri
     ];
   };
 }

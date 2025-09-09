@@ -13,14 +13,20 @@ in
   config = {
     programs.ssh = {
       enable = true;
-      addKeysToAgent = "confirm 1h";
+      enableDefaultConfig = false; # this is being deprecated but still defaults to true, so raises warnings
       includes = [
         "~/.orbstack/ssh/config" # TODO only on darwin
         "~/.ssh/config.d/*"
       ];
 
       matchBlocks =
-        with lib;
+        {
+          "*" = {
+            addKeysToAgent = "confirm 1h";
+            forwardAgent = false;
+          };
+        } //
+        (with lib;
         let
           allHosts = naturalSort (
             concatLists (mapAttrsToList (name: { hostnames, ... }: [ name ] ++ hostnames) myHosts)
@@ -43,7 +49,7 @@ in
               };
             }
           )
-          myHosts;
+          myHosts);
     };
   };
 }

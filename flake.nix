@@ -4,7 +4,13 @@
     # https://status.nixos.org/
     #
     # This ensures that we always use the official nix cache.
-    nixpkgs.url = "github:nixos/nixpkgs/fbc071e5c11e23fba50037de37268e3d8a1858eb";
+    nixpkgs = {
+      type = "github";
+      owner = "NixOS";
+      repo = "nixpkgs";
+      ref = "nixos-unstable";
+      rev = "ca77296380960cd497a765102eeb1356eb80fed0";
+    };
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -25,7 +31,7 @@
       type = "git";
     };
 
-    agenix.url = "github:yaxitech/ragenix";
+    agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -73,7 +79,6 @@
     nil = {
       url = "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
     };
 
     zsh-cd-ls = {
@@ -96,12 +101,14 @@
           age.secrets =
             with lib;
             listToAttrs (
-              map (name: {
-                name = removeSuffix ".age" name;
-                value = {
-                  file = (snowfall.fs.get-file "secrets/${name}");
-                };
-              }) (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix")))
+              map
+                (name: {
+                  name = removeSuffix ".age" name;
+                  value = {
+                    file = (snowfall.fs.get-file "secrets/${name}");
+                  };
+                })
+                (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix")))
             );
         };
     in

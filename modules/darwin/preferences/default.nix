@@ -13,8 +13,8 @@
     system.keyboard.enableKeyMapping = true;
     system.keyboard.remapCapsLockToControl = true;
 
-    # https://archive.is/KBa2w
-    system.activationScripts.postUserActivation.text = ''
+    # https://archive.is/KBa2w / https://discourse.nixos.org/t/system-activationscripts-alternative/64822/4
+    system.activationScripts.activateSettings.text = ''
       # Following line should allow us to avoid a logout/login cycle
       /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     '';
