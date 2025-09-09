@@ -74,6 +74,7 @@ eval "$(delta --generate-completion bash)"
 
 eval "$(mise activate bash)"
 
+. $HOME/.local/share/dotfiles/watch-defaults.sh
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
 if [[ $TERM != "dumb" ]]; then
@@ -97,7 +98,6 @@ if [[ $(type -t __vte_prompt_command) = function ]]; then
 fi
 unset __HM_PROMPT_COMMAND
 
-. $HOME/.local/share/dotfiles/watch-defaults.sh
 eval "$(direnv hook bash)"
 
 eval "$(zoxide init bash )"
