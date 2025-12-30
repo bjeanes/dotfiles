@@ -4,8 +4,16 @@
   ...
 }:
 {
-  config = lib.mkIf (pkgs.stdenv.isDarwin) {
-    programs.zsh.initContent = ". ${./watch-defaults.sh}";
-    programs.bash.initExtra = ". ${./watch-defaults.sh}";
-  };
+  config = lib.mkIf (pkgs.stdenv.isDarwin) (
+    let
+      init = ''
+        . ${./watch-defaults.sh}
+        [ -d /opt/homebrew/bin ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+      '';
+    in
+    {
+      programs.zsh.initContent = init;
+      programs.bash.initExtra = init;
+    }
+  );
 }
