@@ -75,6 +75,8 @@ eval "$(delta --generate-completion bash)"
 eval "$(mise activate bash)"
 
 . $HOME/.local/share/dotfiles/watch-defaults.sh
+[ -d /opt/homebrew/bin ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
 if [[ $TERM != "dumb" ]]; then
