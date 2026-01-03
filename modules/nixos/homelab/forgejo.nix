@@ -63,7 +63,7 @@ in
 
           virtualisation.oci-containers.containers = {
             ${svc} = {
-              image = "codeberg.org/forgejo/forgejo:10";
+              image = "codeberg.org/forgejo/forgejo:13";
               autoStart = true;
               dependsOn = [
                 "${svc}-db"
