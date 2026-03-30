@@ -21,30 +21,31 @@ in
     # TODO: https://nixos.asia/en/tips/git-profiles
     programs.git = {
       enable = true;
-      aliases = {
-        br = "branch --format='%(color:red)%(committerdate:iso8601)%(color:reset) %(align:8)(%(ahead-behind:HEAD))%(end) %(color:blue)%(align:40)%(refname:short)%(end)%(color:reset) %(color:white)%(contents:subject) %(color:yellow)(%(committerdate:relative))%(color:reset)' --sort=-creatordate";
-        oldestb = "br --sort=committerdate";
-        newestb = "br --sort=-committerdate";
 
-        c = "commit -v";
-        co = "checkout";
-        commit = "commit -v";
-        lg = lib.concatStringsSep " " [
-          "log --decorate --graph"
-          "--pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'"
-          "--abbrev-commit"
-          "--date=relative"
-          "--decorate-refs-exclude='refs/jj/keep/*'"
-          "--exclude='refs/jj/keep/*'"
-        ];
-        st = "status";
-        unadd = "reset HEAD";
+      settings = {
+        alias = {
+          br = "branch --format='%(color:red)%(committerdate:iso8601)%(color:reset) %(align:8)(%(ahead-behind:HEAD))%(end) %(color:blue)%(align:40)%(refname:short)%(end)%(color:reset) %(color:white)%(contents:subject) %(color:yellow)(%(committerdate:relative))%(color:reset)' --sort=-creatordate";
+          oldestb = "br --sort=committerdate";
+          newestb = "br --sort=-committerdate";
 
-        me = "!sh -c 'echo `git config user.name` \\<`git config user.email`\\>'";
-        mine = "!sh -c 'git lg --author=\"`git me`\"'";
-      };
+          c = "commit -v";
+          co = "checkout";
+          commit = "commit -v";
+          lg = lib.concatStringsSep " " [
+            "log --decorate --graph"
+            "--pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'"
+            "--abbrev-commit"
+            "--date=relative"
+            "--decorate-refs-exclude='refs/jj/keep/*'"
+            "--exclude='refs/jj/keep/*'"
+          ];
+          st = "status";
+          unadd = "reset HEAD";
 
-      extraConfig = {
+          me = "!sh -c 'echo `git config user.name` \\<`git config user.email`\\>'";
+          mine = "!sh -c 'git lg --author=\"`git me`\"'";
+        };
+
         user = {
           inherit (user) name email;
         };
@@ -84,9 +85,10 @@ in
         };
 
         commit.gpgsign = true;
-        gpg.format = "ssh";
         user.signingkey = signingKey;
       };
+
+      signing.format = "ssh";
 
       ignores = [
         "*.swp"
@@ -94,29 +96,21 @@ in
       ];
     };
 
-    # difftastic will show syntactical/structural changes in diffs
-    # programs.git.difftastic.enable = true;
-
-    # delta will show diffs with language-aware syntax highlighting
-    programs.git.delta.enable = true;
-    programs.git.delta.package = pkgs.delta;
-    programs.bash.initExtra = # bash
-      ''
-        eval "$(${pkgs.delta}/bin/delta --generate-completion bash)"
-      '';
-    programs.zsh.initContent = # zsh
-      ''
-        eval "$(${pkgs.delta}/bin/delta --generate-completion zsh)"
-      '';
+    # difftastic will show diffs with language-aware _structural_ syntax highlighting
+    programs.difftastic = {
+      enable = true;
+      jujutsu.enable = true;
+      git.enable = true;
+    };
 
     programs.lazygit.enable = true;
     programs.lazygit.settings = {
-      # lazygit can pull the pager out of Git's config, but `programs.git.delta.enable = true` sets
-      # the pager to `delta` directly, wheras `lazygit` requires `delta` to be called with
+      # lazygit can pull the pager out of Git's config, but `programs.git.difftastic.enable = true` sets
+      # the pager to `difftastic` directly, wheras `lazygit` requires `difftastic` to be called with
       # `--paging=never` due to rendering issues.
       #
       # https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
-      git.paging.pager = "${pkgs.delta}/bin/delta --paging=never";
+      git.paging.pager = "${pkgs.difftastic}/bin/difft --color=always --display=inline";
 
       update.method = "never"; # we will manage it here
       disableStartupPopups = true;
@@ -199,10 +193,7 @@ in
           "empty() ~ (root() | merges())"
         ];
 
-        diff.tool = "delta";
         ui.default-command = "log";
-        ui.pager = "delta";
-        ui.diff-formatter = "git";
 
         # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
         aliases.mon = [

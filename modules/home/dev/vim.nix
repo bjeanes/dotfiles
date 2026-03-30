@@ -1,8 +1,7 @@
-{
-  inputs,
-  system,
-  lib,
-  ...
+{ inputs
+, system
+, lib
+, ...
 }:
 let
   nvim = inputs.self.packages.${system}.nvim.extend {

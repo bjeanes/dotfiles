@@ -9,7 +9,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       ref = "nixos-unstable";
-      rev = "ca77296380960cd497a765102eeb1356eb80fed0";
+      # rev = "8110df5ad7abf5d4c0f6fb0f8f978390e77f9685";
     };
 
     darwin.url = "github:lnl7/nix-darwin/master";
@@ -22,7 +22,6 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     ghostty.url = "github:ghostty-org/ghostty";
-    ghostty.inputs.nixpkgs-unstable.follows = "nixpkgs";
     ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
 
     docker-inspect-run-cmd-fmt = {
@@ -67,7 +66,6 @@
     _1password-shell-plugins = {
       url = "github:1Password/shell-plugins";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "snowfall-lib/flake-utils-plus/flake-utils";
     };
 
     # nix-index-database.url = "github:nix-community/nix-index-database";

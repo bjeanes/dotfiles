@@ -3,7 +3,7 @@
     treesitter = {
       enable = true;
 
-      folding = false;
+      folding.enable = false;
       nixvimInjections = true;
 
       settings = {
@@ -38,7 +38,7 @@
     };
 
     treesitter-refactor = {
-      enable = true;
+      enable = false; # DISABLED https://github.com/nix-community/nixvim/issues/4188#issuecomment-3864805648
 
       highlightDefinitions = {
         enable = true;
