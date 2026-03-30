@@ -27,9 +27,6 @@
 [commit]
 	gpgsign = true
 
-[core]
-	pager = "delta"
-
 [credential "https://gist.github.com"]
 	helper = ""
 	helper = "gh auth git-credential"
@@ -38,20 +35,17 @@
 	helper = ""
 	helper = "gh auth git-credential"
 
-[delta]
-	features = "catppuccin-mocha"
+[diff]
+	external = "difft "
 
 [gpg]
 	format = "ssh"
 
-[gpg "openpgp"]
-	program = "gpg"
+[gpg "ssh"]
+	program = "ssh-keygen"
 
 [init]
 	defaultbranch = "main"
-
-[interactive]
-	diffFilter = "delta --color-only"
 
 [pull]
 	rebase = true
@@ -79,6 +73,3 @@
 	email = "me@bjeanes.com"
 	name = "Bo Jeanes"
 	signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
-
-[include]
-	path = "~/.local/share/dotfiles/catppuccin-delta/catppuccin.gitconfig"

@@ -118,70 +118,51 @@ MiniIcons.mock_nvim_web_devicons()
 
 vim.ui.select = require("mini.pick").ui_select
 
--- nvim-lspconfig {{{
-do
-    -- inlay hint
-
-    local __lspServers = {}
-    -- Adding lspOnAttach function to nixvim module lua table so other plugins can hook into it.
-    _M.lspOnAttach = function(client, bufnr) end
-    local __lspCapabilities = function()
-        capabilities = vim.lsp.protocol.make_client_capabilities()
-
-        return capabilities
-    end
-
-    local __setup = {
-        on_attach = _M.lspOnAttach,
-        capabilities = __lspCapabilities(),
-    }
-
-    for i, server in ipairs(__lspServers) do
-        local options = server.extraOptions
-
-        if options == nil then
-            options = __setup
-        else
-            options = vim.tbl_extend("keep", options, __setup)
-        end
-
-        require("lspconfig")[server.name].setup(options)
-    end
-end
--- }}}
-
 require("which-key").setup({})
 
 require("treesitter-context").setup({ max_lines = 4, min_window_height = 40, separator = "-" })
 
-vim.opt.runtimepath:prepend(vim.fs.joinpath(vim.fn.stdpath("data"), "site"))
-require("nvim-treesitter.configs").setup({
-    highlight = {
-        additional_vim_regex_highlighting = true,
-        disable = function(lang, bufnr)
-            return vim.api.nvim_buf_line_count(bufnr) > 10000
-        end,
-        enable = true,
-    },
-    incremental_selection = { enable = true },
-    indent = { enable = true },
-    parser_install_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "site"),
-    refactor = {
-        highlight_current_scope = { enable = false },
-        highlight_definitions = { clear_on_cursor_move = true, enable = true },
-        navigation = {
+-- Create autogroup for treesitter autocmds
+local augroup = vim.api.nvim_create_augroup("nixvim_treesitter", { clear = true })
+
+-- Detect nvim-treesitter API
+local has_configs_module = pcall(require, "nvim-treesitter.configs")
+
+if has_configs_module then
+    require("nvim-treesitter.configs").setup({
+        highlight = {
+            additional_vim_regex_highlighting = true,
+            disable = function(lang, bufnr)
+                return vim.api.nvim_buf_line_count(bufnr) > 10000
+            end,
             enable = true,
-            keymaps = {
-                goto_definition = "gnd",
-                goto_next_usage = "<a-*>",
-                goto_previous_usage = "<a-#>",
-                list_definitions = "gnD",
-                list_definitions_toc = "gO",
-            },
         },
-        smart_rename = { enable = true, keymaps = { smart_rename = "grr" } },
-    },
-})
+        incremental_selection = { enable = true },
+        indent = { enable = true },
+    })
+else
+    require("nvim-treesitter").setup({
+        highlight = {
+            additional_vim_regex_highlighting = true,
+            disable = function(lang, bufnr)
+                return vim.api.nvim_buf_line_count(bufnr) > 10000
+            end,
+            enable = true,
+        },
+        incremental_selection = { enable = true },
+        indent = { enable = true },
+    })
+
+    -- Enable features via autocommands for modern nvim-treesitter
+    vim.api.nvim_create_autocmd("FileType", {
+        group = augroup,
+        pattern = "*",
+        callback = function()
+            pcall(vim.treesitter.start)
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+    })
+end
 
 require("snacks").setup({
     bigfile = { enabled = true },
@@ -219,6 +200,21 @@ require("snacks").setup({
     scratch = { enabled = true },
     statuscolumn = { enabled = true },
     terminal = { enabled = true },
+})
+
+require("neo-tree").setup({
+    close_if_last_window = true,
+    filesystem = {
+        filtered_items = {
+            hide_dotfiles = false,
+            hide_hidden = false,
+            never_show_by_pattern = { ".direnv", ".git", ".*.swp", ".DS_Store" },
+            visible = true,
+        },
+        follow_current_file = { enabled = true, leave_dirs_open = true },
+        use_libuv_file_watcher = vim.fn.has("win32") ~= 1,
+    },
+    window = { auto_expand_width = false, width = 40 },
 })
 
 require("nvim-navic").setup({ lsp = { auto_attach = true } })
@@ -304,7 +300,9 @@ require("conform").setup({
         stylua = { command = "stylua" },
         taplo = { command = "taplo" },
         terraform_fmt = { command = "terraform" },
-        xmlformat = { command = "xmlformat" },
+        xmlformat = {
+            command = "xmlformat",
+        },
         yamlfmt = { command = "yamlfmt" },
     },
     formatters_by_ft = {
@@ -325,22 +323,6 @@ require("conform").setup({
         xml = { "xmlformat", "xmllint" },
         yaml = { "yamlfmt" },
     },
-})
-
-require("neo-tree").setup({
-    close_if_last_window = true,
-    document_symbols = { custom_kinds = {} },
-    filesystem = {
-        filtered_items = {
-            hide_dotfiles = false,
-            hide_hidden = false,
-            never_show_by_pattern = { ".direnv", ".git", ".*.swp", ".DS_Store" },
-            visible = true,
-        },
-        follow_current_file = { enabled = true, leaveDirsOpen = true },
-        use_libuv_file_watcher = vim.fn.has("win32") ~= 1,
-    },
-    window = { auto_expand_width = false, width = 40 },
 })
 
 -- Set up keybinds {{{
@@ -449,9 +431,30 @@ end
 
 vim.filetype.add({ extension = { ignore = "gitignore" }, pattern = { ["flake.lock"] = "json" } })
 
+-- LSP {{{
+do
+    local __lspCapabilities = function()
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+        return capabilities
+    end
+
+    local __setup = { capabilities = __lspCapabilities() }
+
+    local __wrapConfig = function(cfg)
+        if cfg == nil then
+            cfg = __setup
+        else
+            cfg = vim.tbl_extend("keep", cfg, __setup)
+        end
+        return cfg
+    end
+end
+-- }}}
+
 -- Set up autogroups {{
 do
-    local __nixvim_autogroups = { nixvim_binds_LspAttach = { clear = true } }
+    local __nixvim_autogroups = { nixvim_binds_LspAttach = { clear = true }, nixvim_lsp_on_attach = { clear = false } }
 
     for group_name, options in pairs(__nixvim_autogroups) do
         vim.api.nvim_create_augroup(group_name, options)
@@ -461,6 +464,19 @@ end
 -- Set up autocommands {{
 do
     local __nixvim_autocommands = {
+        {
+            callback = function(event)
+                do
+                    -- client and bufnr are supplied to the builtin `on_attach` callback,
+                    -- so make them available in scope for our global `onAttach` impl
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    local bufnr = event.buf
+                end
+            end,
+            desc = "Run LSP onAttach",
+            event = "LspAttach",
+            group = "nixvim_lsp_on_attach",
+        },
         {
             callback = function(args)
                 do
