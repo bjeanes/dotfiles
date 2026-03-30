@@ -1,7 +1,8 @@
 disableStartupPopups: true
 git:
   paging:
-    pager: delta --paging=never
+    pager: difft
+      --color=always --display=inline
 os:
   editPreset: nvim
 update:

@@ -1,4 +1,4 @@
-. "/etc/profiles/per-user/bjeanes/etc/profile.d/hm-session-vars.sh"
+. "$HOME/.local/share/dotfiles/hm-session-vars.sh"
 
 
 

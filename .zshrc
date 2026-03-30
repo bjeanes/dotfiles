@@ -35,23 +35,15 @@ for profile in ${(z)NIX_PROFILES}; do
 done
 
 ZSH_SSH_AWK="gawk"
-path+="$HOME/.zsh/plugins/zsh-vi-mode"
-fpath+="$HOME/.zsh/plugins/zsh-vi-mode"
-
-path+="$HOME/.zsh/plugins/zsh-ssh"
-fpath+="$HOME/.zsh/plugins/zsh-ssh"
-
-path+="$HOME/.zsh/plugins/zsh-autopair"
-fpath+="$HOME/.zsh/plugins/zsh-autopair"
-
-path+="$HOME/.zsh/plugins/fzf-tab"
-fpath+="$HOME/.zsh/plugins/fzf-tab"
-
-path+="$HOME/.zsh/plugins/cd-ls"
-fpath+="$HOME/.zsh/plugins/cd-ls"
-
-path+="$HOME/.zsh/plugins/F-Sy-H"
-fpath+="$HOME/.zsh/plugins/F-Sy-H"
+# Add plugin directories to PATH and fpath
+plugin_dirs=(
+  zsh-vi-mode zsh-ssh zsh-autopair fzf-tab cd-ls F-Sy-H
+)
+for plugin_dir in "${plugin_dirs[@]}"; do
+  path+="$HOME/.zsh/plugins/$plugin_dir"
+  fpath+="$HOME/.zsh/plugins/$plugin_dir"
+done
+unset plugin_dir plugin_dirs
 
 
 autoload -U compinit && compinit
@@ -61,24 +53,16 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 eval "$(zoxide init zsh )"
 
-if [[ -f "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/zsh-ssh/plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/zsh-ssh/plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/zsh-autopair/zsh-autopair.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/cd-ls/cd-ls.plugin.zsh"
-fi
-if [[ -f "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh" ]]; then
-  source "$HOME/.zsh/plugins/F-Sy-H/F-Sy-H.plugin.zsh"
-fi
+# Source plugins
+plugins=(
+  zsh-vi-mode/zsh-vi-mode.plugin.zsh zsh-ssh/plugin.zsh
+  zsh-autopair/zsh-autopair.plugin.zsh fzf-tab/fzf-tab.plugin.zsh
+  cd-ls/cd-ls.plugin.zsh F-Sy-H/F-Sy-H.plugin.zsh
+)
+for plugin in "${plugins[@]}"; do
+  [[ -f "$HOME/.zsh/plugins/$plugin" ]] && source "$HOME/.zsh/plugins/$plugin"
+done
+unset plugin plugins
 
 # History options should be set in .zshrc and after oh-my-zsh sourcing.
 # See https://github.com/nix-community/home-manager/issues/177.
@@ -88,33 +72,59 @@ SAVEHIST="10000"
 HISTFILE="$HOME/.zsh_history"
 mkdir -p "$(dirname "$HISTFILE")"
 
-setopt HIST_FCNTL_LOCK
-unsetopt APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
-unsetopt HIST_IGNORE_ALL_DUPS
-unsetopt HIST_SAVE_NO_DUPS
-unsetopt HIST_FIND_NO_DUPS
-setopt HIST_IGNORE_SPACE
-unsetopt HIST_EXPIRE_DUPS_FIRST
-setopt SHARE_HISTORY
-unsetopt EXTENDED_HISTORY
-setopt autocd
-
 if [[ $options[zle] = on ]]; then
   source <(fzf --zsh)
 fi
 
 source "$HOME/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 
-eval "$(delta --generate-completion zsh)"
+# Set shell options
+set_opts=(
+  HIST_FCNTL_LOCK HIST_IGNORE_DUPS HIST_IGNORE_SPACE SHARE_HISTORY autocd
+  NO_APPEND_HISTORY NO_EXTENDED_HISTORY NO_HIST_EXPIRE_DUPS_FIRST
+  NO_HIST_FIND_NO_DUPS NO_HIST_IGNORE_ALL_DUPS NO_HIST_SAVE_NO_DUPS
+)
+for opt in "${set_opts[@]}"; do
+  setopt "$opt"
+done
+unset opt set_opts
 
 eval "$(mise activate zsh)"
+
+gh() {
+  op plugin run -- gh "$@";
+}
+
+cargo() {
+  op plugin run -- cargo "$@";
+}
+
+heroku() {
+  op plugin run -- heroku "$@";
+}
+
+tea() {
+  op plugin run -- tea "$@";
+}
+
+glab() {
+  op plugin run -- glab "$@";
+}
 
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
 if [[ $TERM != "dumb" ]]; then
   eval "$(starship init zsh)"
 fi
+
+function lg() {
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+    command lazygit "$@"
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+      cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+      rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
 
 if test -n "$KITTY_INSTALLATION_DIR"; then
   export KITTY_SHELL_INTEGRATION="no-rc"
@@ -129,14 +139,10 @@ fi
 
 eval "$(direnv hook zsh)"
 
-alias -- cargo='op plugin run -- cargo'
 alias -- cat=bat
 alias -- cd=z
 alias -- eza='eza --icons auto --git'
 alias -- g=git
-alias -- gh='op plugin run -- gh'
-alias -- glab='op plugin run -- glab'
-alias -- heroku='op plugin run -- heroku'
 alias -- jj='jj --config-file=$HOME/.jj.local.toml'
 alias -- l=ls
 alias -- la='eza -a'
@@ -145,5 +151,4 @@ alias -- ll='ls -la'
 alias -- lla='eza -la'
 alias -- ls=eza
 alias -- lt='eza --tree'
-alias -- tea='op plugin run -- tea'
 alias -- vimdiff='nvim -d'

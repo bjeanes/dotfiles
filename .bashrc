@@ -7,29 +7,23 @@ HISTFILESIZE=100000
 HISTSIZE=10000
 
 shopt -s histappend
-shopt -s checkwinsize
 shopt -s extglob
 shopt -s globstar
 shopt -s checkjobs
 
-alias cargo='op plugin run -- cargo'
-alias cat=bat
-alias cd=z
-alias eza='eza --icons auto --git'
-alias g=git
-alias gh='op plugin run -- gh'
-alias glab='op plugin run -- glab'
-alias heroku='op plugin run -- heroku'
-alias jj='jj --config-file=$HOME/.jj.local.toml'
-alias l=ls
-alias la='eza -a'
-alias lg=lazygit
-alias ll='ls -la'
-alias lla='eza -la'
-alias ls=eza
-alias lt='eza --tree'
-alias tea='op plugin run -- tea'
-alias vimdiff='nvim -d'
+alias -- cat=bat
+alias -- cd=z
+alias -- eza='eza --icons auto --git'
+alias -- g=git
+alias -- jj='jj --config-file=$HOME/.jj.local.toml'
+alias -- l=ls
+alias -- la='eza -a'
+alias -- lg=lazygit
+alias -- ll='ls -la'
+alias -- lla='eza -la'
+alias -- ls=eza
+alias -- lt='eza --tree'
+alias -- vimdiff='nvim -d'
 
 if [[ -n "${GHOSTTY_RESOURCES_DIR}" ]]; then
   builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
@@ -70,15 +64,38 @@ docker-describe() {
   docker inspect --format "$(cat $HOME/.local/share/dotfiles/docker-inspect-run-cmd-fmt/run.tpl)" "$1"
 }
 
-eval "$(delta --generate-completion bash)"
-
 eval "$(mise activate bash)"
+
+gh() {
+  op plugin run -- gh "$@";
+}
+
+cargo() {
+  op plugin run -- cargo "$@";
+}
+
+heroku() {
+  op plugin run -- heroku "$@";
+}
+
+tea() {
+  op plugin run -- tea "$@";
+}
+
+glab() {
+  op plugin run -- glab "$@";
+}
 
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
-if [[ $TERM != "dumb" ]]; then
-  eval "$(starship init bash --print-full-init)"
-fi
+function lg() {
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+    command lazygit "$@"
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+      cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+      rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
 
 if test -n "$KITTY_INSTALLATION_DIR"; then
   export KITTY_SHELL_INTEGRATION="no-rc"
@@ -98,6 +115,10 @@ fi
 unset __HM_PROMPT_COMMAND
 
 eval "$(direnv hook bash)"
+
+if [[ $TERM != "dumb" ]]; then
+  eval "$(starship init bash --print-full-init)"
+fi
 
 eval "$(zoxide init bash )"
 

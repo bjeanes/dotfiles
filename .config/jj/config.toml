@@ -9,9 +9,6 @@ mon = [
     "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'",
 ]
 
-[diff]
-tool = "delta"
-
 [git]
 private-commits = "( description(exact-i:'wip') ) | ( description(exact-i:'private') ) | ( description(exact-i:'priv') ) | ( description(glob-i:'wip:') ) | ( description(glob-i:'priv:') ) | ( description(glob-i:'private:') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) )"
 push-new-bookmarks = true
@@ -31,8 +28,7 @@ git_push_bookmark = "\"bjeanes/\" ++ change_id.short()\n"
 
 [ui]
 default-command = "log"
-diff-formatter = "git"
-pager = "delta"
+diff-formatter = ["difft", "--color=always", "--sort-paths", "$left", "$right"]
 
 [user]
 email = "me@bjeanes.com"
