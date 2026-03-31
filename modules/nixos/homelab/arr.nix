@@ -272,6 +272,12 @@ in
       needsMedia = false;
     })
 
+    # https://getqui.com/
+    (mkArr "qui" {
+      image = "ghcr.io/autobrr/qui:latest";
+      port = 7476;
+    })
+
     # Collect statistics about what is getting watched in Plex, so that I can
     # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
