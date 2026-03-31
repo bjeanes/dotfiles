@@ -329,6 +329,7 @@ in
     # Reliably unpacking media
     (mkArr "unpackerr" {
       image = "ghcr.io/unpackerr/unpackerr:latest";
+      port = 5656;
       after = [
         "sonarr"
         "radarr"
