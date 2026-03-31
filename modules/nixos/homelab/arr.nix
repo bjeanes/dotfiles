@@ -248,6 +248,9 @@ in
       needsMedia = false;
     })
 
+    # NZB
+    (mkArr "sabnzbd" { port = 8080; })
+
     # Managing media requests
     (mkArr "overseerr" {
       image = "sctx/overseerr:latest";
