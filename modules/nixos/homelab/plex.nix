@@ -89,7 +89,6 @@ in
         ];
         udp = [
           1900 # Plex DLNA Server
-          5353 # older Bonjour/Avahi discovery
           32410 # GDM network discovery
           32412 # GDM network discovery
           32413 # GDM network discovery
@@ -158,36 +157,35 @@ in
               # TODO: instead of interleaving mounts between local and NAS, have a single
               # MergerFS mount point and regularly move large / irregularly accessed files like
               # thumbnails from the local branch to the NAS branch in the MergerFS mount.
-              volumes =
-                [
-                  "/etc/localtime:/etc/localtime:ro"
-                  "/dev/dri:/dev/dri:z"
-                  "${secrets.plex-token.path}:/run/secrets/plex-claim"
-                  "${transcodePath}:/transcode"
+              volumes = [
+                "/etc/localtime:/etc/localtime:ro"
+                "/dev/dri:/dev/dri:z"
+                "${secrets.plex-token.path}:/run/secrets/plex-claim"
+                "${transcodePath}:/transcode"
 
-                  "/mnt/nfs/nas/media:/data" # TV Shows, Movies, Music, etc
+                "/mnt/nfs/nas/media:/data" # TV Shows, Movies, Music, etc
 
-                  # Base config is local, in particular /config/Library, which
-                  # LSIO's Plex checks owner. If it doesn't match it performs
-                  # a lengthly and permission-denied attempt to chown, which
-                  # we want to avoid.
-                  "${cfg.configDir}:/config"
+                # Base config is local, in particular /config/Library, which
+                # LSIO's Plex checks owner. If it doesn't match it performs
+                # a lengthly and permission-denied attempt to chown, which
+                # we want to avoid.
+                "${cfg.configDir}:/config"
 
-                  # A lot of large metadata files, thumbnails, etc, are stored
-                  # here, so let's put that straight on the NAS instead
-                  "${nasConfigPath}/${pmsPath}:/config/${pmsPath}"
+                # A lot of large metadata files, thumbnails, etc, are stored
+                # here, so let's put that straight on the NAS instead
+                "${nasConfigPath}/${pmsPath}:/config/${pmsPath}"
 
-                  # We want the SQLite DB to be local though, but it's a subpath of pmsPath, so overlay DB location locally
-                  "${cfg.configDir}/${databasePath}:/config/${databasePath}"
+                # We want the SQLite DB to be local though, but it's a subpath of pmsPath, so overlay DB location locally
+                "${cfg.configDir}/${databasePath}:/config/${databasePath}"
 
-                  # But... make sure those database backups still end up on the NAS
-                  "${nasConfigPath}/${databaseBackupPath}:/config/${databaseBackupPath}"
+                # But... make sure those database backups still end up on the NAS
+                "${nasConfigPath}/${databaseBackupPath}:/config/${databaseBackupPath}"
 
-                  # Log files should be local
-                  "${cfg.configDir}/${logsPath}:/config/${logsPath}"
-                ]
-                # Temporary caching should be local
-                ++ (map (d: "${cfg.configDir}/${d}:/config/${d}") tmpPaths);
+                # Log files should be local
+                "${cfg.configDir}/${logsPath}:/config/${logsPath}"
+              ]
+              # Temporary caching should be local
+              ++ (map (d: "${cfg.configDir}/${d}:/config/${d}") tmpPaths);
 
               environment = {
                 TZ = "Australia/Melbourne";
