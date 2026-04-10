@@ -110,8 +110,12 @@ in
       # `--paging=never` due to rendering issues.
       #
       # https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
-      git.paging.pager = "${pkgs.difftastic}/bin/difft --color=always --display=inline";
+      git.pagers = [
+        { pager = "${pkgs.delta}/bin/delta --dark --paging=never"; }
+        { externalDiffCommand = "${pkgs.difftastic}/bin/difft --color=always --display=inline"; }
+      ];
 
+      autoFetch = false;
       update.method = "never"; # we will manage it here
       disableStartupPopups = true;
 
