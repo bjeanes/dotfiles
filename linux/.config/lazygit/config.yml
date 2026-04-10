@@ -1,7 +1,10 @@
+autoFetch: false
 disableStartupPopups: true
 git:
-  paging:
-    pager: difft
+  pagers:
+  - pager: delta --dark
+      --paging=never
+  - externalDiffCommand: difft
       --color=always --display=inline
 os:
   editPreset: nvim
