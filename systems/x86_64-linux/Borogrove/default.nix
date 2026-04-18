@@ -36,7 +36,16 @@
   networking.hostId = "4942dfbd";
   networking.networkmanager.enable = true;
 
-  services.glances.enable = true;
+  services.glances = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  remote-power-management = {
+    enable = true;
+    user = "homeassistant";
+    authorizedKeysFile = ./../../../secrets/homeassistant-key.pub;
+  };
 
   homelab.services = {
     arrs.enable = true;

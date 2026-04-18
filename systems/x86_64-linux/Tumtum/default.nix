@@ -35,7 +35,16 @@
   networking.hostId = "45fc3250";
   networking.networkmanager.enable = true;
 
-  services.glances.enable = true;
+  services.glances = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  remote-power-management = {
+    enable = true;
+    user = "homeassistant";
+    authorizedKeysFile = ./../../../secrets/homeassistant-key.pub;
+  };
 
   homelab.services.plex.enable = true;
 }

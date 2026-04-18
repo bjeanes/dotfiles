@@ -33,7 +33,16 @@
     hashedPasswordFile = config.age.secrets.default-password.path;
   };
 
-  services.glances.enable = true;
+  services.glances = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  remote-power-management = {
+    enable = true;
+    user = "homeassistant";
+    authorizedKeysFile = ./../../../secrets/homeassistant-key.pub;
+  };
 
   networking.hostId = "cc8e939c";
   networking.networkmanager.enable = true;
