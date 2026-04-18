@@ -40,15 +40,17 @@
     treesitter-refactor = {
       enable = false; # DISABLED https://github.com/nix-community/nixvim/issues/4188#issuecomment-3864805648
 
-      highlightDefinitions = {
-        enable = true;
-        clearOnCursorMove = true;
-      };
-      smartRename = {
-        enable = true;
-      };
-      navigation = {
-        enable = true;
+      settings = {
+        highlight_definitions = {
+          enable = true;
+          clear_on_cursor_move = true;
+        };
+        smart_rename = {
+          enable = true;
+        };
+        navigation = {
+          enable = true;
+        };
       };
     };
   };

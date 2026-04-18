@@ -14,34 +14,36 @@
   plugins.neo-tree = {
     enable = true;
 
-    closeIfLastWindow = true;
+    settings = {
+      close_if_last_window = true;
 
-    filesystem = {
-      filteredItems = {
-        hideDotfiles = false;
-        hideHidden = false;
+      filesystem = {
+        use_libuv_file_watcher.__raw = ''vim.fn.has "win32" ~= 1'';
 
-        neverShowByPattern = [
-          ".direnv"
-          ".git"
-          ".*.swp"
-          ".DS_Store"
-        ];
+        filtered_items = {
+          hide_dotfiles = false;
+          hide_hidden = false;
 
-        visible = true;
+          never_show_by_pattern = [
+            ".direnv"
+            ".git"
+            ".*.swp"
+            ".DS_Store"
+          ];
+
+          visible = true;
+        };
+
+        follow_current_file = {
+          enabled = true;
+          leave_dirs_open = true;
+        };
       };
 
-      followCurrentFile = {
-        enabled = true;
-        leaveDirsOpen = true;
+      window = {
+        width = 40;
+        auto_expand_width = false;
       };
-
-      useLibuvFileWatcher.__raw = ''vim.fn.has "win32" ~= 1'';
-    };
-
-    window = {
-      width = 40;
-      autoExpandWidth = false;
     };
   };
 }
