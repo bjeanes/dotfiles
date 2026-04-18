@@ -19,7 +19,7 @@ in
     };
 
     image = lib.mkOption {
-      default = "lscr.io/linuxserver/qbittorrent:4.6.7";
+      default = "lscr.io/linuxserver/qbittorrent:latest";
       type = lib.types.str;
       description = "OCI image for ${svc}";
     };
