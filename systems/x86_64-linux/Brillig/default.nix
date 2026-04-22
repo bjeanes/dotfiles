@@ -44,6 +44,8 @@
     authorizedKeysFile = ./../../../secrets/homeassistant-key.pub;
   };
 
+  homelab.services.llama.enable = true;
+
   networking.hostId = "cc8e939c";
   networking.networkmanager.enable = true;
 }
