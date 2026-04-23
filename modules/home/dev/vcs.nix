@@ -197,6 +197,11 @@ in
 
         ui.default-command = "log";
 
+        revset-aliases = {
+          # https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
+          "closest_merge(to)" = "heads(::to & merges())";
+        };
+
         aliases = {
           # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
           mon = [
@@ -206,6 +211,43 @@ in
             "sh"
             "-c"
             "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"
+          ];
+
+          # https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
+          #
+          # Incorporate a revset which is a descendent of a megamerge into the
+          # megamerge (between latest trunk and megamerge). Takes multiple
+          # arguments, each one being an independent (parallel) stack under the
+          # megamerge.
+          stack = [
+            "rebase"
+            "--after"
+            "trunk()"
+            "--before"
+            "closest_merge(@)"
+            "--revisions"
+          ];
+
+          # https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
+          #
+          # Incorporate all commits after the megamerge as a single patch-series
+          # under the megamerge (on top of latest trunk). Like `stack` above,
+          # except it requires no arguments and treats everything as a single stack
+          stage = [
+            "stack"
+            "closest_merge(@)+:: ~ empty()"
+          ];
+
+          # https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
+          #
+          # Easier bulk rebasing of WIP (between previous trunk and megamerge) onto latest trunk
+          restack = [
+            "rebase"
+            "--onto"
+            "trunk()"
+            "--source"
+            "roots(trunk()..) & mutable()"
+            "--simplify-parents"
           ];
 
           # When editing an earlier commit, `jj git push` won't push later
