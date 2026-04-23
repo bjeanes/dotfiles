@@ -171,9 +171,8 @@ in
           '';
         };
 
+        remotes.origin.auto-track-bookmarks = "bjeanes/*";
         git.sign-on-push = true;
-
-        git.push-new-bookmarks = true; # Don't require --allow-new;
 
         # Any commit matching any of these revset expressions will be treated
         # as "private" and will not be pushable (without `--allow-private`)
