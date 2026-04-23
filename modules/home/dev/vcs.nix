@@ -197,30 +197,33 @@ in
 
         ui.default-command = "log";
 
-        # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
-        aliases.mon = [
-          "util"
-          "exec"
-          "--"
-          "sh"
-          "-c"
-          "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"
-        ];
+        aliases = {
+          # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
+          mon = [
+            "util"
+            "exec"
+            "--"
+            "sh"
+            "-c"
+            "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"
+          ];
 
-        # When editing an earlier commit, `jj git push` won't push later
-        # rebased commits because:
-        #
-        #     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
-        #
-        # This provides a different revset that doesn't is open ended (`..` vs
-        # `..@`) which will push all sideways bookmarks, regardless of current
-        # working commit.
-        aliases."gpa" = [
-          "git"
-          "push"
-          "-r"
-          "remote_bookmarks(remote=origin).." # default would end in `..@`
-        ];
+          # When editing an earlier commit, `jj git push` won't push later
+          # rebased commits because:
+          #
+          #     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
+          #
+          # This provides a different revset that doesn't is open ended (`..` vs
+          # `..@`) which will push all sideways bookmarks, regardless of current
+          # working commit.
+          gpa = [
+            "git"
+            "push"
+            "-r"
+            "remote_bookmarks(remote=origin).." # default would end in `..@`
+          ];
+        };
+
       };
     };
 
