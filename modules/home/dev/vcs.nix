@@ -172,6 +172,7 @@ in
         };
 
         remotes.origin.auto-track-bookmarks = "bjeanes/*";
+
         git.sign-on-push = true;
 
         # Any commit matching any of these revset expressions will be treated
@@ -270,7 +271,7 @@ in
     };
 
     home.packages = with pkgs; [
-      # gg-jj  # seems broken on latest due to Tauri
+      gg-jj
     ];
   };
 }
