@@ -4,8 +4,11 @@ mon = ['util', 'exec', '--', 'sh', '-c', "clear; jj --ignore-working-copy --no-p
 
 [git]
 private-commits = "( description(exact-i:'wip') ) | ( description(exact-i:'private') ) | ( description(exact-i:'priv') ) | ( description(glob-i:'wip:') ) | ( description(glob-i:'priv:') ) | ( description(glob-i:'private:') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) )"
-push-new-bookmarks = true
 sign-on-push = true
+
+[remotes]
+[remotes.origin]
+auto-track-bookmarks = 'bjeanes/*'
 
 [signing]
 backend = 'ssh'
