@@ -431,6 +431,10 @@ end
 
 vim.filetype.add({ extension = { ignore = "gitignore" }, pattern = { ["flake.lock"] = "json" } })
 
+do
+    local __editorconfig = require("editorconfig")
+end
+
 -- LSP {{{
 do
     local __lspCapabilities = function()
