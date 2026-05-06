@@ -1,3 +1,5 @@
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
 
 -- Nixvim's internal module table
 -- Can be used to share code throughout init.lua
@@ -142,12 +144,27 @@ else
     })
 
     -- Enable features via autocommands for modern nvim-treesitter
+    local disabled_highlight = {}
+
     vim.api.nvim_create_autocmd("FileType", {
         group = augroup,
         pattern = "*",
-        callback = function()
-            pcall(vim.treesitter.start)
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        callback = function(args)
+            local filetype = vim.bo[args.buf].filetype
+            local lang = vim.treesitter.language.get_lang(filetype) or filetype
+            local start_highlight = true
+
+            for _, disabled in ipairs(disabled_highlight) do
+                if disabled == lang or disabled == filetype then
+                    start_highlight = false
+                    break
+                end
+            end
+
+            if start_highlight then
+                pcall(vim.treesitter.start, args.buf, lang)
+            end
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
     })
 end
@@ -418,10 +435,6 @@ end
 -- }}}
 
 vim.filetype.add({ extension = { ignore = "gitignore" }, pattern = { ["flake.lock"] = "json" } })
-
-do
-    local __editorconfig = require("editorconfig")
-end
 
 -- LSP {{{
 do
