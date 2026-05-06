@@ -38,6 +38,30 @@
     openFirewall = true;
   };
 
+  homelab.services.homeassistant = {
+    enable = true;
+    image.sha256 = "sha256-R0uPLmV/aXx6ImrNW20Lj3Sy39GfcUh6GCONizajYE8=";
+    network.macAddress = "52:54:00:3b:95:b0";
+    uuid = "3d285dee-b8e3-45dd-9b08-b4dc1fd3eeac";
+    usbDevices = [
+      #   { ConBee II
+      #     vendorId = "0x1cf1";
+      #     productId = "0x0030";
+      #   }
+      {
+        # Nabu Casa SkyConnect
+        vendorId = "0x10c4";
+        productId = "0xea60";
+      }
+    ];
+    serialDevices = [
+      # ConBee II is unresponsive when exposed as a USB device, so putting it
+      # here exposes it as a TTY device at /dev/ttyS1, which Zigbee2MQTT is
+      # happy with.
+      "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2449538-if00"
+    ];
+  };
+
   remote-power-management = {
     enable = true;
     user = "homeassistant";

@@ -12,6 +12,11 @@
       # rev = "8110df5ad7abf5d4c0f6fb0f8f978390e77f9685";
     };
 
+    nixvirt = {
+      url = "github:AshleyYakeley/NixVirt";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -129,9 +134,10 @@
       ];
 
       systems.modules.nixos = with inputs; [
+        agenix.nixosModules.default
         comin.nixosModules.comin
         catppuccin.nixosModules.catppuccin
-        agenix.nixosModules.default
+        nixvirt.nixosModules.default
         secrets
       ];
 
