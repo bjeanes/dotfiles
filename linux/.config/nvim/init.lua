@@ -130,25 +130,13 @@ local has_configs_module = pcall(require, "nvim-treesitter.configs")
 
 if has_configs_module then
     require("nvim-treesitter.configs").setup({
-        highlight = {
-            additional_vim_regex_highlighting = true,
-            disable = function(lang, bufnr)
-                return vim.api.nvim_buf_line_count(bufnr) > 10000
-            end,
-            enable = true,
-        },
+        highlight = { additional_vim_regex_highlighting = true, enable = true },
         incremental_selection = { enable = true },
         indent = { enable = true },
     })
 else
     require("nvim-treesitter").setup({
-        highlight = {
-            additional_vim_regex_highlighting = true,
-            disable = function(lang, bufnr)
-                return vim.api.nvim_buf_line_count(bufnr) > 10000
-            end,
-            enable = true,
-        },
+        highlight = { additional_vim_regex_highlighting = true, enable = true },
         incremental_selection = { enable = true },
         indent = { enable = true },
     })
