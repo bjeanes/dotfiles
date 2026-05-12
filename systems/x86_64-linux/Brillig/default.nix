@@ -38,6 +38,7 @@
     openFirewall = true;
   };
 
+  homelab.networking.e1000eOffloads.disable = true;
   homelab.services.homeassistant = {
     enable = true;
     image.sha256 = "sha256-R0uPLmV/aXx6ImrNW20Lj3Sy39GfcUh6GCONizajYE8=";
