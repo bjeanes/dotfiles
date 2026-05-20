@@ -42,7 +42,7 @@ behaviour = "own"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
 
 [template-aliases]
-"format_short_signature(signature)" = "if(\n  signature.email().domain() == \"users.noreply.github.com\",\n  signature.email().local() ++ \"@GH\",\n  if(\n    signature.email().local() == \"me\" ||\n      signature.email().local() == \"hello\" ||\n      signature.email().local() == \"dev\" ||\n      signature.email().local() == \"git\",\n    signature.email().domain(),\n    signature.email().local() ++ \"@\"\n  )\n)\n"
+"format_short_signature(signature)" = "if(\n  signature.email().domain() == \"users.noreply.github.com\",\n  signature.email().local().replace(regex:\"^[0-9]+\\\\+\", \"\") ++ \"@GH\",\n  if(\n    signature.email().local() == \"me\" ||\n      signature.email().local() == \"hello\" ||\n      signature.email().local() == \"dev\" ||\n      signature.email().local() == \"git\",\n    signature.email().domain(),\n    signature.email().local() ++ \"@\"\n  )\n)\n"
 "format_timestamp(timestamp)" = "timestamp.ago()"
 
 [templates]
