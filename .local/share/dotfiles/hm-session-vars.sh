@@ -12,3 +12,5 @@ export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 export VISUAL="nvim"
 
+# reset TERM with new TERMINFO available (if any)
+export TERM="$TERM"

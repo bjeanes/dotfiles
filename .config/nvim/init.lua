@@ -1,3 +1,5 @@
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
 
 -- Nixvim's internal module table
 -- Can be used to share code throughout init.lua
@@ -130,36 +132,39 @@ local has_configs_module = pcall(require, "nvim-treesitter.configs")
 
 if has_configs_module then
     require("nvim-treesitter.configs").setup({
-        highlight = {
-            additional_vim_regex_highlighting = true,
-            disable = function(lang, bufnr)
-                return vim.api.nvim_buf_line_count(bufnr) > 10000
-            end,
-            enable = true,
-        },
+        highlight = { additional_vim_regex_highlighting = true, enable = true },
         incremental_selection = { enable = true },
         indent = { enable = true },
     })
 else
     require("nvim-treesitter").setup({
-        highlight = {
-            additional_vim_regex_highlighting = true,
-            disable = function(lang, bufnr)
-                return vim.api.nvim_buf_line_count(bufnr) > 10000
-            end,
-            enable = true,
-        },
+        highlight = { additional_vim_regex_highlighting = true, enable = true },
         incremental_selection = { enable = true },
         indent = { enable = true },
     })
 
     -- Enable features via autocommands for modern nvim-treesitter
+    local disabled_highlight = {}
+
     vim.api.nvim_create_autocmd("FileType", {
         group = augroup,
         pattern = "*",
-        callback = function()
-            pcall(vim.treesitter.start)
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        callback = function(args)
+            local filetype = vim.bo[args.buf].filetype
+            local lang = vim.treesitter.language.get_lang(filetype) or filetype
+            local start_highlight = true
+
+            for _, disabled in ipairs(disabled_highlight) do
+                if disabled == lang or disabled == filetype then
+                    start_highlight = false
+                    break
+                end
+            end
+
+            if start_highlight then
+                pcall(vim.treesitter.start, args.buf, lang)
+            end
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
     })
 end
