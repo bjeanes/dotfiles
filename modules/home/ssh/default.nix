@@ -15,7 +15,6 @@ in
       enable = true;
       enableDefaultConfig = false; # this is being deprecated but still defaults to true, so raises warnings
       includes = [
-        "~/.orbstack/ssh/config" # TODO only on darwin
         "~/.ssh/config.d/*"
       ];
 

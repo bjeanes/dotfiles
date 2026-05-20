@@ -4,6 +4,10 @@
   ...
 }:
 {
+  imports = [
+    ./orbstack.nix
+  ];
+
   config = lib.mkIf (pkgs.stdenv.isDarwin) (
     let
       init = ''
