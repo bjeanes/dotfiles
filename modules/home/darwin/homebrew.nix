@@ -7,16 +7,12 @@
   config = lib.mkIf (pkgs.stdenv.isDarwin) (
     let
       init = ''
-        source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+        [ -d /opt/homebrew/bin ] && eval "$(/opt/homebrew/bin/brew shellenv)"
       '';
     in
     {
       programs.zsh.profileExtra = init;
       programs.bash.profileExtra = init;
-
-      programs.ssh.includes = [
-        "~/.orbstack/ssh/config"
-      ];
     }
   );
 }

@@ -6,13 +6,13 @@
 {
   imports = [
     ./orbstack.nix
+    ./homebrew.nix
   ];
 
   config = lib.mkIf (pkgs.stdenv.isDarwin) (
     let
       init = ''
         . ${./watch-defaults.sh}
-        [ -d /opt/homebrew/bin ] && eval "$(/opt/homebrew/bin/brew shellenv)"
       '';
     in
     {
