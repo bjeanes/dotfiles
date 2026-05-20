@@ -162,11 +162,25 @@ in
               )
             )
           '';
+
+          # https://ddbeck.com/notes/jj-git-push-bookmark-template/
+          "slugify(str)" = ''
+            truncate_end(
+              65,
+              str.first_line()
+                .replace(regex:"[^[[:alnum:]].]", "-")
+                .replace(regex:"-{2,}", "-")
+                .replace(regex:"\\.{2,}", ".")
+                .replace(regex:"(^-+|-+$)", "")
+                .lower()
+            )
+          '';
+
         };
 
         templates = {
           git_push_bookmark = ''
-            "bjeanes/" ++ change_id.short()
+            "bjeanes/" ++ change_id.short() ++ "-" ++ slugify(description)
           '';
         };
 
