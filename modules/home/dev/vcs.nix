@@ -148,11 +148,10 @@ in
           # Relative timestamp rendered as "x days/hours/seconds ago"
           "format_timestamp(timestamp)" = "timestamp.ago()";
 
-          # TODO: find a way to strip the `(\d+)\+` prefix from users.noreply.github.com email addresses
           "format_short_signature(signature)" = ''
             if(
               signature.email().domain() == "users.noreply.github.com",
-              signature.email().local() ++ "@GH",
+              signature.email().local().replace(regex:"^[0-9]+\\+", "") ++ "@GH",
               if(
                 signature.email().local() == "me" ||
                   signature.email().local() == "hello" ||
