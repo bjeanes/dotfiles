@@ -17,22 +17,21 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/catppuccin-wezterm` | catppuccin-wezterm 0 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main |
-| `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2026-03-09 |
+| `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2026-03-31 |
 | `~/.local/share/dotfiles/vte` | vte 0.82.3 |
-| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2026-01-17 |
+| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2026-03-31 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/a7788416689dbefea659d9e9415c87926b0ba5d8 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/086a40dc7ed8242c03be9f47fbcee68699cc2395 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/v2.0.0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/dca1a190aa85f9065979ef35802fb77131911106 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/git-blame.nvim` | https://github.com/f-person/git-blame.nvim/tree/5c536e2d4134d064aa3f41575280bc8a2a0e03d7 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/hmts.nvim` | https://github.com/calops/hmts.nvim/tree/a32cd413f7d0a69d7f3d279c631f20cb117c8d30 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/439cdcd6992bc9012efd7d8ed7a7b7a0f1fac32a |
-| `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/1f75801ad71b440d1303c927fc489bc706eeee51 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/0f339bf5c93f392dc5d2417d47d7b9edc5f96fe8 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/3.40.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/bfba63d6c129d8b5073fe9eb965c9acee04becb0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/46204c8fdaa36a9aa3768780450e4bc7a210025f |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.8.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/f5eba192f39b453675d115351808bd51276d9de5 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/6620ae1c44dfa8623b22d0cbf873a9e8d073b849 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/adf4b6b0420b7be6c717ef0ac7993183d6c201b1 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/4916d6592ede8c07973490d9322f187e07dfefac |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/b0c45cefe2c8f7b55fc46f34e563bc428ef99636 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/7235c7ce2cea530cb6b59bc3e46d4bfe917d15c8 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-sleuth` | https://github.com/tpope/vim-sleuth/tree/be69bff86754b1aa5adcbb527d7fcd1635a84080 |

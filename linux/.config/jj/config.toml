@@ -1,37 +1,57 @@
 [aliases]
-gpa = ['git', 'push', '-r', 'remote_bookmarks(remote=origin)..']
-mon = ['util', 'exec', '--', 'sh', '-c', "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"]
-restack = ['rebase', '--onto', 'trunk()', '--source', 'roots(trunk()..) & mutable()', '--simplify-parents']
-stack = ['rebase', '--after', 'trunk()', '--before', 'closest_merge(@)', '--revisions']
-stage = ['stack', 'closest_merge(@)+:: ~ empty()']
+gpa = ["git", "push", "-r", "remote_bookmarks(remote=origin).."]
+mon = [
+    "util",
+    "exec",
+    "--",
+    "sh",
+    "-c",
+    "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'",
+]
+restack = [
+    "rebase",
+    "--onto",
+    "trunk()",
+    "--source",
+    "roots(trunk()..) & mutable()",
+    "--simplify-parents",
+]
+stack = [
+    "rebase",
+    "--after",
+    "trunk()",
+    "--before",
+    "closest_merge(@)",
+    "--revisions",
+]
+stage = ["stack", "closest_merge(@)+:: ~ empty()"]
 
 [git]
 private-commits = "( description(exact-i:'wip') ) | ( description(exact-i:'private') ) | ( description(exact-i:'priv') ) | ( description(glob-i:'wip:') ) | ( description(glob-i:'priv:') ) | ( description(glob-i:'private:') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) )"
 sign-on-push = true
 
-[remotes]
 [remotes.origin]
-auto-track-bookmarks = 'bjeanes/*'
+auto-track-bookmarks = "bjeanes/*"
 
 [revset-aliases]
-'closest_merge(to)' = 'heads(::to & merges())'
+"closest_merge(to)" = "heads(::to & merges())"
 
 [signing]
-backend = 'ssh'
-behaviour = 'own'
-key = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh'
+backend = "ssh"
+behaviour = "own"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
 
 [template-aliases]
-'format_short_signature(signature)' = "if(\n  signature.email().domain() == \"users.noreply.github.com\",\n  signature.email().local() ++ \"@GH\",\n  if(\n    signature.email().local() == \"me\" ||\n      signature.email().local() == \"hello\" ||\n      signature.email().local() == \"dev\" ||\n      signature.email().local() == \"git\",\n    signature.email().domain(),\n    signature.email().local() ++ \"@\"\n  )\n)\n"
-'format_timestamp(timestamp)' = 'timestamp.ago()'
+"format_short_signature(signature)" = "if(\n  signature.email().domain() == \"users.noreply.github.com\",\n  signature.email().local() ++ \"@GH\",\n  if(\n    signature.email().local() == \"me\" ||\n      signature.email().local() == \"hello\" ||\n      signature.email().local() == \"dev\" ||\n      signature.email().local() == \"git\",\n    signature.email().domain(),\n    signature.email().local() ++ \"@\"\n  )\n)\n"
+"format_timestamp(timestamp)" = "timestamp.ago()"
 
 [templates]
 git_push_bookmark = "\"bjeanes/\" ++ change_id.short()\n"
 
 [ui]
-default-command = 'log'
-diff-formatter = ['difft', '--color=always', '--sort-paths', '$left', '$right']
+default-command = "log"
+diff-formatter = ["difft", "--color=always", "--sort-paths", "$left", "$right"]
 
 [user]
-email = 'me@bjeanes.com'
-name = 'Bo Jeanes'
+email = "me@bjeanes.com"
+name = "Bo Jeanes"

@@ -28,7 +28,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/dca1a190aa85f9065979ef35802fb77131911106 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/git-blame.nvim` | https://github.com/f-person/git-blame.nvim/tree/5c536e2d4134d064aa3f41575280bc8a2a0e03d7 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/5849ef04c32a6a8e55957b946c0a275801d87530 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/0f339bf5c93f392dc5d2417d47d7b9edc5f96fe8 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/3.40.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/bfba63d6c129d8b5073fe9eb965c9acee04becb0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.8.0 |
