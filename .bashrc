@@ -25,7 +25,7 @@ alias -- ls=eza
 alias -- lt='eza --tree'
 alias -- vimdiff='nvim -d'
 
-if [[ -n "${GHOSTTY_RESOURCES_DIR}" ]]; then
+if [[ -r "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash" ]]; then
   builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
 fi
 

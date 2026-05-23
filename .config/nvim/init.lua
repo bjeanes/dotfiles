@@ -143,28 +143,59 @@ else
         indent = { enable = true },
     })
 
-    -- Enable features via autocommands for modern nvim-treesitter
-    local disabled_highlight = {}
-
+    -- Enable features via an autocommand for modern nvim-treesitter
     vim.api.nvim_create_autocmd("FileType", {
         group = augroup,
         pattern = "*",
         callback = function(args)
-            local filetype = vim.bo[args.buf].filetype
-            local lang = vim.treesitter.language.get_lang(filetype) or filetype
-            local start_highlight = true
+            local buf = args.buf
+            local filetype = vim.bo[buf].filetype
+            local lang = vim.treesitter.language.get_lang(filetype)
+            if not lang then
+                return
+            end
+            local has_parser = vim.treesitter.language.add(lang)
+            if not has_parser then
+                return
+            end
 
-            for _, disabled in ipairs(disabled_highlight) do
-                if disabled == lang or disabled == filetype then
-                    start_highlight = false
-                    break
+            local function has_query(query_name)
+                return vim.treesitter.query.get(lang, query_name) ~= nil
+            end
+
+            local function add_undo_ftplugin(command)
+                vim.b.undo_ftplugin = (vim.b.undo_ftplugin and vim.b.undo_ftplugin .. " | " or "") .. command
+            end
+
+            local function is_disabled(disabled)
+                if type(disabled) == "function" then
+                    return disabled(lang, buf, filetype)
+                elseif type(disabled) == "table" then
+                    for _, disabled_language in ipairs(disabled) do
+                        if disabled_language == lang or disabled_language == filetype then
+                            return true
+                        end
+                    end
+                end
+
+                return false
+            end
+
+            local disabled_highlight = {}
+            if has_query("highlights") and not is_disabled(disabled_highlight) then
+                vim.treesitter.start(buf, lang)
+                add_undo_ftplugin(("call v:lua.vim.treesitter.stop(%d)"):format(buf))
+
+                local vim_syntax = false
+                if vim_syntax == true or is_disabled(vim_syntax) then
+                    vim.bo[buf].syntax = "ON"
                 end
             end
-
-            if start_highlight then
-                pcall(vim.treesitter.start, args.buf, lang)
+            local disabled_indent = {}
+            if has_query("indents") and not is_disabled(disabled_indent) then
+                vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                add_undo_ftplugin("setlocal indentexpr<")
             end
-            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
     })
 end
@@ -330,6 +361,29 @@ require("conform").setup({
     },
 })
 
+local function __nixvim_lsp_on_attach(client, bufnr, event) end
+
+vim.lsp.handlers["client/registerCapability"] = (function(overridden)
+    return function(err, res, ctx, ...)
+        local result = overridden(err, res, ctx, ...)
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+        if client == nil then
+            return result
+        end
+
+        for bufnr, _ in pairs(client.attached_buffers) do
+            __nixvim_lsp_on_attach(client, bufnr, {
+                buf = bufnr,
+                data = {
+                    client_id = client.id,
+                },
+            })
+        end
+
+        return result
+    end
+end)(vim.lsp.handlers["client/registerCapability"])
+
 -- Set up keybinds {{{
 do
     local __nixvim_binds = {
@@ -475,7 +529,11 @@ do
                     -- client and bufnr are supplied to the builtin `on_attach` callback,
                     -- so make them available in scope for our global `onAttach` impl
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    local bufnr = event.buf
+                    if client == nil then
+                        return
+                    end
+
+                    __nixvim_lsp_on_attach(client, event.buf, event)
                 end
             end,
             desc = "Run LSP onAttach",
