@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   catppuccin = {
+    autoEnable = lib.mkDefault true;
     enable = lib.mkDefault true;
     flavor = lib.mkDefault "mocha";
   };

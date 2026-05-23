@@ -9,7 +9,7 @@
       owner = "NixOS";
       repo = "nixpkgs";
       ref = "nixos-unstable";
-      # rev = "8110df5ad7abf5d4c0f6fb0f8f978390e77f9685";
+      # rev = "1559d3daa3ecc813a650b79375ea61b6741b8746";
     };
 
     nixvirt = {
@@ -30,7 +30,7 @@
     ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
 
     docker-inspect-run-cmd-fmt = {
-      url = "https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git?ref=main";
+      url = "git+https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git";
       flake = false;
       type = "git";
     };
@@ -104,14 +104,12 @@
           age.secrets =
             with lib;
             listToAttrs (
-              map
-                (name: {
-                  name = removeSuffix ".age" name;
-                  value = {
-                    file = (snowfall.fs.get-file "secrets/${name}");
-                  };
-                })
-                (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix")))
+              map (name: {
+                name = removeSuffix ".age" name;
+                value = {
+                  file = (snowfall.fs.get-file "secrets/${name}");
+                };
+              }) (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix")))
             );
         };
     in

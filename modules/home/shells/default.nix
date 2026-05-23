@@ -97,7 +97,7 @@
     programs.fzf.enable = true;
     programs.fzf.enableZshIntegration = true;
     programs.fzf.enableBashIntegration = true;
-    programs.fzf.fileWidgetOptions = [
+    programs.fzf.fileWidget.options = [
       "--preview '${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :500 {}'"
     ];
 
