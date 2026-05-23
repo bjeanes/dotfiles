@@ -5,8 +5,8 @@ local wezterm = require 'wezterm'
 
 local catppuccin_plugin = os.getenv("HOME") .. "/.local/share/dotfiles/catppuccin-wezterm/plugin/init.lua"
 local catppuccin_config = {
-  flavor = "mocha",
-  accent = "mauve",
+  ["accent"] = "mauve",
+  ["flavor"] = "mocha"
 }
 
 local config = wezterm.config_builder()

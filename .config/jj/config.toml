@@ -1,29 +1,8 @@
 [aliases]
 gpa = ["git", "push", "-r", "remote_bookmarks(remote=origin).."]
-mon = [
-    "util",
-    "exec",
-    "--",
-    "sh",
-    "-c",
-    "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'",
-]
-restack = [
-    "rebase",
-    "--onto",
-    "trunk()",
-    "--source",
-    "roots(trunk()..) & mutable()",
-    "--simplify-parents",
-]
-stack = [
-    "rebase",
-    "--after",
-    "trunk()",
-    "--before",
-    "closest_merge(@)",
-    "--revisions",
-]
+mon = ["util", "exec", "--", "sh", "-c", "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"]
+restack = ["rebase", "--onto", "trunk()", "--source", "roots(trunk()..) & mutable()", "--simplify-parents"]
+stack = ["rebase", "--after", "trunk()", "--before", "closest_merge(@)", "--revisions"]
 stage = ["stack", "closest_merge(@)+:: ~ empty()"]
 
 [git]
@@ -42,12 +21,37 @@ behaviour = "own"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
 
 [template-aliases]
-"format_short_signature(signature)" = "if(\n  signature.email().domain() == \"users.noreply.github.com\",\n  signature.email().local().replace(regex:\"^[0-9]+\\\\+\", \"\") ++ \"@GH\",\n  if(\n    signature.email().local() == \"me\" ||\n      signature.email().local() == \"hello\" ||\n      signature.email().local() == \"dev\" ||\n      signature.email().local() == \"git\",\n    signature.email().domain(),\n    signature.email().local() ++ \"@\"\n  )\n)\n"
+"format_short_signature(signature)" = '''
+if(
+  signature.email().domain() == "users.noreply.github.com",
+  signature.email().local().replace(regex:"^[0-9]+\\+", "") ++ "@GH",
+  if(
+    signature.email().local() == "me" ||
+      signature.email().local() == "hello" ||
+      signature.email().local() == "dev" ||
+      signature.email().local() == "git",
+    signature.email().domain(),
+    signature.email().local() ++ "@"
+  )
+)
+'''
 "format_timestamp(timestamp)" = "timestamp.ago()"
-"slugify(str)" = "truncate_end(\n  65,\n  str.first_line()\n    .replace(regex:\"[^[[:alnum:]].]\", \"-\")\n    .replace(regex:\"-{2,}\", \"-\")\n    .replace(regex:\"\\\\.{2,}\", \".\")\n    .replace(regex:\"(^-+|-+$)\", \"\")\n    .lower()\n)\n"
+"slugify(str)" = '''
+truncate_end(
+  65,
+  str.first_line()
+    .replace(regex:"[^[[:alnum:]].]", "-")
+    .replace(regex:"-{2,}", "-")
+    .replace(regex:"\\.{2,}", ".")
+    .replace(regex:"(^-+|-+$)", "")
+    .lower()
+)
+'''
 
 [templates]
-git_push_bookmark = "\"bjeanes/\" ++ change_id.short() ++ \"-\" ++ slugify(description)\n"
+git_push_bookmark = """
+"bjeanes/" ++ change_id.short() ++ "-" ++ slugify(description)
+"""
 
 [ui]
 default-command = "log"
