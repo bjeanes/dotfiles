@@ -42,8 +42,14 @@ plugin_dirs=(
 for plugin_dir in "${plugin_dirs[@]}"; do
   path+="$HOME/.zsh/plugins/$plugin_dir"
   fpath+="$HOME/.zsh/plugins/$plugin_dir"
+  for plugin_fpath_dir in \
+    "$plugin_dir/share/zsh/plugins/$plugin_dir" \
+    "$plugin_dir/share/zsh/site-functions" \
+    "$plugin_dir/share/zsh/vendor-completions"; do
+    [[ -d "$HOME/.zsh/plugins/$plugin_fpath_dir" ]] && fpath+="$HOME/.zsh/plugins/$plugin_fpath_dir"
+  done
 done
-unset plugin_dir plugin_dirs
+unset plugin_dir plugin_dirs plugin_fpath_dir
 
 
 autoload -U compinit && compinit
@@ -135,7 +141,7 @@ if test -n "$KITTY_INSTALLATION_DIR"; then
   unfunction kitty-integration
 fi
 
-if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+if [[ -r "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration ]]; then
   source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
 fi
 
