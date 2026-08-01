@@ -215,11 +215,7 @@ in
             ${svcName} = {
               aliases = [ "plex.service" ];
 
-              requires = [
-                "mnt-nfs-nas-media.mount"
-                "mnt-nfs-nas-docker.mount"
-              ];
-              upheldBy = [
+              bindsTo = [
                 "mnt-nfs-nas-media.mount"
                 "mnt-nfs-nas-docker.mount"
               ];

@@ -102,12 +102,8 @@ in
 
           systemd.services.${svcName} = {
             aliases = [ "${svc}.service" ];
-            requires = [ "mnt-nfs-nas-media.mount" ];
             after = [ "mnt-nfs-nas-media.mount" ];
-            upheldBy = [
-              "${svc}.service"
-              "mnt-nfs-nas-media.mount"
-            ];
+            bindsTo = [ "mnt-nfs-nas-media.mount" ];
             serviceConfig = {
               TimeoutStopSec = lib.mkForce "2h";
             };

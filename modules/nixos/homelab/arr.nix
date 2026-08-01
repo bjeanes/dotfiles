@@ -176,15 +176,14 @@ let
                 ];
                 systemd.services = {
                   ${svcName} = {
-                    requires = [ "mnt-nfs-nas-media.mount" ];
-                    upheldBy = [ "mnt-nfs-nas-media.mount" ];
+                    bindsTo = [ "mnt-nfs-nas-media.mount" ];
                     after = [ "mnt-nfs-nas-media.mount" ];
                   };
                 };
               })
               (lib.mkIf cfg.backupToNAS {
                 systemd.services."backup-${name}-to-NAS" = {
-                  requires = [ "mnt-nfs-nas-docker.mount" ];
+                  bindsTo = [ "mnt-nfs-nas-docker.mount" ];
                   after = [ "mnt-nfs-nas-docker.mount" ];
                   startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
                   serviceConfig = {
@@ -257,7 +256,6 @@ let
                   systemd.services.${self} = {
                     inherit after;
                     requires = after;
-                    upheldBy = after;
                   };
                 }
               ))
