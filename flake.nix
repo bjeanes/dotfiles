@@ -73,8 +73,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-index-database.url = "github:nix-community/nix-index-database";
-    # nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -128,6 +128,8 @@
 
       systems.modules.darwin = with inputs; [
         agenix.darwinModules.default
+        nix-index-database.darwinModules.nix-index
+        { programs.nix-index-database.comma.enable = true; }
         secrets
       ];
 
@@ -136,6 +138,8 @@
         comin.nixosModules.comin
         catppuccin.nixosModules.catppuccin
         nixvirt.nixosModules.default
+        nix-index-database.nixosModules.default
+        { programs.nix-index-database.comma.enable = true; }
         secrets
       ];
 
@@ -143,6 +147,8 @@
         _1password-shell-plugins.hmModules.default
         catppuccin.homeModules.catppuccin
         agenix.homeManagerModules.default
+        nix-index-database.homeModules.default
+        { programs.nix-index-database.comma.enable = true; }
         secrets
       ];
 

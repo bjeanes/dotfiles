@@ -405,6 +405,26 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785046085,
+        "narHash": "sha256-UiK+mmZJuLWQVhJ5b2wDzogIYWAesyRm6LA3h3Ulh3Y=",
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "rev": "11665045df8b9938ef811a3bfdc65cffb02b4b70",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nixlib": {
       "locked": {
         "lastModified": 1736643958,
@@ -570,6 +590,7 @@
         "ghostty": "ghostty",
         "home-manager": "home-manager_3",
         "nil": "nil",
+        "nix-index-database": "nix-index-database",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs_4",
         "nixvim": "nixvim",
