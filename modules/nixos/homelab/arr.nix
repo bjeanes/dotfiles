@@ -118,6 +118,9 @@ let
                       image = cfg.image;
                       autoStart = true;
                       volumes = [ "${cfg.configDir}:${configMount}" ];
+                      labels = {
+                        "io.containers.autoupdate" = "registry";
+                      };
                       # extraOptions = [ "--pull=always" ];
                       environment = {
                         TZ = cfg.timeZone;
@@ -315,7 +318,7 @@ in
 
     # Managing media requests
     (mkArr "overseerr" {
-      image = "sctx/overseerr:latest";
+      image = "docker.io/sctx/overseerr:latest";
       port = 5055;
       needsMedia = false;
       configMount = "/app/config";

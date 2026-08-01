@@ -41,11 +41,14 @@ rec {
       {
         virtualisation.oci-containers.containers.${name} = {
           inherit hostname;
-          image = "tailscale/tailscale:latest";
+          image = "docker.io/tailscale/tailscale:latest";
           extraOptions = [
             "--cap-add=net_admin"
             "--cap-add=sys_module"
           ];
+          labels = {
+            "io.containers.autoupdate" = "registry";
+          };
           environment = {
             TS_EXTRA_ARGS = "--advertise-tags=${concatStringsSep "," tags}";
             TS_HOSTNAME = hostname;
