@@ -147,7 +147,7 @@ in
             ]
 
             # Create volumes (if possible) for the caching directories, and set expiries
-            ++ (map (d: "v ${e cfg.configDir}/${e d}  0775 ${cfg.user} ${cfg.group} 1w -") tmpPaths);
+            ++ (map (d: "d ${e cfg.configDir}/${e d}  0775 ${cfg.user} ${cfg.group} 1w -") tmpPaths);
 
           virtualisation.oci-containers.containers = {
             ${svc} = {
