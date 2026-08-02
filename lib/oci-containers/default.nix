@@ -1,6 +1,7 @@
 { lib, namespace, ... }:
 rec {
-  containerSvcName = config: name: "${config.virtualisation.oci-containers.backend}-${name}";
+  containerSvcName =
+    config: name: config.virtualisation.oci-containers.containers.${name}.serviceName;
 
   # Allow setting environment variables on an oci-container declaration from the contents of a file
   setEnvFromFilesForContainer =
