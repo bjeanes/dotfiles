@@ -232,21 +232,9 @@ in
           PGID = "${pkgs.getent}/bin/getent group homelab | cut -d: -f3";
         })
 
-        (lib.mkIf cfg.backupToNAS {
-          systemd.services."backup-${svc}-to-NAS" = {
-            requires = [ "mnt-nfs-nas-docker.mount" ];
-            after = [ "mnt-nfs-nas-docker.mount" ];
-            startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
-            serviceConfig = {
-              Type = "oneshot";
-            };
-            script = ''
-              set -eu
-              ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${svc}/
-            '';
-          };
-        })
+        (lib.mkIf cfg.backupToNAS (
+          myLib.buildBackupScriptForDir pkgs svc cfg.configDir { inherit (cfg) timeZone; }
+        ))
 
         (lib.mkIf cfg.tailscale.enable {
           virtualisation.oci-containers.containers = {

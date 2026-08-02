@@ -181,21 +181,9 @@ let
                   };
                 };
               })
-              (lib.mkIf cfg.backupToNAS {
-                systemd.services."backup-${name}-to-NAS" = {
-                  bindsTo = [ "mnt-nfs-nas-docker.mount" ];
-                  after = [ "mnt-nfs-nas-docker.mount" ];
-                  startAt = "*-*-* 02:00:00 ${cfg.timeZone}";
-                  serviceConfig = {
-                    Type = "oneshot";
-                  };
-                  script = ''
-                    set -eu
-                    ${pkgs.util-linux}/bin/flock /tmp/backup-to-NAS.lock \
-                      ${pkgs.rsync}/bin/rsync -avuP --no-o --no-g ${lib.escapeShellArg cfg.configDir}/* /mnt/nfs/nas/docker/media/${name}/
-                  '';
-                };
-              })
+              (lib.mkIf cfg.backupToNAS (
+                myLib.buildBackupScriptForDir pkgs name cfg.configDir { inherit (cfg) timeZone; }
+              ))
               (lib.mkIf cfg.tailscale.enable {
                 virtualisation.oci-containers.containers = {
                   # Set up main service container to use and depend on the network container for Tailscale
