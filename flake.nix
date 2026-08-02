@@ -35,6 +35,8 @@
       type = "git";
     };
 
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
+
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -138,6 +140,7 @@
         comin.nixosModules.comin
         catppuccin.nixosModules.catppuccin
         nixvirt.nixosModules.default
+        quadlet-nix.nixosModules.quadlet
         nix-index-database.nixosModules.default
         { programs.nix-index-database.comma.enable = true; }
         secrets
@@ -147,6 +150,7 @@
         _1password-shell-plugins.hmModules.default
         catppuccin.homeModules.catppuccin
         agenix.homeManagerModules.default
+        inputs.quadlet-nix.homeManagerModules.quadlet
         nix-index-database.homeModules.default
         { programs.nix-index-database.comma.enable = true; }
         secrets

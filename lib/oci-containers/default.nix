@@ -47,6 +47,33 @@ rec {
       };
     };
 
+  mkQuadletDynamicEnvironment =
+    pkgs: config:
+    {
+      containerName,
+      variables,
+    }:
+    let
+      serviceName = "${containerName}.service";
+
+      generated = mkDynamicEnvFile pkgs {
+        inherit serviceName variables;
+      };
+    in
+    {
+      virtualisation.quadlet.containers.${containerName} = {
+        containerConfig.environmentFiles = [
+          generated.envFile
+        ];
+
+        serviceConfig = {
+          RuntimeDirectory = lib.mkDefault containerName;
+          ExecStartPre = lib.mkAfter [ generated.execStartPre ];
+          ExecStopPost = lib.mkAfter [ generated.execStopPost ];
+        };
+      };
+    };
+
   mkDynamicEnvFile =
     pkgs:
     {
@@ -129,25 +156,31 @@ rec {
   mkTailscaleContainer =
     pkgs: config: name:
     {
-      hostname ? name,
-      authKeyFile ? config.age.secrets.tailscale-auth-service.path,
-      ephemeral ? false,
-      storePath ? "/var/lib/tailscale/ctr-${name}", # NOTE: ignored if ephemeral
-      tags ? [
-        "tag:home"
-        "tag:service"
-      ],
-      https ? null,
-      funnel ? null,
-      tcp ? null,
       container ? { },
-    }:
+      ...
+    }@opts:
     with lib;
+    let
+      rest = removeAttrs opts [ "container" ];
+      common = mkTailscaleContainerCommon pkgs config name rest;
+    in
     mkMerge [
+      common.config
+      {
+        virtualisation.oci-containers.containers.${name} = container;
+      }
+      (mkOciDynamicEnvironment pkgs config {
+        containerName = name;
+        variables = common.dynamicEnvironment;
+      })
       {
         virtualisation.oci-containers.containers.${name} = {
-          inherit hostname;
-          image = "docker.io/tailscale/tailscale:latest";
+          inherit (common)
+            environment
+            volumes
+            image
+            hostname
+            ;
           extraOptions = [
             "--cap-add=net_admin"
             "--cap-add=sys_module"
@@ -155,61 +188,102 @@ rec {
           labels = {
             "io.containers.autoupdate" = "registry";
           };
-          environment = {
-            TS_EXTRA_ARGS = "--advertise-tags=${concatStringsSep "," tags}";
-            TS_HOSTNAME = hostname;
-            TS_ACCEPT_DNS = "true";
-            TS_AUTH_ONCE = "true";
-          };
         };
       }
-      {
-        virtualisation.oci-containers.containers.${name} = container;
-      }
-      (mkIf ephemeral {
-        virtualisation.oci-containers.containers.${name}.environment = {
-          TS_TAILSCALED_EXTRA_ARGS = "--state=mem:";
-        };
-      })
-      (mkIf (!ephemeral) {
-        systemd.tmpfiles.rules = [
-          "d ${storePath} 0775 root root - -"
-        ];
+    ];
 
-        virtualisation.oci-containers.containers.${name} = {
-          environment = {
-            TS_STATE_DIR = "/var/lib/tailscale";
-          };
-          volumes = [
-            "${storePath}:/var/lib/tailscale"
-          ];
-        };
-      })
-      (setEnvFromCommandsForContainer pkgs config name {
+  mkTailscaleContainerCommon =
+    pkgs: config: name:
+    {
+      hostname ? name,
+      authKeyFile ? config.age.secrets.tailscale-auth-service.path,
+      storePath ? "/var/lib/tailscale/ctr-${name}", # NOTE: ignored if ephemeral
+      image ? "docker.io/tailscale/tailscale:latest",
+      ephemeral ? false,
+      https ? null,
+      tcp ? null,
+      funnel ? null,
+      tags ? [
+        "tag:home"
+        "tag:service"
+      ],
+    }@opts:
+    with lib;
+    let
+      serveJson = mkTailscaleServeConfig pkgs {
+        inherit https tcp funnel;
+      };
+      hasServeConfig = serveJson != null;
+    in
+    {
+      inherit image hostname;
+      environment = {
+        TS_EXTRA_ARGS = "--advertise-tags=${concatStringsSep "," tags}";
+        TS_HOSTNAME = hostname;
+        TS_ACCEPT_DNS = "true";
+        TS_AUTH_ONCE = "true";
+      }
+      // optionalAttrs ephemeral {
+        TS_TAILSCALED_EXTRA_ARGS = "--state=mem:";
+      }
+      // optionalAttrs (!ephemeral) {
+        TS_STATE_DIR = "/var/lib/tailscale";
+      }
+      // optionalAttrs hasServeConfig {
+        TS_SERVE_CONFIG = "/config/serve.json";
+      };
+
+      dynamicEnvironment = {
         TS_AUTHKEY = "cat ${escapeShellArg authKeyFile} | tr -d '\n' && echo -n '?ephemeral=${
           if ephemeral then "true" else "false"
         }'";
+      };
+
+      volumes =
+        (optionals (!ephemeral) [ "${storePath}:/var/lib/tailscale" ])
+        ++ (optionals hasServeConfig [ "${builtins.dirOf serveJson}:/config:ro" ]);
+
+      config.systemd.tmpfiles.rules = optionals (!ephemeral) [ "d ${storePath} 0775 root root - -" ];
+    };
+
+  mkTailscaleQuadletContainer =
+    pkgs: config: name:
+    {
+      podName ? "${name}-pod",
+      pod ? config.virtualisation.quadlet.pods.${podName}.ref,
+      ...
+    }@opts:
+    with lib;
+    let
+      rest = removeAttrs opts [
+        "pod"
+        "podName"
+      ];
+      common = mkTailscaleContainerCommon pkgs config name rest;
+    in
+    mkMerge [
+      common.config
+
+      (mkQuadletDynamicEnvironment pkgs config {
+        containerName = name;
+        variables = common.dynamicEnvironment;
       })
 
       {
-        systemd.services.${containerSvcName config name}.aliases = [ "${name}.service" ];
-      }
-
-      (
-        let
-          serveJSON = mkTailscaleServeConfig pkgs { inherit https tcp funnel; };
-          hasServeConfig = serveJSON != null;
-        in
-        (mkIf hasServeConfig {
-          virtualisation.oci-containers.containers.${name} = {
-            volumes = [ "${builtins.dirOf serveJSON}:/config:ro" ];
-            environment = {
-              TS_SERVE_CONFIG = "/config/serve.json";
-            };
+        virtualisation.quadlet.containers.${name} = {
+          autoStart = true;
+          containerConfig = {
+            inherit (common) image volumes;
+            inherit pod;
+            autoUpdate = "registry";
+            environments = common.environment;
+            addCapabilities = [
+              "NET_ADMIN"
+              "SYS_MODULE"
+            ];
           };
-        })
-      )
-
+        };
+      }
     ];
 
 }
