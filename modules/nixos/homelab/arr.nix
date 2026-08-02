@@ -195,28 +195,14 @@ let
                 };
               })
               (lib.mkIf cfg.tailscale.enable (
-                myLib.mkTailscaleContainer pkgs config tsName {
-                  hostname = name;
-                  serve = (
-                    lib.optionalAttrs (port != null) (
-                      let
-                        endpoint = "\${TS_CERT_DOMAIN}:443";
-                      in
-                      {
-                        TCP."443".HTTPS = true;
-                        Web.${endpoint}.Handlers."/".Proxy = "http://127.0.0.1:${builtins.toString port}";
-                      }
-                      # the lib.optionalAttrs _shouldn't_ be necessary, but
-                      # because of
-                      # https://github.com/tailscale/tailscale/issues/14682 it
-                      # results in Tailscale dashboard misleadingly saying the
-                      # machine has a funnel.
-                      // (lib.optionalAttrs funnel {
-                        AllowFunnel.${endpoint} = funnel;
-                      })
-                    )
-                  );
-                }
+                myLib.mkTailscaleContainer pkgs config tsName (
+                  {
+                    hostname = name;
+                  }
+                  // lib.optionalAttrs (port != null) (
+                    { https = port; } // lib.optionalAttrs funnel { funnel = [ 443 ]; }
+                  )
+                )
               ))
             ]
             ++ (map (

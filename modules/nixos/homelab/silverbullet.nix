@@ -147,10 +147,7 @@ in
 
         (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
           hostname = svc;
-          serve = {
-            TCP."443".HTTPS = true;
-            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:3000";
-          };
+          https = 3000;
         })
 
       ]

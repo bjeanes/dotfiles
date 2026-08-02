@@ -1,4 +1,12 @@
-{ lib, namespace, ... }:
+{
+  lib,
+  namespace,
+  ...
+}:
+let
+  myLib = lib.${namespace};
+  inherit (myLib) mkTailscaleServeConfig;
+in
 rec {
   containerSvcName =
     config: name: config.virtualisation.oci-containers.containers.${name}.serviceName;
@@ -129,7 +137,9 @@ rec {
         "tag:home"
         "tag:service"
       ],
-      serve ? { },
+      https ? null,
+      funnel ? null,
+      tcp ? null,
       container ? { },
     }:
     with lib;
@@ -181,57 +191,25 @@ rec {
         }'";
       })
 
-      # TODO handle building the serve JSON from clearer args so callers don't have to care about Tailscale serve JSON
-      # e.g. complicated ts-serve.json:
-      # {
-      #   "TCP": {
-      #     "123": {
-      #       "TCPForward": "127.0.0.1:456"
-      #     },
-      #     "8080": {
-      #       "HTTP": true
-      #     },
-      #     "8443": {
-      #       "HTTPS": true
-      #     }
-      #   },
-      #   "Web": {
-      #     "${TS_CERT_DOMAIN}:8080": {
-      #       "Handlers": {
-      #         "/": {
-      #           "Proxy": "http://127.0.0.1:8888"
-      #         }
-      #       }
-      #     },
-      #     "${TS_CERT_DOMAIN}:8443": {
-      #       "Handlers": {
-      #         "/": {
-      #           "Proxy": "http://127.0.0.1:9999"
-      #         },
-      #         "/test": {
-      #           "Proxy": "https://localhost:9999/hello"
-      #         }
-      #       }
-      #     }
-      #   },
-      #   "AllowFunnel": {
-      #     "bandersnatch.griffin-climb.ts.net:123": true
-      #   }
-      # }
       {
         systemd.services.${containerSvcName config name}.aliases = [ "${name}.service" ];
-
-        virtualisation.oci-containers.containers.${name} =
-          let
-            serveJSON = pkgs.writers.writeJSON "ts-serve.json" serve;
-          in
-          {
-            volumes = [ "${serveJSON}:${serveJSON}" ];
-            environment = {
-              TS_SERVE_CONFIG = toString serveJSON;
-            };
-          };
       }
 
+      (
+        let
+          serveJSON = mkTailscaleServeConfig pkgs { inherit https tcp funnel; };
+          hasServeConfig = serveJSON != null;
+        in
+        (mkIf hasServeConfig {
+          virtualisation.oci-containers.containers.${name} = {
+            volumes = [ "${builtins.dirOf serveJSON}:/config:ro" ];
+            environment = {
+              TS_SERVE_CONFIG = "/config/serve.json";
+            };
+          };
+        })
+      )
+
     ];
+
 }

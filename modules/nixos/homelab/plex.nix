@@ -258,15 +258,7 @@ in
           myLib.mkTailscaleContainer pkgs config tsName {
             hostname = svc;
             container.ports = dockerPorts;
-            serve = (
-              let
-                endpoint = "\${TS_CERT_DOMAIN}:443";
-              in
-              {
-                TCP."443".HTTPS = true;
-                Web.${endpoint}.Handlers."/".Proxy = "http://127.0.0.1:32400";
-              }
-            );
+            https = 32400;
           }
         ))
 

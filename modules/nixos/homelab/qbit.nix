@@ -179,11 +179,7 @@ in
 
         (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
           hostname = "qb";
-          serve = {
-            TCP."443".HTTPS = true;
-            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy =
-              "http://localhost:${builtins.toString cfg.webUiPort}";
-          };
+          https = cfg.webUiPort;
           container = {
             extraOptions = [ "--network=container:${svc}-vpn" ];
             dependsOn = [

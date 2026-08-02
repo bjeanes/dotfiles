@@ -125,11 +125,8 @@ in
         (mkTailscaleContainer "${svc}-tailscale" {
           storePath = "${cfg.configDir}/ts";
           hostname = svc;
-          serve = {
-            TCP."443".HTTPS = true;
-            TCP."22".TCPForward = "localhost:2222";
-            Web."\${TS_CERT_DOMAIN}:443".Handlers."/".Proxy = "http://localhost:3000";
-          };
+          https = 3000;
+          tcp = [ 22 ];
         })
       ]
     );
