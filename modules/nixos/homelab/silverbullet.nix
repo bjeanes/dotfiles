@@ -18,7 +18,7 @@ in
     };
 
     image = lib.mkOption {
-      default = "zefhemel/silverbullet:latest";
+      default = "ghcr.io/silverbulletmd/silverbullet:latest";
       type = lib.types.str;
       description = "OCI image for ${svc}";
     };
@@ -105,10 +105,12 @@ in
                   "${cfg.configDir}:/space"
                 ];
                 extraOptions = [
-                  "--pull=always"
                   "--network=container:${svc}-tailscale"
                   "--hostuser=${cfg.user}"
                 ];
+                labels = {
+                  "io.containers.autoupdate" = "registry";
+                };
                 environment = {
                   TZ = cfg.timeZone;
                   SB_PORT = "3000";
