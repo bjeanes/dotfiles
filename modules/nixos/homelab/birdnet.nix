@@ -106,6 +106,10 @@ in
                   environments = {
                     TZ = cfg.timeZone;
                   };
+                  volumes = [
+                    "${cfg.configDir}/config:/config"
+                    "${cfg.configDir}/data:/data"
+                  ];
                 };
                 unitConfig = {
                   AssertPathIsDirectory = [
