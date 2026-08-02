@@ -9,8 +9,7 @@ let
   coalesce = val: default: if (val == null) then default else val;
   myLib = lib.${namespace};
 
-  setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
-  setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
+  setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
 
   mkArr =
     name:

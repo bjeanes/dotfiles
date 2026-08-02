@@ -9,8 +9,7 @@ let
   tsnet = "griffin-climb.ts.net";
   myLib = lib.${namespace};
 
-  setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
-  setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
+  setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer pkgs config;
 
   arrs = [
     "sonarr"

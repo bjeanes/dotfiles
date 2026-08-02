@@ -63,8 +63,7 @@ in
       tsName = "${svc}-tailscale";
       myLib = lib.${namespace};
       svcName = myLib.containerSvcName config svc;
-      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
-      setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
+      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
       secrets = config.age.secrets;
 
       nasConfigPath = "/mnt/nfs/nas/docker/media/plex";

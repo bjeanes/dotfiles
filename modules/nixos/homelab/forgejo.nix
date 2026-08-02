@@ -36,7 +36,7 @@ in
       cfg = config.homelab.services.${svc};
       myLib = lib.${namespace};
       svcName = myLib.containerSvcName config svc;
-      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
+      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
       mkTailscaleContainer = myLib.mkTailscaleContainer pkgs config;
     in
     lib.mkIf cfg.enable (

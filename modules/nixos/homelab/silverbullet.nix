@@ -64,8 +64,6 @@ in
       myLib = lib.${namespace};
       cfg = config.homelab.services.${svc};
       svcName = myLib.containerSvcName config svc;
-      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer config;
-      setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer config;
       secrets = config.age.secrets;
     in
     lib.mkIf cfg.enable (
