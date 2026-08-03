@@ -30,7 +30,7 @@
     ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
 
     docker-inspect-run-cmd-fmt = {
-      url = "git+https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git";
+      url = "https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git";
       flake = false;
       type = "git";
     };
