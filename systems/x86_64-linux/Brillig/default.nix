@@ -42,6 +42,7 @@
   homelab.services.homeassistant = {
     enable = true;
     image.sha256 = "sha256-R0uPLmV/aXx6ImrNW20Lj3Sy39GfcUh6GCONizajYE8=";
+    memoryMB = 8192;
     network.macAddress = "52:54:00:3b:95:b0";
     uuid = "3d285dee-b8e3-45dd-9b08-b4dc1fd3eeac";
     usbDevices = [
