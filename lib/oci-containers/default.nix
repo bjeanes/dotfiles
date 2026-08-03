@@ -202,6 +202,7 @@ rec {
       ephemeral ? false,
       https ? null,
       tcp ? null,
+      tlsTcp ? null,
       funnel ? null,
       tags ? [
         "tag:home"
@@ -211,7 +212,12 @@ rec {
     with lib;
     let
       serveJson = mkTailscaleServeConfig pkgs {
-        inherit https tcp funnel;
+        inherit
+          https
+          tcp
+          tlsTcp
+          funnel
+          ;
       };
       hasServeConfig = serveJson != null;
     in

@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  namespace,
-  ...
+{ lib
+, config
+, pkgs
+, namespace
+, ...
 }:
 let
   coalesce = val: default: if (val == null) then default else val;
@@ -13,15 +12,19 @@ let
 
   mkArr =
     name:
-    {
-      needsMedia ? true,
-      image ? "lscr.io/linuxserver/${name}:latest",
-      port ? null,
-      configMount ? "/config",
-      funnel ? false,
-      forceUser ? null,
-      after ? [ ],
-      ...
+    { needsMedia ? true
+    , image ? "lscr.io/linuxserver/${name}:latest"
+    , https ? null
+    , configMount ? "/config"
+    , funnel ? false
+    , # Extra listeners beyond the `https` web UI, in `mkTailscaleServeConfig`
+      # spec form (e.g. `[ "6697:6501" ]`). `tlsTcp` has tailscaled terminate
+      # TLS and forward plaintext to the target.
+      tcp ? [ ]
+    , tlsTcp ? [ ]
+    , forceUser ? null
+    , after ? [ ]
+    , ...
     }:
     let
       svcName = myLib.containerSvcName config name;
@@ -198,41 +201,42 @@ let
                 myLib.mkTailscaleContainer pkgs config tsName (
                   {
                     hostname = name;
+                    inherit tcp tlsTcp https;
                   }
-                  // lib.optionalAttrs (port != null) (
-                    { https = port; } // lib.optionalAttrs funnel { funnel = [ 443 ]; }
-                  )
+                  // lib.optionalAttrs funnel { funnel = [ 443 ]; }
                 )
               ))
             ]
-            ++ (map (
-              svc:
-              (lib.mkIf (config.homelab.services.${svc}.enable) (
-                let
-                  self = if (cfg.tailscale.enable) then tsName else svcName;
+            ++ (map
+              (
+                svc:
+                (lib.mkIf (config.homelab.services.${svc}.enable) (
+                  let
+                    self = if (cfg.tailscale.enable) then tsName else svcName;
 
-                  # tailscale conditional temporarily disabled because qBit
-                  # doesn't have the `.tailscale.enabled` option, as its
-                  # always enabled. I am currently running everything through
-                  # tailscale, so content to leave this hardcoded _for now_
-                  after =
-                    # if (config.homelab.services.${svc}.tailscale.enable) then
-                    [
-                      "${svc}.service"
-                      "${svc}-tailscale.service"
-                    ]
-                  # else
-                  #   ["${svc}.service"];
-                  ;
-                in
-                {
-                  systemd.services.${self} = {
-                    inherit after;
-                    requires = after;
-                  };
-                }
-              ))
-            ) after)
+                    # tailscale conditional temporarily disabled because qBit
+                    # doesn't have the `.tailscale.enabled` option, as its
+                    # always enabled. I am currently running everything through
+                    # tailscale, so content to leave this hardcoded _for now_
+                    after =
+                      # if (config.homelab.services.${svc}.tailscale.enable) then
+                      [
+                        "${svc}.service"
+                        "${svc}-tailscale.service"
+                      ]
+                      # else
+                      #   ["${svc}.service"];
+                    ;
+                  in
+                  {
+                    systemd.services.${self} = {
+                      inherit after;
+                      requires = after;
+                    };
+                  }
+                ))
+              )
+              after)
           )
         );
     };
@@ -241,7 +245,7 @@ in
   imports = [
     # TV Shows
     (mkArr "sonarr" {
-      port = 8989;
+      https = 8989;
       after = [
         "prowlarr"
         "qbittorrent"
@@ -251,7 +255,7 @@ in
 
     # Movies
     (mkArr "radarr" {
-      port = 7878;
+      https = 7878;
       after = [
         "prowlarr"
         "qbittorrent"
@@ -261,7 +265,7 @@ in
 
     # Music
     (mkArr "lidarr" {
-      port = 8686;
+      https = 8686;
       after = [
         "prowlarr"
         "qbittorrent"
@@ -271,26 +275,26 @@ in
 
     # Books - disabled because it's pretty shit; will look at alternatives
     # (mkArr "readarr" {
-    #   port = 8787;
+    #   https = 8787;
     #   image = "lscr.io/linuxserver/readarr:develop";
     # })
 
     # Subtitles
-    (mkArr "bazarr" { port = 6767; })
+    (mkArr "bazarr" { https = 6767; })
 
     # Indexer aggregation
     (mkArr "prowlarr" {
-      port = 9696;
+      https = 9696;
       needsMedia = false;
     })
 
     # NZB
-    (mkArr "sabnzbd" { port = 8080; })
+    (mkArr "sabnzbd" { https = 8080; })
 
     # Managing media requests
     (mkArr "overseerr" {
       image = "docker.io/sctx/overseerr:latest";
-      port = 5055;
+      https = 5055;
       needsMedia = false;
       configMount = "/app/config";
       funnel = true;
@@ -303,7 +307,7 @@ in
     # Reliably unpacking media
     (mkArr "unpackerr" {
       image = "ghcr.io/unpackerr/unpackerr:latest";
-      port = 5656;
+      https = 5656;
       after = [
         "sonarr"
         "radarr"
@@ -314,7 +318,7 @@ in
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
     (mkArr "autobrr" {
       image = "ghcr.io/autobrr/autobrr:latest";
-      port = 7474;
+      https = 7474;
       needsMedia = false;
       after = [
         "sonarr"
@@ -326,7 +330,7 @@ in
     # https://getqui.com/
     (mkArr "qui" {
       image = "ghcr.io/autobrr/qui:latest";
-      port = 7476;
+      https = 7476;
       after = [
         "qbittorrent"
       ];
@@ -334,7 +338,13 @@ in
 
     (mkArr "znc" {
       image = "lscr.io/linuxserver/znc:latest";
-      port = 6501;
+
+      # ZNC multiplexes webadmin and IRC on a single plaintext listener, so
+      # 6501 serves the web UI over HTTPS and 6697 gives clients IRC over TLS,
+      # both terminated by tailscaled against the node's cert.
+      https = 6501;
+      tlsTcp = [ "6697:6501" ];
+
       needsMedia = false;
     })
 
@@ -342,14 +352,14 @@ in
     # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
       image = "ghcr.io/tautulli/tautulli:latest";
-      port = 8181;
+      https = 8181;
       needsMedia = false;
       after = [ "plex" ];
     })
 
     (mkArr "maintainerr" {
       image = "ghcr.io/jorenn92/maintainerr:latest";
-      port = 6246;
+      https = 6246;
       needsMedia = false;
       configMount = "/opt/data";
       forceUser = "1000:1000";

@@ -5,6 +5,10 @@
   #     "123": {
   #       "TCPForward": "127.0.0.1:456"
   #     },
+  #     "6697": {
+  #       "TCPForward": "127.0.0.1:6501",
+  #       "TerminateTLS": "${TS_CERT_DOMAIN}"
+  #     },
   #     "8080": {
   #       "HTTP": true
   #     },
@@ -39,6 +43,7 @@
     pkgs:
     {
       tcp ? null,
+      tlsTcp ? null,
       https ? null,
       funnel ? null,
     }:
@@ -52,6 +57,7 @@
         ;
 
       tcp' = if tcp == null then [ ] else tcp;
+      tlsTcp' = if tlsTcp == null then [ ] else tlsTcp;
       https' = if https == null then { } else https;
       funnel' = if funnel == null then [ ] else funnel;
 
@@ -81,6 +87,9 @@
 
           "22:forgejo:2222"
             Listen on 22 and forward to forgejo:2222.
+
+        The same forms are used by both `tcp` (raw forwarding) and `tlsTcp`
+        (tailscaled terminates TLS, then forwards plaintext to the target).
       */
       parseTcp =
         specification:
@@ -118,13 +127,32 @@
             else
               fail "invalid TCP forwarding specification `${string}`";
         in
-        {
-          inherit (parsed) listen target;
+        parsed;
 
-          entry = nameValuePair (toString parsed.listen) {
-            TCPForward = parsed.target;
-          };
+      /*
+        `TerminateTLS` is the SNI name tailscaled will serve — and the only one
+        it accepts — so it must be the node's own cert domain. containerboot
+        substitutes `${TS_CERT_DOMAIN}` throughout serve.json, not just in the
+        `Web` keys, so the placeholder works here too.
+      */
+      mkTcpEntry =
+        { terminateTLS }:
+        specification:
+        let
+          parsed = parseTcp specification;
+        in
+        parsed
+        // {
+          entry = nameValuePair (toString parsed.listen) (
+            {
+              TCPForward = parsed.target;
+            }
+            // optionalAttrs terminateTLS {
+              TerminateTLS = certDomain;
+            }
+          );
         };
+
       normaliseUpstream =
         upstream:
         if builtins.isInt upstream then
@@ -158,12 +186,15 @@
         else
           fail "`https` must be null, an upstream, or an attrset of path prefixes";
 
-      hasTcp = tcp' != [ ];
+      hasTcp = tcp' != [ ] || tlsTcp' != [ ];
       hasHttps = httpsHandlers != { };
       hasFunnel = funnel' != [ ];
       isEmpty = !(hasTcp || hasHttps || hasFunnel);
 
-      parsedTcp = map parseTcp tcp';
+      parsedTcp =
+        map (mkTcpEntry { terminateTLS = false; }) tcp'
+        ++ map (mkTcpEntry { terminateTLS = true; }) tlsTcp';
+
       tcpPorts = map (entry: toString entry.listen) parsedTcp;
 
       duplicateTcpPorts = lib.filter (port: lib.count (candidate: candidate == port) tcpPorts > 1) (
