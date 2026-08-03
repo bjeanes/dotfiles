@@ -74,7 +74,7 @@ in
     mountModules lib.${namespace}.hosts.nas.lan "nas" {
       media = "/volume1/media";
       docker = "/volume2/docker";
-      backups = "/volume1/backups";
+      backups = "/volume3/backups";
     }
   );
 
