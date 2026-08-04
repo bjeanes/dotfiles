@@ -45,4 +45,6 @@
     user = "homeassistant";
     authorizedKeysFile = ./../../../secrets/homeassistant-key.pub;
   };
+
+  homelab.services.plex.enable = true;
 }
