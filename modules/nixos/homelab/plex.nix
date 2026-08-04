@@ -133,7 +133,7 @@ in
             [
               # Ensure config directory exists, owned by user
               "d ${e cfg.configDir}                   0775 ${cfg.user} ${cfg.group} - -"
-              "d ${e cfg.configDir}/${pmsPath}        0775 ${cfg.user} ${cfg.group} - -"
+              "d ${e cfg.configDir}/${e pmsPath}      0775 ${cfg.user} ${cfg.group} - -"
               "d ${e cfg.configDir}/${e logsPath}     0775 ${cfg.user} ${cfg.group} 4w -" # expire logs
               "d ${e transcodePath}                   0775 ${cfg.user} ${cfg.group} 2d -" # expire transcode artifacts
 
