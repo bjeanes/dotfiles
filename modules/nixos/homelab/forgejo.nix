@@ -63,14 +63,13 @@ in
 
           virtualisation.oci-containers.containers = {
             ${svc} = {
-              image = "codeberg.org/forgejo/forgejo:13";
+              image = "codeberg.org/forgejo/forgejo:16";
               autoStart = true;
               dependsOn = [
                 "${svc}-db"
                 "${svc}-tailscale"
               ];
               extraOptions = [
-                # "--pull=always"
                 "--network=container:${svc}-tailscale"
               ];
               environment = {
