@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+cat >/dev/null # ref updates on stdin; unused
+git for-each-ref --count=1 --format=x refs/notes/ | grep -q . || exit 0
+git push --no-verify --quiet "$2" 'refs/notes/*:refs/notes/*' ||
+  echo "warning: failed to push notes to $1 (fetch and \`git notes merge\` first?)" >&2
+
