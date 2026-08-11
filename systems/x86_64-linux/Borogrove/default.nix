@@ -53,6 +53,7 @@
     forgejo.enable = true;
     silverbullet.enable = true;
     birdnet.enable = true;
+    znc.enable = true;
   };
 
   virtualisation.oci-containers.backend = "podman";

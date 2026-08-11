@@ -319,6 +319,7 @@ in
       after = [
         "sonarr"
         "radarr"
+        "znc"
       ];
     })
 
@@ -329,6 +330,12 @@ in
       after = [
         "qbittorrent"
       ];
+    })
+
+    (mkArr "znc" {
+      image = "lscr.io/linuxserver/znc:latest";
+      port = 6501;
+      needsMedia = false;
     })
 
     # Collect statistics about what is getting watched in Plex, so that I can
