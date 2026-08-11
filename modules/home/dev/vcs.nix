@@ -4,6 +4,14 @@ let
   user.email = "me@bjeanes.com";
 
   signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
+
+  # pre-push hook: $1 = remote name, $2 = remote URL
+  pushNotes = pkgs.writeShellScript "git-push-notes" ''
+    cat >/dev/null # ref updates on stdin; unused
+    git for-each-ref --count=1 --format=x refs/notes/ | grep -q . || exit 0
+    git push --no-verify --quiet "$2" 'refs/notes/*:refs/notes/*' ||
+      echo "warning: failed to push notes to $1 (fetch and \`git notes merge\` first?)" >&2
+  '';
 in
 {
   config = {
@@ -32,7 +40,7 @@ in
           co = "checkout";
           commit = "commit -v";
           lg = lib.concatStringsSep " " [
-            "log --decorate --graph"
+            "log --no-notes --decorate --graph"
             "--pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'"
             "--abbrev-commit"
             "--date=relative"
@@ -77,6 +85,23 @@ in
         rebase.autostash = true;
         pull.rebase = true;
         remote.pushDefault = "origin";
+
+        remote.origin.fetch = "refs/notes/*:refs/notes/*";
+
+        # Push notes alongside every push. Done as a hook rather than
+        # `remote.origin.push`, because any configured push refspec replaces
+        # `push.default = current` (and `push.autoSetupRemote`).
+        hook.push-notes = {
+          event = "pre-push";
+          command = "${pushNotes}";
+        };
+
+        notes = {
+          # Show all notes refs (not just `refs/notes/commits`) in `git log`/`git show`
+          displayRef = "refs/notes/*";
+          # Carry notes over to the new commits on `rebase` and `commit --amend`
+          rewriteRef = "refs/notes/*";
+        };
 
         status = {
           short = true;
