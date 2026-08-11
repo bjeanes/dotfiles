@@ -3,7 +3,7 @@
 	c = "commit -v"
 	co = "checkout"
 	commit = "commit -v"
-	lg = "log --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate-refs-exclude='refs/jj/keep/*' --exclude='refs/jj/keep/*'"
+	lg = "log --no-notes --decorate --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --decorate-refs-exclude='refs/jj/keep/*' --exclude='refs/jj/keep/*'"
 	me = "!sh -c 'echo `git config user.name` \\<`git config user.email`\\>'"
 	mine = "!sh -c 'git lg --author=\"`git me`\"'"
 	newestb = "br --sort=-committerdate"
@@ -44,8 +44,16 @@
 [gpg "ssh"]
 	program = "ssh-keygen"
 
+[hook "push-notes"]
+	command = "git-push-notes"
+	event = "pre-push"
+
 [init]
 	defaultbranch = "main"
+
+[notes]
+	displayRef = "refs/notes/*"
+	rewriteRef = "refs/notes/*"
 
 [pull]
 	rebase = true
@@ -60,6 +68,9 @@
 
 [remote]
 	pushDefault = "origin"
+
+[remote "origin"]
+	fetch = "refs/notes/*:refs/notes/*"
 
 [rerere]
 	enabled = true
