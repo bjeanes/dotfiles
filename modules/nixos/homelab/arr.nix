@@ -1,8 +1,9 @@
-{ lib
-, config
-, pkgs
-, namespace
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  namespace,
+  ...
 }:
 let
   coalesce = val: default: if (val == null) then default else val;
@@ -12,19 +13,20 @@ let
 
   mkArr =
     name:
-    { needsMedia ? true
-    , image ? "lscr.io/linuxserver/${name}:latest"
-    , https ? null
-    , configMount ? "/config"
-    , funnel ? false
-    , # Extra listeners beyond the `https` web UI, in `mkTailscaleServeConfig`
+    {
+      needsMedia ? true,
+      image ? "lscr.io/linuxserver/${name}:latest",
+      https ? null,
+      configMount ? "/config",
+      funnel ? false,
+      # Extra listeners beyond the `https` web UI, in `mkTailscaleServeConfig`
       # spec form (e.g. `[ "6697:6501" ]`). `tlsTcp` has tailscaled terminate
       # TLS and forward plaintext to the target.
-      tcp ? [ ]
-    , tlsTcp ? [ ]
-    , forceUser ? null
-    , after ? [ ]
-    , ...
+      tcp ? [ ],
+      tlsTcp ? [ ],
+      forceUser ? null,
+      after ? [ ],
+      ...
     }:
     let
       svcName = myLib.containerSvcName config name;
@@ -207,36 +209,34 @@ let
                 )
               ))
             ]
-            ++ (map
-              (
-                svc:
-                (lib.mkIf (config.homelab.services.${svc}.enable) (
-                  let
-                    self = if (cfg.tailscale.enable) then tsName else svcName;
+            ++ (map (
+              svc:
+              (lib.mkIf (config.homelab.services.${svc}.enable) (
+                let
+                  self = if (cfg.tailscale.enable) then tsName else svcName;
 
-                    # tailscale conditional temporarily disabled because qBit
-                    # doesn't have the `.tailscale.enabled` option, as its
-                    # always enabled. I am currently running everything through
-                    # tailscale, so content to leave this hardcoded _for now_
-                    after =
-                      # if (config.homelab.services.${svc}.tailscale.enable) then
-                      [
-                        "${svc}.service"
-                        "${svc}-tailscale.service"
-                      ]
-                      # else
-                      #   ["${svc}.service"];
-                    ;
-                  in
-                  {
-                    systemd.services.${self} = {
-                      inherit after;
-                      requires = after;
-                    };
-                  }
-                ))
-              )
-              after)
+                  # tailscale conditional temporarily disabled because qBit
+                  # doesn't have the `.tailscale.enabled` option, as its
+                  # always enabled. I am currently running everything through
+                  # tailscale, so content to leave this hardcoded _for now_
+                  after =
+                    # if (config.homelab.services.${svc}.tailscale.enable) then
+                    [
+                      "${svc}.service"
+                      "${svc}-tailscale.service"
+                    ]
+                  # else
+                  #   ["${svc}.service"];
+                  ;
+                in
+                {
+                  systemd.services.${self} = {
+                    inherit after;
+                    requires = after;
+                  };
+                }
+              ))
+            ) after)
           )
         );
     };
@@ -323,7 +323,6 @@ in
       after = [
         "sonarr"
         "radarr"
-        "znc"
       ];
     })
 
@@ -334,18 +333,6 @@ in
       after = [
         "qbittorrent"
       ];
-    })
-
-    (mkArr "znc" {
-      image = "lscr.io/linuxserver/znc:latest";
-
-      # ZNC multiplexes webadmin and IRC on a single plaintext listener, so
-      # 6501 serves the web UI over HTTPS and 6697 gives clients IRC over TLS,
-      # both terminated by tailscaled against the node's cert.
-      https = 6501;
-      tlsTcp = [ "6697:6501" ];
-
-      needsMedia = false;
     })
 
     # Collect statistics about what is getting watched in Plex, so that I can

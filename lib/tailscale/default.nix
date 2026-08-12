@@ -88,6 +88,13 @@
           "22:forgejo:2222"
             Listen on 22 and forward to forgejo:2222.
 
+          { listen = 6697; target = 6667; proxyProtocol = 2; }
+            As above, but with per-port options. `target` defaults to `listen`
+            and takes either a port or `host:port`. `proxyProtocol` prepends a
+            PROXY protocol header (1 or 2) so the backend can recover the
+            original client address, which TLS termination would otherwise
+            hide; the backend must be configured to expect it.
+
         The same forms are used by both `tcp` (raw forwarding) and `tlsTcp`
         (tailscaled terminates TLS, then forwards plaintext to the target).
       */
@@ -127,7 +134,56 @@
             else
               fail "invalid TCP forwarding specification `${string}`";
         in
-        parsed;
+        if builtins.isAttrs specification then
+          parseTcpOptions specification
+        else
+          parsed // { proxyProtocol = null; };
+
+      normaliseTarget =
+        target:
+        if builtins.isInt target then
+          "localhost:${toString (parsePort target)}"
+        else if builtins.isString target then
+          (
+            if builtins.match "([0-9]+)" target == null then
+              target
+            else
+              "localhost:${toString (parsePort target)}"
+          )
+        else
+          fail "TCP target must be an integer port or string";
+
+      parseTcpOptions =
+        options:
+        let
+          unknown = builtins.attrNames (
+            removeAttrs options [
+              "listen"
+              "target"
+              "proxyProtocol"
+            ]
+          );
+
+          proxyProtocol = options.proxyProtocol or null;
+        in
+        if unknown != [ ] then
+          fail "unknown TCP option(s) ${concatMapStringsSep ", " (name: "`${name}`") unknown}"
+        else if !(options ? listen) then
+          fail "TCP entry is missing `listen`"
+        else if
+          proxyProtocol != null
+          && !(builtins.elem proxyProtocol [
+            1
+            2
+          ])
+        then
+          fail "`proxyProtocol` must be 1 or 2, got `${toString proxyProtocol}`"
+        else
+          {
+            listen = parsePort options.listen;
+            target = normaliseTarget (options.target or options.listen);
+            inherit proxyProtocol;
+          };
 
       /*
         `TerminateTLS` is the SNI name tailscaled will serve — and the only one
@@ -149,6 +205,9 @@
             }
             // optionalAttrs terminateTLS {
               TerminateTLS = certDomain;
+            }
+            // optionalAttrs (parsed.proxyProtocol != null) {
+              ProxyProtocol = parsed.proxyProtocol;
             }
           );
         };
