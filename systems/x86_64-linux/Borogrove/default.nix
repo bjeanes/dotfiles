@@ -49,6 +49,12 @@
 
   homelab.services = {
     arrs.enable = true;
+
+    # Radarr generates its own API key on first run, so `radarr4k-api-key.age`
+    # can't exist until radarr4k has been deployed once. Drop this (and
+    # uncomment the secret) once it has.
+    recyclarr.radarr4k.enable = false;
+
     qbittorrent.enable = true;
     forgejo.enable = true;
     silverbullet.enable = true;

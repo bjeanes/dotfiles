@@ -263,6 +263,16 @@ in
       ];
     })
 
+    (mkArr "radarr4k" {
+      image = "lscr.io/linuxserver/radarr:latest";
+      https = 7878;
+      after = [
+        "prowlarr"
+        "qbittorrent"
+        "sabnzbd"
+      ];
+    })
+
     # Music
     (mkArr "lidarr" {
       https = 8686;

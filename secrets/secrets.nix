@@ -24,6 +24,12 @@ in
 
   "sonarr-api-key.age".publicKeys = all;
   "radarr-api-key.age".publicKeys = all;
+
+  # Uncomment once radarr4k has been deployed once and its generated key
+  # encrypted -- every entry here is decrypted unconditionally at activation,
+  # so listing it before the .age file exists breaks the build.
+  # "radarr4k-api-key.age".publicKeys = all;
+
   "lidarr-api-key.age".publicKeys = all;
   "prowlarr-api-key.age".publicKeys = all;
   "homeassistant-api-key.age".publicKeys = all;
