@@ -10,7 +10,17 @@
   nix = {
     enable = true;
 
-    linux-builder.enable = system == "aarch64-darwin";
+    linux-builder = {
+      enable = system == "aarch64-darwin";
+
+      # https://nixcademy.com/posts/rosetta-linux-builder-macos/
+      package = pkgs.darwin.linux-builder-vz;
+      systems = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+    };
+    settings.trusted-users = [ "@admin" ];
 
     gc.interval = {
       Weekday = 0;

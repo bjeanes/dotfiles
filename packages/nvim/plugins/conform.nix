@@ -158,7 +158,6 @@
 
                 runtimeInputs = [
                   pyPkgs.mdformat
-                  pyPkgs.mdformat-tables
                   pyPkgs.mdformat-gfm
                   # pyPkgs.mdformat-gfm-alerts
                   pyPkgs.mdformat-frontmatter
