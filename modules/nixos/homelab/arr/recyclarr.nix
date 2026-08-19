@@ -38,10 +38,6 @@ let
     }
     // attrs;
 
-  templates = map (template: {
-    inherit template;
-  });
-
   /*
     Anti-churn score knobs, applied on top of each guide profile.
 
@@ -82,6 +78,7 @@ let
     { trash_id, until_quality }:
     {
       inherit trash_id;
+      reset_unmatched_scores.enabled = true;
 
       min_format_score = 0;
       min_upgrade_format_score = 100; # PLACEHOLDER -- calibrate, see above
@@ -150,7 +147,7 @@ let
   };
 
   sonarrSeries = mkInstance "sonarr" {
-    include = templates [ "web-1080p-alternative" ];
+    quality_definition.type = "series";
 
     quality_profiles = [
       (guideProfile {
@@ -185,7 +182,7 @@ let
   };
 
   radarrMovies = mkInstance "radarr" {
-    include = templates [ "hd-bluray-web" ];
+    quality_definition.type = "movie";
 
     quality_profiles = [
       (guideProfile {
@@ -196,7 +193,7 @@ let
   };
 
   radarrMovies4k = mkInstance "radarr4k" {
-    include = templates [ "uhd-bluray-web" ];
+    quality_definition.type = "movie";
 
     quality_profiles = [
       (guideProfile {
