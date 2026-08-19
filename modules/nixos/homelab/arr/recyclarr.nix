@@ -14,6 +14,7 @@ let
   arrs = [
     "sonarr"
     "radarr"
+    "radarr4k"
   ];
   cfg = config.homelab.services.recyclarr;
 
