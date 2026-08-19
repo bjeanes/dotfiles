@@ -355,7 +355,7 @@ in
     })
 
     (mkArr "maintainerr" {
-      image = "ghcr.io/jorenn92/maintainerr:latest";
+      image = "ghcr.io/maintainerr/maintainerr:latest";
       https = 6246;
       needsMedia = false;
       configMount = "/opt/data";
