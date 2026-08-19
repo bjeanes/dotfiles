@@ -1,8 +1,12 @@
+%YAML 1.1
+---
 aliases:
   configure-repo: '!gh configure-repo-squash && gh configure-repo-delete-merged'
-  configure-repo-delete-merged: api repos/{owner}/{repo} --method PATCH -f delete_branch_on_merge=true
-  configure-repo-squash: api repos/{owner}/{repo} --method PATCH -f allow_squash_merge=true
-    -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY
+  configure-repo-delete-merged: api repos/{owner}/{repo} --method PATCH -f 
+    delete_branch_on_merge=true
+  configure-repo-squash: api repos/{owner}/{repo} --method PATCH -f 
+    allow_squash_merge=true -f squash_merge_commit_title=PR_TITLE -f 
+    squash_merge_commit_message=PR_BODY
 editor: ''
 git_protocol: https
 version: '1'

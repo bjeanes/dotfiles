@@ -1,10 +1,13 @@
+%YAML 1.1
+---
 autoFetch: false
 disableStartupPopups: true
 git:
   pagers:
-  - pager: delta --dark
-      --paging=never
-  - externalDiffCommand: difft
+  - pager: delta 
+      --dark --paging=never
+  - externalDiffCommand: 
+      difft 
       --color=always --display=inline
 os:
   editPreset: nvim
