@@ -160,3 +160,14 @@ alias -- lla='eza -la'
 alias -- ls=eza
 alias -- lt='eza --tree'
 alias -- vimdiff='nvim -d'
+# Inside a kitty terminal, use the `ssh` kitten so that terminfo, shell
+# integration, and config are copied to the remote host. Checked at shell
+# startup rather than via a static alias so that shells started outside of
+# kitty (or on hosts without it) get plain `ssh`.
+case "$TERM" in
+  *kitty*)
+    if command -v kitty >/dev/null 2>&1; then
+      alias ssh='kitty +kitten ssh'
+    fi
+    ;;
+esac
