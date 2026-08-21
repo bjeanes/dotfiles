@@ -1,13 +1,18 @@
 { lib, namespace, ... }:
 let
-  myHosts =
-    lib.concatMapAttrs
-      (host: { addresses ? [ ], aliases ? [ ], ... }: {
-        "${lib.concatStringsSep " " ([host] ++ aliases)}" = {
-          hostnames = addresses;
-        };
-      })
-      lib.${namespace}.hosts;
+  myHosts = lib.concatMapAttrs (
+    host:
+    {
+      addresses ? [ ],
+      aliases ? [ ],
+      ...
+    }:
+    {
+      "${lib.concatStringsSep " " ([ host ] ++ aliases)}" = {
+        hostnames = addresses;
+      };
+    }
+  ) lib.${namespace}.hosts;
 in
 {
   config = {
@@ -18,14 +23,14 @@ in
         "~/.ssh/config.d/*"
       ];
 
-      matchBlocks =
-        {
-          "*" = {
-            addKeysToAgent = "confirm 1h";
-            forwardAgent = false;
-          };
-        } //
-        (with lib;
+      matchBlocks = {
+        "*" = {
+          addKeysToAgent = "confirm 1h";
+          forwardAgent = false;
+        };
+      }
+      // (
+        with lib;
         let
           allHosts = naturalSort (
             concatLists (mapAttrsToList (name: { hostnames, ... }: [ name ] ++ hostnames) myHosts)
@@ -36,19 +41,18 @@ in
             forwardAgent = true;
           };
         }
-        // concatMapAttrs
-          (
-            host:
-            { hostnames ? [ ]
-            ,
-            }:
-            {
-              ${host} = {
-                hostname = (builtins.head hostnames);
-              };
-            }
-          )
-          myHosts);
+        // concatMapAttrs (
+          host:
+          {
+            hostnames ? [ ],
+          }:
+          {
+            ${host} = {
+              hostname = (builtins.head hostnames);
+            };
+          }
+        ) myHosts
+      );
     };
   };
 }

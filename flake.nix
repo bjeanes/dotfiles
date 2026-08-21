@@ -168,7 +168,7 @@
         # in
         {
 
-          formatter = channels.nixpkgs.nixpkgs-fmt;
+          formatter = channels.nixpkgs.nixfmt-tree;
           # formatter = treefmtEval.${system}.config.build.wrapper;
           # checks = {
           #   treefmt = treefmtEval.${system}.config.build.check self;

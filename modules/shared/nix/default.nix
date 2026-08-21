@@ -1,7 +1,8 @@
-{ pkgs
-, inputs
-, system
-, ...
+{
+  pkgs,
+  inputs,
+  system,
+  ...
 }:
 let
   adminGroup = if pkgs.stdenv.isDarwin then "admin" else "wheel";

@@ -1,4 +1,4 @@
-{ config, lib, ...}: {
+{ config, lib, ... }: {
   plugins.snacks = {
     settings.dashboard = {
       enabled = true;
@@ -87,18 +87,24 @@
     };
   };
 
-  autoCmd = lib.mkIf (config.plugins.snacks.settings.dashboard.enabled && config.plugins.mini.enable && lib.hasAttr "indentscope" config.plugins.mini.modules)
-    [
-      {
-        event = [ "User" ];
-        pattern = [
-          "SnacksDashboardOpened"
-        ];
-        callback.__raw = ''
-          function()
-            vim.b.miniindentscope_disable = true
-          end
-        '';
-      }
-    ];
+  autoCmd =
+    lib.mkIf
+      (
+        config.plugins.snacks.settings.dashboard.enabled
+        && config.plugins.mini.enable
+        && lib.hasAttr "indentscope" config.plugins.mini.modules
+      )
+      [
+        {
+          event = [ "User" ];
+          pattern = [
+            "SnacksDashboardOpened"
+          ];
+          callback.__raw = ''
+            function()
+              vim.b.miniindentscope_disable = true
+            end
+          '';
+        }
+      ];
 }

@@ -1,6 +1,8 @@
-{ inputs
-, channels
-, lib
-, self
-, ...
-}: final: prev: { }
+{
+  inputs,
+  channels,
+  lib,
+  self,
+  ...
+}:
+final: prev: { }

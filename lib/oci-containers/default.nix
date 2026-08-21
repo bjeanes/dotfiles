@@ -197,7 +197,8 @@ rec {
     {
       hostname ? name,
       authKeyFile ? config.age.secrets.tailscale-auth-service.path,
-      storePath ? "/var/lib/tailscale/ctr-${name}", # NOTE: ignored if ephemeral
+      storePath ? "/var/lib/tailscale/ctr-${name}",
+      # NOTE: ignored if ephemeral
       image ? "docker.io/tailscale/tailscale:latest",
       ephemeral ? false,
       https ? null,

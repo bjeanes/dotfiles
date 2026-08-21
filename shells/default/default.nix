@@ -1,7 +1,8 @@
-{ inputs
-, pkgs
-, system
-, ...
+{
+  inputs,
+  pkgs,
+  system,
+  ...
 }:
 
 pkgs.mkShell {

@@ -1,19 +1,20 @@
 # https://github.com/echasnovski/mini.animate
 let
-  timing = ms: 
+  timing =
+    ms:
     let
       msS = builtins.toString ms;
-    in 
+    in
     {
-    __raw = # lua
-    ''
-      -- Animate only for ${msS}ms
-      require('mini.animate').gen_timing.linear({
-        duration = ${msS},
-        unit = 'total'
-      })
-    '';
-  };
+      __raw = # lua
+        ''
+          -- Animate only for ${msS}ms
+          require('mini.animate').gen_timing.linear({
+            duration = ${msS},
+            unit = 'total'
+          })
+        '';
+    };
 in
 {
   plugins.mini = {
@@ -29,5 +30,3 @@ in
     };
   };
 }
-
-

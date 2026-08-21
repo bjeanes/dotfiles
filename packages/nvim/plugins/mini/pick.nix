@@ -1,4 +1,9 @@
-{ myLib, lib, config, ... }:
+{
+  myLib,
+  lib,
+  config,
+  ...
+}:
 let
   enabled = (config.plugins.mini.enable && lib.hasAttr "pick" config.plugins.mini.modules);
 in
@@ -9,14 +14,15 @@ in
       extra = { };
     };
 
-    luaConfig.post = lib.mkIf enabled # lua
-      ''
-        vim.ui.select = require('mini.pick').ui_select
-      '';
+    luaConfig.post =
+      lib.mkIf enabled # lua
+        ''
+          vim.ui.select = require('mini.pick').ui_select
+        '';
   };
 
-  keymaps = lib.mkIf enabled
-    (myLib.modeKeys "n" {
+  keymaps = lib.mkIf enabled (
+    myLib.modeKeys "n" {
       "<Leader>/" = {
         action = "<cmd>Pick grep_live<CR>";
         options.desc = "Live grep";
@@ -33,5 +39,6 @@ in
         action = "<cmd>Pick resume<CR>";
         options.desc = "Resume last picker";
       };
-    });
+    }
+  );
 }
