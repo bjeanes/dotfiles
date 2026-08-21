@@ -89,6 +89,7 @@ in
               {
                 virtualisation.oci-containers.containers.unpackerr.environment = {
                   "${prefix}URL" = instance.url;
+                  "${prefix}PROTOCOLS " = " torrent,usenet";
                 };
               }
               (setEnvFromFilesForContainer "unpackerr" {
