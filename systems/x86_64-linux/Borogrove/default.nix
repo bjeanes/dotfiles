@@ -55,6 +55,7 @@
     birdnet.enable = true;
     hister.enable = true;
     soju.enable = true;
+    tracearr.enable = true;
   };
 
   virtualisation.oci-containers.backend = "podman";

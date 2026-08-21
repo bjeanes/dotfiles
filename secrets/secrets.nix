@@ -32,6 +32,9 @@ in
   "plex-token.age".publicKeys = all;
   "tautulli-api-key.age".publicKeys = all;
 
+  "tracearr-jwt-secret.age".publicKeys = all;
+  "tracearr-cookie-secret.age".publicKeys = all;
+
   "wg-private-key.age".publicKeys = [
     bjeanes
     borogrove
