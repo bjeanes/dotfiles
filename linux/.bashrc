@@ -66,6 +66,8 @@ docker-describe() {
 
 eval "$(mise activate bash)"
 
+eval "$(devenv hook bash)"
+
 gh() {
   op plugin run -- gh "$@";
 }

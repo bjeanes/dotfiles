@@ -97,6 +97,8 @@ unset opt set_opts
 
 eval "$(mise activate zsh)"
 
+eval "$(devenv hook zsh)"
+
 gh() {
   op plugin run -- gh "$@";
 }
