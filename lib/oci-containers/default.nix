@@ -5,7 +5,7 @@
 }:
 let
   myLib = lib.${namespace};
-  inherit (myLib) mkTailscaleServeConfig;
+  inherit (myLib) mkTailscaleContainerCommon;
 in
 rec {
   containerSvcName =
@@ -191,67 +191,6 @@ rec {
         };
       }
     ];
-
-  mkTailscaleContainerCommon =
-    pkgs: config: name:
-    {
-      hostname ? name,
-      authKeyFile ? config.age.secrets.tailscale-auth-service.path,
-      storePath ? "/var/lib/tailscale/ctr-${name}",
-      # NOTE: ignored if ephemeral
-      image ? "docker.io/tailscale/tailscale:latest",
-      ephemeral ? false,
-      https ? null,
-      tcp ? null,
-      tlsTcp ? null,
-      funnel ? null,
-      tags ? [
-        "tag:home"
-        "tag:service"
-      ],
-    }@opts:
-    with lib;
-    let
-      serveJson = mkTailscaleServeConfig pkgs {
-        inherit
-          https
-          tcp
-          tlsTcp
-          funnel
-          ;
-      };
-      hasServeConfig = serveJson != null;
-    in
-    {
-      inherit image hostname;
-      environment = {
-        TS_EXTRA_ARGS = "--advertise-tags=${concatStringsSep "," tags}";
-        TS_HOSTNAME = hostname;
-        TS_ACCEPT_DNS = "true";
-        TS_AUTH_ONCE = "true";
-      }
-      // optionalAttrs ephemeral {
-        TS_TAILSCALED_EXTRA_ARGS = "--state=mem:";
-      }
-      // optionalAttrs (!ephemeral) {
-        TS_STATE_DIR = "/var/lib/tailscale";
-      }
-      // optionalAttrs hasServeConfig {
-        TS_SERVE_CONFIG = "/config/serve.json";
-      };
-
-      dynamicEnvironment = {
-        TS_AUTHKEY = "cat ${escapeShellArg authKeyFile} | tr -d '\n' && echo -n '?ephemeral=${
-          if ephemeral then "true" else "false"
-        }'";
-      };
-
-      volumes =
-        (optionals (!ephemeral) [ "${storePath}:/var/lib/tailscale" ])
-        ++ (optionals hasServeConfig [ "${builtins.dirOf serveJson}:/config:ro" ]);
-
-      config.systemd.tmpfiles.rules = optionals (!ephemeral) [ "d ${storePath} 0775 root root - -" ];
-    };
 
   mkTailscaleQuadletContainer =
     pkgs: config: name:
