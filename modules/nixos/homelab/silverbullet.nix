@@ -148,6 +148,13 @@ in
         (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
           hostname = svc;
           https = 3000;
+
+          # Runs tailscaled as the same user Silverbullet drops to, so pages
+          # written over Taildrive are owned by it and remain editable in the
+          # app. Needs `drive:share` on this node in the tailnet policy file,
+          # plus a `tailscale.com/cap/drive` grant for whoever mounts it.
+          inherit (cfg) user group;
+          drive.space = cfg.configDir;
         })
 
       ]

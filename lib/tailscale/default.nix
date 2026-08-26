@@ -313,6 +313,10 @@
         "tag:home"
         "tag:service"
       ],
+      user ? null,
+      group ? null,
+      # Taildrive shares as { <share-name> = <host path>; }
+      drive ? { },
     }@opts:
     with lib;
     let
@@ -325,9 +329,14 @@
           ;
       };
       hasServeConfig = serveJson != null;
+
+      ownerGroup = if group == null then user else group;
+
+      # Share name -> path the host directory is mounted at in the container
+      driveShares = mapAttrs (shareName: _: "/taildrive/${shareName}") drive;
     in
     {
-      inherit image hostname;
+      inherit image hostname user;
       environment = {
         TS_EXTRA_ARGS = "--advertise-tags=${concatStringsSep "," tags}";
         TS_HOSTNAME = hostname;
@@ -350,10 +359,108 @@
         }'";
       };
 
+      inherit driveShares;
+
+      /*
+        `--hostuser` copies the host's passwd entry into the container's
+        generated /etc/passwd before podman resolves `--user`, so the name is
+        enough and the uid stays as stateful as it actually is. The entry is
+        also what lets tailscaled name the share's owner.
+      */
+      extraOptions = optionals (user != null) [
+        "--hostuser=${user}"
+        "--user=${user}"
+      ];
+
       volumes =
         (optionals (!ephemeral) [ "${storePath}:/var/lib/tailscale" ])
-        ++ (optionals hasServeConfig [ "${builtins.dirOf serveJson}:/config:ro" ]);
+        ++ (optionals hasServeConfig [ "${builtins.dirOf serveJson}:/config:ro" ])
+        ++ (mapAttrsToList (shareName: hostPath: "${hostPath}:${driveShares.${shareName}}") drive);
 
-      config.systemd.tmpfiles.rules = optionals (!ephemeral) [ "d ${storePath} 0775 root root - -" ];
+      config.assertions = [
+        {
+          assertion = drive == { } || user != null;
+          message = "mkTailscaleContainer: `drive` requires `user`; tailscaled refuses to serve Taildrive shares as root";
+        }
+      ];
+
+      config.systemd.tmpfiles.rules = optionals (!ephemeral) (
+        if user == null then
+          [ "d ${storePath} 0775 root root - -" ]
+        else
+          [
+            "d ${storePath} 0750 ${user} ${ownerGroup} - -"
+            # Existing state predates the switch away from root
+            "Z ${storePath} - ${user} ${ownerGroup} - -"
+          ]
+      );
+    };
+
+  /*
+    Publish Taildrive shares for a tailscale sidecar once tailscaled is up.
+
+    containerboot has no Taildrive support, so the shares have to be set over
+    the local API after the daemon authenticates; they then persist in the
+    node's prefs. Sharing also needs the `drive:share` node attribute in the
+    tailnet policy file, and the local API rejects it until then, which is why
+    this retries rather than failing on the first attempt.
+  */
+  mkTaildriveShares =
+    pkgs:
+    {
+      containerName,
+      unit,
+      shares,
+      # Quadlet is podman-only; oci-containers passes its configured backend
+      ctr ? "${pkgs.podman}/bin/podman",
+    }:
+    let
+
+      script = pkgs.writeShellScript "${containerName}-taildrive-shares" /* bash */ ''
+        set -euo pipefail
+
+        # containerboot puts the socket at TS_SOCKET (/tmp/tailscaled.sock by
+        # default) and only symlinks it to the well-known path when it can
+        # write /var/run/tailscale, which it cannot as a non-root container.
+        ts() {
+          ${ctr} exec ${lib.escapeShellArg containerName} \
+            tailscale --socket=/tmp/tailscaled.sock "$@"
+        }
+
+        # The share is served as whoever creates it, which is the container's
+        # user, because `exec` inherits it.
+        share() {
+          for _ in $(${pkgs.coreutils}/bin/seq 60); do
+            if ts drive share "$1" "$2"; then
+              return 0
+            fi
+            ${pkgs.coreutils}/bin/sleep 2
+          done
+
+          echo "timed out publishing Taildrive share $1" >&2
+          return 1
+        }
+
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (
+            shareName: mountPath: "share ${lib.escapeShellArg shareName} ${lib.escapeShellArg mountPath}"
+          ) shares
+        )}
+      '';
+    in
+    lib.mkIf (shares != { }) {
+      systemd.services."${containerName}-taildrive" = {
+        description = "Publish Taildrive shares for ${containerName}";
+        after = [ unit ];
+        requires = [ unit ];
+        # Stop with the container, and start again when it does
+        partOf = [ unit ];
+        wantedBy = [ unit ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = script;
+        };
+      };
     };
 }

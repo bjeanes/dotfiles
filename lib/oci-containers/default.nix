@@ -5,7 +5,7 @@
 }:
 let
   myLib = lib.${namespace};
-  inherit (myLib) mkTailscaleContainerCommon;
+  inherit (myLib) mkTailscaleContainerCommon mkTaildriveShares;
 in
 rec {
   containerSvcName =
@@ -184,12 +184,23 @@ rec {
           extraOptions = [
             "--cap-add=net_admin"
             "--cap-add=sys_module"
-          ];
+          ]
+          ++ common.extraOptions;
           labels = {
             "io.containers.autoupdate" = "registry";
           };
         };
       }
+      (mkTaildriveShares pkgs {
+        containerName = name;
+        unit = "${containerSvcName config name}.service";
+        shares = common.driveShares;
+        ctr =
+          let
+            inherit (config.virtualisation.oci-containers) backend;
+          in
+          "${pkgs.${backend}}/bin/${backend}";
+      })
     ];
 
   mkTailscaleQuadletContainer =
@@ -227,9 +238,17 @@ rec {
               "NET_ADMIN"
               "SYS_MODULE"
             ];
+            # `User=`; the passwd entry it resolves against has no quadlet key
+            user = common.user;
+            podmanArgs = optionals (common.user != null) [ "--hostuser=${common.user}" ];
           };
         };
       }
+      (mkTaildriveShares pkgs {
+        containerName = name;
+        unit = "${name}.service";
+        shares = common.driveShares;
+      })
     ];
 
 }
