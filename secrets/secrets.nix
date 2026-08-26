@@ -35,6 +35,9 @@ in
   "tracearr-jwt-secret.age".publicKeys = all;
   "tracearr-cookie-secret.age".publicKeys = all;
 
+  "yuvomi-session-secret.age".publicKeys = all;
+  "yuvomi-db-encryption-key.age".publicKeys = all;
+
   "wg-private-key.age".publicKeys = [
     bjeanes
     borogrove

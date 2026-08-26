@@ -71,6 +71,11 @@
     ];
   };
 
+  homelab.services.yuvomi.enable = true;
+
+  virtualisation.podman.autoPrune.enable = true;
+  virtualisation.quadlet.autoUpdate.enable = true;
+
   remote-power-management = {
     enable = true;
     user = "homeassistant";
