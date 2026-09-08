@@ -24,6 +24,25 @@ let
   # flip to false for the bare kiosk session.
   desktop = false;
 
+  nocturne = inputs.nocturne-linux;
+
+  # AVS DSP firmware and topology blobs, extracted from ChromeOS. Paths mirror
+  # what the driver looks for: /lib/firmware/intel/avs/{,skl/}*.bin
+  avsFirmware = pkgs.runCommand "nocturne-avs-firmware" { } ''
+    mkdir -p $out/lib/firmware/intel/avs/skl
+    cp ${nocturne}/config/firmware/avs/*.bin $out/lib/firmware/intel/avs/
+    cp ${nocturne}/config/firmware/avs/skl/*.bin $out/lib/firmware/intel/avs/skl/
+  '';
+
+  # WirePlumber needs a headroom bump and a volume limit for these speakers.
+  # (53-device-names.conf exists upstream but setup.sh doesn't install it.)
+  wirePlumberConfig = pkgs.runCommand "nocturne-wireplumber-config" { } ''
+    d=$out/share/wireplumber/wireplumber.conf.d
+    mkdir -p "$d"
+    cp ${nocturne}/config/wireplumber/51-increase-headroom.conf "$d/"
+    cp ${nocturne}/config/wireplumber/52-volume-limit.conf "$d/"
+  '';
+
   swayConfig = pkgs.writeText "tulgey-kiosk.conf" ''
     output eDP-1 scale 2
 
@@ -111,12 +130,45 @@ in
   # cros-ec-light (plus an acpi-als), for rotation, ambient light, etc.
   hardware.sensor.iio.enable = true;
 
+  # --- Audio ---------------------------------------------------------------
+  # The Intel AVS driver binds on its own (cards enumerate as AVS DMIC /
+  # AVS I2S MAX98373 / AVS HDMI) but produces no sound without the ChromeOS
+  # DSP firmware, a UCM2 profile, and these module options. `ignore_fw_version`
+  # is required because the extracted blobs don't match the version the driver
+  # expects.
+  #
+  # NOTE: speakers may still not work until the firmware carries the coreboot
+  # NHLT 32-bit-render-format fix -- see nocturne.md, "Audio".
+  boot.extraModprobeConfig = builtins.readFile "${nocturne}/config/modprobe/snd-avs.conf";
+
+  hardware.firmware = [ avsFirmware ];
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber.configPackages = [ wirePlumberConfig ];
   };
+
+  # The UCM2 profile isn't upstream, so overlay it onto alsa-ucm-conf where
+  # alsa-lib will find it, rather than fiddling with ALSA_CONFIG_UCM2 across
+  # several services.
+  nixpkgs.overlays = [
+    (_final: prev: {
+      alsa-ucm-conf = prev.alsa-ucm-conf.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          mkdir -p $out/share/alsa/ucm2/conf.d/avs_max98373
+          cp ${nocturne}/config/ucm2/Google-Nocturne-1.0.conf \
+            $out/share/alsa/ucm2/conf.d/avs_max98373/
+        '';
+      });
+    })
+  ];
+
+  # Touchpad/touchscreen quirks for this chassis.
+  environment.etc."libinput/local-overrides.quirks".source =
+    "${nocturne}/config/libinput/local-overrides.quirks";
 
   environment.systemPackages = with pkgs; [
     alsa-utils
