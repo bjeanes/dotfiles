@@ -43,6 +43,13 @@
       ];
     };
 
+    tulgey = rec {
+      lan = "10.10.10.221";
+      addresses = [
+        lan
+      ];
+    };
+
     homeassistant = rec {
       aliases = [
         "hass"
@@ -50,7 +57,7 @@
       ];
       zt = "10.144.245.56";
       ts = "100.80.108.14";
-      lan = "10.10.10.73";
+      lan = "10.10.10.50";
       addresses = [
         ts
         zt

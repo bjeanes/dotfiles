@@ -1,0 +1,181 @@
+# Google Pixel Slate (board codename "nocturne"), Amber Lake Y, 12.3" 3000x2000
+# touchscreen. Stock ChromeOS firmware replaced with MrChromebox coreboot+edk2,
+# so this behaves as an ordinary UEFI x86_64 machine.
+
+# See https://github.com/kabili207/nocturne-linux for prior art on configuring
+# Linux for this device.
+#
+# Intended role: wall-mounted Home Assistant dashboard / kiosk.
+#
+{
+  config,
+  inputs,
+  lib,
+  namespace,
+  pkgs,
+  system,
+  ...
+}:
+let
+  # The dashboard the kiosk session opens on.
+  dashboardUrl = "http://${lib.${namespace}.hosts.homeassistant.lan}:8123/";
+
+  # Leave true while hardware is still being sorted (audio, rotation, touch);
+  # flip to false for the bare kiosk session.
+  desktop = true;
+
+  # Toggle the panel backlight. Writes bl_power (the standard sysfs blanking
+  # control) and zeroes brightness as a belt-and-braces measure, since not
+  # every driver honours bl_power. There is only one backlight on this board,
+  # so a single state file is fine.
+  toggleDisplay = pkgs.writeShellScript "toggle-display" ''
+    set -u
+    state=/run/panel-brightness
+    if [ -e "$state" ]; then
+      for bl in /sys/class/backlight/*; do
+        echo 0 >"$bl/bl_power" 2>/dev/null || true
+        cat "$state" >"$bl/brightness" 2>/dev/null || true
+      done
+      rm -f "$state"
+    else
+      for bl in /sys/class/backlight/*; do
+        cat "$bl/brightness" >"$state" 2>/dev/null || true
+        echo 4 >"$bl/bl_power" 2>/dev/null || true
+        echo 0 >"$bl/brightness" 2>/dev/null || true
+      done
+    fi
+  '';
+in
+{
+  snowfallorg.users.bjeanes = { };
+
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
+  system.stateVersion = "26.05";
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # ChromeOS-era hardware wants a recent kernel: cros_ec drivers for the
+  # embedded controller and its sensors, and the Intel AVS audio driver.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  time.timeZone = "Australia/Melbourne";
+
+  networking.hostId = "ead7048e";
+  networking.networkmanager.enable = true;
+
+  users.users.bjeanes = {
+    isNormalUser = true;
+    group = "users";
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "input"
+    ];
+    shell = pkgs.zsh;
+    hashedPasswordFile = config.age.secrets.default-password.path;
+  };
+
+  services.glances = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  hardware.graphics.enable = true;
+
+  # Touchscreen and the detachable's touchpad both come up under libinput.
+  services.libinput.enable = true;
+
+  # The embedded controller exposes cros-ec-accel, cros-ec-gyro and
+  # cros-ec-light (plus an acpi-als), for rotation, ambient light, etc.
+  hardware.sensor.iio.enable = true;
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  environment.systemPackages = with pkgs; [
+    alsa-utils
+  ];
+
+  # Wall panel: never sleep, never idle off. HandlePowerKey=ignore is the
+  # important one -- systemd's default is `poweroff`, so without it a stray
+  # tap on a wall-mounted tablet shuts the machine down.
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleSuspendKey = "ignore";
+    HandlePowerKey = "ignore";
+    IdleAction = "ignore";
+  };
+  systemd.sleep.settings.Sleep = {
+    AllowSuspend = false;
+    AllowHibernation = false;
+  };
+
+  # ...and instead make the power button a display on/off toggle.
+  services.actkbd = {
+    enable = true;
+    bindings = [
+      {
+        keys = [ 116 ]; # KEY_POWER
+        events = [ "key" ];
+        command = "${toggleDisplay}";
+      }
+    ];
+  };
+
+  # --- The panel's own user ------------------------------------------------
+  # Unprivileged (deliberately not in wheel) and passwordless, so both the
+  # kiosk session and GDM autologin come up unattended.
+  users.users.tablet = {
+    isNormalUser = true;
+    description = "Wall panel session";
+    group = "users";
+    extraGroups = [
+      "video"
+      "input"
+    ];
+    hashedPassword = "";
+  };
+
+  # The empty password above is only ever usable at the physical console:
+  # sshd has password auth off repo-wide, and this shuts the door explicitly.
+  services.openssh.settings.DenyUsers = [ "tablet" ];
+
+  # --- Kiosk session -------------------------------------------------------
+  # A bare Wayland compositor running one full-screen browser: no desktop, no
+  # display manager, no lock screen, straight up on the dashboard.
+  services.cage = lib.mkIf (!desktop) {
+    enable = true;
+    user = "tablet";
+    program = lib.concatStringsSep " " [
+      "${pkgs.chromium}/bin/chromium"
+      "--kiosk"
+      "--app=${dashboardUrl}"
+      "--ozone-platform=wayland"
+      "--force-device-scale-factor=2" # 3000x2000 at 12.3"
+      "--noerrdialogs"
+      "--disable-infobars"
+      "--disable-features=TranslateUI"
+    ];
+  };
+
+  # --- Interactive desktop -------------------------------------------------
+  # Handy while working on the hardware by hand. GNOME has the most consistent
+  # touch handling and picks sane HiDPI scaling on its own.
+  services.desktopManager.gnome.enable = desktop;
+  services.displayManager = lib.mkIf desktop {
+    gdm.enable = true; # Wayland-only as of GNOME 50; no toggle to set
+    autoLogin = {
+      enable = true;
+      user = "tablet";
+    };
+  };
+}
