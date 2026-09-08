@@ -5,7 +5,7 @@
   ...
 }:
 let
-  adminGroup = if pkgs.stdenv.isDarwin then "admin" else "wheel";
+  adminGroup = if pkgs.stdenv.hostPlatform.isDarwin then "admin" else "wheel";
 in
 {
   config = {

@@ -9,7 +9,7 @@
     ./homebrew.nix
   ];
 
-  config = lib.mkIf (pkgs.stdenv.isDarwin) (
+  config = lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin) (
     let
       init = ''
         . ${./watch-defaults.sh}

@@ -10,7 +10,7 @@ pkgs.writeShellApplication {
   runtimeInputs = [
     pkgs.snowfallorg.flake
   ]
-  ++ lib.optionals stdenv.isDarwin [ pkgs.darwin-rebuild ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin-rebuild ];
 
   text = /* bash */ ''
     flake switch "$@"

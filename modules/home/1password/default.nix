@@ -9,7 +9,7 @@ let
 in
 {
   config = {
-    programs.ssh = lib.optionalAttrs pkgs.stdenv.isDarwin {
+    programs.ssh = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       matchBlocks = {
         "*".extraOptions = {
           "IdentityAgent" = lib.strings.escapeShellArg _1pSocket;
@@ -17,7 +17,7 @@ in
       };
     };
 
-    home.sessionVariables = lib.optionalAttrs pkgs.stdenv.isDarwin {
+    home.sessionVariables = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
 
       SSH_AUTH_SOCK = _1pSocket;
     };

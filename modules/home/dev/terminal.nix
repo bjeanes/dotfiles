@@ -16,7 +16,7 @@ let
 
   # https://github.com/nix-community/home-manager/issues/6295
   ghosttyPkg =
-    if pkgs.stdenv.isDarwin then
+    if pkgs.stdenv.hostPlatform.isDarwin then
       (pkgs.writeShellScriptBin "gostty-mock" "true")
     else
       inputs.ghostty.packages.${system}.default;
@@ -45,7 +45,7 @@ in
         enableZshIntegration = true;
 
         # HM sources this from the package, but on darwin this is just a dummy package, so it errors
-        installBatSyntax = !pkgs.stdenv.isDarwin;
+        installBatSyntax = !pkgs.stdenv.hostPlatform.isDarwin;
 
         settings = {
           background-blur-radius = 20;

@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf (pkgs.stdenv.isDarwin) (
+  config = lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin) (
     let
       init = ''
         [ -d /opt/homebrew/bin ] && eval "$(/opt/homebrew/bin/brew shellenv)"

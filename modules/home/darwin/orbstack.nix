@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf (pkgs.stdenv.isDarwin) (
+  config = lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin) (
     let
       init = ''
         source ~/.orbstack/shell/init.zsh 2>/dev/null || :
