@@ -18,6 +18,12 @@
     "sd_mod"
     "sdhci_pci"
   ];
+
+  boot.blacklistedKernelModules = [
+    # fix flood of "kernel: rc rc0: receive overflow" messages in dmesg
+    "ite-cir"
+  ];
+
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
