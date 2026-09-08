@@ -25,6 +25,10 @@ let
 
   remotes = lib.filterAttrs (name: host: name != selfName && host ? builder) peers;
 
+  nativePlatforms = {
+    x86_64-linux = [ "i686-linux" ];
+  };
+
   # Tailscale when both ends are on the tailnet
   addressOf =
     host: if self ? ts && host ? ts then host.ts else host.lan or (builtins.head host.addresses);
@@ -81,7 +85,9 @@ in
           # never depends on the ambient one being right.
           publicHostKey = lib.elemAt (lib.splitString " " host.hostKey) 1;
 
-          inherit (host.builder) system maxJobs speedFactor;
+          systems = [ host.builder.system ] ++ (nativePlatforms.${host.builder.system} or [ ]);
+
+          inherit (host.builder) maxJobs speedFactor;
 
           supportedFeatures =
             host.builder.supportedFeatures or [
