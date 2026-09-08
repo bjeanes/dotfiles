@@ -23,6 +23,13 @@
       ];
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA9/LnXIRJW8TfdfNnCBuo5HfU+fIUxLHMex9dBycClU";
+
+      # NUC8i7HVK (Hades Canyon), 4c/8t.
+      builder = {
+        system = "x86_64-linux";
+        maxJobs = 4;
+        speedFactor = 2;
+      };
     };
 
     borogrove = rec {
@@ -35,6 +42,13 @@
       ];
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwjs401oUl5CYv0bijTQyHQgRFJuCGbcpgUzrYSlMak";
+
+      # OptiPlex 7070 SFF.
+      builder = {
+        system = "x86_64-linux";
+        maxJobs = 4;
+        speedFactor = 3;
+      };
     };
 
     brillig = rec {
@@ -47,6 +61,13 @@
       ];
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPGIUDOsRo5QmbXpUNqan5WjasENTVtrfEe3XQFxkaZJ";
+
+      # OptiPlex 7070 SFF.
+      builder = {
+        system = "x86_64-linux";
+        maxJobs = 4;
+        speedFactor = 3;
+      };
     };
 
     tulgey = rec {

@@ -121,6 +121,14 @@ in
     openFirewall = true;
   };
 
+  # This bounds *local* build parallelism only, so the build mesh still gets
+  # everything it can take: nix offers each derivation to the builders first
+  # and falls back here only when they are all busy or unreachable. The default
+  # (`auto`, one job per CPU) would have a fanless 2-core tablet picking up
+  # four concurrent compiles as overflow; one at a time keeps the fallback
+  # without cooking the panel.
+  nix.settings.max-jobs = 1;
+
   hardware.graphics.enable = true;
 
   # Touchscreen and the detachable's touchpad both come up under libinput.
