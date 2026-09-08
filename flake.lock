@@ -578,6 +578,22 @@
         "type": "github"
       }
     },
+    "nocturne-linux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776185429,
+        "narHash": "sha256-sTCaCpniyUzXwWby4RTG6sxnaCBCM9XK7kz4okbNtIU=",
+        "owner": "kabili207",
+        "repo": "nocturne-linux",
+        "rev": "a9b2facaf44b27617674fb5af0b5c80029e5d274",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kabili207",
+        "repo": "nocturne-linux",
+        "type": "github"
+      }
+    },
     "quadlet-nix": {
       "locked": {
         "lastModified": 1782004439,
@@ -610,6 +626,7 @@
         "nixpkgs": "nixpkgs_4",
         "nixvim": "nixvim",
         "nixvirt": "nixvirt",
+        "nocturne-linux": "nocturne-linux",
         "quadlet-nix": "quadlet-nix",
         "snowfall-flake": "snowfall-flake",
         "snowfall-lib": "snowfall-lib_2",

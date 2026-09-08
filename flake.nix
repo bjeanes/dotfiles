@@ -29,6 +29,15 @@
     ghostty.url = "github:ghostty-org/ghostty";
     ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
 
+    # Pixel Slate ("nocturne") hardware support: AVS audio firmware/topology
+    # blobs extracted from ChromeOS, ALSA UCM2 profile, modprobe options,
+    # WirePlumber tweaks and libinput quirks. Not a flake; we just read files
+    # out of the tree. See systems/x86_64-linux/Tulgey/nocturne.md
+    nocturne-linux = {
+      url = "github:kabili207/nocturne-linux";
+      flake = false;
+    };
+
     docker-inspect-run-cmd-fmt = {
       url = "https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git";
       flake = false;

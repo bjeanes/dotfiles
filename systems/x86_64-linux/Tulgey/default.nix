@@ -22,7 +22,24 @@ let
 
   # Leave true while hardware is still being sorted (audio, rotation, touch);
   # flip to false for the bare kiosk session.
-  desktop = true;
+  desktop = false;
+
+  swayConfig = pkgs.writeText "tulgey-kiosk.conf" ''
+    output eDP-1 scale 2
+
+    default_border none
+    default_floating_border none
+    xwayland disable
+
+    # No idle handling, no lock screen: this is a wall panel.
+    exec ${lib.getExe pkgs.chromium} \
+      --kiosk \
+      --app=${dashboardUrl} \
+      --ozone-platform=wayland \
+      --noerrdialogs \
+      --disable-infobars \
+      --disable-features=TranslateUI
+  '';
 
   # Toggle the panel backlight. Writes bl_power (the standard sysfs blanking
   # control) and zeroes brightness as a belt-and-braces measure, since not
@@ -150,21 +167,14 @@ in
   services.openssh.settings.DenyUsers = [ "tablet" ];
 
   # --- Kiosk session -------------------------------------------------------
-  # A bare Wayland compositor running one full-screen browser: no desktop, no
-  # display manager, no lock screen, straight up on the dashboard.
-  services.cage = lib.mkIf (!desktop) {
+  # greetd's initial_session is the autologin: it launches sway as `tablet`
+  # with no prompt, and sway brings up the browser full-screen.
+  services.greetd = lib.mkIf (!desktop) {
     enable = true;
-    user = "tablet";
-    program = lib.concatStringsSep " " [
-      "${pkgs.chromium}/bin/chromium"
-      "--kiosk"
-      "--app=${dashboardUrl}"
-      "--ozone-platform=wayland"
-      "--force-device-scale-factor=2" # 3000x2000 at 12.3"
-      "--noerrdialogs"
-      "--disable-infobars"
-      "--disable-features=TranslateUI"
-    ];
+    settings.initial_session = {
+      command = "${lib.getExe pkgs.sway} --config ${swayConfig}";
+      user = "tablet";
+    };
   };
 
   # --- Interactive desktop -------------------------------------------------
