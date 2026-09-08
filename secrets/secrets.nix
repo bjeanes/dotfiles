@@ -1,8 +1,11 @@
 let
-  borogrove = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwjs401oUl5CYv0bijTQyHQgRFJuCGbcpgUzrYSlMak";
-  brillig = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPGIUDOsRo5QmbXpUNqan5WjasENTVtrfEe3XQFxkaZJ";
-  tumtum = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA9/LnXIRJW8TfdfNnCBuo5HfU+fIUxLHMex9dBycClU";
-  tulgey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPJObRh7ekCViBEsHYTyNFz8RXHJYxNKL1NcMxKwUVIw";
+  inherit (import ../lib/hosts) hosts;
+
+  borogrove = hosts.borogrove.hostKey;
+  brillig = hosts.brillig.hostKey;
+  tumtum = hosts.tumtum.hostKey;
+  tulgey = hosts.tulgey.hostKey;
+
   bjeanes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
 
   users = [ bjeanes ];

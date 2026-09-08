@@ -21,6 +21,8 @@
         zt
         lan
       ];
+
+      hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA9/LnXIRJW8TfdfNnCBuo5HfU+fIUxLHMex9dBycClU";
     };
 
     borogrove = rec {
@@ -31,6 +33,8 @@
         ts
         zt
       ];
+
+      hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwjs401oUl5CYv0bijTQyHQgRFJuCGbcpgUzrYSlMak";
     };
 
     brillig = rec {
@@ -41,6 +45,8 @@
         ts
         zt
       ];
+
+      hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPGIUDOsRo5QmbXpUNqan5WjasENTVtrfEe3XQFxkaZJ";
     };
 
     tulgey = rec {
@@ -48,6 +54,8 @@
       addresses = [
         lan
       ];
+
+      hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPJObRh7ekCViBEsHYTyNFz8RXHJYxNKL1NcMxKwUVIw";
     };
 
     homeassistant = rec {
