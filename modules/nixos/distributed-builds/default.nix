@@ -93,10 +93,6 @@ in
           # nix-daemon, so the builder's own sandboxing and settings apply.
           protocol = "ssh-ng";
 
-          # Pinned here as well as in known_hosts, because nix hands ssh its
-          # own throwaway known_hosts file when this is set -- so a build
-          # never depends on the ambient one being right.
-          publicHostKey = lib.elemAt (lib.splitString " " host.hostKey) 1;
 
           systems = [ host.builder.system ] ++ (nativePlatforms.${host.builder.system} or [ ]);
 
