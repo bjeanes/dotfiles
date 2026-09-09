@@ -109,19 +109,29 @@
   outputs =
     inputs:
     let
+      # Declare only the secrets this host is actually a recipient of.
       secrets =
-        { lib, ... }:
+        { lib, config, ... }:
+        let
+          rules = import (lib.snowfall.fs.get-file "secrets/secrets.nix");
+          inherit (import (lib.snowfall.fs.get-file "lib/hosts")) hosts;
+
+          # NixOS hosts decrypt with their SSH host key (agenix's default
+          # identityPaths). Anything absent from lib/hosts -- the darwin
+          # machines -- decrypts with my user key, which is a recipient of
+          # everything, so those keep the full set.
+          host = hosts.${lib.toLower (config.networking.hostName or "")} or null;
+
+          isRecipient =
+            name: host == null || !(host ? hostKey) || lib.elem host.hostKey rules.${name}.publicKeys;
+        in
         {
-          age.secrets =
-            with lib;
-            listToAttrs (
-              map (name: {
-                name = removeSuffix ".age" name;
-                value = {
-                  file = (snowfall.fs.get-file "secrets/${name}");
-                };
-              }) (attrNames (import (snowfall.fs.get-file "secrets/secrets.nix")))
-            );
+          age.secrets = lib.listToAttrs (
+            map (name: {
+              name = lib.removeSuffix ".age" name;
+              value.file = lib.snowfall.fs.get-file "secrets/${name}";
+            }) (lib.filter isRecipient (lib.attrNames rules))
+          );
         };
     in
     (inputs.snowfall-lib.mkFlake {
