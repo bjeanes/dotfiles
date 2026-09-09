@@ -9,7 +9,6 @@
       owner = "NixOS";
       repo = "nixpkgs";
       ref = "nixos-unstable";
-      # rev = "1559d3daa3ecc813a650b79375ea61b6741b8746";
     };
 
     nixvirt = {
