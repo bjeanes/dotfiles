@@ -565,7 +565,8 @@ Verified working under a current kernel (7.2.x) with MrChromebox UEFI firmware:
 
 Not working:
 
-- **Audio.** The cards enumerate but are silent. The **Intel AVS driver binds**
+- **Audio.** Still no confirmed output, but read the permission trap below
+  before believing any test result. The **Intel AVS driver binds**
   — `AVS PROBE`, `AVS DMIC`, `AVS I2S MAX98373`, `AVS HDMI` all appear. But
   enumeration is not the same as working, and this needs more than userspace
   config. Per [nocturne-linux](https://github.com/kabili207/nocturne-linux), the
@@ -598,7 +599,33 @@ Not working:
      exist at all, and no `snd`/`avs` modprobe options are set. So the cards
      enumerating is the machine driver registering ahead of DSP firmware load —
      the firmware is genuinely absent, not merely version-mismatched.
-  4. **ALSA UCM2 profile** → `share/alsa/ucm2/conf.d/avs_max98373/Google-Nocturne-1.0.conf`
+  4. **ALSA UCM2 profile** → `share/alsa/ucm2/conf.d/avs_max98373/Google-Nocturne-1.0.conf`.
+     **nocturne-linux's own profile is a stub that cannot work** — verified by
+     reading it on the device:
+
+     ```
+     Syntax 7
+     SectionUseCase."HiFi" { File "HiFi.conf" }
+     ```
+
+     There is no `HiFi.conf` in that repo, and none anywhere under
+     `ucm2/Intel/avs/*` in `alsa-ucm-conf` either, so the include dangles and
+     the profile fails to load outright. It also carries **no `BootSequence`**,
+     so nothing initialises the two MAX98373s and nothing ever flips
+     `Left/Right Spk Switch` on — silent even if the include resolved.
+
+     A UCM profile is not optional here: the speaker PCM is card device **1**,
+     and **card 1 has no device 0 at all**, so WirePlumber's non-UCM fallback
+     probes `hw:1,0` and finds nothing.
+
+     The fix is to reuse upstream's **`Google-Atlas-1.0`** profile under this
+     board's card longname. Atlas is the same machine driver (`avs_max98373`)
+     with the same two MAX98373s, so the control names — which come from the
+     codec and machine drivers, not the board — are identical, and its
+     `PlaybackPCM "hw:${CardId},1"` already matches. It ships a real
+     70-line `BootSequence` (DAI select muxes, output voltage, digital volume,
+     DHT/BDE limiter setup) and a `Google-Atlas-1.0-HiFi.conf` that enables the
+     speaker switches.
   5. **WirePlumber config** → `wireplumber.conf.d/51-increase-headroom.conf`
      and `52-volume-limit.conf`. (`53-device-names.conf` exists in the repo but
      `setup.sh` doesn't install it.)
@@ -646,6 +673,80 @@ on/off toggle driven from sysfs has something real to write to.
   setting `brightness` to 0 definitely works as a fallback)
 - `keyd` scancodes for the Whiskers top row (no keyboard to test)
 
+### Audio: the `/dev/snd` permission trap
+
+This cost a whole round of false conclusions, so it is worth stating plainly:
+**you cannot test this device's audio over SSH without preparation, and both
+obvious ways of trying produce misleading errors.**
+
+`/dev/snd/*` is `root:audio` mode `0660`, and logind adds a POSIX ACL for
+whoever holds the *active seat* — on a kiosk that is always the panel user:
+
+```
+$ getfacl /dev/snd/controlC1
+user::rw-
+user:tablet:rw-      <- the seat0 session, not you
+group::rw-
+other::---
+```
+
+So:
+
+- **As an SSH user not in the `audio` group**, ALSA cannot even enumerate
+  cards. `amixer -c 1` returns `Invalid card number '1'` and `aplay -L` lists
+  only `null`, `pipewire`, `default` — with no `hw:CARD=…` entries at all.
+  This looks exactly like "the sound card is missing" and is not.
+- **Under `sudo`**, root bypasses the ACL, but `default` routes to PipeWire and
+  root has no PipeWire session, so `aplay` fails with **`audio open error:
+  Host is down`**. That error is about the absent daemon, not the hardware.
+
+Fixes: add the admin account to the `audio` group for static access, and test
+an explicit device (`aplay -D hw:1,1`) to bypass PipeWire entirely.
+
+Two things worth reading that need **no** permissions at all, because they live
+in `/proc`:
+
+```
+$ cat /proc/asound/cards          # card names + longname UCM matches on
+$ cat /proc/asound/card1/pcm1p/info
+$ cat /proc/asound/card1/pcm1p/sub0/status
+closed                            # <- never opened, by anything, ever
+```
+
+That last one is the useful one: `closed` means nothing has so much as opened
+the PCM, which distinguishes "not wired up" from "playing into a dead speaker".
+
+**Evidence the hardware and firmware side are fine** (all from `journalctl -k`,
+which `wheel` can read without `sudo`):
+
+```
+ACPI: NHLT 0x000000007A9C5000 0019DC (v05 GOOGLE NOCTURNE ...)
+max98373 i2c-MX98373:00: MAX98373 revisionID: 0x43
+max98373 i2c-MX98373:01: MAX98373 revisionID: 0x43
+max98373 i2c-MX98373:00: Reset completed (retry:0)
+max98373 i2c-MX98373:01: Reset completed (retry:0)
+snd_soc_avs 0000:00:1f.3: bound 0000:00:02.0 (ops intel_audio_component_bind_ops [i915])
+```
+
+Both codecs answer on I2C and reset cleanly, the NHLT table is present, and
+four cards register (`hdaudioB0D2`, `avs_max98373`, `avs_probe_mb`,
+`avs_dmic`) all with longname `Google-Nocturne-1.0`. `avs_probe_mb` and
+`avs_dmic` only appear once topology parses, so the DSP blobs did load. Module
+options read back correctly from sysfs:
+
+```
+/sys/module/snd_intel_dspcfg/parameters/dsp_driver     = 4
+/sys/module/snd_soc_avs/parameters/ignore_fw_version   = Y
+/sys/module/snd_soc_avs/parameters/obsolete_card_names = Y
+```
+
+`obsolete_card_names=1` matters for UCM: it is what keeps the card named
+`avs_max98373`, which is the directory UCM2 matches under `conf.d/`.
+
+Notably, a failed `aplay` produced **no new kernel messages whatsoever** — the
+last entries were from boot. A userspace-only failure, which is what pointed at
+the permissions and the dangling UCM include rather than at the DSP.
+
 ### The 3000×2000 panel and kiosk compositors
 
 At 12.3", this panel needs 200% scaling to be usable, and **that has to come
@@ -677,6 +778,38 @@ not at runtime.
 
 Also worth knowing: `HandlePowerKey` defaults to `poweroff`, so on a
 wall-mounted tablet a stray tap shuts the machine down. Set it to `ignore`.
+
+### On-screen keyboard in a kiosk
+
+A wall panel has no keyboard and no room for a toggle button, so the OSK has to
+appear by itself on text focus. Two protocol pieces have to line up:
+
+- **`wvkbd --auto`** toggles visibility from `zwp_input_method_v2`, which sway
+  implements. (`wvkbd` also takes `SIGUSR1`/`SIGUSR2`/`SIGRTMIN` to
+  hide/show/toggle by hand, which is handy for testing over SSH.) Heights are
+  **logical** pixels: at `scale 2` this panel is 1500×1000, not 3000×2000.
+- **Chromium must actually create a text-input object**, which it does not do
+  by default. It needs `--enable-wayland-ime`, *and*
+  `--wayland-text-input-version=3`, because sway speaks only v3 while Chromium
+  still defaults to v1. Without both, `wvkbd --auto` never receives a focus
+  event and simply stays hidden. Both switches verified present in the
+  Chromium 151 binary.
+
+If you only need to log in once, there is a cheaper route: flip the host to the
+interactive GNOME session, use GNOME's built-in OSK, and log in by hand. Both
+sessions run as the same panel user against the same `~/.config/chromium`
+profile, so the session persists back into the kiosk.
+
+### Stopping accidental zoom
+
+`--disable-pinch` disables pinch-to-zoom of the page viewport. On a wall panel
+that gesture is only ever triggered by accident, and with no keyboard there is
+no ctrl+/- either, so this effectively pins the kiosk at 100%. Home Assistant's
+own map and history cards keep working, because they handle raw touch events
+themselves rather than relying on browser zoom.
+
+`--disable-features=OverscrollHistoryNavigation` goes with it: a stray
+two-finger swipe should not navigate a single-page app backwards.
 
 ---
 

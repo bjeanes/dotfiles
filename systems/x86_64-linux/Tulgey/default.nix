@@ -53,6 +53,11 @@
       "networkmanager"
       "video"
       "input"
+      # logind ACLs /dev/snd to whoever holds the active seat -- here that is
+      # always `tablet`. Without static group membership this account cannot
+      # even enumerate cards over SSH (`amixer -c 1` => "Invalid card
+      # number"), which makes every remote audio diagnosis meaningless.
+      "audio"
     ];
     shell = pkgs.zsh;
     hashedPasswordFile = config.age.secrets.default-password.path;
