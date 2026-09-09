@@ -74,14 +74,41 @@ let
   };
   ucm2Dir = "${ucm2}/share/alsa/ucm2";
 
-  # Headroom bump and volume limit for these speakers.
-  # (53-device-names.conf exists upstream but setup.sh doesn't install it.)
+  # Ours. Without it the default sink lands on the HDMI node
+  # (alsa_output.platform-avs_hdaudio...stereo-fallback), because WirePlumber
+  # gives ALSA sinks a priority.session of 600-1000 and nothing here makes the
+  # speakers preferred. On a wall panel with an empty HDMI port that means the
+  # dashboard plays into nothing. 1400 puts the speakers clearly ahead while
+  # staying under the documented 1500 ceiling -- above that a sink's *monitor*
+  # can get selected as the default source instead.
+  preferSpeakers = pkgs.writeText "54-prefer-internal-speakers.conf" ''
+    monitor.alsa.rules = [
+      {
+        matches = [
+          {
+            node.name = "~alsa_output.platform-avs_max98373.*"
+          }
+        ]
+        actions = {
+          update-props = {
+            priority.session = 1400
+          }
+        }
+      }
+    ]
+  '';
+
   wirePlumberConfig = pkgs.runCommand "nocturne-wireplumber-config" { } ''
     d=$out/share/wireplumber/wireplumber.conf.d
     mkdir -p "$d"
     cp ${nocturne}/config/wireplumber/51-increase-headroom.conf "$d/"
     cp ${nocturne}/config/wireplumber/52-volume-limit.conf "$d/"
+    # 53 ships in nocturne-linux but setup.sh never installs it; cosmetic
+    # (device.description strings) but harmless.
+    cp ${nocturne}/config/wireplumber/53-device-names.conf "$d/"
+    cp ${preferSpeakers} "$d/54-prefer-internal-speakers.conf"
   '';
+
 in
 {
   # dsp_driver=4 forces AVS; ignore_fw_version=1 is required because the
