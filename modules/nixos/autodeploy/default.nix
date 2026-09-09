@@ -18,7 +18,7 @@
       system.activationScripts = {
         tsServeComin.text = # sh
           ''
-            ${config.services.tailscale.package}/bin/tailscale serve --bg --set-path "/comin" "http://localhost:4242/status"
+            ${config.services.tailscale.package}/bin/tailscale serve --bg --set-path "/comin" "http://localhost:4243/metrics"
           '';
       };
     })
