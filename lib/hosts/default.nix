@@ -40,6 +40,7 @@
       addresses = [
         ts
         zt
+        lan
       ];
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwjs401oUl5CYv0bijTQyHQgRFJuCGbcpgUzrYSlMak";
@@ -61,6 +62,7 @@
       addresses = [
         ts
         zt
+        lan
       ];
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPGIUDOsRo5QmbXpUNqan5WjasENTVtrfEe3XQFxkaZJ";
