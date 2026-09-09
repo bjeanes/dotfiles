@@ -30,8 +30,6 @@
   panel = {
     dashboardUrl = "http://${lib.${namespace}.hosts.homeassistant.lan}:8123/";
 
-    # Leave true while hardware is still being sorted (audio, rotation, touch);
-    # false gives the bare kiosk session.
     interactive = false;
   };
 
@@ -53,10 +51,7 @@
       "networkmanager"
       "video"
       "input"
-      # logind ACLs /dev/snd to whoever holds the active seat -- here that is
-      # always `tablet`. Without static group membership this account cannot
-      # even enumerate cards over SSH (`amixer -c 1` => "Invalid card
-      # number"), which makes every remote audio diagnosis meaningless.
+      # /dev/snd is ACL'd to the seat holder (tablet); this is for SSH.
       "audio"
     ];
     shell = pkgs.zsh;
@@ -68,11 +63,6 @@
     openFirewall = true;
   };
 
-  # This bounds *local* build parallelism only, so the build mesh still gets
-  # everything it can take: nix offers each derivation to the builders first
-  # and falls back here only when they are all busy or unreachable. The default
-  # (`auto`, one job per CPU) would have a fanless 2-core tablet picking up
-  # four concurrent compiles as overflow; one at a time keeps the fallback
-  # without cooking the panel.
+  # Fanless: take builder overflow one job at a time.
   nix.settings.max-jobs = 1;
 }

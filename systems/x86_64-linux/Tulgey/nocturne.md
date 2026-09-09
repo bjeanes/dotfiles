@@ -21,7 +21,7 @@ means an open question.
 | Marketing name | Google Pixel Slate (2018) |
 | Board / codename | `nocturne` |
 | HWID prefix | `NOCTURNE D5B-…` (rest redacted) |
-| SoC | Intel Core i7-8500Y (Amber Lake Y) |
+| SoC | Intel Core i7-8500Y (Amber Lake Y), 2 cores / 4 threads, fanless |
 | RAM | 16 GB |
 | Storage | 233 GB eMMC — Samsung `KLMEG8UERM` (soldered) |
 | Display | eDP-1, 3000×2000, 12.3" (~293 PPI) |
@@ -635,7 +635,7 @@ Not working:
      `avs-max98373-late-probe-dapm-fix`, both DAPM init-timing fixes in
      `sound/soc/intel/avs/boards/`. Written against 6.8; *unknown* whether they
      still apply, or are even still needed, on 7.x. **Try without them first**
-     — a patched kernel is a large build on 4 Y-series cores.
+     — a patched kernel is a large build on 2 Y-series cores (4 threads).
   7. **A coreboot change.** This is the one that's easy to miss:
      `nhlt-max98373-add-32bit-render-format.patch` patches
      `src/soc/intel/skylake/nhlt/max98373.c` — that is **coreboot, not the
@@ -743,71 +743,6 @@ is immune to the renumbering that hand-written `hw:N,M` tests are not.
     : values=on
   ```
 
-#### The default sink goes to HDMI unless told otherwise
-
-WirePlumber gives ALSA sinks a `priority.session` of 600–1000 and nothing makes
-the internal speakers preferred, so the default lands on
-`alsa_output.platform-avs_hdaudio...stereo-fallback`. On a wall panel with an
-empty HDMI port that means the dashboard plays into nothing. Fix with a
-`wireplumber.conf.d` rule setting `priority.session = 1400` on
-`~alsa_output.platform-avs_max98373.*`. Keep it **under 1500** — above that a
-sink's monitor can be chosen as the default *source*.
-
-#### PipeWire is socket-activated
-
-`pipewire.socket` sits listening while `pipewire.service` and
-`wireplumber.service` are `inactive (dead)` until a client connects. That is
-normal, not a fault: a dashboard that plays no audio never starts them. It does
-mean `wpctl status` shows nothing until something asks for sound, so start them
-by hand when testing:
-
-```
-systemctl --user start pipewire wireplumber
-```
-
-### Audio: the `/dev/snd` permission trap
-
-This cost a whole round of false conclusions, so it is worth stating plainly:
-**you cannot test this device's audio over SSH without preparation, and both
-obvious ways of trying produce misleading errors.**
-
-`/dev/snd/*` is `root:audio` mode `0660`, and logind adds a POSIX ACL for
-whoever holds the *active seat* — on a kiosk that is always the panel user:
-
-```
-$ getfacl /dev/snd/controlC1
-user::rw-
-user:tablet:rw-      <- the seat0 session, not you
-group::rw-
-other::---
-```
-
-So:
-
-- **As an SSH user not in the `audio` group**, ALSA cannot even enumerate
-  cards. `amixer -c 1` returns `Invalid card number '1'` and `aplay -L` lists
-  only `null`, `pipewire`, `default` — with no `hw:CARD=…` entries at all.
-  This looks exactly like "the sound card is missing" and is not.
-- **Under `sudo`**, root bypasses the ACL, but `default` routes to PipeWire and
-  root has no PipeWire session, so `aplay` fails with **`audio open error:
-  Host is down`**. That error is about the absent daemon, not the hardware.
-
-Fixes: add the admin account to the `audio` group for static access, and test
-an explicit device (`aplay -D hw:1,1`) to bypass PipeWire entirely.
-
-Two things worth reading that need **no** permissions at all, because they live
-in `/proc`:
-
-```
-$ cat /proc/asound/cards          # card names + longname UCM matches on
-$ cat /proc/asound/card1/pcm1p/info
-$ cat /proc/asound/card1/pcm1p/sub0/status
-closed                            # <- never opened, by anything, ever
-```
-
-That last one is the useful one: `closed` means nothing has so much as opened
-the PCM, which distinguishes "not wired up" from "playing into a dead speaker".
-
 **Evidence the hardware and firmware side are fine** (all from `journalctl -k`,
 which `wheel` can read without `sudo`):
 
@@ -834,119 +769,6 @@ options read back correctly from sysfs:
 
 `obsolete_card_names=1` matters for UCM: it is what keeps the card named
 `avs_max98373`, which is the directory UCM2 matches under `conf.d/`.
-
-Notably, a failed `aplay` produced **no new kernel messages whatsoever** — the
-last entries were from boot. A userspace-only failure, which is what pointed at
-the permissions and the dangling UCM include rather than at the DSP.
-
-### The 3000×2000 panel and kiosk compositors
-
-At 12.3", this panel needs 200% scaling to be usable, and **that has to come
-from the compositor, not the browser.**
-
-`cage` cannot do it. Its entire option set is `-d -h -m <mode> -r -s -v` — no
-output scale, and no environment variable for one; it also doesn't implement
-`wlr-output-management`, so `wlr-randr` can't set it at runtime either.
-
-Passing `--force-device-scale-factor=2` to Chromium under cage produces a
-specific and recognisable failure: **content in the top-left quarter of the
-screen, three quarters black, the page laid out as though the viewport were
-6000×4000, and touch unresponsive.** Chromium renders a double-size buffer but
-declares `buffer_scale=1` because the compositor advertises scale 1, so the
-compositor composites the 6000×4000 buffer 1:1 and only the top-left 3000×2000
-of it is visible. (The giveaway: a page element that should be centred lands at
-the *centre of the physical display*, which is the bottom-right corner of the
-visible quarter.)
-
-The fix is a compositor that can set output scale — `sway` (`output eDP-1 scale
-2`) or `labwc` — and then **dropping** `--force-device-scale-factor` entirely,
-letting the compositor hand Chromium a 1500×1000 logical viewport to render at
-2×.
-
-One firmware note: **`services.displayManager.gdm.wayland` can no longer be set**
-(GNOME 50 is Wayland-only), and `systemd.sleep.extraConfig` is now a hard
-assertion — use `systemd.sleep.settings.Sleep`. Both were caught by evaluation,
-not at runtime.
-
-Also worth knowing: `HandlePowerKey` defaults to `poweroff`, so on a
-wall-mounted tablet a stray tap shuts the machine down. Set it to `ignore`.
-
-### On-screen keyboard in a kiosk
-
-A wall panel has no keyboard and no room for a toggle button, so the OSK has to
-appear by itself on text focus. Two protocol pieces have to line up:
-
-- **`wvkbd --auto`** toggles visibility from `zwp_input_method_v2`, which sway
-  implements. (`wvkbd` also takes `SIGUSR1`/`SIGUSR2`/`SIGRTMIN` to
-  hide/show/toggle by hand, which is handy for testing over SSH.) Heights are
-  **logical** pixels: at `scale 2` this panel is 1500×1000, not 3000×2000.
-- **Chromium must actually create a text-input object**, which it does not do
-  by default. It needs `--enable-wayland-ime`, *and*
-  `--wayland-text-input-version=3`, because sway speaks only v3 while Chromium
-  still defaults to v1. Without both, `wvkbd --auto` never receives a focus
-  event and simply stays hidden. Both switches verified present in the
-  Chromium 151 binary.
-
-If you only need to log in once, there is a cheaper route: flip the host to the
-interactive GNOME session, use GNOME's built-in OSK, and log in by hand. Both
-sessions run as the same panel user against the same `~/.config/chromium`
-profile, so the session persists back into the kiosk.
-
-### The wvkbd sizing loop (freezes and stacked keyboards)
-
-Do **not** pass `-H`/`-L` to `wvkbd`. Its `layer_surface_configure` treats any
-configure whose size differs from what it asked for as grounds to tear the
-surface down and rebuild it:
-
-```c
-// Not what we expected, or redimension, refresh and restart
-if (keyboard.w != w || keyboard.h != h) {
-    zwlr_layer_surface_v1_ack_configure(surface, serial);
-    hide();
-    show();
-    return;
-};
-```
-
-Force a height the compositor will not grant verbatim and that never
-converges. Observed symptoms, all one bug:
-
-- the keyboard appears to **freeze** (the process is spinning in the loop);
-- **several keyboards stack up**, none dismissable — these are the popup
-  surfaces it creates each pass, sized `h * 2` and anchored at `-h`;
-- moving between fields with `Tab` adds one more stack per focus change,
-  because each `im_activate` re-enters the loop.
-
-`ps` shows only **one** `wvkbd` process throughout, which is what rules out
-"something is spawning duplicates" and points at surface accounting instead.
-
-Let wvkbd size itself and pass `--hidden` so it starts down rather than
-appearing at session start.
-
-### Why the keyboard overlaid the page instead of shrinking it
-
-Chromium's `--kiosk` fullscreens the window, and **a fullscreen surface covers
-the whole output regardless of any layer surface's exclusive zone.** So the
-keyboard drew on top of the dashboard and hid whatever field was being typed
-into.
-
-Dropping `--kiosk` and keeping `--app=` leaves Chromium as an ordinary tiled
-window: sway subtracts the keyboard's exclusive zone from the usable area and
-the page reflows above it. `--app=` already removes the omnibox and all browser
-chrome, so nothing is gained by `--kiosk` here.
-
-### Stopping accidental zoom
-
-`--disable-pinch` disables pinch-to-zoom of the page viewport. On a wall panel
-that gesture is only ever triggered by accident, and with no keyboard there is
-no ctrl+/- either, so this effectively pins the kiosk at 100%. Home Assistant's
-own map and history cards keep working, because they handle raw touch events
-themselves rather than relying on browser zoom.
-
-`--disable-features=OverscrollHistoryNavigation` goes with it: a stray
-two-finger swipe should not navigate a single-page app backwards.
-
----
 
 ## 11. If it won't boot
 

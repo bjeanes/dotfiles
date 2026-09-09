@@ -109,17 +109,15 @@
   outputs =
     inputs:
     let
-      # Declare only the secrets this host is actually a recipient of.
+      # Only the secrets this host can decrypt: agenix fails activation on any
+      # it cannot open, and the wg-* files are borogrove-only.
       secrets =
         { lib, config, ... }:
         let
           rules = import (lib.snowfall.fs.get-file "secrets/secrets.nix");
           inherit (import (lib.snowfall.fs.get-file "lib/hosts")) hosts;
 
-          # NixOS hosts decrypt with their SSH host key (agenix's default
-          # identityPaths). Anything absent from lib/hosts -- the darwin
-          # machines -- decrypts with my user key, which is a recipient of
-          # everything, so those keep the full set.
+          # Absent from lib/hosts (darwin) => decrypts with my user key: keep all.
           host = hosts.${lib.toLower (config.networking.hostName or "")} or null;
 
           isRecipient =

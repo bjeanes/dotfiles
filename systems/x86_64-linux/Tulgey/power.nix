@@ -1,11 +1,7 @@
-# Power behaviour for a device screwed to a wall: never sleep, never idle off,
-# and repurpose the power button as a display toggle.
+# Screwed to a wall: never sleep; power button toggles the display.
 { pkgs, ... }:
 let
-  # Writes bl_power (the standard sysfs blanking control) and zeroes brightness
-  # as a belt-and-braces measure, since not every driver honours bl_power.
-  # Verified on this device: one backlight, /sys/class/backlight/intel_backlight,
-  # max_brightness 65535, bl_power present. One state file is therefore fine.
+  # bl_power plus brightness=0, since not every driver honours bl_power.
   toggleDisplay = pkgs.writeShellScript "toggle-display" ''
     set -u
     state=/run/panel-brightness
@@ -25,8 +21,7 @@ let
   '';
 in
 {
-  # HandlePowerKey is the important one: systemd's default is `poweroff`, so
-  # without it a stray tap on a wall-mounted tablet shuts the machine down.
+  # Default HandlePowerKey is poweroff, which a stray tap would trigger.
   services.logind.settings.Login = {
     HandleLidSwitch = "ignore";
     HandleSuspendKey = "ignore";
@@ -39,11 +34,7 @@ in
     AllowHibernation = false;
   };
 
-  # ...and instead make the power button a display on/off toggle.
-  #
-  # Caveat: while panel.interactive is true, GNOME also grabs the power key, so
-  # set its power-button action to "Do Nothing" or the two will both fire. With
-  # the sway kiosk nothing competes.
+  # GNOME also grabs the power key when panel.interactive is true.
   services.actkbd = {
     enable = true;
     bindings = [
