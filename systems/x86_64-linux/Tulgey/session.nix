@@ -29,12 +29,25 @@ let
     default_floating_border none
     xwayland disable
 
-    # On-screen keyboard. --auto shows and hides it on text-field focus via
+    # On-screen keyboard. --auto shows/hides it on text-field focus via
     # zwp_input_method_v2, which sway implements; there is no physical
     # keyboard and no toggle affordance on a wall panel, so auto is the only
-    # workable mode. Heights are logical pixels -- the panel is 3000x2000 at
-    # scale 2, so 1500x1000, and it hangs in landscape.
-    exec ${lib.getExe pkgs.wvkbd} --auto -L 320 -H 380 --fn "Sans 16"
+    # workable mode. --hidden keeps it down until the first focus rather than
+    # showing at session start.
+    #
+    # Do NOT pass -H/-L here. wvkbd's layer_surface_configure treats any
+    # configure whose size differs from what it asked for as a reason to
+    # hide() and show() again:
+    #
+    #   if (keyboard.w != w || keyboard.h != h) { ...; hide(); show(); return; }
+    #
+    # Forcing a height sway won't grant verbatim makes that oscillate forever:
+    # the process spins recreating its surface (it appears frozen) while the
+    # popups it creates each pass -- sized h*2, anchored -h -- pile up on
+    # screen as several undismissable stacked keyboards. Letting wvkbd size
+    # itself keeps the requested and granted geometry equal, so the branch
+    # never fires.
+    exec ${lib.getExe pkgs.wvkbd} --auto --hidden --fn "Sans 16"
 
     # --disable-pinch locks out pinch-to-zoom of the page viewport, which on a
     # wall panel is only ever triggered by accident; HA's own map/plot cards
@@ -47,8 +60,13 @@ let
     # Chromium create a text-input object at all; without them wvkbd --auto
     # never receives a focus event and stays hidden. sway speaks only v3,
     # while Chromium still defaults to v1, hence the explicit version.
+    # Deliberately NOT --kiosk. --kiosk fullscreens the window, and a
+    # fullscreen surface covers the whole output regardless of any layer
+    # surface's exclusive zone -- which is why the keyboard used to sit on
+    # top of the page instead of shrinking it. Tiled, sway subtracts the
+    # keyboard's exclusive zone from the usable area and Chromium reflows
+    # above it. --app= already removes the omnibox and all browser chrome.
     exec ${lib.getExe pkgs.chromium} \
-      --kiosk \
       --app=${cfg.dashboardUrl} \
       --ozone-platform=wayland \
       --enable-wayland-ime \
