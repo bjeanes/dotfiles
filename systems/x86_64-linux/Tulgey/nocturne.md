@@ -565,8 +565,10 @@ Verified working under a current kernel (7.2.x) with MrChromebox UEFI firmware:
 
 Not working:
 
-- **Audio.** Still no confirmed output, but read the permission trap below
-  before believing any test result. The **Intel AVS driver binds**
+- **Audio — WORKING.** Speakers confirmed audible. See "Audio: what actually
+  fixed it" below for the short version; the list that follows is the
+  investigation, kept because most of it was necessary and two of its
+  predictions were wrong. The **Intel AVS driver binds**
   — `AVS PROBE`, `AVS DMIC`, `AVS I2S MAX98373`, `AVS HDMI` all appear. But
   enumeration is not the same as working, and this needs more than userspace
   config. Per [nocturne-linux](https://github.com/kabili207/nocturne-linux), the
@@ -642,17 +644,21 @@ Not working:
      MrChromebox ROM won't carry it, which is why nocturne-linux ships its own
      coreboot submodule, `core.patch` and `rebuild-firmware.sh`.
 
-  **So the speakers may require reflashing firmware built from patched
-  coreboot**, on top of all the kernel-side work. Everything in 1–5 is worth
-  doing first since it's cheap, but don't expect output until the NHLT entry is
-  right. HDMI audio and the DMICs may work without it.
+  **Both 6 and 7 turned out to be unnecessary — this was wrong.** The speakers
+  work on a **stock MrChromebox UEFI ROM** with an unpatched kernel: no
+  coreboot rebuild, no NHLT patch, no reflash, and neither DAPM patch. The
+  prediction that there would be no output "until the NHLT entry is right" was
+  simply false — the NHLT table this board's own firmware already emits
+  (`ACPI: NHLT ... GOOGLE NOCTURNE`) is sufficient. Anyone following this guide
+  should stop after step 5 and test before contemplating a firmware rebuild.
 
   The speakers are 2× Maxim MAX98373 over TDM/I2S.
 
-  (Two earlier notes in this file were wrong and have been corrected: that
-  audio needed "only a UCM2 profile", and then that it needed "three kernel
-  patches". It's five userspace/firmware pieces, two *possible* kernel patches,
-  and one coreboot patch.)
+  (Successive claims in this file about audio scope were all wrong, and are
+  left on the record: first "only a UCM2 profile", then "three kernel patches",
+  then "five userspace/firmware pieces, two possible kernel patches and one
+  coreboot patch". The truth is smaller than the last two: **firmware blobs,
+  modprobe options, and a working UCM2 profile.** Nothing else.)
 
   Note the general chrultrabook warning *"using AVS on a device with max98357a
   will blow your speakers"* does **not** apply — this board is MAX98373, which
@@ -672,6 +678,92 @@ on/off toggle driven from sysfs has something real to write to.
 - Whether `intel_backlight` honours *writes* to `bl_power` (the file exists;
   setting `brightness` to 0 definitely works as a fallback)
 - `keyd` scancodes for the Whiskers top row (no keyboard to test)
+
+### Audio: what actually fixed it
+
+Three things, all userspace, no firmware or kernel work:
+
+1. The AVS DSP firmware blobs in `/lib/firmware/intel/avs/{,skl/}`.
+2. The modprobe options (`dsp_driver=4`, `ignore_fw_version=1`,
+   `obsolete_card_names=1`).
+3. **A UCM2 profile that actually loads** — upstream's `Google-Atlas-1.0`
+   reused under this board's card longname, because nocturne-linux's own
+   profile is a broken stub (see §10 item 4).
+
+Confirmation that UCM is the thing carrying it, rather than a generic fallback:
+
+```
+$ alsaucm -c avs_max98373 list _devices/HiFi
+  0: Speaker
+    Speakers
+$ wpctl inspect <sink>
+    api.alsa.card.name     = "avs_max98373"
+    api.alsa.path          = "hw:avsmax98373,1"
+    device.profile.name    = "HiFi: Speaker: sink"
+    node.name = alsa_output.platform-avs_max98373.26.auto.HiFi__Speaker__sink
+```
+
+`HiFi: Speaker: sink` is the UCM profile. A generic fallback would instead read
+`stereo-fallback`, which is what the HDMI node shows.
+
+#### Card numbers are not stable across boots
+
+This wasted a round of testing. The speaker card was **card 1** on one boot and
+**card 0** on the next, with `avs_dmic` taking the slot it vacated:
+
+```
+ 0 [avsmax98373  ]: avs_max98373 - avs_max98373     <- was card 1 last boot
+ 1 [avsdmic      ]: avs_dmic     - avs_dmic
+ 2 [hdaudioB0D2  ]: hdaudioB0D2  - hdaudioB0D2
+ 3 [PROBE        ]: avs_probe_mb - AVS PROBE
+```
+
+So `hw:1,1` is a moving target and any note recording it is wrong by the next
+reboot. **Always address the card by name**, which is stable:
+
+```
+speaker-test -D plughw:CARD=avsmax98373,DEV=1 -c 2 -t sine -l 1
+```
+
+This is also why UCM matters beyond routing: PipeWire binds by card name, so it
+is immune to the renumbering that hand-written `hw:N,M` tests are not.
+
+#### Two more traps in testing
+
+- **The stock test file is mono.** `Front_Center.wav` is 1-channel, the speaker
+  PCM wants 2, and `aplay -D hw:...` refuses with `Channels count non
+  available` — which reads like a broken device. Use `plughw:` (inserts the
+  conversion) or a stereo file.
+- **`amixer sget` is the wrong verb** for these controls; they are not simple
+  mixer elements, so it prints nothing at all and looks like an empty card.
+  Use `cget`:
+
+  ```
+  $ amixer -c 0 cget name='Left Spk Switch'
+    : values=on
+  ```
+
+#### The default sink goes to HDMI unless told otherwise
+
+WirePlumber gives ALSA sinks a `priority.session` of 600–1000 and nothing makes
+the internal speakers preferred, so the default lands on
+`alsa_output.platform-avs_hdaudio...stereo-fallback`. On a wall panel with an
+empty HDMI port that means the dashboard plays into nothing. Fix with a
+`wireplumber.conf.d` rule setting `priority.session = 1400` on
+`~alsa_output.platform-avs_max98373.*`. Keep it **under 1500** — above that a
+sink's monitor can be chosen as the default *source*.
+
+#### PipeWire is socket-activated
+
+`pipewire.socket` sits listening while `pipewire.service` and
+`wireplumber.service` are `inactive (dead)` until a client connects. That is
+normal, not a fault: a dashboard that plays no audio never starts them. It does
+mean `wpctl status` shows nothing until something asks for sound, so start them
+by hand when testing:
+
+```
+systemctl --user start pipewire wireplumber
+```
 
 ### Audio: the `/dev/snd` permission trap
 
@@ -799,6 +891,49 @@ If you only need to log in once, there is a cheaper route: flip the host to the
 interactive GNOME session, use GNOME's built-in OSK, and log in by hand. Both
 sessions run as the same panel user against the same `~/.config/chromium`
 profile, so the session persists back into the kiosk.
+
+### The wvkbd sizing loop (freezes and stacked keyboards)
+
+Do **not** pass `-H`/`-L` to `wvkbd`. Its `layer_surface_configure` treats any
+configure whose size differs from what it asked for as grounds to tear the
+surface down and rebuild it:
+
+```c
+// Not what we expected, or redimension, refresh and restart
+if (keyboard.w != w || keyboard.h != h) {
+    zwlr_layer_surface_v1_ack_configure(surface, serial);
+    hide();
+    show();
+    return;
+};
+```
+
+Force a height the compositor will not grant verbatim and that never
+converges. Observed symptoms, all one bug:
+
+- the keyboard appears to **freeze** (the process is spinning in the loop);
+- **several keyboards stack up**, none dismissable — these are the popup
+  surfaces it creates each pass, sized `h * 2` and anchored at `-h`;
+- moving between fields with `Tab` adds one more stack per focus change,
+  because each `im_activate` re-enters the loop.
+
+`ps` shows only **one** `wvkbd` process throughout, which is what rules out
+"something is spawning duplicates" and points at surface accounting instead.
+
+Let wvkbd size itself and pass `--hidden` so it starts down rather than
+appearing at session start.
+
+### Why the keyboard overlaid the page instead of shrinking it
+
+Chromium's `--kiosk` fullscreens the window, and **a fullscreen surface covers
+the whole output regardless of any layer surface's exclusive zone.** So the
+keyboard drew on top of the dashboard and hid whatever field was being typed
+into.
+
+Dropping `--kiosk` and keeping `--app=` leaves Chromium as an ordinary tiled
+window: sway subtracts the keyboard's exclusive zone from the usable area and
+the page reflows above it. `--app=` already removes the omnibox and all browser
+chrome, so nothing is gained by `--kiosk` here.
 
 ### Stopping accidental zoom
 
