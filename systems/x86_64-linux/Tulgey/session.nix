@@ -29,25 +29,19 @@ let
     default_floating_border none
     xwayland disable
 
-    # On-screen keyboard. --auto shows/hides it on text-field focus via
-    # zwp_input_method_v2, which sway implements; there is no physical
-    # keyboard and no toggle affordance on a wall panel, so auto is the only
-    # workable mode. --hidden keeps it down until the first focus rather than
-    # showing at session start.
+    # On-screen keyboard: squeekboard, the Phosh/Mobian OSK. It shows and
+    # hides itself on text-input focus, which is the only workable mode on a
+    # wall panel with no physical keyboard and no room for a toggle, and it
+    # sizes itself to the output so there is no height to get wrong.
     #
-    # Do NOT pass -H/-L here. wvkbd's layer_surface_configure treats any
-    # configure whose size differs from what it asked for as a reason to
-    # hide() and show() again:
-    #
-    #   if (keyboard.w != w || keyboard.h != h) { ...; hide(); show(); return; }
-    #
-    # Forcing a height sway won't grant verbatim makes that oscillate forever:
-    # the process spins recreating its surface (it appears frozen) while the
-    # popups it creates each pass -- sized h*2, anchored -h -- pile up on
-    # screen as several undismissable stacked keyboards. Letting wvkbd size
-    # itself keeps the requested and granted geometry equal, so the branch
-    # never fires.
-    exec ${lib.getExe pkgs.wvkbd} --auto --hidden --fn "Sans 16"
+    # This replaces wvkbd. wvkbd's focus-based mode (--auto, new in v0.20 and
+    # described by its own changelog as opt-in and "not the default yet")
+    # produced three separate failures here: several undismissable keyboards
+    # stacking up on focus changes, the process wedging, and every keypress
+    # behaving as though held down. Note touchkio drives squeekboard over
+    # D-Bus at /sm/puri/OSK0 for the same job, so this is the well-trodden
+    # path for a Home Assistant panel.
+    exec ${lib.getExe pkgs.squeekboard}
 
     # --disable-pinch locks out pinch-to-zoom of the page viewport, which on a
     # wall panel is only ever triggered by accident; HA's own map/plot cards
@@ -127,6 +121,26 @@ in
       };
     };
 
+    # squeekboard binds its auto-show to this key, GET-only:
+    #
+    #   g_settings_bind (settings, "screen-keyboard-enabled", holder,
+    #                    "enabled", G_SETTINGS_BIND_GET);
+    #
+    # Nothing sets it outside Phosh, so it reads false and the keyboard will
+    # only appear when told to over D-Bus -- hide-on-blur still works, which
+    # makes the failure look like a focus bug rather than a disabled feature.
+    # (Had the schema been absent entirely squeekboard would have defaulted to
+    # enabled; it is present via its own wrapper's XDG_DATA_DIRS, so the gate
+    # is live.) dconf's GIO module is likewise already in that wrapper, so a
+    # system-wide default here is enough -- the session needs no extra env.
+    programs.dconf = {
+      enable = true;
+      profiles.user.databases = [
+        {
+          settings."org/gnome/desktop/a11y/applications".screen-keyboard-enabled = true;
+        }
+      ];
+    };
     services.desktopManager.gnome.enable = cfg.interactive;
     services.displayManager = lib.mkIf cfg.interactive {
       gdm.enable = true; # Wayland-only as of GNOME 50; no toggle to set
