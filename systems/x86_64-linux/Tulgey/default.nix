@@ -34,6 +34,24 @@ let
     cp ${nocturne}/config/firmware/avs/skl/*.bin $out/lib/firmware/intel/avs/skl/
   '';
 
+  # The UCM2 profile isn't upstream. ALSA checks $ALSA_CONFIG_UCM2 before its
+  # compiled-in path, so point that at a merged tree rather than overriding
+  # alsa-ucm-conf -- alsa-lib sits deep enough in the graph that overriding it
+  # rebuilds chromium, ffmpeg, wayland and much else. This costs two symlink
+  # farms and compiles nothing.
+  ucm2 = pkgs.symlinkJoin {
+    name = "alsa-ucm-conf-nocturne";
+    paths = [
+      pkgs.alsa-ucm-conf
+      (pkgs.runCommand "nocturne-ucm2" { } ''
+        mkdir -p $out/share/alsa/ucm2/conf.d/avs_max98373
+        cp ${nocturne}/config/ucm2/Google-Nocturne-1.0.conf \
+          $out/share/alsa/ucm2/conf.d/avs_max98373/
+      '')
+    ];
+  };
+  ucm2Dir = "${ucm2}/share/alsa/ucm2";
+
   # WirePlumber needs a headroom bump and a volume limit for these speakers.
   # (53-device-names.conf exists upstream but setup.sh doesn't install it.)
   wirePlumberConfig = pkgs.runCommand "nocturne-wireplumber-config" { } ''
@@ -159,20 +177,14 @@ in
     wireplumber.configPackages = [ wirePlumberConfig ];
   };
 
-  # The UCM2 profile isn't upstream, so overlay it onto alsa-ucm-conf where
-  # alsa-lib will find it, rather than fiddling with ALSA_CONFIG_UCM2 across
-  # several services.
-  nixpkgs.overlays = [
-    (_final: prev: {
-      alsa-ucm-conf = prev.alsa-ucm-conf.overrideAttrs (old: {
-        postInstall = (old.postInstall or "") + ''
-          mkdir -p $out/share/alsa/ucm2/conf.d/avs_max98373
-          cp ${nocturne}/config/ucm2/Google-Nocturne-1.0.conf \
-            $out/share/alsa/ucm2/conf.d/avs_max98373/
-        '';
-      });
-    })
-  ];
+  # Point ALSA at the merged UCM2 tree. It has to be set on the units, not via
+  # environment.sessionVariables -- systemd user services don't inherit those.
+  systemd.user.services = lib.genAttrs [ "pipewire" "pipewire-pulse" "wireplumber" ] (_: {
+    environment.ALSA_CONFIG_UCM2 = ucm2Dir;
+  });
+
+  # ...and for interactive alsa-utils poking (aplay -L, alsaucm, alsamixer).
+  environment.sessionVariables.ALSA_CONFIG_UCM2 = ucm2Dir;
 
   # Touchpad/touchscreen quirks for this chassis.
   environment.etc."libinput/local-overrides.quirks".source =
