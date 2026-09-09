@@ -1,6 +1,11 @@
-# A build mesh across the NixOS machines in this flake: every host offers its spare cores to the others, so whoever
-# kicks off a rebuild gets the whole fleet's CPUs rather than just the one in front of it. Tulgey, a fanless 2-core wall
-# panel, is the motivating case as it has kernel patches to compile.
+# Distributed builds across the NixOS machines in this flake. Tulgey, a fanless 2-core wall panel with kernel patches to
+# compile, is the motivating case: it hands its builds to machines that can actually do them.
+#
+# The topology is deliberately one-directional -- builders build, clients delegate, and no host does both. It started as
+# a symmetric mesh and that deadlocked the entire fleet: a host serving a remote build re-delegates it through its own
+# /etc/nix/machines, so A hands a derivation to B, B hands it back to A, and both then block forever waiting for the
+# output-path lock the other already holds. `waiting for lock on '...'`, indefinitely, on every machine at once. An
+# assertion below enforces the invariant, because the failure is silent until everything is wedged.
 #
 # Authentication reuses each machine's SSH *host* key as its client identity.  Those public keys are already in the
 # registry (agenix needs them anyway).
@@ -52,7 +57,11 @@ in
       default = peers ? ${selfName};
     };
 
-    serve = lib.mkEnableOption "accepting builds submitted by the other NixOS machines" // {
+    client = lib.mkEnableOption "handing this host's builds to the machines that serve them" // {
+      default = self.buildClient or false;
+    };
+
+    serve = lib.mkEnableOption "accepting builds submitted by the build cluster's clients" // {
       default = self ? builder;
     };
 
@@ -78,6 +87,24 @@ in
         publicKey = host.hostKey;
       }) peers;
 
+      assertions = [
+        {
+          assertion = !(cfg.client && cfg.serve);
+          message = ''
+            distributed-builds: ${selfName} is set up as both a client and a
+            builder. A host that delegates while also accepting delegated work
+            can hand a derivation to a peer that hands it straight back, and
+            both then wait forever on their own copy of that output path's
+            lock -- with no error, just a build that never finishes.
+
+            Give it `builder` in the host registry or `buildClient = true`,
+            not both.
+          '';
+        }
+      ];
+    })
+
+    (lib.mkIf (cfg.enable && cfg.client) {
       nix = {
         distributedBuilds = remotes != { };
 
@@ -92,7 +119,6 @@ in
           # ssh-ng rather than the legacy protocol: it speaks to the remote
           # nix-daemon, so the builder's own sandboxing and settings apply.
           protocol = "ssh-ng";
-
 
           systems = [ host.builder.system ] ++ (nativePlatforms.${host.builder.system} or [ ]);
 

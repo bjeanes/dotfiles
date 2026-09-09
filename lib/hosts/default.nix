@@ -88,6 +88,8 @@
       ];
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPJObRh7ekCViBEsHYTyNFz8RXHJYxNKL1NcMxKwUVIw";
+
+      buildClient = true;
     };
 
     homeassistant = rec {
