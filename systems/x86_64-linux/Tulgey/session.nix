@@ -74,6 +74,8 @@ in
     # Read in-process by touchkio, so it never reaches argv or a disk copy.
     age.secrets."touchkio-mqtt-password".owner = "tablet";
 
+    systemd.services.greetd.restartIfChanged = lib.mkIf (!cfg.interactive) (lib.mkForce true);
+
     # squeekboard gates auto-show on this key; nothing outside Phosh sets it.
     programs.dconf = {
       enable = true;
