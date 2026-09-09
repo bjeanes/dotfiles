@@ -34,6 +34,8 @@
         nix.settings = lib.mapAttrs (_: lib.mkForce) {
           substituters = lib.unique config.nix.settings.substituters;
           trusted-public-keys = lib.unique config.nix.settings.trusted-public-keys;
+          connect-timeout = config.nix.settings.connect-timeout;
+          download-attempts = config.nix.settings.download-attempts;
         };
 
         virtualisation = lib.mkForce {

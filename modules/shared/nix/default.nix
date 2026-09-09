@@ -40,6 +40,9 @@ in
           "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
         ];
 
+        connect-timeout = 3;
+        download-attempts = 2;
+
         trusted-users = [
           "root"
           "@${adminGroup}"
