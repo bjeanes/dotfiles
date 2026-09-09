@@ -2,11 +2,13 @@
 {
   config,
   lib,
+  namespace,
   pkgs,
   ...
 }:
 let
   cfg = config.panel;
+  mqttHost = lib.${namespace}.hosts.homeassistant.lan;
 
   swayConfig = pkgs.writeText "tulgey-kiosk.conf" ''
     output eDP-1 scale 2
@@ -19,24 +21,12 @@ let
     # dark stylesheet it already ships. Read once at startup.
     exec env GTK_THEME=Adwaita:dark ${lib.getExe pkgs.squeekboard}
 
-    # --disable-pinch locks out pinch-to-zoom of the page viewport, which on a
-    # wall panel is only ever triggered by accident
-    #
-    # --enable-wayland-ime plus --wayland-text-input-version=3 are what allows 
-    # on-screen keyboard to hook into appropriate events to show itself.
-    #
-    # Not using --kiosk so that Sway can tile the keyboard under Chromium,
-    # instead of covering content you may need to interact with (e.g. to focus
-    # on a different input element)
-    exec ${lib.getExe pkgs.chromium} \
-      --app=${cfg.dashboardUrl} \
-      --ozone-platform=wayland \
-      --enable-wayland-ime \
-      --wayland-text-input-version=3 \
-      --noerrdialogs \
-      --disable-infobars \
-      --disable-pinch \
-      --disable-features=TranslateUI,OverscrollHistoryNavigation
+    exec ${lib.getExe pkgs.${namespace}.touchkio} \
+      --web-url=${cfg.dashboardUrl} \
+      --mqtt-url=mqtt://${mqttHost}:1883 \
+      --mqtt-user=tablet \
+      --mqtt-password-file=${config.age.secrets."touchkio-mqtt-password".path} \
+      --web-zoom=1
   '';
 
   kioskSession = {
@@ -81,6 +71,9 @@ in
       };
     };
 
+    # Read in-process by touchkio, so it never reaches argv or a disk copy.
+    age.secrets."touchkio-mqtt-password".owner = "tablet";
+
     # squeekboard gates auto-show on this key; nothing outside Phosh sets it.
     programs.dconf = {
       enable = true;
@@ -90,6 +83,10 @@ in
         }
       ];
     };
+
+    # For the interactive session; the kiosk itself is touchkio.
+    environment.systemPackages = [ pkgs.${namespace}.touchkio ];
+
     services.desktopManager.gnome.enable = cfg.interactive;
     services.displayManager = lib.mkIf cfg.interactive {
       gdm.enable = true;

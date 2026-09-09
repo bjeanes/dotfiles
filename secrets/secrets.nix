@@ -43,6 +43,11 @@ in
   "yuvomi-session-secret.age".publicKeys = all;
   "yuvomi-db-encryption-key.age".publicKeys = all;
 
+  "touchkio-mqtt-password.age".publicKeys = [
+    bjeanes
+    tulgey
+  ];
+
   "wg-private-key.age".publicKeys = [
     bjeanes
     borogrove
