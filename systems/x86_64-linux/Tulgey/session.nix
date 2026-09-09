@@ -36,6 +36,13 @@ let
     # scale 2, so 1500x1000, and it hangs in landscape.
     exec ${lib.getExe pkgs.wvkbd} --auto -L 320 -H 380 --fn "Sans 16"
 
+    # --disable-pinch locks out pinch-to-zoom of the page viewport, which on a
+    # wall panel is only ever triggered by accident; HA's own map/plot cards
+    # keep working because they handle raw touch events themselves rather than
+    # relying on browser zoom. With no keyboard there is no ctrl+/- either, so
+    # that pins the kiosk at 100%. OverscrollHistoryNavigation goes for the
+    # same reason: a stray two-finger swipe should not navigate the SPA back.
+    #
     # --enable-wayland-ime plus --wayland-text-input-version=3 are what make
     # Chromium create a text-input object at all; without them wvkbd --auto
     # never receives a focus event and stays hidden. sway speaks only v3,
@@ -48,7 +55,8 @@ let
       --wayland-text-input-version=3 \
       --noerrdialogs \
       --disable-infobars \
-      --disable-features=TranslateUI
+      --disable-pinch \
+      --disable-features=TranslateUI,OverscrollHistoryNavigation
   '';
 
   kioskSession = {
