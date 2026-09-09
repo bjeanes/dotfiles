@@ -18,20 +18,20 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/catppuccin-wezterm` | catppuccin-wezterm 0-unstable-2023-04-12 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
-| `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2026-07-10 |
+| `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2026-08-31 |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
-| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2026-08-12 |
+| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2026-08-31 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/v2.0.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/016802de402556da54c36bd7359b441266b01cdd |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/git-blame.nvim` | https://github.com/f-person/git-blame.nvim/tree/5c536e2d4134d064aa3f41575280bc8a2a0e03d7 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/v0.18.0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/3.41.0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/bfba63d6c129d8b5073fe9eb965c9acee04becb0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/3.42.0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/33f0a63ba878febcf1b078f9a4d314c0f952809a |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.11.0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/f5eba192f39b453675d115351808bd51276d9de5 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/074aa4422bf029908338e855d0c0f71470a971bb |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/455808fd0fae06e6d70fadfd61432275db8f34ce |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/427e9222363d07c32d6db6169e4049c28d58d141 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/f3061339b8eaf9fda873600bc425b8d2d8502533 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/882c996cf28183f4d63640de0b4c02ec886d01f2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/7235c7ce2cea530cb6b59bc3e46d4bfe917d15c8 |
