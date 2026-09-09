@@ -29,6 +29,19 @@ let
     x86_64-linux = [ "i686-linux" ];
   };
 
+  allAddressesOf =
+    host:
+    lib.unique (
+      (host.addresses or [ ])
+      ++ (builtins.filter (a: a != null) (
+        map (k: host.${k} or null) [
+          "ts"
+          "zt"
+          "lan"
+        ]
+      ))
+    );
+
   # Tailscale when both ends are on the tailnet
   addressOf =
     host: if self ? ts && host ? ts then host.ts else host.lan or (builtins.head host.addresses);
@@ -61,7 +74,7 @@ in
       # as root), so pin the peers' host keys system-wide: an unattended build
       # has nobody around to answer a host-key prompt.
       programs.ssh.knownHosts = lib.mapAttrs (name: host: {
-        hostNames = [ name ] ++ (host.aliases or [ ]) ++ host.addresses;
+        hostNames = [ name ] ++ (host.aliases or [ ]) ++ allAddressesOf host;
         publicKey = host.hostKey;
       }) peers;
 
