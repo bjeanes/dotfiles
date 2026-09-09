@@ -17,6 +17,10 @@ let
     default_floating_border none
     xwayland disable
 
+    # touchkio drives display power through wlopm too, and polls for changes it
+    # did not make, so its MQTT display entity follows the button.
+    bindsym XF86PowerOff exec ${lib.getExe pkgs.wlopm} --toggle '*'
+
     # squeekboard only self-selects dark under Phosh; GTK_THEME picks the
     # dark stylesheet it already ships. Read once at startup.
     exec env GTK_THEME=Adwaita:dark ${lib.getExe pkgs.squeekboard}
