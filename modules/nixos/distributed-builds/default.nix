@@ -128,7 +128,26 @@ in
 
       users.groups.${cfg.user} = { };
 
-      nix.settings.trusted-users = [ cfg.user ];
+      nix = {
+        settings = {
+          trusted-users = [ cfg.user ];
+
+          # Bound with `maxJobs` in the registry so concurrent jobs cannot
+          # oversubscribe the machine. Nix defaults this to 0, meaning every
+          # job gets every core, which is how a builder ends up with several
+          # times its core count in compilers and runs itself out of memory.
+          cores = self.builder.cores;
+        };
+
+        # These boxes are servers first -- Plex, qbittorrent, postgres, the
+        # *arrs -- and builders second, so builds yield to them. `batch` rather
+        # than `idle` for the CPU: the option's own docs warn that `idle` can
+        # starve work outright, and is meant for machines that are idle most of
+        # the time. Disk is the one that actually hurts interactive use, so
+        # that one does get `idle`.
+        daemonCPUSchedPolicy = "batch";
+        daemonIOSchedClass = "idle";
+      };
     })
   ];
 }

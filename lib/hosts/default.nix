@@ -27,7 +27,8 @@
       # NUC8i7HVK (Hades Canyon), 4c/8t.
       builder = {
         system = "x86_64-linux";
-        maxJobs = 4;
+        maxJobs = 2;
+        cores = 4;
         speedFactor = 2;
       };
     };
@@ -43,10 +44,12 @@
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwjs401oUl5CYv0bijTQyHQgRFJuCGbcpgUzrYSlMak";
 
-      # OptiPlex 7070 SFF.
+      # OptiPlex 7070 SFF: 6 cores, 15G, no swap. `maxJobs * cores` is kept at
+      # the core count on purpose
       builder = {
         system = "x86_64-linux";
-        maxJobs = 4;
+        maxJobs = 2;
+        cores = 3;
         speedFactor = 3;
       };
     };
@@ -62,10 +65,12 @@
 
       hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPGIUDOsRo5QmbXpUNqan5WjasENTVtrfEe3XQFxkaZJ";
 
-      # OptiPlex 7070 SFF.
+      # OptiPlex 7070 SFF: 6 cores, 15G, no swap. `maxJobs * cores` is kept at
+      # the core count on purpose
       builder = {
         system = "x86_64-linux";
-        maxJobs = 4;
+        maxJobs = 2;
+        cores = 3;
         speedFactor = 3;
       };
     };
