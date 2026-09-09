@@ -37,6 +37,11 @@ let
       --disable-infobars \
       --disable-features=TranslateUI
   '';
+
+  kioskSession = {
+    command = "${lib.getExe pkgs.sway} --config ${swayConfig}";
+    user = "tablet";
+  };
 in
 {
   options.panel = {
@@ -68,12 +73,18 @@ in
     # password auth off repo-wide, and this shuts the door explicitly.
     services.openssh.settings.DenyUsers = [ "tablet" ];
 
-    # greetd's initial_session is the autologin -- no prompt, straight in.
+    # initial_session is the autologin -- no prompt, straight in at boot.
+    # default_session is what greetd runs every *other* time, i.e. if the
+    # session ever exits; it is mandatory (greetd refuses to start with
+    # "default_session contains no command"), and the NixOS module only
+    # defaults its `user`, to "greeter". Pointing it at the same session means
+    # a crashed or quit kiosk comes straight back rather than leaving the wall
+    # showing a bare VT.
     services.greetd = lib.mkIf (!cfg.interactive) {
       enable = true;
-      settings.initial_session = {
-        command = "${lib.getExe pkgs.sway} --config ${swayConfig}";
-        user = "tablet";
+      settings = {
+        initial_session = kioskSession;
+        default_session = kioskSession;
       };
     };
 
