@@ -4,7 +4,7 @@
   ...
 }:
 let
-  version = "1.5.1";
+  version = "1.6.0";
 in
 pkgs.stdenv.mkDerivation {
   pname = "touchkio";
@@ -12,7 +12,7 @@ pkgs.stdenv.mkDerivation {
 
   src = pkgs.fetchurl {
     url = "https://github.com/leukipp/touchkio/releases/download/v${version}/touchkio-linux-x64-${version}.zip";
-    hash = "sha256-4jGh1JnZQlvs7sAUoZnoRdqONZc9RtbVaMfHKH41QMI=";
+    hash = "sha256-j6WuEpG2HwOXOPWpVC8MqJeq9m0hH+EZ/5Z4siGw9IA=";
   };
 
   nativeBuildInputs = with pkgs; [
@@ -20,26 +20,22 @@ pkgs.stdenv.mkDerivation {
     makeWrapper
   ];
 
-  # Upstream matches only ALS name "als" (ours is "acpi-als"), gates wlopm to
-  # a desktop list without sway, demands $DISPLAY on a Wayland session, and
-  # has no way to suppress its own 40px title bar outside debug mode, and
-  # takes the MQTT password only via argv (world-readable) or a JSON file.
+  # Upstream matches only ALS name "als" (ours is "acpi-als"), demands
+  # $DISPLAY on a Wayland session, has no way to suppress its own 40px title
+  # bar outside debug mode (a tiled sway window reads as "Framed"), and takes
+  # the MQTT password only via argv (world-readable) or a JSON file.
   postPatch = ''
     substituteInPlace resources/app/js/hardware.js \
       --replace-fail 'if (name === "als") {' \
                      'if (["als", "acpi-als"].includes(name)) {'
 
-    substituteInPlace resources/app/js/hardware.js \
-      --replace-fail '{ command: "wlopm", desktops: ["labwc", "wayfire", "unknown"] },' \
-                     '{ command: "wlopm", desktops: ["labwc", "wayfire", "sway", "unknown"] },'
-
     substituteInPlace resources/app/js/webview.js \
-      --replace-fail 'const height = force === "ON" ? 40 : force === "OFF" ? 0 : status.height > 0 ? 0 : 40;' \
+      --replace-fail 'const height = force === "ON" ? 40 : force === "OFF" ? 0 : header.height > 0 ? 0 : 40;' \
                      'const height = 0;'
 
     substituteInPlace resources/app/js/integration.js \
-      --replace-fail 'const password = ARGS.mqtt_password ? ARGS.mqtt_password : null;' \
-                     'const password = ARGS.mqtt_password_file ? require("fs").readFileSync(ARGS.mqtt_password_file, "utf8").replace(/\s+$/, "") : ARGS.mqtt_password ? ARGS.mqtt_password : null;'
+      --replace-fail 'const password = ARGS.mqtt_password || null;' \
+                     'const password = ARGS.mqtt_password_file ? require("fs").readFileSync(ARGS.mqtt_password_file, "utf8").replace(/\s+$/, "") : ARGS.mqtt_password || null;'
 
     substituteInPlace resources/app/index.js \
       --replace-fail 'if (!process.env.DISPLAY) {' \
