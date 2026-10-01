@@ -265,6 +265,7 @@ let
     if cfg.network.mode == "macvtap" then
       {
         type = "direct";
+        trustGuestRxFilters = true;
         source = {
           dev = cfg.network.hostInterface;
           mode = "bridge";
