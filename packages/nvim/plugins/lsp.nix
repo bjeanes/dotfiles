@@ -2,8 +2,23 @@
 {
   plugins.lspconfig.enable = true;
 
+  # Neovim applies `documentChanges` (including file renames) but doesn't
+  # advertise it, nor send `workspace/willRenameFiles`, so servers that move
+  # files on rename (e.g. clojure-lsp namespaces) refuse or half-apply it.
+  lsp.luaConfig.content = ''
+    local rename = vim.lsp.util.rename
+    vim.lsp.util.rename = function(old, new, opts)
+      Snacks.rename.on_rename_file(old, new, function()
+        rename(old, new, opts)
+      end)
+    end
+  '';
+
   lsp.servers = {
-    clojure_lsp.enable = true;
+    clojure_lsp = {
+      enable = true;
+      config.capabilities.workspace.workspaceEdit.documentChanges = true;
+    };
     expert = {
       enable = true;
       package = pkgs.beamPackages.expert;
