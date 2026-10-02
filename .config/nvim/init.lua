@@ -392,6 +392,14 @@ do
         },
         {
             action = function()
+                Snacks.notifier.show_history()
+            end,
+            key = "<Leader>n",
+            mode = "n",
+            options = { desc = "Notification history" },
+        },
+        {
+            action = function()
                 Snacks.notifier.hide()
             end,
             key = "<Leader>un",
