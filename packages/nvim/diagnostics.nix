@@ -3,6 +3,10 @@
     update_in_insert = true;
     severity_sort = true;
 
+    # Short message on other lines, full message under the cursor line
+    virtual_text.current_line = false;
+    virtual_lines.current_line = true;
+
     float = {
       border = "rounded";
     };
