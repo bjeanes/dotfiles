@@ -471,6 +471,14 @@ vim.filetype.add({ extension = { ignore = "gitignore" }, pattern = { ["flake.loc
 
 -- LSP {{{
 do
+    local rename = vim.lsp.util.rename
+    vim.lsp.util.rename = function(old, new, opts)
+        Snacks.rename.on_rename_file(old, new, function()
+            rename(old, new, opts)
+        end)
+    end
+
+    vim.lsp.config("clojure_lsp", { capabilities = { workspace = { workspaceEdit = { documentChanges = true } } } })
     vim.lsp.enable("clojure_lsp")
     vim.lsp.enable("expert")
     vim.lsp.enable("nixd")
