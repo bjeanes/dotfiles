@@ -481,6 +481,16 @@ do
     vim.lsp.config("clojure_lsp", { capabilities = { workspace = { workspaceEdit = { documentChanges = true } } } })
     vim.lsp.enable("clojure_lsp")
     vim.lsp.enable("expert")
+    vim.lsp.config(
+        "nixd",
+        {
+            settings = {
+                nixd = {
+                    formatting = { command = { "nixfmt" } },
+                },
+            },
+        }
+    )
     vim.lsp.enable("nixd")
     vim.lsp.enable("ruby_lsp")
     vim.lsp.enable("rust_analyzer")
