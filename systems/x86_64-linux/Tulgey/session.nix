@@ -78,6 +78,12 @@ in
     # Read in-process by touchkio, so it never reaches argv or a disk copy.
     age.secrets."touchkio-mqtt-password".owner = "tablet";
 
+    # touchkio writes brightness with plain `tee` only if it can already write
+    # the file; otherwise it wants sudo or ddcutil.
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chgrp video /sys%p/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys%p/brightness"
+    '';
+
     systemd.services.greetd.restartIfChanged = lib.mkIf (!cfg.interactive) (lib.mkForce true);
 
     # squeekboard gates auto-show on this key; nothing outside Phosh sets it.
