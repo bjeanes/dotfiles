@@ -23,7 +23,10 @@
       enable = true;
       package = pkgs.beamPackages.expert;
     };
-    nixd.enable = true;
+    nixd = {
+      enable = true;
+      config.settings.nixd.formatting.command = [ (lib.getExe pkgs.nixfmt) ];
+    };
     ruby_lsp.enable = true;
     rust_analyzer.enable = true;
   };
