@@ -56,6 +56,10 @@
     hister.enable = true;
     soju.enable = true;
     tracearr.enable = true;
+    miniflux = {
+      enable = true;
+      hostName = "rss";
+    };
   };
 
   virtualisation.oci-containers.backend = "podman";
