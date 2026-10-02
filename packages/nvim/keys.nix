@@ -5,7 +5,7 @@
 {
   globals = {
     mapleader = " ";
-    maplocalleader = " ";
+    maplocalleader = ",";
   };
 
   keymaps =
