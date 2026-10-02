@@ -18,5 +18,13 @@
         '';
         options.desc = "Dismiss all notifications";
       };
+      "<Leader>n" = {
+        action.__raw = ''
+          function()
+            Snacks.notifier.show_history()
+          end
+        '';
+        options.desc = "Notification history";
+      };
     };
 }
