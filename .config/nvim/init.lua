@@ -7,7 +7,14 @@ local _M = {}
 
 -- Set up globals {{{
 do
-    local nixvim_globals = { mapleader = " ", maplocalleader = " " }
+    local nixvim_globals = {
+        ["conjure#filetypes"] = { "clojure", "fennel", "janet", "lisp", "racket", "scheme" },
+        ["conjure#mapping#def_word"] = false,
+        ["conjure#mapping#doc_word"] = false,
+        mapleader = " ",
+        maplocalleader = ",",
+        rainbow_delimiters = { whitelist = { "clojure", "commonlisp", "fennel", "janet_simple", "racket", "scheme" } },
+    }
 
     for k, v in pairs(nixvim_globals) do
         vim.g[k] = v
@@ -505,6 +512,8 @@ do
 end
 -- }}}
 
+require("nvim-paredit").setup({ indent = { enabled = true } })
+
 -- Set up autogroups {{
 do
     local __nixvim_autogroups = { nixvim_lsp_binds = { clear = false } }
@@ -665,6 +674,15 @@ do
             end,
             event = { "User" },
             pattern = { "SnacksDashboardOpened" },
+        },
+        {
+            callback = function(args)
+                for _, key in ipairs({ "'", "`" }) do
+                    vim.keymap.set("i", key, key, { buffer = args.buf })
+                end
+            end,
+            event = "FileType",
+            pattern = { "clojure", "fennel", "janet", "lisp", "racket", "scheme" },
         },
     }
 
