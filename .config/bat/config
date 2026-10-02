@@ -1,3 +1,2 @@
 --map-syntax=flake.lock:JSON
---map-syntax='~/.config/ghostty/config:Ghostty Config'
 --theme='Catppuccin Mocha'
