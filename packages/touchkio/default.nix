@@ -21,17 +21,12 @@ pkgs.stdenv.mkDerivation {
   ];
 
   # Upstream matches only ALS name "als" (ours is "acpi-als"), demands
-  # $DISPLAY on a Wayland session, has no way to suppress its own 40px title
-  # bar outside debug mode (a tiled sway window reads as "Framed"), and takes
-  # the MQTT password only via argv (world-readable) or a JSON file.
+  # $DISPLAY on a Wayland session, and takes the MQTT password only via argv
+  # (world-readable) or a JSON file.
   postPatch = ''
     substituteInPlace resources/app/js/hardware.js \
       --replace-fail 'if (name === "als") {' \
                      'if (["als", "acpi-als"].includes(name)) {'
-
-    substituteInPlace resources/app/js/webview.js \
-      --replace-fail 'const height = force === "ON" ? 40 : force === "OFF" ? 0 : header.height > 0 ? 0 : 40;' \
-                     'const height = 0;'
 
     substituteInPlace resources/app/js/integration.js \
       --replace-fail 'const password = ARGS.mqtt_password || null;' \
