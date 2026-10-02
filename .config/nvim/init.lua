@@ -52,6 +52,8 @@ vim.diagnostic.config({
         },
     },
     update_in_insert = true,
+    virtual_lines = { current_line = true },
+    virtual_text = { current_line = false },
 })
 
 vim.cmd([[colorscheme catppuccin
@@ -120,7 +122,7 @@ MiniIcons.mock_nvim_web_devicons()
 
 vim.ui.select = require("mini.pick").ui_select
 
-require("which-key").setup({})
+require("which-key").setup({ spec = { { "<Leader>l", group = "LSP" } } })
 
 require("treesitter-context").setup({ max_lines = 4, min_window_height = 40, separator = "-" })
 
@@ -361,29 +363,6 @@ require("conform").setup({
     },
 })
 
-local function __nixvim_lsp_on_attach(client, bufnr, event) end
-
-vim.lsp.handlers["client/registerCapability"] = (function(overridden)
-    return function(err, res, ctx, ...)
-        local result = overridden(err, res, ctx, ...)
-        local client = vim.lsp.get_client_by_id(ctx.client_id)
-        if client == nil then
-            return result
-        end
-
-        for bufnr, _ in pairs(client.attached_buffers) do
-            __nixvim_lsp_on_attach(client, bufnr, {
-                buf = bufnr,
-                data = {
-                    client_id = client.id,
-                },
-            })
-        end
-
-        return result
-    end
-end)(vim.lsp.handlers["client/registerCapability"])
-
 -- Set up keybinds {{{
 do
     local __nixvim_binds = {
@@ -492,28 +471,17 @@ vim.filetype.add({ extension = { ignore = "gitignore" }, pattern = { ["flake.loc
 
 -- LSP {{{
 do
-    local __lspCapabilities = function()
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-        return capabilities
-    end
-
-    local __setup = { capabilities = __lspCapabilities() }
-
-    local __wrapConfig = function(cfg)
-        if cfg == nil then
-            cfg = __setup
-        else
-            cfg = vim.tbl_extend("keep", cfg, __setup)
-        end
-        return cfg
-    end
+    vim.lsp.enable("clojure_lsp")
+    vim.lsp.enable("expert")
+    vim.lsp.enable("nixd")
+    vim.lsp.enable("ruby_lsp")
+    vim.lsp.enable("rust_analyzer")
 end
 -- }}}
 
 -- Set up autogroups {{
 do
-    local __nixvim_autogroups = { nixvim_binds_LspAttach = { clear = true }, nixvim_lsp_on_attach = { clear = false } }
+    local __nixvim_autogroups = { nixvim_lsp_binds = { clear = false } }
 
     for group_name, options in pairs(__nixvim_autogroups) do
         vim.api.nvim_create_augroup(group_name, options)
@@ -524,67 +492,141 @@ end
 do
     local __nixvim_autocommands = {
         {
-            callback = function(event)
-                do
-                    -- client and bufnr are supplied to the builtin `on_attach` callback,
-                    -- so make them available in scope for our global `onAttach` impl
-                    local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    if client == nil then
-                        return
-                    end
-
-                    __nixvim_lsp_on_attach(client, event.buf, event)
-                end
-            end,
-            desc = "Run LSP onAttach",
-            event = "LspAttach",
-            group = "nixvim_lsp_on_attach",
-        },
-        {
             callback = function(args)
-                do
-                    local __nixvim_binds = {
-                        {
-                            action = vim.lsp.buf.hover,
-                            key = "K",
-                            mode = "n",
-                            options = { desc = "Lsp buf hover", silent = false },
+                local __keymaps = {
+                    {
+                        action = vim.lsp.buf["hover"],
+                        key = "K",
+                        mode = "n",
+                        options = {
+                            desc = "Lsp buf hover",
                         },
-                        {
-                            action = vim.lsp.buf.references,
-                            key = "gD",
-                            mode = "n",
-                            options = { desc = "Lsp buf references", silent = false },
+                    },
+                    {
+                        action = vim.lsp.buf["references"],
+                        key = "gD",
+                        mode = "n",
+                        options = {
+                            desc = "Lsp buf references",
                         },
-                        {
-                            action = vim.lsp.buf.definition,
-                            key = "gd",
-                            mode = "n",
-                            options = { desc = "Lsp buf definition", silent = false },
+                    },
+                    {
+                        action = vim.lsp.buf["definition"],
+                        key = "gd",
+                        mode = "n",
+                        options = {
+                            desc = "Lsp buf definition",
                         },
-                        {
-                            action = vim.lsp.buf.implementation,
-                            key = "gi",
-                            mode = "n",
-                            options = { desc = "Lsp buf implementation", silent = false },
+                    },
+                    {
+                        action = vim.lsp.buf["implementation"],
+                        key = "gi",
+                        mode = "n",
+                        options = {
+                            desc = "Lsp buf implementation",
                         },
-                        {
-                            action = vim.lsp.buf.type_definition,
-                            key = "gt",
-                            mode = "n",
-                            options = { desc = "Lsp buf type_definition", silent = false },
+                    },
+                    {
+                        action = vim.lsp.buf["type_definition"],
+                        key = "gt",
+                        mode = "n",
+                        options = {
+                            desc = "Lsp buf type_definition",
                         },
-                    }
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='declaration'<CR>",
+                        key = "<Leader>lD",
+                        mode = "n",
+                        options = {
+                            desc = "Declarations",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick diagnostic scope='all'<CR>",
+                        key = "<Leader>lE",
+                        mode = "n",
+                        options = {
+                            desc = "Diagnostics (all)",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='workspace_symbol_live'<CR>",
+                        key = "<Leader>lS",
+                        mode = "n",
+                        options = {
+                            desc = "Workspace symbols",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='definition'<CR>",
+                        key = "<Leader>ld",
+                        mode = "n",
+                        options = {
+                            desc = "Definitions",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick diagnostic scope='current'<CR>",
+                        key = "<Leader>le",
+                        mode = "n",
+                        options = {
+                            desc = "Diagnostics (buffer)",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='implementation'<CR>",
+                        key = "<Leader>li",
+                        mode = "n",
+                        options = {
+                            desc = "Implementations",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='references'<CR>",
+                        key = "<Leader>lr",
+                        mode = "n",
+                        options = {
+                            desc = "References",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='document_symbol'<CR>",
+                        key = "<Leader>ls",
+                        mode = "n",
+                        options = {
+                            desc = "Document symbols",
+                        },
+                    },
+                    {
+                        action = "<Cmd>Pick lsp scope='type_definition'<CR>",
+                        key = "<Leader>lt",
+                        mode = "n",
+                        options = {
+                            desc = "Type definitions",
+                        },
+                    },
+                    {
+                        action = vim.lsp.buf["code_action"],
+                        key = "<Leader>la",
+                        mode = {
+                            "n",
+                            "x",
+                        },
+                        options = {
+                            desc = "Code actions",
+                        },
+                    },
+                }
 
-                    for i, map in ipairs(__nixvim_binds) do
-                        local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                        vim.keymap.set(map.mode, map.key, map.action, options)
-                    end
+                for _, keymap in ipairs(__keymaps) do
+                    local options = vim.tbl_extend("keep", keymap.options or {}, { buffer = args.buf })
+                    vim.keymap.set(keymap.mode, keymap.key, keymap.action, options)
                 end
             end,
-            desc = "Load keymaps for LspAttach",
+            desc = "Load LSP keymaps",
             event = "LspAttach",
-            group = "nixvim_binds_LspAttach",
+            group = "nixvim_lsp_binds",
         },
         {
             command = "setlocal spell spelllang=en_au,en_gb,en_us",
