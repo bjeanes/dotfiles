@@ -35,7 +35,7 @@ end
 require("catppuccin").setup({
     default_integrations = true,
     flavour = "macchiato",
-    integrations = { cmp = true, mini = { enabled = true }, treesitter = true },
+    integrations = { blink_cmp = true, mini = { enabled = true }, treesitter = true },
     term_colors = true,
     transparent_background = true,
 })
