@@ -8,7 +8,7 @@
 
       # https://github.com/catppuccin/nvim/tree/main/lua/catppuccin/groups/integrations
       integrations = {
-        cmp = true;
+        blink_cmp = true;
         mini.enabled = true;
         treesitter = true;
       };
