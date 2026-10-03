@@ -34,6 +34,12 @@ in
       description = "OCI image for the Nextflux frontend";
     };
 
+    feedTheCommentsImage = lib.mkOption {
+      default = "ghcr.io/bjeanes/feed-the-comments:latest";
+      type = lib.types.str;
+      description = "OCI image for the feed-the-comments feed rewriter";
+    };
+
     dbImage = lib.mkOption {
       # Pinned to a major version and opted out of auto-update
       default = "docker.io/library/postgres:18-alpine";
@@ -81,9 +87,11 @@ in
 
       dbName = "${svc}-db";
       nextfluxName = "nextflux";
+      ftcName = "feed-the-comments";
 
       port = 8080;
       nextfluxPort = 3000;
+      ftcPort = 3001;
       dbPort = 5432;
 
       # Nextflux is a static SPA built for `/`, so it gets the root and
@@ -177,6 +185,12 @@ in
                   # `X-Forwarded-Proto`, and issue non-`Secure` cookies until then.
                   HTTPS = "1";
                   TRUSTED_REVERSE_PROXY_NETWORKS = "127.0.0.1/32";
+
+                  # So feeds can be subscribed through feed-the-comments at
+                  # `http://localhost:${toString ftcPort}`. The tailnet URL
+                  # isn't an option: it's private too, and tailscaled runs in
+                  # userspace so nothing else in the pod can route to it.
+                  FETCHER_ALLOW_PRIVATE_NETWORKS = "1";
                 };
                 notify = "healthy";
                 healthCmd = "/usr/bin/miniflux -healthcheck auto";
@@ -204,6 +218,22 @@ in
                 ];
               };
             };
+
+            containers.${ftcName} = {
+              autoStart = true;
+              containerConfig = {
+                pod = pods.${podName}.ref;
+                autoUpdate = "registry";
+                image = cfg.feedTheCommentsImage;
+                environments = {
+                  TZ = cfg.timeZone;
+                  PORT = toString ftcPort;
+                  HTTP_HOST = "127.0.0.1";
+                  # For links only; tailscaled strips the path before proxying
+                  PUBLIC_URL = "https://${fqdn}/${ftcName}";
+                };
+              };
+            };
           };
         }
 
@@ -215,6 +245,7 @@ in
             # tailscaled strips the mount point before proxying, so the
             # upstream has to put it back for Miniflux's router.
             "${basePath}/" = "http://localhost:${toString port}${basePath}/";
+            "/${ftcName}/" = ftcPort;
           };
         })
 
