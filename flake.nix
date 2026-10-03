@@ -130,67 +130,92 @@
             }) (lib.filter isRecipient (lib.attrNames rules))
           );
         };
-    in
-    (inputs.snowfall-lib.mkFlake {
-      inherit inputs;
-      src = ./.;
 
-      channels-config = {
-        allowUnfree = true;
-      };
-
-      overlays = with inputs; [
-        darwin.overlays.default
-        snowfall-flake.overlays.default
-      ];
-
-      systems.modules.darwin = with inputs; [
-        agenix.darwinModules.default
-        nix-index-database.darwinModules.nix-index
-        { programs.nix-index-database.comma.enable = true; }
-        secrets
-      ];
-
-      systems.modules.nixos = with inputs; [
-        agenix.nixosModules.default
-        comin.nixosModules.comin
-        catppuccin.nixosModules.catppuccin
-        nixvirt.nixosModules.default
-        quadlet-nix.nixosModules.quadlet
-        nix-index-database.nixosModules.default
-        { programs.nix-index-database.comma.enable = true; }
-        secrets
-      ];
-
-      homes.modules = with inputs; [
-        _1password-shell-plugins.hmModules.default
-        catppuccin.homeModules.catppuccin
-        agenix.homeManagerModules.default
-        inputs.quadlet-nix.homeManagerModules.quadlet
-        nix-index-database.homeModules.default
-        { programs.nix-index-database.comma.enable = true; }
-        secrets
-      ];
-
-      alias = {
-        packages.default = "switch";
-      };
-
-      outputs-builder =
-        channels:
-        # let
-        #   system = channels.nixpkgs.system;
-        #   treefmtEval = inputs.treefmt-nix.lib.evalModule channels.nixpkgs ./treefmt.nix;
-        # in
+      # A fresh Mac has no aarch64-linux builder to build our customised
+      # linux-builder, so first activation uses the stock one from
+      # cache.nixos.org; the next normal switch then builds the real one.
+      linuxBuilderBootstrap =
+        { lib, pkgs, ... }:
         {
-
-          formatter = channels.nixpkgs.nixfmt-tree;
-          # formatter = treefmtEval.${system}.config.build.wrapper;
-          # checks = {
-          #   treefmt = treefmtEval.${system}.config.build.check self;
-          # };
+          nix.linux-builder = {
+            package = lib.mkForce pkgs.darwin.linux-builder;
+            config = lib.mkForce { };
+            systems = lib.mkForce [ "aarch64-linux" ];
+          };
         };
-    });
+
+      flake = inputs.snowfall-lib.mkFlake {
+        inherit inputs;
+        src = ./.;
+
+        channels-config = {
+          allowUnfree = true;
+        };
+
+        overlays = with inputs; [
+          darwin.overlays.default
+          snowfall-flake.overlays.default
+        ];
+
+        systems.modules.darwin = with inputs; [
+          agenix.darwinModules.default
+          nix-index-database.darwinModules.nix-index
+          { programs.nix-index-database.comma.enable = true; }
+          secrets
+        ];
+
+        systems.modules.nixos = with inputs; [
+          agenix.nixosModules.default
+          comin.nixosModules.comin
+          catppuccin.nixosModules.catppuccin
+          nixvirt.nixosModules.default
+          quadlet-nix.nixosModules.quadlet
+          nix-index-database.nixosModules.default
+          { programs.nix-index-database.comma.enable = true; }
+          secrets
+        ];
+
+        homes.modules = with inputs; [
+          _1password-shell-plugins.hmModules.default
+          catppuccin.homeModules.catppuccin
+          agenix.homeManagerModules.default
+          inputs.quadlet-nix.homeManagerModules.quadlet
+          nix-index-database.homeModules.default
+          { programs.nix-index-database.comma.enable = true; }
+          secrets
+        ];
+
+        alias = {
+          packages.default = "switch";
+        };
+
+        outputs-builder =
+          channels:
+          # let
+          #   system = channels.nixpkgs.system;
+          #   treefmtEval = inputs.treefmt-nix.lib.evalModule channels.nixpkgs ./treefmt.nix;
+          # in
+          {
+
+            formatter = channels.nixpkgs.nixfmt-tree;
+            # formatter = treefmtEval.${system}.config.build.wrapper;
+            # checks = {
+            #   treefmt = treefmtEval.${system}.config.build.check self;
+            # };
+          };
+      };
+    in
+    flake
+    // {
+      darwinConfigurations =
+        flake.darwinConfigurations
+        // inputs.nixpkgs.lib.mapAttrs' (
+          name: system:
+          inputs.nixpkgs.lib.nameValuePair "${name}-bootstrap" (
+            system.extendModules { modules = [ linuxBuilderBootstrap ]; }
+          )
+        ) flake.darwinConfigurations;
+    };
 
   nixConfig = {
     extra-substituters = [
