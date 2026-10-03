@@ -370,6 +370,12 @@ require("conform").setup({
     },
 })
 
+require("blink-cmp").setup({
+    completion = { documentation = { auto_show = true } },
+    keymap = { preset = "default" },
+    signature = { enabled = true },
+})
+
 -- Set up keybinds {{{
 do
     local __nixvim_binds = {
