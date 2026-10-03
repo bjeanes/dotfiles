@@ -18,6 +18,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/blink.cmp` | https://github.com/Saghen/blink.cmp/tree/v1.10.2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/v2.0.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/016802de402556da54c36bd7359b441266b01cdd |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conjure` | https://github.com/Olical/conjure/tree/v4.60.0 |
