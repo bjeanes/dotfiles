@@ -308,6 +308,14 @@ in
       };
     };
 
+    programs.bash.initExtra = /* bash */ ''
+      source <(COMPLETE=bash jj)
+    '';
+
+    programs.zsh.initContent = /* zsh */ ''
+      source <(COMPLETE=zsh jj)
+    '';
+
     home.packages = with pkgs; [
       gg-jj
     ];
