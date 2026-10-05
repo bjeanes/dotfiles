@@ -1,5 +1,6 @@
 background-blur-radius = 20
 background-opacity = 0.900000
+keybind = global:ctrl+`=toggle_quick_terminal
 minimum-contrast = 1.100000
 shell-integration-features = sudo
 theme = light:catppuccin-mocha,dark:catppuccin-mocha
