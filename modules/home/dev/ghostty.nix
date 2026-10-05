@@ -9,13 +9,6 @@
 let
   cfg = config.programs.ghostty;
 
-  # Home Manager module doesn't have nice ergonomics for keybindings. This is
-  # lifted from the now-deprecated https://github.com/clo4/ghostty-hm-module
-  toGhosttyKeybindings = lib.generators.toKeyValue {
-    listsAsDuplicateKeys = true;
-    mkKeyValue = key: value: "keybind = ${key}=${value}";
-  };
-
   # https://github.com/nix-community/home-manager/issues/6295
   ghosttyPkg =
     if pkgs.stdenv.hostPlatform.isDarwin then
@@ -46,15 +39,10 @@ in
         background-opacity = 0.9;
         minimum-contrast = 1.1;
         shell-integration-features = "sudo";
+        keybind = [
+          "global:ctrl+`=toggle_quick_terminal"
+        ];
       };
-
-      keybindings = {
-        "global:ctrl+`" = "toggle_quick_terminal";
-      };
-    };
-
-    xdg.configFile."ghostty/config" = lib.mkIf cfg.enable {
-      text = toGhosttyKeybindings cfg.keybindings;
     };
   };
 }
