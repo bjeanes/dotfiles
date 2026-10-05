@@ -95,6 +95,8 @@ for opt in "${set_opts[@]}"; do
 done
 unset opt set_opts
 
+source <(COMPLETE=zsh jj)
+
 eval "$(mise activate zsh)"
 
 eval "$(devenv hook zsh)"
