@@ -60,6 +60,8 @@ docker-describe() {
   docker inspect --format "$(cat $HOME/.local/share/dotfiles/docker-inspect-run-cmd-fmt/run.tpl)" "$1"
 }
 
+source <(COMPLETE=bash jj)
+
 eval "$(mise activate bash)"
 
 eval "$(devenv hook bash)"
