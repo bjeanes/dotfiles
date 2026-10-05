@@ -12,7 +12,7 @@ let
   # https://github.com/nix-community/home-manager/issues/6295
   ghosttyPkg =
     if pkgs.stdenv.hostPlatform.isDarwin then
-      (pkgs.writeShellScriptBin "gostty-mock" "true")
+      (pkgs.writeShellScriptBin "ghostty-mock" "true")
     else
       inputs.ghostty.packages.${system}.default;
 in
