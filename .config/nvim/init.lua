@@ -129,7 +129,7 @@ MiniIcons.mock_nvim_web_devicons()
 
 vim.ui.select = require("mini.pick").ui_select
 
-require("which-key").setup({ spec = { { "<Leader>l", group = "LSP" } } })
+require("which-key").setup({ spec = { { "<Leader>a", group = "AI" }, { "<Leader>l", group = "LSP" } } })
 
 require("treesitter-context").setup({ max_lines = 4, min_window_height = 40, separator = "-" })
 
@@ -370,6 +370,65 @@ require("conform").setup({
     },
 })
 
+require("codecompanion").setup({
+    adapters = {
+        acp = {
+            claude_code = function()
+                return require("codecompanion.adapters").extend("claude_code", {
+                    -- Absolute path: direnv reloads inside nvim reset $PATH to the
+                    -- pre-direnv shell's, dropping the nixvim wrapper's entries.
+                    commands = {
+                        default = {
+                            "claude-agent-acp",
+                        },
+                        yolo = {
+                            "claude-agent-acp",
+                            "--yolo",
+                        },
+                    },
+                    env = {
+                        CLAUDE_CODE_OAUTH_TOKEN = function()
+                            local token = vim.env.CLAUDE_CODE_OAUTH_TOKEN
+                            if token and token ~= "" then
+                                return token
+                            end
+                            local ok, lines = pcall(vim.fn.readfile, "/run/agenix/claude-code-oauth-token")
+                            token = ok and vim.trim(table.concat(lines, "")) or ""
+                            return token ~= "" and token or nil
+                        end,
+                    },
+                    handlers = {
+                        -- env_replaced is passed to the agent process; nothing to export.
+                        auth = function(self)
+                            return self.env_replaced.CLAUDE_CODE_OAUTH_TOKEN ~= nil
+                        end,
+                    },
+                })
+            end,
+        },
+        http = {
+            lmstudio = function()
+                return require("codecompanion.adapters").extend("openai_compatible", {
+                    name = "lmstudio",
+                    formatted_name = "LM Studio",
+                    env = {
+                        url = "http://localhost:1234",
+                        api_key = "lm-studio",
+                    },
+                })
+            end,
+        },
+    },
+    interactions = {
+        background = { adapter = "lmstudio" },
+        chat = { adapter = "claude_code" },
+        cmd = { adapter = "lmstudio" },
+        inline = { adapter = "lmstudio" },
+    },
+})
+
+require("claudecode").setup({ terminal = { provider = "snacks" } })
+
 require("blink-cmp").setup({
     completion = { documentation = { auto_show = true } },
     keymap = { preset = "default" },
@@ -474,6 +533,85 @@ do
             options = { desc = "Resume last picker" },
         },
         { action = "<cmd>Pick files<CR>", key = "<Leader>f", mode = "n", options = { desc = "File picker" } },
+        {
+            action = "<Cmd>CodeCompanionCodeReview Comment<CR>",
+            key = "<Leader>aC",
+            mode = "n",
+            options = { desc = "Comment on agent change" },
+        },
+        {
+            action = "<Cmd>CodeCompanionCodeReview<CR>",
+            key = "<Leader>aR",
+            mode = "n",
+            options = { desc = "Review agent changes" },
+        },
+        {
+            action = "<Cmd>ClaudeCodeAdd %<CR>",
+            key = "<Leader>ab",
+            mode = "n",
+            options = { desc = "Add buffer to Claude Code" },
+        },
+        { action = "<Cmd>ClaudeCode<CR>", key = "<Leader>ac", mode = "n", options = { desc = "Toggle Claude Code" } },
+        {
+            action = "<Cmd>ClaudeCodeFocus<CR>",
+            key = "<Leader>af",
+            mode = "n",
+            options = { desc = "Focus Claude Code" },
+        },
+        {
+            action = "<Cmd>CodeCompanionChat Toggle<CR>",
+            key = "<Leader>ai",
+            mode = "n",
+            options = { desc = "Toggle CodeCompanion chat" },
+        },
+        {
+            action = "<Cmd>ClaudeCodeDiffDeny<CR>",
+            key = "<Leader>an",
+            mode = "n",
+            options = { desc = "Reject Claude Code diff" },
+        },
+        {
+            action = "<Cmd>CodeCompanionActions<CR>",
+            key = "<Leader>ap",
+            mode = "n",
+            options = { desc = "CodeCompanion actions" },
+        },
+        {
+            action = "<Cmd>ClaudeCode --resume<CR>",
+            key = "<Leader>ar",
+            mode = "n",
+            options = { desc = "Resume Claude Code session" },
+        },
+        {
+            action = "<Cmd>ClaudeCodeDiffAccept<CR>",
+            key = "<Leader>ay",
+            mode = "n",
+            options = { desc = "Accept Claude Code diff" },
+        },
+        {
+            action = ":CodeCompanionCodeReview Comment<CR>",
+            key = "<Leader>aC",
+            mode = "v",
+            options = { desc = "Comment on agent change" },
+        },
+        {
+            action = "<Cmd>CodeCompanionChat Add<CR>",
+            key = "<Leader>ai",
+            mode = "v",
+            options = { desc = "Add selection to CodeCompanion chat" },
+        },
+        {
+            action = "<Cmd>CodeCompanionActions<CR>",
+            key = "<Leader>ap",
+            mode = "v",
+            options = { desc = "CodeCompanion actions" },
+        },
+        {
+            action = "<Cmd>ClaudeCodeSend<CR>",
+            key = "<Leader>as",
+            mode = "v",
+            options = { desc = "Send selection to Claude Code" },
+        },
         { action = "<Cmd>w<CR>", key = "<Leader>w", mode = "n", options = { desc = "Save" } },
         { action = "<cmd>noh<CR>", key = "<esc>", mode = "n" },
         { action = "y$", key = "Y", mode = "n" },
@@ -522,7 +660,7 @@ require("nvim-paredit").setup({ indent = { enabled = true } })
 
 -- Set up autogroups {{
 do
-    local __nixvim_autogroups = { nixvim_lsp_binds = { clear = false } }
+    local __nixvim_autogroups = { ["nixvim-path"] = { clear = true }, nixvim_lsp_binds = { clear = false } }
 
     for group_name, options in pairs(__nixvim_autogroups) do
         vim.api.nvim_create_augroup(group_name, options)
@@ -680,6 +818,52 @@ do
             end,
             event = { "User" },
             pattern = { "SnacksDashboardOpened" },
+        },
+        {
+            callback = function()
+                local nixvim = vim.split(
+                    "",
+                    ":"
+                )
+                local nixvim_after = vim.split("", ":", { trimempty = true })
+
+                local res = vim.system(
+                    {
+                        "direnv",
+                        "exec",
+                        "/",
+                        "printenv",
+                        "PATH",
+                    },
+                    { text = true }
+                ):wait()
+                if res.code ~= 0 then
+                    return
+                end
+
+                local split = function(s)
+                    return vim.split(s or "", ":", { trimempty = true })
+                end
+                local ours, host = {}, {}
+                for _, d in ipairs(vim.list_extend(vim.list_extend({}, nixvim), nixvim_after)) do
+                    ours[d] = true
+                end
+                for _, d in ipairs(split(res.stdout:gsub("%s+$", ""))) do
+                    host[d] = true
+                end
+
+                local added, base = {}, {}
+                for _, d in ipairs(split(vim.env.PATH)) do
+                    if not ours[d] then
+                        table.insert(host[d] and base or added, d)
+                    end
+                end
+
+                vim.env.PATH = table.concat(vim.iter({ added, nixvim, base, nixvim_after }):flatten():totable(), ":")
+            end,
+            event = "User",
+            group = "nixvim-path",
+            pattern = "DirenvLoaded",
         },
         {
             callback = function(args)
