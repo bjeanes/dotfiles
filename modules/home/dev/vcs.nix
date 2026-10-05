@@ -287,6 +287,7 @@ in
             "--source"
             "roots(trunk()..) & mutable()"
             "--simplify-parents"
+            "--skip-emptied"
           ];
 
           # When editing an earlier commit, `jj git push` won't push later
