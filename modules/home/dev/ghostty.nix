@@ -38,7 +38,7 @@ in
         #window-theme = system;
         background-opacity = 0.9;
         minimum-contrast = 1.1;
-        shell-integration-features = "sudo";
+        shell-integration-features = "sudo,ssh-env,ssh-terminfo,title";
         keybind = [
           "global:ctrl+`=toggle_quick_terminal"
         ];
