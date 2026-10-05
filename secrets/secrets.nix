@@ -43,6 +43,11 @@ in
   "yuvomi-session-secret.age".publicKeys = all;
   "yuvomi-db-encryption-key.age".publicKeys = all;
 
+  "bookorbit-jwt-secret.age".publicKeys = all;
+  "bookorbit-podcast-encryption-key.age".publicKeys = all;
+  "bookorbit-setup-bootstrap-token.age".publicKeys = all;
+  "bookorbit-book-request-encryption-key.age".publicKeys = all;
+
   "touchkio-mqtt-password.age".publicKeys = [
     bjeanes
     tulgey

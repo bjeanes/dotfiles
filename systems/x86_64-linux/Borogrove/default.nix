@@ -56,6 +56,7 @@
     hister.enable = true;
     soju.enable = true;
     tracearr.enable = true;
+    bookorbit.enable = true;
     miniflux = {
       enable = true;
       hostName = "rss";
