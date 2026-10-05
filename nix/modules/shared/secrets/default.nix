@@ -11,11 +11,11 @@ let
   rules = import (secretsDir + "/secrets.nix");
   inherit (flake.lib) hosts;
 
-  # Absent from lib/hosts (darwin) => decrypts with my user key: keep all.
+  # Absent from lib/hosts, or no key there => decrypts with my user key: keep all.
   host = hosts.${lib.toLower (config.networking.hostName or "")} or null;
+  hostKey = if host == null then null else host.hostKey or host.ageHostKey or null;
 
-  isRecipient =
-    name: host == null || !(host ? hostKey) || lib.elem host.hostKey rules.${name}.publicKeys;
+  isRecipient = name: hostKey == null || lib.elem hostKey rules.${name}.publicKeys;
 in
 {
   age.secrets = lib.listToAttrs (

@@ -110,6 +110,7 @@
     bandersnatch = rec {
       zt = "10.144.79.92";
       ts = "100.101.219.23";
+      ageHostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETQmhtMDzi7+bSQDH1KKRSYwexyKo1hLKhrOwX+lISn";
       addresses = [
         ts
         zt
@@ -119,6 +120,7 @@
     jabberwocky = rec {
       zt = "10.144.6.239";
       ts = "100.126.78.67";
+      ageHostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMIBQJqxK9ve357EGtKmnXhGLUD+3yPNfhEhmDw5vNcZ";
       addresses = [
         ts
         zt

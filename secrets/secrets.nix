@@ -6,6 +6,9 @@ let
   tumtum = hosts.tumtum.hostKey;
   tulgey = hosts.tulgey.hostKey;
 
+  bandersnatch = hosts.bandersnatch.ageHostKey;
+  jabberwocky = hosts.jabberwocky.ageHostKey;
+
   bjeanes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh";
 
   users = [ bjeanes ];
@@ -51,6 +54,12 @@ in
   "touchkio-mqtt-password.age".publicKeys = [
     bjeanes
     tulgey
+  ];
+
+  "claude-code-oauth-token.age".publicKeys = [
+    bjeanes
+    bandersnatch
+    jabberwocky
   ];
 
   "wg-private-key.age".publicKeys = [
