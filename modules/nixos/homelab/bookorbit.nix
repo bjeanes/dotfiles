@@ -37,18 +37,6 @@ in
       description = "Tailnet hostname to expose ${svc} as";
     };
 
-    libraries = lib.mkOption {
-      default = {
-        Books = "/mnt/nfs/nas/media/Books";
-        Audiobooks = "/mnt/nfs/nas/media/Audiobooks";
-      };
-      type = with lib.types; attrsOf str;
-      description = ''
-        Host directories to mount under /media in the container, by name. Each
-        still has to be added as a library in the web UI.
-      '';
-    };
-
     jwtSecretFile = lib.mkOption {
       default = config.age.secrets."${svc}-jwt-secret".path;
       type = lib.types.str;
@@ -224,8 +212,8 @@ in
                 };
                 volumes = [
                   "${dataDir}:/data"
-                ]
-                ++ lib.mapAttrsToList (name: path: "${path}:/media/${name}") cfg.libraries;
+                  "/mnt/nfs/nas/media:/media"
+                ];
 
                 # Upstream's compose hardening
                 readOnly = true;
