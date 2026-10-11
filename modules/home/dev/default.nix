@@ -12,7 +12,7 @@
       direnv
       nixpkgs-fmt
       nil
-      snowfallorg.flake
+      nh
       jq
     ];
 

@@ -12,11 +12,11 @@ pkgs.mkShell {
       alejandra
       # python310Packages.mdformat
       shfmt
+      nh
     ])
     ++ (with inputs; [
       self.packages.${system}.nvim
       nil.packages.${system}.nil
-      snowfall-flake.packages.${system}.flake
       nixos-generators.packages.${system}.nixos-generate
       agenix.packages.${system}.default
     ]);

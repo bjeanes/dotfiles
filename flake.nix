@@ -56,11 +56,6 @@
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    snowfall-flake = {
-      url = "github:snowfallorg/flake";
-      # Flake requires some packages that aren't on 22.05, but are available on unstable.
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     comin = {
       url = "github:nlewo/comin";
@@ -154,7 +149,6 @@
 
         overlays = with inputs; [
           darwin.overlays.default
-          snowfall-flake.overlays.default
         ];
 
         systems.modules.darwin = with inputs; [

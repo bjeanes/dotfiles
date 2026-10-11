@@ -8,11 +8,11 @@ pkgs.writeShellApplication {
   name = "switch";
 
   runtimeInputs = [
-    pkgs.snowfallorg.flake
+    pkgs.nh
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin-rebuild ];
 
   text = /* bash */ ''
-    flake switch "$@"
+    nh ${if stdenv.hostPlatform.isDarwin then "darwin" else "os"} switch . "$@"
   '';
 }
