@@ -10,5 +10,11 @@
             }
         }
     },
-    "direnv.restart.automatic": true,
+    // this can interrupt other extensions that are in the middle of something.
+    // If those extensions are also causing edits to any watched directories by
+    // direnv, it can cause those extensions to be unable to progress at all.
+    //
+    // Instead, prefer explicitly opting in to restart the environment (which
+    // reloads extensions, it seems).
+    "direnv.restart.automatic": false,
 }
