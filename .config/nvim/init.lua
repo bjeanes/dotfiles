@@ -874,6 +874,15 @@ do
             event = "FileType",
             pattern = { "clojure", "fennel", "janet", "lisp", "racket", "scheme" },
         },
+        {
+            callback = function(args)
+                if vim.fs.root(args.buf, "tests.edn") then
+                    vim.b[args.buf]["conjure#client#clojure#nrepl#test#runner"] = "kaocha"
+                end
+            end,
+            event = "FileType",
+            pattern = "clojure",
+        },
     }
 
     for _, autocmd in ipairs(__nixvim_autocommands) do
