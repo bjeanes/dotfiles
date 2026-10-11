@@ -16,8 +16,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nix-darwin.url = "github:lnl7/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
@@ -26,12 +26,11 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     ghostty.url = "github:ghostty-org/ghostty";
-    ghostty.inputs.flake-compat.follows = "snowfall-lib/flake-compat";
 
     # Pixel Slate ("nocturne") hardware support: AVS audio firmware/topology
     # blobs extracted from ChromeOS, ALSA UCM2 profile, modprobe options,
     # WirePlumber tweaks and libinput quirks. Not a flake; we just read files
-    # out of the tree. See systems/x86_64-linux/Tulgey/nocturne.md
+    # out of the tree. See nix/hosts/Tulgey/nocturne.md
     nocturne-linux = {
       url = "github:kabili207/nocturne-linux";
       flake = false;
@@ -52,8 +51,8 @@
 
     catppuccin.url = "github:catppuccin/nix";
 
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
+    blueprint = {
+      url = "github:numtide/blueprint";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -81,9 +80,6 @@
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-    treefmt-nix.url = "github:numtide/treefmt-nix";
-    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-
     nil = {
       url = "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -103,33 +99,6 @@
   outputs =
     inputs:
     let
-      # Only the secrets this host can decrypt: agenix fails activation on any
-      # it cannot open, and the wg-* files are borogrove-only.
-      secrets =
-        { lib, config, ... }:
-        let
-          rules = import ./secrets/secrets.nix;
-          inherit (import ./lib/hosts) hosts;
-
-          # Absent from lib/hosts (darwin) => decrypts with my user key: keep all.
-          host = hosts.${lib.toLower (config.networking.hostName or "")} or null;
-
-          isRecipient =
-            name: host == null || !(host ? hostKey) || lib.elem host.hostKey rules.${name}.publicKeys;
-        in
-        {
-          age.secrets = lib.listToAttrs (
-            map (name: {
-              name = lib.removeSuffix ".age" name;
-              # Copied out on its own so the closure doesn't hold the whole flake
-              value.file = builtins.path {
-                path = ./secrets + "/${name}";
-                inherit name;
-              };
-            }) (lib.filter isRecipient (lib.attrNames rules))
-          );
-        };
-
       # A fresh Mac has no aarch64-linux builder to build our customised
       # linux-builder, so first activation uses the stock one from
       # cache.nixos.org; the next normal switch then builds the real one.
@@ -143,64 +112,19 @@
           };
         };
 
-      flake = inputs.snowfall-lib.mkFlake {
+      flake = inputs.blueprint {
         inherit inputs;
-        src = ./.;
+        prefix = "nix";
 
-        channels-config = {
-          allowUnfree = true;
+        systems = [
+          "aarch64-darwin"
+          "x86_64-linux"
+        ];
+
+        nixpkgs = {
+          config.allowUnfree = true;
+          overlays = [ inputs.nix-darwin.overlays.default ];
         };
-
-        overlays = with inputs; [
-          darwin.overlays.default
-        ];
-
-        systems.modules.darwin = with inputs; [
-          agenix.darwinModules.default
-          nix-index-database.darwinModules.nix-index
-          { programs.nix-index-database.comma.enable = true; }
-          secrets
-        ];
-
-        systems.modules.nixos = with inputs; [
-          agenix.nixosModules.default
-          comin.nixosModules.comin
-          catppuccin.nixosModules.catppuccin
-          nixvirt.nixosModules.default
-          quadlet-nix.nixosModules.quadlet
-          nix-index-database.nixosModules.default
-          { programs.nix-index-database.comma.enable = true; }
-          secrets
-        ];
-
-        homes.modules = with inputs; [
-          _1password-shell-plugins.hmModules.default
-          catppuccin.homeModules.catppuccin
-          agenix.homeManagerModules.default
-          inputs.quadlet-nix.homeManagerModules.quadlet
-          nix-index-database.homeModules.default
-          { programs.nix-index-database.comma.enable = true; }
-          secrets
-        ];
-
-        alias = {
-          packages.default = "switch";
-        };
-
-        outputs-builder =
-          channels:
-          # let
-          #   system = channels.nixpkgs.system;
-          #   treefmtEval = inputs.treefmt-nix.lib.evalModule channels.nixpkgs ./treefmt.nix;
-          # in
-          {
-
-            formatter = channels.nixpkgs.nixfmt-tree;
-            # formatter = treefmtEval.${system}.config.build.wrapper;
-            # checks = {
-            #   treefmt = treefmtEval.${system}.config.build.check self;
-            # };
-          };
       };
     in
     flake

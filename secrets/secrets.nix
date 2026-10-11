@@ -1,5 +1,5 @@
 let
-  inherit (import ../lib/hosts) hosts;
+  inherit (import ../nix/lib/hosts) hosts;
 
   borogrove = hosts.borogrove.hostKey;
   brillig = hosts.brillig.hostKey;

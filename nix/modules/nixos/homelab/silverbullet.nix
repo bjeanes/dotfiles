@@ -1,0 +1,162 @@
+{
+  config,
+  lib,
+  flake,
+  pkgs,
+  ...
+}:
+let
+  svc = "silverbullet";
+  coalesce = val: default: if (val == null) then default else val;
+in
+{
+  options.homelab.services.${svc} = {
+    enable = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = "Enable ${svc}";
+    };
+
+    image = lib.mkOption {
+      default = "ghcr.io/silverbulletmd/silverbullet:latest";
+      type = lib.types.str;
+      description = "OCI image for ${svc}";
+    };
+
+    configDir = lib.mkOption {
+      default = "/var/lib/homelab/${svc}";
+      example = "/var/lib/homelab/${svc}";
+      type = lib.types.str;
+      description = "Location to store service config";
+    };
+
+    timeZone = lib.mkOption {
+      default = config.homelab.timeZone;
+      type = lib.types.str;
+      description = "Time zone for ${svc}";
+    };
+
+    user = lib.mkOption {
+      default = coalesce config.homelab.user svc;
+      type = lib.types.str;
+      description = ''
+        User to run ${svc} service as
+      '';
+    };
+
+    group = lib.mkOption {
+      default = config.homelab.group;
+      type = lib.types.str;
+      description = ''
+        Group to run the ${svc} service as
+      '';
+    };
+
+    backupToNAS = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Back up configDir to legacy location on NAS";
+    };
+  };
+
+  config =
+    let
+      myLib = flake.lib;
+      cfg = config.homelab.services.${svc};
+      svcName = myLib.containerSvcName config svc;
+      secrets = config.age.secrets;
+    in
+    lib.mkIf cfg.enable (
+      lib.mkMerge [
+        {
+          users.users = {
+            "${cfg.user}" = {
+              isSystemUser = true;
+              group = cfg.group;
+            };
+          };
+          users.groups.${cfg.group} = { };
+
+          systemd.services.${myLib.containerSvcName config "${svc}-tailscale"} = {
+            partOf = [ "${svc}.service" ];
+          };
+
+          systemd.tmpfiles.rules =
+            let
+              inherit (cfg) user group;
+            in
+            [
+              # Ensure config directory exists, owned by user
+              "d ${cfg.configDir}    0775 ${user} ${group} - -"
+
+              # Ensure directory and contents belong to specified owner and group
+              "Z ${cfg.configDir} - ${user} ${group} - -"
+            ];
+
+          virtualisation.oci-containers = {
+            containers = {
+              ${svc} = {
+                image = cfg.image;
+                autoStart = true;
+                dependsOn = [ "${svc}-tailscale" ];
+                volumes = [
+                  "${cfg.configDir}:/space"
+                ];
+                extraOptions = [
+                  "--network=container:${svc}-tailscale"
+                  "--hostuser=${cfg.user}"
+                ];
+                labels = {
+                  "io.containers.autoupdate" = "registry";
+                };
+                environment = {
+                  TZ = cfg.timeZone;
+                  SB_PORT = "3000";
+                };
+              };
+            };
+          };
+        }
+
+        # {
+        #   systemd.tmpfiles.rules = [
+        #     # Add ACLs to Silverbullet config directory for Resilio
+        #     "A+ ${cfg.configDir} - - - - group:rslsync:rwx,default:group:rslsync:rwx"
+        #   ];
+        #
+        #   services.resilio = {
+        #     enable = true;
+        #     sharedFolders = [
+        #       {
+        #         directory = cfg.configDir;
+        #         secretFile = secrets.silverbullet-resilio-sync-key.path;
+        #         knownHosts = [ ];
+        #         searchLAN = true;
+        #         useDHT = false;
+        #         useRelayServer = true;
+        #         useSyncTrash = true;
+        #         useTracker = true;
+        #       }
+        #     ];
+        #   };
+        # }
+
+        (lib.mkIf cfg.backupToNAS (
+          myLib.buildBackupScriptForDir pkgs svc cfg.configDir { inherit (cfg) timeZone; }
+        ))
+
+        (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
+          hostname = svc;
+          https = 3000;
+
+          # Runs tailscaled as the same user Silverbullet drops to, so pages
+          # written over Taildrive are owned by it and remain editable in the
+          # app. Needs `drive:share` on this node in the tailnet policy file,
+          # plus a `tailscale.com/cap/drive` grant for whoever mounts it.
+          inherit (cfg) user group;
+          drive.space = cfg.configDir;
+        })
+
+      ]
+    );
+}
