@@ -1,11 +1,11 @@
 {
   lib,
-  namespace,
+  inputs,
   pkgs,
   ...
 }:
 let
-  nas = lib.${namespace}.hosts.nas.lan;
+  nas = inputs.self.lib.hosts.nas.lan;
   mountModules =
     from: at: mounts:
     (lib.mapAttrsToList (name: remote-path: {
@@ -71,7 +71,7 @@ let
 in
 {
   imports = (
-    mountModules lib.${namespace}.hosts.nas.lan "nas" {
+    mountModules inputs.self.lib.hosts.nas.lan "nas" {
       media = "/volume1/media";
       docker = "/volume2/docker";
       backups = "/volume3/backups";

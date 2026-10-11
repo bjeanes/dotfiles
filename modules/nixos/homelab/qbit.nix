@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  namespace,
+  inputs,
   pkgs,
   ...
 }:
@@ -74,7 +74,7 @@ in
 
   config =
     let
-      myLib = lib.${namespace};
+      myLib = inputs.self.lib;
       cfg = config.homelab.services.${svc};
       svcName = myLib.containerSvcName config svc;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;

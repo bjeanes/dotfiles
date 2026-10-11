@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  namespace,
+  inputs,
   pkgs,
   ...
 }:
@@ -61,7 +61,7 @@ in
     let
       cfg = config.homelab.services.${svc};
       tsName = "${svc}-tailscale";
-      myLib = lib.${namespace};
+      myLib = inputs.self.lib;
       svcName = myLib.containerSvcName config svc;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
       secrets = config.age.secrets;

@@ -37,7 +37,7 @@
             icon = " ";
             key = "c";
             desc = "Config";
-            action = '':lua Snacks.dashboard.pick('files', {cwd = "${builtins.toString ./../..}"})'';
+            action = '':lua Snacks.dashboard.pick('files', {cwd = "${./../..}"})'';
           }
           {
             icon = " ";

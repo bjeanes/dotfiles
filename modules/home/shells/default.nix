@@ -6,7 +6,7 @@
   ...
 }:
 {
-  imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./zsh-plugins) ++ [
+  imports = (inputs.self.lib.nixFilesRecursive ./zsh-plugins) ++ [
     # TODO make this "module" a common module and include it in system level dot files (tbd if this is inherited in home manager or replaced, so might need to be in both). That way it will be available when `root`, which is handy.
     (
       let

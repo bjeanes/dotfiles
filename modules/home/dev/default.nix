@@ -1,6 +1,11 @@
-{ pkgs, lib, ... }:
 {
-  imports = (lib.snowfall.fs.get-non-default-nix-files-recursive ./.);
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  imports = (inputs.self.lib.nixFilesRecursive ./.);
 
   config = {
     home.packages = with pkgs; [

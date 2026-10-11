@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  namespace,
+  inputs,
   ...
 }:
 let
@@ -62,7 +62,7 @@ in
 
   config =
     let
-      myLib = lib.${namespace};
+      myLib = inputs.self.lib;
       cfg = config.homelab.services.${svc};
       secrets = config.age.secrets;
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;

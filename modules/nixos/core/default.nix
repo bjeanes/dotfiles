@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 {
-  imports = (lib.snowfall.fs.get-non-default-nix-files ./.);
+  imports = (inputs.self.lib.nixFiles ./.);
 
   config = {
     programs.git.enable = true;

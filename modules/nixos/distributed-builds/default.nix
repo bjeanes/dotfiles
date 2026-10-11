@@ -12,14 +12,14 @@
 {
   config,
   lib,
-  namespace,
+  inputs,
   pkgs,
   ...
 }:
 let
   cfg = config.distributed-builds;
 
-  inherit (lib.${namespace}) hosts;
+  inherit (inputs.self.lib) hosts;
 
   # Anything in the registry carrying a host key is one of this flake's NixOS
   # machines.

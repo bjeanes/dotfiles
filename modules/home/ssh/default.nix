@@ -1,4 +1,4 @@
-{ lib, namespace, ... }:
+{ inputs, lib, ... }:
 let
   myHosts = lib.concatMapAttrs (
     host:
@@ -12,7 +12,7 @@ let
         hostnames = addresses;
       };
     }
-  ) lib.${namespace}.hosts;
+  ) inputs.self.lib.hosts;
 in
 {
   config = {

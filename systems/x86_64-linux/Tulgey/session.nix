@@ -2,13 +2,14 @@
 {
   config,
   lib,
+  inputs,
   namespace,
   pkgs,
   ...
 }:
 let
   cfg = config.panel;
-  mqttHost = lib.${namespace}.hosts.homeassistant.lan;
+  mqttHost = inputs.self.lib.hosts.homeassistant.lan;
 
   swayConfig = pkgs.writeText "tulgey-kiosk.conf" ''
     output eDP-1 scale 2

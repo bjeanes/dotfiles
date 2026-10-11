@@ -108,8 +108,8 @@
       secrets =
         { lib, config, ... }:
         let
-          rules = import (lib.snowfall.fs.get-file "secrets/secrets.nix");
-          inherit (import (lib.snowfall.fs.get-file "lib/hosts")) hosts;
+          rules = import ./secrets/secrets.nix;
+          inherit (import ./lib/hosts) hosts;
 
           # Absent from lib/hosts (darwin) => decrypts with my user key: keep all.
           host = hosts.${lib.toLower (config.networking.hostName or "")} or null;
@@ -121,7 +121,11 @@
           age.secrets = lib.listToAttrs (
             map (name: {
               name = lib.removeSuffix ".age" name;
-              value.file = lib.snowfall.fs.get-file "secrets/${name}";
+              # Copied out on its own so the closure doesn't hold the whole flake
+              value.file = builtins.path {
+                path = ./secrets + "/${name}";
+                inherit name;
+              };
             }) (lib.filter isRecipient (lib.attrNames rules))
           );
         };

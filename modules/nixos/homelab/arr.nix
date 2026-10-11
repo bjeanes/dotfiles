@@ -2,12 +2,12 @@
   lib,
   config,
   pkgs,
-  namespace,
+  inputs,
   ...
 }:
 let
   coalesce = val: default: if (val == null) then default else val;
-  myLib = lib.${namespace};
+  myLib = inputs.self.lib;
 
   setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
 
@@ -32,9 +32,7 @@ let
       svcName = myLib.containerSvcName config name;
     in
     {
-      imports = builtins.filter (f: lib.hasSuffix "/${name}.nix" f) (
-        lib.snowfall.fs.get-non-default-nix-files-recursive ./arr
-      );
+      imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
 
       options.homelab.services.${name} = {
         enable = lib.mkOption {

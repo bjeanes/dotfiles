@@ -2,12 +2,12 @@
   lib,
   config,
   pkgs,
-  namespace,
+  inputs,
   ...
 }:
 let
   tsnet = "griffin-climb.ts.net";
-  myLib = lib.${namespace};
+  myLib = inputs.self.lib;
 
   setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer pkgs config;
 

@@ -11,7 +11,7 @@
 {
   config,
   lib,
-  namespace,
+  inputs,
   pkgs,
   ...
 }:
@@ -28,7 +28,7 @@
 
   # --- The panel's own knobs, consumed by ./session.nix --------------------
   panel = {
-    dashboardUrl = "http://${lib.${namespace}.hosts.homeassistant.lan}:8123/";
+    dashboardUrl = "http://${inputs.self.lib.hosts.homeassistant.lan}:8123/";
 
     interactive = false;
   };
