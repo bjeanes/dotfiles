@@ -54,5 +54,18 @@ in
         end
       '';
     }
+
+    # Conjure checks b: before g:, so only use kaocha in projects that have it.
+    {
+      event = "FileType";
+      pattern = "clojure";
+      callback.__raw = ''
+        function(args)
+          if vim.fs.root(args.buf, "tests.edn") then
+            vim.b[args.buf]["conjure#client#clojure#nrepl#test#runner"] = "kaocha"
+          end
+        end
+      '';
+    }
   ];
 }
