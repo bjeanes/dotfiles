@@ -70,6 +70,8 @@ eval "$(mise activate bash)"
 
 eval "$(devenv hook bash)"
 
+. $HOME/.local/share/dotfiles/watch-defaults.sh
+
 gh() {
   op plugin run -- gh "$@";
 }
@@ -89,8 +91,6 @@ tea() {
 glab() {
   op plugin run -- glab "$@";
 }
-
-. $HOME/.local/share/dotfiles/watch-defaults.sh
 
 source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
 
