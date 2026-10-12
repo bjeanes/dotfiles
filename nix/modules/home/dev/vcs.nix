@@ -241,7 +241,18 @@ in
         revset-aliases = {
           # https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
           "closest_merge(to)" = "heads(::to & merges())";
+
+          # Commits that others depend on, so shouldn't be rewritten (e.g. by
+          # `jj restack`). Set per-repo with `jj pin`; unpin with
+          # `jj config edit --repo`.
+          "pinned()" = "none()";
+          "immutable_heads()" = "builtin_immutable_heads() | pinned()";
         };
+
+        # Default log, plus every local bookmark's commits back to trunk, including
+        # immutable ones (e.g. `pinned()`). Deliberately avoids mentioning remote
+        # bookmarks: doing so makes stale (hidden) remote targets visible.
+        revsets.log = "builtin_log() | (trunk()..bookmarks())";
 
         aliases = {
           # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
@@ -291,6 +302,32 @@ in
             "--simplify-parents"
             "--skip-emptied"
           ];
+
+          # Append revsets to this repo's `pinned()` (making them immutable).
+          # Pin a remote bookmark (e.g. `jj pin my-feature@origin`) so it
+          # follows the branch if others push to it.
+          pin =
+            let
+              # `jj pin <revset>...`: append revsets to this repo's `pinned()` alias
+              jjPin = pkgs.writeShellScript "jj-pin" /* bash */ ''
+                set -eu
+                [ $# -gt 0 ] || { echo "usage: jj pin <revset>..." >&2; exit 1; }
+                key='revset-aliases."pinned()"'
+                pins=$(jj config get "$key" 2>/dev/null || echo 'none()')
+                for rev in "$@"; do
+                  jj log --ignore-working-copy --no-graph -r "$rev" -T commit_id >/dev/null
+                  if [ "$pins" = 'none()' ]; then pins="($rev)"; else pins="$pins | ($rev)"; fi
+                done
+                jj config set --repo "$key" "$pins"
+                echo "pinned() = $pins"
+              '';
+            in
+            [
+              "util"
+              "exec"
+              "--"
+              "${jjPin}"
+            ];
 
           # When editing an earlier commit, `jj git push` won't push later
           # rebased commits because:
