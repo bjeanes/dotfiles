@@ -155,7 +155,6 @@ alias -- cat=bat
 alias -- cd=z
 alias -- eza='eza --icons auto --git'
 alias -- g=git
-alias -- jj='jj --config-file=$HOME/.jj.local.toml'
 alias -- l=ls
 alias -- la='eza -a'
 alias -- lg=lazygit
