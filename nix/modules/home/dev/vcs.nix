@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 let
   user.name = "Bo Jeanes";
   user.email = "me@bjeanes.com";
@@ -149,12 +149,13 @@ in
       os.editPreset = "nvim";
     };
 
-    home.shellAliases.jj = "jj --config-file=$HOME/.jj.local.toml";
-
     home.activation.local-jj = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if [ ! -f $HOME/.jj.local.toml ]; then
-        cp ${./jj.local.toml} ~/.jj.local.toml
-        chmod 755 ~/.jj.local.toml
+      local_config_dir="${config.xdg.configHome}/jj/conf.d"
+      mkdir -p "$local_config_dir"
+      local_config_file="$local_config_dir/local.toml"
+      if [ ! -f "$local_config_file" ]; then
+        cp ${./jj.local.toml} "$local_config_file"
+        chmod 755 "$local_config_file"
       fi
     '';
 
