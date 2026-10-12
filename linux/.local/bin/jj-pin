@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eu
+[ $# -gt 0 ] || { echo "usage: jj pin <revset>..." >&2; exit 1; }
+key='revset-aliases."pinned()"'
+pins=$(jj config get "$key" 2>/dev/null || echo 'none()')
+for rev in "$@"; do
+  jj log --ignore-working-copy --no-graph -r "$rev" -T commit_id >/dev/null
+  if [ "$pins" = 'none()' ]; then pins="($rev)"; else pins="$pins | ($rev)"; fi
+done
+jj config set --repo "$key" "$pins"
+echo "pinned() = $pins"
+

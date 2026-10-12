@@ -1,6 +1,7 @@
 [aliases]
 gpa = ["git", "push", "-r", "remote_bookmarks(remote=origin).."]
 mon = ["util", "exec", "--", "sh", "-c", "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"]
+pin = ["util", "exec", "--", "jj-pin"]
 restack = ["rebase", "--onto", "trunk()", "--source", "roots(trunk()..) & mutable()", "--simplify-parents", "--skip-emptied"]
 stack = ["rebase", "--after", "trunk()", "--before", "closest_merge(@)", "--revisions"]
 stage = ["stack", "closest_merge(@)+:: ~ empty()"]
@@ -14,6 +15,11 @@ auto-track-bookmarks = "bjeanes/*"
 
 [revset-aliases]
 "closest_merge(to)" = "heads(::to & merges())"
+"immutable_heads()" = "builtin_immutable_heads() | pinned()"
+"pinned()" = "none()"
+
+[revsets]
+log = "builtin_log() | (trunk()..bookmarks())"
 
 [signing]
 backend = "ssh"
