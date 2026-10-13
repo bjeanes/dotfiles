@@ -23,7 +23,7 @@ log = "builtin_log() | (trunk()..bookmarks())"
 
 [signing]
 backend = "ssh"
-behaviour = "own"
+behavior = "own"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
 
 [template-aliases]
