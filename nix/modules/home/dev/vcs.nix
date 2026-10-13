@@ -167,7 +167,7 @@ in
         inherit user;
 
         signing = {
-          behaviour = "own";
+          behavior = "own";
           backend = "ssh";
           key = signingKey;
         };
