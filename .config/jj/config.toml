@@ -7,7 +7,7 @@ stack = ["rebase", "--after", "trunk()", "--before", "closest_merge(@)", "--revi
 stage = ["stack", "closest_merge(@)+:: ~ empty()"]
 
 [git]
-private-commits = "( description(exact-i:'wip') ) | ( description(exact-i:'private') ) | ( description(exact-i:'priv') ) | ( description(glob-i:'wip:') ) | ( description(glob-i:'priv:') ) | ( description(glob-i:'private:') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) )"
+private-commits = "private()"
 sign-on-push = true
 
 [remotes.origin]
@@ -17,6 +17,7 @@ auto-track-bookmarks = "bjeanes/*"
 "closest_merge(to)" = "heads(::to & merges())"
 "immutable_heads()" = "builtin_immutable_heads() | pinned()"
 "pinned()" = "none()"
+"private()" = "( description(exact-i:'wip') ) | ( description(exact-i:'private') ) | ( description(exact-i:'priv') ) | ( description(glob-i:'wip:') ) | ( description(glob-i:'priv:') ) | ( description(glob-i:'private:') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) )"
 
 [revsets]
 log = "builtin_log() | (trunk()..bookmarks())"
