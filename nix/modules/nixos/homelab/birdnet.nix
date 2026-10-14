@@ -12,6 +12,7 @@ in
   options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc {
     # image = "ghcr.io/tphakala/birdnet-go:latest";
     image = "ghcr.io/tphakala/birdnet-go:nightly";
+    hostName = svc;
     withUser = true;
   };
 
@@ -19,12 +20,11 @@ in
     let
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
-      secrets = config.age.secrets;
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;
       mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
       mkQuadletDynamicEnvironment = myLib.mkQuadletDynamicEnvironment pkgs config;
 
-      inherit (config.virtualisation.quadlet) containers pods;
+      inherit (config.virtualisation.quadlet) pods;
 
       podName = "${svc}-pod";
     in
@@ -79,17 +79,19 @@ in
 
         (mkTailscaleQuadletContainer "${svc}-tailscale" {
           inherit podName;
-          hostname = svc;
+          hostname = cfg.hostName;
           https = 8080;
         })
 
         (mkQuadletDynamicEnvironment {
           containerName = svc;
           variables = {
-            BIRDNET_UID = "${pkgs.coreutils}/bin/id -u ${svc}";
-            BIRDNET_GID = "${pkgs.getent}/bin/getent group homelab | cut -d: -f3";
+            BIRDNET_UID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+            BIRDNET_GID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
           };
         })
+
+        (lib.mkIf cfg.backupToNAS (buildBackupScriptForDir cfg.configDir { inherit (cfg) timeZone; }))
       ]
     );
 
