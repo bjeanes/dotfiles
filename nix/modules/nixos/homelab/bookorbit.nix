@@ -42,28 +42,23 @@ in
       mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
       mkQuadletDynamicEnvironment = myLib.mkQuadletDynamicEnvironment pkgs config;
 
-      inherit (config.virtualisation.quadlet) pods volumes;
+      inherit (config.virtualisation.quadlet) pods;
 
       podName = "${svc}-pod";
       fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
 
-      dbName = "${svc}-db";
+      pg = myLib.postgresFor svc;
 
       port = 3000;
-      dbPort = 5432;
-
-      dbUser = svc;
-      dbDatabase = svc;
-      dbPassword = svc;
 
       # Covers, uploads (`book-bucket`) and other app state. The entrypoint
       # chowns it to PUID:PGID on every start.
       dataDir = "${cfg.configDir}/data";
 
-      # Nightly `pg_dump`s land here. rsyncing this is a real backup; rsyncing
-      # a live PGDATA is not, which is why the database itself lives in a
-      # podman volume rather than under `configDir`. The dump runs an hour
-      # before `buildBackupScriptForDir`'s 02:00 rsync.
+      # `pg_dump`s land here, just ahead of each NAS backup. rsyncing this is
+      # a real backup; rsyncing a live PGDATA is not, which is why the
+      # database itself lives in a podman volume rather than under
+      # `configDir`.
       backupDir = "${cfg.configDir}/backups";
 
       mountUnit = "mnt-nfs-nas-media.mount";
@@ -88,40 +83,6 @@ in
           virtualisation.quadlet = {
             pods.${podName} = { };
 
-            volumes."${svc}-pgdata" = { };
-
-            containers.${dbName} = {
-              autoStart = true;
-              containerConfig = {
-                pod = pods.${podName}.ref;
-                image = cfg.dbImage;
-                # Only the pod needs to reach this.
-                exec = [
-                  "postgres"
-                  "-c"
-                  "listen_addresses=127.0.0.1"
-                ];
-                environments = {
-                  TZ = cfg.timeZone;
-                  POSTGRES_USER = dbUser;
-                  POSTGRES_DB = dbDatabase;
-                  POSTGRES_PASSWORD = dbPassword;
-                };
-                # pg18 images keep PGDATA in a major-versioned subdirectory,
-                # so the volume goes one level up.
-                volumes = [
-                  "${volumes."${svc}-pgdata".ref}:/var/lib/postgresql"
-                ];
-                notify = "healthy";
-                healthCmd = "pg_isready -U ${dbUser} -d ${dbDatabase}";
-                healthInterval = "10s";
-                healthTimeout = "5s";
-                healthRetries = 10;
-              };
-              # First boot runs initdb before the healthcheck can pass.
-              serviceConfig.TimeoutStartSec = "300";
-            };
-
             containers.${svc} = {
               autoStart = true;
               containerConfig = {
@@ -137,10 +98,10 @@ in
                   PORT = toString port;
 
                   POSTGRES_HOST = "localhost";
-                  POSTGRES_PORT = toString dbPort;
-                  POSTGRES_USER = dbUser;
-                  POSTGRES_PASSWORD = dbPassword;
-                  POSTGRES_DB = dbDatabase;
+                  POSTGRES_PORT = toString pg.port;
+                  POSTGRES_USER = pg.user;
+                  POSTGRES_PASSWORD = pg.password;
+                  POSTGRES_DB = pg.database;
 
                   # Used for Kobo sync endpoints and links in emails
                   APP_URL = "https://${fqdn}";
@@ -175,28 +136,14 @@ in
               };
               unitConfig = {
                 After = [
-                  "${dbName}.service"
+                  pg.unit
                   mountUnit
                 ];
-                Requires = [ "${dbName}.service" ];
+                Requires = [ pg.unit ];
                 BindsTo = [ mountUnit ];
                 AssertPathIsDirectory = [ dataDir ];
               };
             };
-          };
-
-          systemd.services."${svc}-db-dump" = {
-            description = "Dump ${svc}'s database";
-            startAt = "*-*-* 01:00:00 ${cfg.timeZone}";
-            requires = [ "${dbName}.service" ];
-            after = [ "${dbName}.service" ];
-            serviceConfig.Type = "oneshot";
-            script = ''
-              set -eu
-              ${pkgs.podman}/bin/podman exec ${dbName} \
-                pg_dump -U ${dbUser} -d ${dbDatabase} -Fc > ${backupDir}/${svc}.dump.tmp
-              mv ${backupDir}/${svc}.dump.tmp ${backupDir}/${svc}.dump
-            '';
           };
         }
 
@@ -214,13 +161,25 @@ in
           };
         })
 
+        (myLib.mkQuadletPostgres config pg {
+          inherit podName;
+          inherit (cfg) timeZone;
+          image = cfg.dbImage;
+          containerConfig.healthRetries = 10;
+        })
+
         (mkTailscaleQuadletContainer "${svc}-tailscale" {
           inherit podName;
           hostname = cfg.hostName;
           https = port;
         })
 
-        (lib.mkIf cfg.backupToNAS (buildBackupScriptForDir cfg.configDir { inherit (cfg) timeZone; }))
+        (lib.mkIf cfg.backupToNAS (
+          lib.mkMerge [
+            (myLib.mkPostgresDump pkgs config svc pg backupDir)
+            (buildBackupScriptForDir cfg.configDir { inherit (cfg) timeZone; })
+          ]
+        ))
       ]
     );
 }

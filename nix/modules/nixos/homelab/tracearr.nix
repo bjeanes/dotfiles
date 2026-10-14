@@ -48,16 +48,11 @@ in
       podName = "${svc}-pod";
       fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
 
-      dbName = "${svc}-db";
+      pg = myLib.postgresFor svc;
       redisName = "${svc}-redis";
 
       port = 3000;
-      dbPort = 5432;
       redisPort = 6379;
-
-      dbUser = svc;
-      dbDatabase = svc;
-      dbPassword = svc;
 
       # Tracearr's own scheduled backups (pg_dump custom-format archives, zipped)
       # land here. rsyncing this is a real backup; rsyncing a live PGDATA is not,
@@ -79,57 +74,7 @@ in
           virtualisation.quadlet = {
             pods.${podName} = { };
 
-            volumes."${svc}-pgdata" = { };
             volumes."${svc}-redisdata" = { };
-
-            containers.${dbName} = {
-              autoStart = true;
-              containerConfig = {
-                pod = pods.${podName}.ref;
-                image = cfg.dbImage;
-                # Upstream's tuning, verbatim: the decompression cap keeps a
-                # single DML transaction bounded, the lock table has to be big
-                # enough for a Tautulli import to touch many chunks at once, and
-                # 150 connections leaves headroom over the app's self-sizing pool.
-                exec = [
-                  "postgres"
-                  "-c"
-                  "listen_addresses=127.0.0.1"
-                  "-c"
-                  "timescaledb.license=timescale"
-                  "-c"
-                  "timescaledb.max_tuples_decompressed_per_dml_transaction=100000"
-                  "-c"
-                  "max_locks_per_transaction=4096"
-                  "-c"
-                  "timescaledb.telemetry_level=off"
-                  "-c"
-                  "max_connections=150"
-                ];
-                environments = {
-                  TZ = cfg.timeZone;
-                  POSTGRES_USER = dbUser;
-                  POSTGRES_DB = dbDatabase;
-                  POSTGRES_PASSWORD = dbPassword;
-                };
-                volumes = [
-                  "${volumes."${svc}-pgdata".ref}:/home/postgres/pgdata/data"
-                ];
-                shmSize = "512m";
-                ulimits = [ "nofile=65536:65536" ];
-                # `Notify=healthy` makes the unit reach READY only once
-                # `pg_isready` passes, which is what lets `tracearr.service`
-                # order itself behind a database that will actually accept a
-                # connection rather than one whose process merely exists.
-                notify = "healthy";
-                healthCmd = "pg_isready -U ${dbUser}";
-                healthInterval = "10s";
-                healthTimeout = "5s";
-                healthRetries = 5;
-              };
-              # First boot runs initdb before the healthcheck can pass.
-              serviceConfig.TimeoutStartSec = "300";
-            };
 
             containers.${redisName} = {
               autoStart = true;
@@ -140,7 +85,7 @@ in
                   "redis-server"
                   "--appendonly"
                   "yes"
-                  # As above: only the pod needs to reach this.
+                  # Only the pod needs to reach this.
                   "--bind"
                   "127.0.0.1"
                 ];
@@ -172,7 +117,7 @@ in
                   PORT = toString port;
                   LOG_LEVEL = "info";
 
-                  DATABASE_URL = "postgres://${dbUser}:${dbPassword}@localhost:${toString dbPort}/${dbDatabase}";
+                  DATABASE_URL = pg.url;
                   REDIS_URL = "redis://localhost:${toString redisPort}";
                   BACKUP_DIR = "/data/backup";
 
@@ -189,11 +134,11 @@ in
               };
               unitConfig = {
                 After = [
-                  "${dbName}.service"
+                  pg.unit
                   "${redisName}.service"
                 ];
                 Requires = [
-                  "${dbName}.service"
+                  pg.unit
                   "${redisName}.service"
                 ];
                 AssertPathIsDirectory = [ backupDir ];
@@ -201,6 +146,28 @@ in
             };
           };
         }
+
+        (myLib.mkQuadletPostgres config pg {
+          inherit podName;
+          inherit (cfg) timeZone;
+          image = cfg.dbImage;
+          dataPath = "/home/postgres/pgdata/data";
+          # Upstream's tuning, verbatim: the decompression cap keeps a single
+          # DML transaction bounded, the lock table has to be big enough for a
+          # Tautulli import to touch many chunks at once, and 150 connections
+          # leaves headroom over the app's self-sizing pool.
+          settings = [
+            "timescaledb.license=timescale"
+            "timescaledb.max_tuples_decompressed_per_dml_transaction=100000"
+            "max_locks_per_transaction=4096"
+            "timescaledb.telemetry_level=off"
+            "max_connections=150"
+          ];
+          containerConfig = {
+            shmSize = "512m";
+            ulimits = [ "nofile=65536:65536" ];
+          };
+        })
 
         (mkQuadletDynamicEnvironment {
           containerName = svc;

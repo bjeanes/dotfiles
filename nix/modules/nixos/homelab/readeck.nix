@@ -34,8 +34,7 @@ in
       # database and archived articles under `data/`.
       dataDir = "${cfg.configDir}/data";
 
-      # Nightly `readeck export`s land here. The export runs an hour before
-      # `buildBackupScriptForDir`'s 02:00 rsync.
+      # `readeck export`s land here, just ahead of each NAS backup.
       backupDir = "${cfg.configDir}/backups";
     in
     lib.mkIf cfg.enable (
@@ -105,20 +104,6 @@ in
               };
             };
           };
-
-          systemd.services."${svc}-export" = {
-            description = "Export ${svc}'s data";
-            startAt = "*-*-* 01:00:00 ${cfg.timeZone}";
-            requires = [ "${svc}.service" ];
-            after = [ "${svc}.service" ];
-            serviceConfig.Type = "oneshot";
-            script = ''
-              set -eu
-              ${pkgs.podman}/bin/podman exec ${svc} \
-                /bin/readeck export -config config.toml /backups/${svc}.zip.tmp
-              mv ${backupDir}/${svc}.zip.tmp ${backupDir}/${svc}.zip
-            '';
-          };
         }
 
         (mkTailscaleQuadletContainer "${svc}-tailscale" {
@@ -127,7 +112,22 @@ in
           https = port;
         })
 
-        (lib.mkIf cfg.backupToNAS (buildBackupScriptForDir backupDir { inherit (cfg) timeZone; }))
+        (lib.mkIf cfg.backupToNAS (
+          lib.mkMerge [
+            (myLib.mkPreBackupJob svc {
+              name = "export";
+              description = "Export ${svc}'s data";
+              requires = [ "${svc}.service" ];
+              script = ''
+                set -eu
+                ${config.virtualisation.podman.package}/bin/podman exec ${svc} \
+                  /bin/readeck export -config config.toml /backups/${svc}.zip.tmp
+                mv ${backupDir}/${svc}.zip.tmp ${backupDir}/${svc}.zip
+              '';
+            })
+            (buildBackupScriptForDir backupDir { inherit (cfg) timeZone; })
+          ]
+        ))
       ]
     );
 }
