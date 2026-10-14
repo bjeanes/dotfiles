@@ -9,13 +9,23 @@ let
   svc = "forgejo";
 in
 {
-  options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc { };
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
+      image = "codeberg.org/forgejo/forgejo:16";
+      withUser = true;
+    }
+    // {
+      dbImage = lib.mkOption {
+        default = "postgres:17.2";
+        type = lib.types.str;
+        description = "OCI image for the PostgreSQL backing ${svc}";
+      };
+    };
 
   config =
     let
       cfg = config.homelab.services.${svc};
       myLib = flake.lib;
-      svcName = myLib.containerSvcName config svc;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
       mkTailscaleContainer = myLib.mkTailscaleContainer pkgs config;
     in
@@ -23,27 +33,27 @@ in
       lib.mkMerge [
         {
           users.users = {
-            ${svc} = {
+            ${cfg.user} = {
               isSystemUser = true;
-              group = "homelab";
+              group = cfg.group;
             };
           };
 
-          users.groups.homelab = { };
+          users.groups.${cfg.group} = { };
 
           systemd.tmpfiles.rules = [
             # Ensure config directory exists, owned by user
-            "d ${cfg.configDir}/data   0775 ${svc} homelab - -"
-            "d ${cfg.configDir}/pgdata 0775 ${svc} homelab - -"
+            "d ${cfg.configDir}/data   0775 ${cfg.user} ${cfg.group} - -"
+            "d ${cfg.configDir}/pgdata 0775 ${cfg.user} ${cfg.group} - -"
 
             # Ensure directory and contents belong to specified owner and group
-            "Z ${cfg.configDir}/data   - ${svc} homelab - -"
-            "Z ${cfg.configDir}/pgdata - ${svc} homelab - -"
+            "Z ${cfg.configDir}/data   - ${cfg.user} ${cfg.group} - -"
+            "Z ${cfg.configDir}/pgdata - ${cfg.user} ${cfg.group} - -"
           ];
 
           virtualisation.oci-containers.containers = {
             ${svc} = {
-              image = "codeberg.org/forgejo/forgejo:16";
+              image = cfg.image;
               autoStart = true;
               dependsOn = [
                 "${svc}-db"
@@ -67,13 +77,13 @@ in
             };
 
             "${svc}-db" = {
-              image = "postgres:17.2";
-              user = svc;
+              image = cfg.dbImage;
+              user = cfg.user;
               dependsOn = [ "${svc}-tailscale" ];
               extraOptions = [
                 # workaround Forgejo on TS network not being able to resolve db
                 "--network=container:${svc}-tailscale"
-                "--hostuser=${svc}"
+                "--hostuser=${cfg.user}"
                 # "--pull=always"
               ];
               environment = {
@@ -97,8 +107,8 @@ in
         # to UID/GID at service start time, by modifying the
         # systemd.service record for the docker container.
         (setEnvFromCommandsForContainer svc {
-          USER_UID = "${pkgs.coreutils}/bin/id -u ${svc}";
-          GROUP_GID = "${pkgs.getent}/bin/getent group homelab | cut -d: -f3";
+          USER_UID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+          GROUP_GID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
         })
 
         (mkTailscaleContainer "${svc}-tailscale" {
