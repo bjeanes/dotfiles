@@ -7,89 +7,34 @@
 }:
 let
   svc = "yuvomi";
-  tsnet = "griffin-climb.ts.net";
-  coalesce = val: default: if (val == null) then default else val;
+  secretFile = flake.lib.mkSecretFileOption config svc;
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
-    };
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
+      image = "ghcr.io/ulsklyc/${svc}:latest";
+      hostName = svc;
+      withUser = true;
+      backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
+    }
+    // {
+      sessionSecretFile = secretFile "session-secret" "File containing the key ${svc} signs session cookies with";
 
-    image = lib.mkOption {
-      default = "ghcr.io/ulsklyc/${svc}:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
+      encryptDatabase = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = ''
+          Encrypt the SQLite database at rest with AES-256 (SQLCipher).
 
-    hostName = lib.mkOption {
-      default = svc;
-      type = lib.types.str;
-      description = "Tailnet hostname to expose ${svc} as";
-    };
+          This is a one-way door. An existing plaintext database is encrypted on
+          the next start, and from then on the key is the only way back into it —
+          a wrong or missing key aborts the boot rather than degrading to
+          plaintext. Turning this off again means restoring from a backup.
+        '';
+      };
 
-    sessionSecretFile = lib.mkOption {
-      default = config.age.secrets."${svc}-session-secret".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc} signs session cookies with";
+      dbEncryptionKeyFile = secretFile "db-encryption-key" "File containing the key ${svc}'s database is encrypted with";
     };
-
-    encryptDatabase = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = ''
-        Encrypt the SQLite database at rest with AES-256 (SQLCipher).
-
-        This is a one-way door. An existing plaintext database is encrypted on
-        the next start, and from then on the key is the only way back into it —
-        a wrong or missing key aborts the boot rather than degrading to
-        plaintext. Turning this off again means restoring from a backup.
-      '';
-    };
-
-    dbEncryptionKeyFile = lib.mkOption {
-      default = config.age.secrets."${svc}-db-encryption-key".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc}'s database is encrypted with";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    user = lib.mkOption {
-      default = coalesce config.homelab.user svc;
-      type = lib.types.str;
-      description = ''
-        User to run ${svc} service as
-      '';
-    };
-
-    group = lib.mkOption {
-      default = config.homelab.group;
-      type = lib.types.str;
-      description = ''
-        Group to run the ${svc} service as
-      '';
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up ${svc}'s database dumps to legacy location on NAS";
-    };
-  };
 
   config =
     let
@@ -102,7 +47,7 @@ in
       inherit (config.virtualisation.quadlet) pods;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
       port = 3000;
 
       dataDir = "${cfg.configDir}/data";

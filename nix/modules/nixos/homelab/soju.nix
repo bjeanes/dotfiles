@@ -7,61 +7,28 @@
 }:
 let
   svc = "soju";
-  tsnet = "griffin-climb.ts.net";
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
-    };
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
+      image = "codeberg.org/emersion/${svc}:latest";
+      hostName = "irc";
+    }
+    // {
+      gamja = {
+        enable = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+          description = "Serve the gamja web client in front of ${svc}";
+        };
 
-    image = lib.mkOption {
-      default = "codeberg.org/emersion/${svc}:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
-
-    hostName = lib.mkOption {
-      default = "irc";
-      type = lib.types.str;
-      description = "Tailnet hostname to expose ${svc} as";
-    };
-
-    gamja = {
-      enable = lib.mkOption {
-        default = true;
-        type = lib.types.bool;
-        description = "Serve the gamja web client in front of ${svc}";
-      };
-
-      image = lib.mkOption {
-        default = "codeberg.org/emersion/gamja:latest";
-        type = lib.types.str;
-        description = "OCI image for gamja";
+        image = lib.mkOption {
+          default = "codeberg.org/emersion/gamja:latest";
+          type = lib.types.str;
+          description = "OCI image for gamja";
+        };
       };
     };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up configDir to legacy location on NAS";
-    };
-  };
 
   config =
     let
@@ -73,7 +40,7 @@ in
       inherit (config.virtualisation.quadlet) pods;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
 
       # Every container in the pod shares one network namespace, so these are
       # a single port space. gamja takes 80 so the Tailscale HTTPS handler can

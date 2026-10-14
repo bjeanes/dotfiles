@@ -1,5 +1,7 @@
 { lib, ... }:
 {
+  coalesce = val: default: if val == null then default else val;
+
   buildBackupScriptForDir =
     pkgs: name: dir:
     {

@@ -7,71 +7,40 @@
 }:
 let
   svc = "miniflux";
-  tsnet = "griffin-climb.ts.net";
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
       description = ''
         Enable ${svc}, fronted by Nextflux.
 
         No account is created automatically. Until one is, the instance is
         unusable: `podman exec -it ${svc} /usr/bin/miniflux -create-admin`.
       '';
-    };
+      image = "docker.io/miniflux/miniflux:latest";
+      hostName = svc;
+      backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
+    }
+    // {
+      nextfluxImage = lib.mkOption {
+        default = "docker.io/electh/nextflux:latest";
+        type = lib.types.str;
+        description = "OCI image for the Nextflux frontend";
+      };
 
-    image = lib.mkOption {
-      default = "docker.io/miniflux/miniflux:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
+      feedTheCommentsImage = lib.mkOption {
+        default = "ghcr.io/bjeanes/feed-the-comments:latest";
+        type = lib.types.str;
+        description = "OCI image for the feed-the-comments feed rewriter";
+      };
 
-    nextfluxImage = lib.mkOption {
-      default = "docker.io/electh/nextflux:latest";
-      type = lib.types.str;
-      description = "OCI image for the Nextflux frontend";
+      dbImage = lib.mkOption {
+        # Pinned to a major version and opted out of auto-update
+        default = "docker.io/library/postgres:18-alpine";
+        type = lib.types.str;
+        description = "OCI image for the PostgreSQL backing ${svc}";
+      };
     };
-
-    feedTheCommentsImage = lib.mkOption {
-      default = "ghcr.io/bjeanes/feed-the-comments:latest";
-      type = lib.types.str;
-      description = "OCI image for the feed-the-comments feed rewriter";
-    };
-
-    dbImage = lib.mkOption {
-      # Pinned to a major version and opted out of auto-update
-      default = "docker.io/library/postgres:18-alpine";
-      type = lib.types.str;
-      description = "OCI image for the PostgreSQL backing ${svc}";
-    };
-
-    hostName = lib.mkOption {
-      default = svc;
-      type = lib.types.str;
-      description = "Tailnet hostname to expose Nextflux and ${svc} as";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up ${svc}'s database dumps to legacy location on NAS";
-    };
-  };
 
   config =
     let
@@ -83,7 +52,7 @@ in
       inherit (config.virtualisation.quadlet) pods volumes;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
 
       dbName = "${svc}-db";
       nextfluxName = "nextflux";

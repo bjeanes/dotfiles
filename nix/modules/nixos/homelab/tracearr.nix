@@ -7,72 +7,33 @@
 }:
 let
   svc = "tracearr";
-  tsnet = "griffin-climb.ts.net";
+  secretFile = flake.lib.mkSecretFileOption config svc;
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
-    };
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
+      image = "ghcr.io/connorgallopo/${svc}:latest";
+      hostName = svc;
+      backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
+    }
+    // {
+      dbImage = lib.mkOption {
+        # Pinned to specific version and opted out of auto-update
+        default = "docker.io/timescale/timescaledb-ha:pg18.4-ts2.29.1";
+        type = lib.types.str;
+        description = "OCI image for the TimescaleDB backing ${svc}";
+      };
 
-    image = lib.mkOption {
-      default = "ghcr.io/connorgallopo/${svc}:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
+      redisImage = lib.mkOption {
+        default = "docker.io/library/redis:8-alpine";
+        type = lib.types.str;
+        description = "OCI image for the Redis backing ${svc}";
+      };
 
-    dbImage = lib.mkOption {
-      # Pinned to specific version and opted out of auto-update
-      default = "docker.io/timescale/timescaledb-ha:pg18.4-ts2.29.1";
-      type = lib.types.str;
-      description = "OCI image for the TimescaleDB backing ${svc}";
-    };
+      jwtSecretFile = secretFile "jwt-secret" "File containing the key ${svc} signs auth tokens with";
 
-    redisImage = lib.mkOption {
-      default = "docker.io/library/redis:8-alpine";
-      type = lib.types.str;
-      description = "OCI image for the Redis backing ${svc}";
+      cookieSecretFile = secretFile "cookie-secret" "File containing the key ${svc} signs cookies with";
     };
-
-    hostName = lib.mkOption {
-      default = svc;
-      type = lib.types.str;
-      description = "Tailnet hostname to expose ${svc} as";
-    };
-
-    jwtSecretFile = lib.mkOption {
-      default = config.age.secrets."${svc}-jwt-secret".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc} signs auth tokens with";
-    };
-
-    cookieSecretFile = lib.mkOption {
-      default = config.age.secrets."${svc}-cookie-secret".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc} signs cookies with";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up ${svc}'s database dumps to legacy location on NAS";
-    };
-  };
 
   config =
     let
@@ -85,7 +46,7 @@ in
       inherit (config.virtualisation.quadlet) pods volumes;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
 
       dbName = "${svc}-db";
       redisName = "${svc}-redis";

@@ -6,7 +6,6 @@
   ...
 }:
 let
-  coalesce = val: default: if (val == null) then default else val;
   myLib = flake.lib;
 
   setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
@@ -34,70 +33,32 @@ let
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
 
-      options.homelab.services.${name} = {
-        enable = lib.mkOption {
-          default = config.homelab.services.arrs.enable;
-          type = lib.types.bool;
-          description = "Enable ${name}";
-        };
-
-        tailscale = {
+      options.homelab.services.${name} =
+        myLib.mkHomelabServiceOptions config name {
+          inherit image;
+          withUser = forceUser == null;
+        }
+        // {
           enable = lib.mkOption {
-            default = config.homelab.services.arrs.tailscale.enable;
+            default = config.homelab.services.arrs.enable;
             type = lib.types.bool;
-            description = "Enable Tailscale for ${name}";
+            description = "Enable ${name}";
+          };
+
+          tailscale = {
+            enable = lib.mkOption {
+              default = config.homelab.services.arrs.tailscale.enable;
+              type = lib.types.bool;
+              description = "Enable Tailscale for ${name}";
+            };
+          };
+
+          after = lib.mkOption {
+            default = after;
+            type = lib.types.listOf lib.types.str;
+            description = "Services to be started before ${name}, if enabled";
           };
         };
-
-        image = lib.mkOption {
-          default = image;
-          type = lib.types.str;
-          description = "OCI image for ${name}";
-        };
-
-        after = lib.mkOption {
-          default = after;
-          type = lib.types.listOf lib.types.str;
-          description = "Services to be started before ${name}, if enabled";
-        };
-
-        configDir = lib.mkOption {
-          default = "/var/lib/homelab/${name}";
-          example = "/var/lib/homelab/${name}";
-          type = lib.types.str;
-          description = "Location to store service config";
-        };
-
-        timeZone = lib.mkOption {
-          default = config.homelab.timeZone;
-          type = lib.types.str;
-          description = "Time zone for ${name}";
-        };
-
-        backupToNAS = lib.mkOption {
-          default = true;
-          type = lib.types.bool;
-          description = "Back up configDir to legacy location on NAS";
-        };
-      }
-      // (lib.optionalAttrs (forceUser == null) {
-        user = lib.mkOption {
-          default = coalesce config.homelab.user name;
-          type = lib.types.str;
-          description = ''
-            User to run ${name} service as
-          '';
-        };
-
-        group = lib.mkOption {
-          default = config.homelab.group;
-          type = lib.types.str;
-          description = ''
-            Group to run the ${name} service as
-          '';
-        };
-
-      });
 
       config =
         let

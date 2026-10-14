@@ -12,6 +12,7 @@ in
 lib.foldr lib.recursiveUpdate { } (
   map load [
     ./fs
+    ./homelab
     ./hosts
     ./misc
     ./nvim

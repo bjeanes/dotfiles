@@ -7,63 +7,13 @@
 }:
 let
   svc = "readeck";
-  tsnet = "griffin-climb.ts.net";
-  coalesce = val: default: if (val == null) then default else val;
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
-    };
-
-    image = lib.mkOption {
-      default = "codeberg.org/${svc}/${svc}:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
-
-    hostName = lib.mkOption {
-      default = svc;
-      type = lib.types.str;
-      description = "Tailnet hostname to expose ${svc} as";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    user = lib.mkOption {
-      default = coalesce config.homelab.user svc;
-      type = lib.types.str;
-      description = ''
-        User to run ${svc} service as
-      '';
-    };
-
-    group = lib.mkOption {
-      default = config.homelab.group;
-      type = lib.types.str;
-      description = ''
-        Group to run the ${svc} service as
-      '';
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up ${svc}'s exports to legacy location on NAS";
-    };
+  options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc {
+    image = "codeberg.org/${svc}/${svc}:latest";
+    hostName = svc;
+    withUser = true;
+    backupDescription = "Back up ${svc}'s exports to legacy location on NAS";
   };
 
   config =
@@ -76,7 +26,7 @@ in
       inherit (config.virtualisation.quadlet) pods;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
       port = 8000;
 
       # The image's working directory. Readeck writes `config.toml` (holding

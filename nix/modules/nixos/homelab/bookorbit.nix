@@ -7,95 +7,32 @@
 }:
 let
   svc = "bookorbit";
-  tsnet = "griffin-climb.ts.net";
-  coalesce = val: default: if (val == null) then default else val;
+  secretFile = flake.lib.mkSecretFileOption config svc;
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
-    };
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
+      image = "ghcr.io/${svc}/${svc}:latest";
+      hostName = svc;
+      withUser = true;
+      backupDescription = "Back up ${svc}'s data and database dumps to legacy location on NAS";
+    }
+    // {
+      dbImage = lib.mkOption {
+        # Pinned to a major version and opted out of auto-update
+        default = "docker.io/pgvector/pgvector:pg18";
+        type = lib.types.str;
+        description = "OCI image for the PostgreSQL (with pgvector) backing ${svc}";
+      };
 
-    image = lib.mkOption {
-      default = "ghcr.io/${svc}/${svc}:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
+      jwtSecretFile = secretFile "jwt-secret" "File containing the key ${svc} signs auth tokens with";
 
-    dbImage = lib.mkOption {
-      # Pinned to a major version and opted out of auto-update
-      default = "docker.io/pgvector/pgvector:pg18";
-      type = lib.types.str;
-      description = "OCI image for the PostgreSQL (with pgvector) backing ${svc}";
-    };
+      podcastEncryptionKeyFile = secretFile "podcast-encryption-key" "File containing the key ${svc} encrypts podcast feed URLs with";
 
-    hostName = lib.mkOption {
-      default = svc;
-      type = lib.types.str;
-      description = "Tailnet hostname to expose ${svc} as";
-    };
+      setupBootstrapTokenFile = secretFile "setup-bootstrap-token" "File containing the token the first-run setup wizard asks for";
 
-    jwtSecretFile = lib.mkOption {
-      default = config.age.secrets."${svc}-jwt-secret".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc} signs auth tokens with";
+      bookRequestEncryptionKeyFile = secretFile "book-request-encryption-key" "File containing the key ${svc} encrypts download client and indexer credentials with";
     };
-
-    podcastEncryptionKeyFile = lib.mkOption {
-      default = config.age.secrets."${svc}-podcast-encryption-key".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc} encrypts podcast feed URLs with";
-    };
-
-    setupBootstrapTokenFile = lib.mkOption {
-      default = config.age.secrets."${svc}-setup-bootstrap-token".path;
-      type = lib.types.str;
-      description = "File containing the token the first-run setup wizard asks for";
-    };
-
-    bookRequestEncryptionKeyFile = lib.mkOption {
-      default = config.age.secrets."${svc}-book-request-encryption-key".path;
-      type = lib.types.str;
-      description = "File containing the key ${svc} encrypts download client and indexer credentials with";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    user = lib.mkOption {
-      default = coalesce config.homelab.user svc;
-      type = lib.types.str;
-      description = ''
-        User to run ${svc} service as
-      '';
-    };
-
-    group = lib.mkOption {
-      default = config.homelab.group;
-      type = lib.types.str;
-      description = ''
-        Group to run the ${svc} service as
-      '';
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up ${svc}'s data and database dumps to legacy location on NAS";
-    };
-  };
 
   config =
     let
@@ -108,7 +45,7 @@ in
       inherit (config.virtualisation.quadlet) pods volumes;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
 
       dbName = "${svc}-db";
 

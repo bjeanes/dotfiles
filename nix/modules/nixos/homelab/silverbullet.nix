@@ -7,56 +7,11 @@
 }:
 let
   svc = "silverbullet";
-  coalesce = val: default: if (val == null) then default else val;
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
-    };
-
-    image = lib.mkOption {
-      default = "ghcr.io/silverbulletmd/silverbullet:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    user = lib.mkOption {
-      default = coalesce config.homelab.user svc;
-      type = lib.types.str;
-      description = ''
-        User to run ${svc} service as
-      '';
-    };
-
-    group = lib.mkOption {
-      default = config.homelab.group;
-      type = lib.types.str;
-      description = ''
-        Group to run the ${svc} service as
-      '';
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up configDir to legacy location on NAS";
-    };
+  options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc {
+    image = "ghcr.io/silverbulletmd/silverbullet:latest";
+    withUser = true;
   };
 
   config =

@@ -7,57 +7,24 @@
 }:
 let
   svc = "hister";
-  tsnet = "griffin-climb.ts.net";
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkOption {
-      default = false;
-      type = lib.types.bool;
-      description = "Enable ${svc}";
+  options.homelab.services.${svc} =
+    flake.lib.mkHomelabServiceOptions config svc {
+      image = "ghcr.io/asciimoo/${svc}:latest";
+      hostName = svc;
+    }
+    // {
+      userHandling = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = ''
+          Run ${svc} in multi-user mode: every request is authenticated and each
+          account gets its own document set. Accounts only exist once
+          `create-user` has been run, so the instance is unusable until then.
+        '';
+      };
     };
-
-    image = lib.mkOption {
-      default = "ghcr.io/asciimoo/${svc}:latest";
-      type = lib.types.str;
-      description = "OCI image for ${svc}";
-    };
-
-    userHandling = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = ''
-        Run ${svc} in multi-user mode: every request is authenticated and each
-        account gets its own document set. Accounts only exist once
-        `create-user` has been run, so the instance is unusable until then.
-      '';
-    };
-
-    hostName = lib.mkOption {
-      default = svc;
-      type = lib.types.str;
-      description = "Tailnet hostname to expose ${svc} as";
-    };
-
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store service config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up configDir to legacy location on NAS";
-    };
-  };
 
   config =
     let
@@ -69,7 +36,7 @@ in
       inherit (config.virtualisation.quadlet) pods;
 
       podName = "${svc}-pod";
-      fqdn = "${cfg.hostName}.${tsnet}";
+      fqdn = "${cfg.hostName}.${config.homelab.tailscale.tailnet}";
       port = 4433;
     in
     lib.mkIf cfg.enable (

@@ -6,7 +6,7 @@
   ...
 }:
 let
-  tsnet = "griffin-climb.ts.net";
+  tsnet = config.homelab.tailscale.tailnet;
   myLib = flake.lib;
 
   setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer pkgs config;

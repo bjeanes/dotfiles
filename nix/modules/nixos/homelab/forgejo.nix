@@ -9,27 +9,7 @@ let
   svc = "forgejo";
 in
 {
-  options.homelab.services.${svc} = {
-    enable = lib.mkEnableOption svc;
-    configDir = lib.mkOption {
-      default = "/var/lib/homelab/${svc}";
-      example = "/var/lib/homelab/${svc}";
-      type = lib.types.str;
-      description = "Location to store ${svc} config";
-    };
-
-    timeZone = lib.mkOption {
-      default = config.homelab.timeZone;
-      type = lib.types.str;
-      description = "Time zone for ${svc}";
-    };
-
-    backupToNAS = lib.mkOption {
-      default = true;
-      type = lib.types.bool;
-      description = "Back up configDir to legacy location on NAS";
-    };
-  };
+  options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc { };
 
   config =
     let

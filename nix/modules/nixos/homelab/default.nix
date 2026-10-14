@@ -46,6 +46,12 @@ in
           type = lib.types.bool;
           description = "Enable Tailscale for homelab services";
         };
+
+        tailnet = lib.mkOption {
+          default = "griffin-climb.ts.net";
+          type = lib.types.str;
+          description = "Tailnet DNS name the homelab services are exposed under";
+        };
       };
     };
   };
