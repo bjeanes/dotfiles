@@ -28,6 +28,10 @@ in
       myLib = flake.lib;
       setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
       mkTailscaleContainer = myLib.mkTailscaleContainer pkgs config;
+
+      # Versioned because major Postgres upgrades need a fresh PGDATA.
+      # Postgres refuses to start if it is group- or world-writable.
+      pgData = "${cfg.configDir}/pgdata-17";
     in
     lib.mkIf cfg.enable (
       lib.mkMerge [
@@ -44,11 +48,11 @@ in
           systemd.tmpfiles.rules = [
             # Ensure config directory exists, owned by user
             "d ${cfg.configDir}/data   0775 ${cfg.user} ${cfg.group} - -"
-            "d ${cfg.configDir}/pgdata 0775 ${cfg.user} ${cfg.group} - -"
+            "d ${pgData} 0700 ${cfg.user} ${cfg.group} - -"
 
             # Ensure directory and contents belong to specified owner and group
             "Z ${cfg.configDir}/data   - ${cfg.user} ${cfg.group} - -"
-            "Z ${cfg.configDir}/pgdata - ${cfg.user} ${cfg.group} - -"
+            "Z ${pgData} - ${cfg.user} ${cfg.group} - -"
           ];
 
           virtualisation.oci-containers.containers = {
@@ -92,7 +96,7 @@ in
                 POSTGRES_DB = "gitea"; # "${svc}";
               };
               volumes = [
-                "${cfg.configDir}/pgdata-17:/var/lib/postgresql/data"
+                "${pgData}:/var/lib/postgresql/data"
               ];
             };
           };
