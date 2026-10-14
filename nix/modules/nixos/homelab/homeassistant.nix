@@ -374,14 +374,6 @@ let
     };
   };
 
-  poolDef = {
-    type = "dir";
-    name = cfg.storage.poolName;
-    target = {
-      path = poolDir;
-    };
-  };
-
   baseXml = nixvirtLib.domain.writeXML domainDef;
 
   # Workaround lack of support for <serial type="dev"> in NixVirt's XML schema (does not output the `<source>`)

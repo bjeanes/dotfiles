@@ -18,7 +18,6 @@ in
     let
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
-      svcName = myLib.containerSvcName config svc;
       secrets = config.age.secrets;
     in
     lib.mkIf cfg.enable (
