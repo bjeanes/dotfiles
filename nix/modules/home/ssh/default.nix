@@ -23,10 +23,10 @@ in
         "~/.ssh/config.d/*"
       ];
 
-      matchBlocks = {
+      settings = {
         "*" = {
-          addKeysToAgent = "confirm 1h";
-          forwardAgent = false;
+          AddKeysToAgent = "confirm 1h";
+          ForwardAgent = false;
         };
       }
       // (
@@ -38,7 +38,7 @@ in
         in
         {
           ${concatStringsSep " " allHosts} = {
-            forwardAgent = true;
+            ForwardAgent = true;
           };
         }
         // concatMapAttrs (
@@ -48,7 +48,7 @@ in
           }:
           {
             ${host} = {
-              hostname = (builtins.head hostnames);
+              HostName = (builtins.head hostnames);
             };
           }
         ) myHosts

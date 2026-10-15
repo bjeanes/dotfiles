@@ -10,10 +10,8 @@ in
 {
   config = {
     programs.ssh = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-      matchBlocks = {
-        "*".extraOptions = {
-          "IdentityAgent" = lib.strings.escapeShellArg _1pSocket;
-        };
+      settings = {
+        "*".IdentityAgent = lib.strings.escapeShellArg _1pSocket;
       };
     };
 

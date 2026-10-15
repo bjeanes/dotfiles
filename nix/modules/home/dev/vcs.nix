@@ -8,9 +8,9 @@ in
 {
   config = {
     programs.ssh = {
-      matchBlocks = {
+      settings = {
         "*" = {
-          setEnv = {
+          SetEnv = {
             GIT_AUTHOR_NAME = user.name;
             GIT_AUTHOR_EMAIL = user.email;
           };
