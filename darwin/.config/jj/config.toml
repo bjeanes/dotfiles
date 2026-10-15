@@ -28,6 +28,19 @@ behavior = "own"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJykg+5TulcwmeKFYSjZmnrL5/Fo4kWmOV1fAyt41Evh"
 
 [template-aliases]
+"format_commit_labels(commit)" = """
+separate(" ",
+  coalesce(
+    if(commit.hidden(), label("hidden", "(hidden)")),
+    if(commit.divergent(), label("divergent", "(divergent)")),
+  ),
+  if(commit.conflict(), label("conflict", "(conflict)")),
+  coalesce(
+    if(commit.contained_in("mutable() & private()"), "🔐"),
+    if(commit.contained_in("(mutable() & private())::"), "🔒"),
+  ),
+)
+"""
 "format_short_signature(signature)" = '''
 if(
   signature.email().domain() == "users.noreply.github.com",
