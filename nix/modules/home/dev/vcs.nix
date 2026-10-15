@@ -272,8 +272,12 @@ in
 
               # empty commits, except root commit and merges
               "empty() ~ (root() | merges())"
+
+              # per-repo additions, via `jj config edit --repo`
+              "local_private()"
             ]
           );
+          "local_private()" = "none()";
         };
 
         # Default log, plus every local bookmark's commits back to trunk, including
