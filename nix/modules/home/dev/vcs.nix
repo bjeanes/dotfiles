@@ -204,6 +204,23 @@ in
             )
           '';
 
+          # Builtin labels, plus a locked-with-key on mutable commits matching
+          # `private()` and a plain lock on their descendants (unpushable while
+          # they have a private ancestor). Only mutable commits are considered,
+          # as evaluating `private()` (esp. `empty()`) over all history is slow.
+          "format_commit_labels(commit)" = ''
+            separate(" ",
+              coalesce(
+                if(commit.hidden(), label("hidden", "(hidden)")),
+                if(commit.divergent(), label("divergent", "(divergent)")),
+              ),
+              if(commit.conflict(), label("conflict", "(conflict)")),
+              coalesce(
+                if(commit.contained_in("mutable() & private()"), "🔐"),
+                if(commit.contained_in("(mutable() & private())::"), "🔒"),
+              ),
+            )
+          '';
         };
 
         templates = {
