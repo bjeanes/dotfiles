@@ -21,7 +21,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/blink.cmp` | https://github.com/Saghen/blink.cmp/tree/v1.10.2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/v2.0.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/claudecode.nvim` | https://github.com/coder/claudecode.nvim/tree/2390c6e45c4789072c293ac69de051d169668b29 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/codecompanion.nvim` | https://github.com/olimorris/codecompanion.nvim/tree/v19.23.0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/codecompanion.nvim` | https://github.com/olimorris/codecompanion.nvim/tree/v19.27.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/016802de402556da54c36bd7359b441266b01cdd |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conjure` | https://github.com/Olical/conjure/tree/v4.60.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
@@ -29,10 +29,10 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/v0.18.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/3.42.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/33f0a63ba878febcf1b078f9a4d314c0f952809a |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.11.0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.12.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/455808fd0fae06e6d70fadfd61432275db8f34ce |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-paredit` | https://github.com/julienvincent/nvim-paredit/tree/v1.2.0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/427e9222363d07c32d6db6169e4049c28d58d141 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/e289100ff98969e118c702199d88b764ce9e7fdf |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/f3061339b8eaf9fda873600bc425b8d2d8502533 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/rainbow-delimiters.nvim` | https://gitlab.com/HiPhish/rainbow-delimiters.nvim |
 | `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/882c996cf28183f4d63640de0b4c02ec886d01f2 |
