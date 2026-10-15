@@ -76,7 +76,7 @@ git_push_bookmark = """
 
 [ui]
 default-command = "log"
-diff-formatter = ["difft", "--color=always", "--sort-paths", "$left", "$right"]
+diff-formatter = ["difft", "--color=always", "--sort-paths", "--width=$width", "$left", "$right"]
 
 [user]
 email = "me@bjeanes.com"
