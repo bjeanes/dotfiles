@@ -28,8 +28,8 @@ in
       cfg = config.homelab.services.${svc};
       tsName = "${svc}-tailscale";
       myLib = flake.lib;
-      svcName = myLib.containerSvcName config svc;
-      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
+      mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
+      mkQuadletDynamicEnvironment = myLib.mkQuadletDynamicEnvironment pkgs config;
       secrets = config.age.secrets;
 
       nasConfigPath = "/mnt/nfs/nas/docker/media/plex";
@@ -61,20 +61,17 @@ in
         ];
       };
 
-      toDockerPorts =
-        {
-          tcp ? [ ],
-          udp ? [ ],
-        }:
-        let
-          build = proto: port: "${toString port}:${toString port}/${proto}";
-        in
-        (
+      publishPorts =
+        (map (port: "${toString port}:${toString port}/tcp") firewallPorts.tcp)
+        ++ (map (port: "${toString port}:${toString port}/udp") firewallPorts.udp);
 
-          (map (build "tcp") tcp) ++ (map (build "udp") udp)
-        );
+      podName = "${svc}-pod";
+      inherit (config.virtualisation.quadlet) pods;
 
-      dockerPorts = toDockerPorts firewallPorts;
+      mounts = [
+        "mnt-nfs-nas-media.mount"
+        "mnt-nfs-nas-docker.mount"
+      ];
 
     in
     lib.mkIf cfg.enable (
@@ -115,119 +112,113 @@ in
             # Create volumes (if possible) for the caching directories, and set expiries
             ++ (map (d: "d ${e cfg.configDir}/${e d}  0775 ${cfg.user} ${cfg.group} 1w -") tmpPaths);
 
-          virtualisation.oci-containers.containers = {
-            ${svc} = {
-              image = "lscr.io/linuxserver/plex:latest";
+          virtualisation.quadlet = {
+            # Ports are published by the pod, so they're there whether or not
+            # the Tailscale sidecar is in it.
+            pods.${podName}.podConfig = { inherit publishPorts; };
 
-              # TODO: instead of interleaving mounts between local and NAS, have a single
-              # MergerFS mount point and regularly move large / irregularly accessed files like
-              # thumbnails from the local branch to the NAS branch in the MergerFS mount.
-              volumes = [
-                "/etc/localtime:/etc/localtime:ro"
-                "/dev/dri:/dev/dri:z"
-                "${secrets.plex-token.path}:/run/secrets/plex-claim"
-                "${transcodePath}:/transcode"
+            containers.${svc} = {
+              autoStart = true;
+              containerConfig = {
+                pod = pods.${podName}.ref;
+                image = "lscr.io/linuxserver/plex:latest";
 
-                "/mnt/nfs/nas/media:/data" # TV Shows, Movies, Music, etc
+                devices = [ "/dev/dri:/dev/dri" ];
 
-                # Base config is local, in particular /config/Library, which
-                # LSIO's Plex checks owner. If it doesn't match it performs
-                # a lengthly and permission-denied attempt to chown, which
-                # we want to avoid.
-                "${cfg.configDir}:/config"
+                # TODO: instead of interleaving mounts between local and NAS, have a single
+                # MergerFS mount point and regularly move large / irregularly accessed files like
+                # thumbnails from the local branch to the NAS branch in the MergerFS mount.
+                volumes = [
+                  "/etc/localtime:/etc/localtime:ro"
+                  "${secrets.plex-token.path}:/run/secrets/plex-claim"
+                  "${transcodePath}:/transcode"
 
-                # A lot of large metadata files, thumbnails, etc, are stored
-                # here, so let's put that straight on the NAS instead
-                "${nasConfigPath}/${pmsPath}:/config/${pmsPath}"
+                  "/mnt/nfs/nas/media:/data" # TV Shows, Movies, Music, etc
 
-                # We want the SQLite DB to be local though, but it's a subpath of pmsPath, so overlay DB location locally
-                "${cfg.configDir}/${databasePath}:/config/${databasePath}"
+                  # Base config is local, in particular /config/Library, which
+                  # LSIO's Plex checks owner. If it doesn't match it performs
+                  # a lengthly and permission-denied attempt to chown, which
+                  # we want to avoid.
+                  "${cfg.configDir}:/config"
 
-                # But... make sure those database backups still end up on the NAS
-                "${nasConfigPath}/${databaseBackupPath}:/config/${databaseBackupPath}"
+                  # A lot of large metadata files, thumbnails, etc, are stored
+                  # here, so let's put that straight on the NAS instead
+                  "${nasConfigPath}/${pmsPath}:/config/${pmsPath}"
 
-                # Log files should be local
-                "${cfg.configDir}/${logsPath}:/config/${logsPath}"
-              ]
-              # Temporary caching should be local
-              ++ (map (d: "${cfg.configDir}/${d}:/config/${d}") tmpPaths);
+                  # We want the SQLite DB to be local though, but it's a subpath of pmsPath, so overlay DB location locally
+                  "${cfg.configDir}/${databasePath}:/config/${databasePath}"
 
-              environment = {
-                TZ = "Australia/Melbourne";
-                VERSION = "latest";
-                FILE__PLEX_CLAIM = "/run/secrets/plex-claim";
-                DOCKER_MODS = "linuxserver/mods:universal-stdout-logs";
-                LOGS_TO_STDOUT = lib.concatMapStringsSep "|" (log: "/config/${logsPath}/${log}.log") [
-                  "Plex Crash Uploader"
-                  "Plex Media Server"
-                  "Plex Tuner Service"
-                  "PMS Plugin Logs/com.plexapp.agents.fanarttv"
-                  "PMS Plugin Logs/com.plexapp.agents.imdb"
-                  "PMS Plugin Logs/com.plexapp.agents.lastfm"
-                  "PMS Plugin Logs/com.plexapp.agents.localmedia"
-                  "PMS Plugin Logs/com.plexapp.agents.movieposterdb"
-                  "PMS Plugin Logs/com.plexapp.agents.none"
-                  "PMS Plugin Logs/com.plexapp.agents.plexthememusic"
-                  "PMS Plugin Logs/com.plexapp.agents.themoviedb"
-                  "PMS Plugin Logs/com.plexapp.agents.thetvdb"
-                  "PMS Plugin Logs/com.plexapp.system"
-                ];
+                  # But... make sure those database backups still end up on the NAS
+                  "${nasConfigPath}/${databaseBackupPath}:/config/${databaseBackupPath}"
+
+                  # Log files should be local
+                  "${cfg.configDir}/${logsPath}:/config/${logsPath}"
+                ]
+                # Temporary caching should be local
+                ++ (map (d: "${cfg.configDir}/${d}:/config/${d}") tmpPaths);
+
+                environments = {
+                  TZ = "Australia/Melbourne";
+                  # Use the PMS bundled in the image rather than updating at
+                  # container start, so `podman auto-update` alone decides the
+                  # version and its rollbacks restore the previous one.
+                  VERSION = "docker";
+                  FILE__PLEX_CLAIM = "/run/secrets/plex-claim";
+                  DOCKER_MODS = "linuxserver/mods:universal-stdout-logs";
+                  LOGS_TO_STDOUT = lib.concatMapStringsSep "|" (log: "/config/${logsPath}/${log}.log") [
+                    "Plex Crash Uploader"
+                    "Plex Media Server"
+                    "Plex Tuner Service"
+                    "PMS Plugin Logs/com.plexapp.agents.fanarttv"
+                    "PMS Plugin Logs/com.plexapp.agents.imdb"
+                    "PMS Plugin Logs/com.plexapp.agents.lastfm"
+                    "PMS Plugin Logs/com.plexapp.agents.localmedia"
+                    "PMS Plugin Logs/com.plexapp.agents.movieposterdb"
+                    "PMS Plugin Logs/com.plexapp.agents.none"
+                    "PMS Plugin Logs/com.plexapp.agents.plexthememusic"
+                    "PMS Plugin Logs/com.plexapp.agents.themoviedb"
+                    "PMS Plugin Logs/com.plexapp.agents.thetvdb"
+                    "PMS Plugin Logs/com.plexapp.system"
+                  ];
+                };
+
+                # Gives `podman auto-update` something to roll back on. The
+                # start period allows for `DOCKER_MODS` installing ahead of PMS.
+                healthCmd = "curl -fsS -o /dev/null http://localhost:32400/identity";
+                healthInterval = "30s";
+                healthTimeout = "5s";
+                healthRetries = 3;
+                healthStartPeriod = "2m";
               };
-            };
-          };
-
-          systemd.services = {
-            ${svcName} = {
-              aliases = [ "plex.service" ];
-
-              bindsTo = [
-                "mnt-nfs-nas-media.mount"
-                "mnt-nfs-nas-docker.mount"
-              ];
-              after = [
-                "mnt-nfs-nas-media.mount"
-                "mnt-nfs-nas-docker.mount"
-              ];
+              unitConfig = {
+                BindsTo = mounts;
+                After = mounts;
+              };
             };
           };
         }
 
-        (setEnvFromCommandsForContainer svc {
-          PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
-          PGID = "${pkgs.getent}/bin/getent group homelab | cut -d: -f3";
+        # Nix expressions give us no way to derive the UID from a user at
+        # evaluation time, so these resolve at service start.
+        (mkQuadletDynamicEnvironment {
+          containerName = svc;
+          variables = {
+            PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+            PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+          };
         })
 
         (lib.mkIf cfg.backupToNAS (
           myLib.buildBackupScriptForDir pkgs svc cfg.configDir { inherit (cfg) timeZone; }
         ))
 
-        (lib.mkIf cfg.tailscale.enable {
-          virtualisation.oci-containers.containers = {
-            # Set up main service container to use and depend on the network container for Tailscale
-            ${svc} = {
-              extraOptions = [
-                "--network=container:${tsName}"
-              ];
-              dependsOn = [ tsName ];
-            };
-          };
-        })
-
-        (lib.mkIf (!cfg.tailscale.enable) {
-          virtualisation.oci-containers.containers = {
-            # Set up main service container to use and depend on the network container for Tailscale
-            ${svc}.ports = dockerPorts;
-          };
-        })
-
         (lib.mkIf cfg.tailscale.enable (
-          myLib.mkTailscaleContainer pkgs config tsName {
+          mkTailscaleQuadletContainer tsName {
+            inherit podName;
             hostname = svc;
-            container.ports = dockerPorts;
             https = 32400;
           }
         ))
-
       ]
     );
 
