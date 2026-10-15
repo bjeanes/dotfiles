@@ -29,15 +29,13 @@ in
       settings = {
         # These are also declared in flake.nix's `nixConfig`, but that is only
         # honoured for the evaluating user and only once they've accepted it --
-        # so it never applies to root/comin builds, and ghostty ends up being
-        # compiled from source. Declaring them here makes them system-wide.
+        # so it never applies to root/comin builds. Declaring them here makes
+        # them system-wide.
         substituters = [
           "https://nix-community.cachix.org"
-          "https://ghostty.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
         ];
 
         connect-timeout = 3;

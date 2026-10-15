@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   user.name = "Bo Jeanes";
   user.email = "me@bjeanes.com";
