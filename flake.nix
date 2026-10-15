@@ -50,6 +50,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     catppuccin.url = "github:catppuccin/nix";
+    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
 
     blueprint = {
       url = "github:numtide/blueprint";
