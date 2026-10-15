@@ -236,21 +236,27 @@ in
           #
           # commits with empty messages are already blocked for pushing (without
           # `--allow-empty-description`) so no need to specify that here.
-          "private()" = lib.concatMapStringsSep " | " (t: "( ${t} )") [
-            # Any commit with description of "wip", "priv", "private", either as a prefix or whole message
-            "description(exact-i:'wip')"
-            "description(exact-i:'private')"
-            "description(exact-i:'priv')"
-            "description(glob-i:'wip:')"
-            "description(glob-i:'priv:')"
-            "description(glob-i:'private:')"
+          "private()" = lib.concatMapStringsSep " | " (t: "( ${t} )") (
+            # Any commit with one of these subjects, either as a prefix or whole line
+            lib.concatMap
+              (w: [
+                "subject(exact-i:'${w}')"
+                "subject(glob-i:'${w}:*')"
+              ])
+              [
+                "wip"
+                "prv"
+                "priv"
+                "private"
+              ]
+            ++ [
+              # commits with conflicts
+              "conflicts()"
 
-            # commits with conflicts
-            "conflicts()"
-
-            # empty commits, except root commit and merges
-            "empty() ~ (root() | merges())"
-          ];
+              # empty commits, except root commit and merges
+              "empty() ~ (root() | merges())"
+            ]
+          );
         };
 
         # Default log, plus every local bookmark's commits back to trunk, including
