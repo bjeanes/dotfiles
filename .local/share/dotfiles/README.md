@@ -13,7 +13,7 @@ Your package manager may have it under the same name.
 | `~/.config/eza/theme.yml` | catppuccin-eza 0-unstable-2025-09-03 |
 | `~/.local/share/dotfiles/catppuccin-fzf` | catppuccin-fzf 0-unstable-2026-06-28 |
 | `~/.local/share/dotfiles/catppuccin-glamour` | catppuccin-glamour 0-unstable-2025-05-02 |
-| `~/.local/share/dotfiles/catppuccin-lazygit` | catppuccin-lazygit 0-unstable-2026-04-01 |
+| `~/.local/share/dotfiles/catppuccin-lazygit` | catppuccin-lazygit 0-unstable-2026-10-09 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
