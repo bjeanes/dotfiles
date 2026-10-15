@@ -16,8 +16,9 @@ auto-track-bookmarks = "bjeanes/*"
 [revset-aliases]
 "closest_merge(to)" = "heads(::to & merges())"
 "immutable_heads()" = "builtin_immutable_heads() | pinned()"
+"local_private()" = "none()"
 "pinned()" = "none()"
-"private()" = "( subject(exact-i:'wip') ) | ( subject(glob-i:'wip:*') ) | ( subject(exact-i:'prv') ) | ( subject(glob-i:'prv:*') ) | ( subject(exact-i:'priv') ) | ( subject(glob-i:'priv:*') ) | ( subject(exact-i:'private') ) | ( subject(glob-i:'private:*') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) )"
+"private()" = "( subject(exact-i:'wip') ) | ( subject(glob-i:'wip:*') ) | ( subject(exact-i:'prv') ) | ( subject(glob-i:'prv:*') ) | ( subject(exact-i:'priv') ) | ( subject(glob-i:'priv:*') ) | ( subject(exact-i:'private') ) | ( subject(glob-i:'private:*') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) ) | ( local_private() )"
 
 [revsets]
 log = "builtin_log() | (trunk()..bookmarks())"
