@@ -44,4 +44,10 @@
   };
 
   homelab.services.plex.enable = true;
+
+  virtualisation.podman.autoPrune.enable = true;
+  virtualisation.quadlet.autoUpdate = {
+    enable = true;
+    calendar = "*-*-* 04:00:00 Australia/Melbourne";
+  };
 }

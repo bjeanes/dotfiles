@@ -121,6 +121,7 @@ in
               autoStart = true;
               containerConfig = {
                 pod = pods.${podName}.ref;
+                autoUpdate = "registry";
                 image = "lscr.io/linuxserver/plex:latest";
 
                 devices = [ "/dev/dri:/dev/dri" ];
