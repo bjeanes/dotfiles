@@ -55,6 +55,7 @@
     tracearr.enable = true;
     bookorbit.enable = true;
     readeck.enable = true;
+    affine.enable = true;
     miniflux = {
       enable = true;
       hostName = "rss";
