@@ -157,6 +157,15 @@
             pyPkgs = pkgs.python312Packages;
           in
           {
+            # Hard-wrap at the buffer's 'textwidth' (mdformat never breaks
+            # inside link text or code spans)
+            prepend_args.__raw = # Lua
+              ''
+                function(_, ctx)
+                  local tw = vim.bo[ctx.buf].textwidth
+                  return { "--wrap", tostring(tw > 0 and tw or 80) }
+                end
+              '';
             command = lib.getExe (
               pkgs.writeShellApplication {
                 name = "mdformat";

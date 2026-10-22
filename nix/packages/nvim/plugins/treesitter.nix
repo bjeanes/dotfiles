@@ -6,6 +6,9 @@
       folding.enable = false;
       nixvimInjections = true;
 
+      # Its indentexpr confuses `gq`/auto-wrap continuation lines in lists
+      indent.disable = [ "markdown" ];
+
       settings = {
         highlight = {
           additional_vim_regex_highlighting = true;
