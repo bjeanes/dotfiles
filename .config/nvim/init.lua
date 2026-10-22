@@ -200,7 +200,7 @@ else
                     vim.bo[buf].syntax = "ON"
                 end
             end
-            local disabled_indent = {}
+            local disabled_indent = { "markdown" }
             if has_query("indents") and not is_disabled(disabled_indent) then
                 vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                 add_undo_ftplugin("setlocal indentexpr<")
@@ -333,7 +333,13 @@ require("conform").setup({
     formatters = {
         biome = { command = "biome" },
         jq = { command = "jq" },
-        mdformat = { command = "mdformat" },
+        mdformat = {
+            command = "mdformat",
+            prepend_args = function(_, ctx)
+                local tw = vim.bo[ctx.buf].textwidth
+                return { "--wrap", tostring(tw > 0 and tw or 80) }
+            end,
+        },
         nixfmt = { command = "nixfmt" },
         prettierd = { command = "prettierd" },
         rustfmt = { command = "rustfmt" },
@@ -917,6 +923,11 @@ do
             end,
             event = "FileType",
             pattern = "clojure",
+        },
+        {
+            command = "setlocal textwidth=80 formatexpr=v:lua.require'conform'.formatexpr()",
+            event = "FileType",
+            pattern = { "markdown" },
         },
         { command = "setlocal nofixendofline noendofline", event = { "BufNewFile", "BufRead" }, pattern = "*.age" },
     }
