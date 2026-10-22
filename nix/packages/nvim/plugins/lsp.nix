@@ -2,6 +2,8 @@
 {
   plugins.lspconfig.enable = true;
 
+  extraFiles."lua/container_lsp.lua".source = ./container_lsp.lua;
+
   # Neovim applies `documentChanges` (including file renames) but doesn't
   # advertise it, nor send `workspace/willRenameFiles`, so servers that move
   # files on rename (e.g. clojure-lsp namespaces) refuse or half-apply it.
@@ -12,6 +14,9 @@
         rename(old, new, opts)
       end)
     end
+
+    -- Projects can run these inside their containers; see container_lsp.lua
+    require("container_lsp").setup({ "ruby_lsp", "rubocop" })
   '';
 
   lsp.servers = {
@@ -26,6 +31,12 @@
     nixd = {
       enable = true;
       config.settings.nixd.formatting.command = [ (lib.getExe pkgs.nixfmt) ];
+    };
+    # Projects pin their own RuboCop and plugins (e.g. standard), so never
+    # substitute a Nix one
+    rubocop = {
+      enable = true;
+      package = null;
     };
     ruby_lsp.enable = true;
     rust_analyzer.enable = true;
