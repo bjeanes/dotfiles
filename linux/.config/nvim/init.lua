@@ -626,7 +626,7 @@ do
 end
 -- }}}
 
-vim.filetype.add({ extension = { ignore = "gitignore" }, pattern = { ["flake.lock"] = "json" } })
+vim.filetype.add({ extension = { ignore = "gitignore", slim = "slim" }, pattern = { ["flake.lock"] = "json" } })
 
 -- LSP {{{
 do
