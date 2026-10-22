@@ -637,6 +637,9 @@ do
         end)
     end
 
+    -- Projects can run these inside their containers; see container_lsp.lua
+    require("container_lsp").setup({ "ruby_lsp", "rubocop" })
+
     vim.lsp.config("clojure_lsp", { capabilities = { workspace = { workspaceEdit = { documentChanges = true } } } })
     vim.lsp.enable("clojure_lsp")
     vim.lsp.enable("expert")
@@ -651,6 +654,7 @@ do
         }
     )
     vim.lsp.enable("nixd")
+    vim.lsp.enable("rubocop")
     vim.lsp.enable("ruby_lsp")
     vim.lsp.enable("rust_analyzer")
 end
