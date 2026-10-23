@@ -38,4 +38,17 @@ return {
       services = { ["*"] = "lints" },
     },
   },
+
+  -- Formatters for conform, used in place of the configured ones for the
+  -- listed filetypes. Keyed by any name; it only labels the formatter.
+  formatters = {
+    prettier = {
+      service = "lints",
+      -- Runs from the project root's path in the container, with the buffer on
+      -- stdin; the formatted result must go to stdout. $FILENAME is the file's
+      -- path in the container.
+      cmd = { "yarn", "prettier", "--stdin-filepath", "$FILENAME" },
+      filetypes = { "javascript", "typescript", "css", "scss" },
+    },
+  },
 }

@@ -44,6 +44,12 @@
         })
       '';
 
+    # Projects can run formatters inside their containers; see container_lsp.lua
+    luaConfig.post = # lua
+      ''
+        require("container_lsp").setup_conform()
+      '';
+
     settings = {
       default_format_opts.lsp_format = "last";
 
