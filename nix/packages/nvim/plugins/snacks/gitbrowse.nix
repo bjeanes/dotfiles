@@ -8,7 +8,7 @@
       inherit (myLib) modeKeys;
     in
     modeKeys "n" {
-      "<Leader>go" = {
+      "<Leader>gO" = {
         action.__raw = ''
           function()
             Snacks.gitbrowse.open()
