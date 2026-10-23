@@ -506,7 +506,7 @@ do
             action = function()
                 Snacks.gitbrowse.open()
             end,
-            key = "<Leader>go",
+            key = "<Leader>gO",
             mode = "n",
             options = { desc = "Open Git URL" },
         },
@@ -517,6 +517,30 @@ do
             key = "<Leader>gb",
             mode = "n",
             options = { desc = "Git blame for line" },
+        },
+        {
+            action = ":PermalinkOpen<CR>",
+            key = "<Leader>go",
+            mode = "n",
+            options = { desc = "Open permalink", silent = true },
+        },
+        {
+            action = ":PermalinkCopy<CR>",
+            key = "<Leader>gy",
+            mode = "n",
+            options = { desc = "Copy permalink", silent = true },
+        },
+        {
+            action = ":PermalinkOpen<CR>",
+            key = "<Leader>go",
+            mode = "v",
+            options = { desc = "Open permalink", silent = true },
+        },
+        {
+            action = ":PermalinkCopy<CR>",
+            key = "<Leader>gy",
+            mode = "v",
+            options = { desc = "Copy permalink", silent = true },
         },
         {
             action = "<cmd>Neotree action=focus reveal toggle<CR>",
@@ -659,6 +683,13 @@ do
     vim.lsp.enable("rust_analyzer")
 end
 -- }}}
+
+require("permalink").setup({
+    -- Self-hosted forges, by remote host: ["git.example.com"] = { forge = "forgejo" }
+    hosts = {
+        ["forgejo.griffin-climb.ts.net"] = { forge = "forgejo" },
+    },
+})
 
 require("nvim-paredit").setup({ indent = { enabled = true } })
 
