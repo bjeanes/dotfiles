@@ -370,6 +370,8 @@ require("conform").setup({
     },
 })
 
+require("container_lsp").setup_conform()
+
 require("codecompanion").setup({
     adapters = {
         acp = {
