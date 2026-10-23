@@ -1,5 +1,5 @@
--- Runs language servers inside a project's Docker Compose containers, for
--- projects whose dependencies only exist there.
+-- Runs language servers and formatters inside a project's Docker Compose
+-- containers, for projects whose dependencies only exist there.
 --
 -- A project opts in with a `.nvim/container-lsp.lua` at its root, trusted via
 -- `vim.secure`. See container_lsp.example.lua for its shape.
@@ -25,6 +25,9 @@ local sessions = {}
 
 --- Untrusted project configs already warned about.
 local warned = {}
+
+--- `docker inspect` results, by project dir and service.
+local containers = {}
 
 local function run(cmd, cwd)
   local result = vim.system(cmd, { cwd = cwd, text = true }):wait()
@@ -71,6 +74,22 @@ local function inspect_container(dir, compose, service)
     id = ps()
   end
   return vim.json.decode(run({ "docker", "inspect", id }))[1]
+end
+
+--- Like inspect_container, but reuses the last container while it's running.
+local function container_for(dir, project, service)
+  local key = dir .. "\0" .. service
+  local cached = containers[key]
+  if cached then
+    local result = vim.system({ "docker", "inspect", cached.Id }, { text = true }):wait()
+    local info = result.code == 0 and vim.json.decode(result.stdout)[1]
+    if info and info.State.Running then
+      containers[key] = info
+      return info
+    end
+  end
+  containers[key] = inspect_container(dir, project.compose or { "docker", "compose" }, service)
+  return containers[key]
 end
 
 --- Host/container path pairs for a container. Paths not in a bind mount are
@@ -174,7 +193,7 @@ local function start_in_container(name, root, dispatchers)
     return
   end
 
-  local info = inspect_container(dir, project.compose or { "docker", "compose" }, service)
+  local info = container_for(dir, project, service)
   local mounts = container_mounts(info)
   local to_container = translator(mounts, "host", "container")
   local to_host = translator(mounts, "container", "host")
@@ -212,6 +231,77 @@ local function start_in_container(name, root, dispatchers)
     is_closing = client.is_closing,
     terminate = client.terminate,
   }
+end
+
+--- Conform formatter running a project's formatter in its container, reading
+--- the buffer on stdin. `$FILENAME` in its `cmd` becomes the container path.
+local function conform_formatter(dir, project, spec)
+  return {
+    command = "docker",
+    stdin = true,
+    args = function(_, ctx)
+      local info = container_for(dir, project, spec.service)
+      local to_container = translator(container_mounts(info), "host", "container")
+      local args = { "exec", "--interactive", "--workdir", to_container(dir), info.Id }
+      for _, arg in ipairs(spec.cmd) do
+        table.insert(args, (arg:gsub("%$FILENAME", function() return to_container(ctx.filename) end)))
+      end
+      return args
+    end,
+  }
+end
+
+--- Names of the conform formatters the buffer's project declares for its
+--- filetype, registering them with conform. Nil when there are none.
+local function project_formatters(bufnr)
+  local path = vim.api.nvim_buf_get_name(bufnr)
+  if path == "" then
+    return
+  end
+  local dir, project = load_project(vim.fs.dirname(path))
+  if not (project and project.formatters) then
+    return
+  end
+  local conform = require("conform")
+  local names = {}
+  for name, spec in pairs(project.formatters) do
+    if vim.tbl_contains(spec.filetypes, vim.bo[bufnr].filetype) then
+      -- Scoped to the project, since another may declare a different `name`
+      local id = ("container:%s:%s"):format(dir, name)
+      conform.formatters[id] = conform_formatter(dir, project, spec)
+      table.insert(names, id)
+    end
+  end
+  table.sort(names)
+  return #names > 0 and names or nil
+end
+
+--- Makes conform use a project's container formatters, where it declares any
+--- for the buffer's filetype, in place of the configured ones. Call after
+--- conform's setup.
+function M.setup_conform()
+  local by_ft = require("conform").formatters_by_ft
+  local function wrap(ft, default)
+    by_ft[ft] = function(bufnr)
+      local names = project_formatters(bufnr)
+      if names then
+        return names
+      elseif type(default) == "function" then
+        return default(bufnr)
+      end
+      return default or {}
+    end
+  end
+  for ft, default in pairs(by_ft) do
+    -- "*" adds to every filetype's formatters rather than choosing them
+    if ft ~= "*" then
+      wrap(ft, default)
+    end
+  end
+  -- Covers filetypes with nothing configured
+  if not by_ft["_"] then
+    wrap("_", nil)
+  end
 end
 
 --- Lets the named servers run in a project's containers.
