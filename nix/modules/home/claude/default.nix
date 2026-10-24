@@ -44,6 +44,30 @@ in
     enable = true;
     package = claude;
     rulesDir = ./rules;
+
+    # Merged into the writable settings.json at activation, so `/config` and
+    # permission prompts can still write to it. A declared list replaces that
+    # list in the file, though lists from other settings files still combine.
+    mutableSettings = true;
+
+    # Homebrew and Nix keep their copies current; the built-in updater would
+    # reinstall through whichever npm is first in PATH (mise's). Anthropic's
+    # installer does rely on it, so this needs revisiting if that's used.
+    settings.env.DISABLE_AUTOUPDATER = "1";
+
+    # Sandboxed `nix` commands need the daemon and their per-user cache and state
+    settings.sandbox = {
+      network.allowUnixSockets = [ "/nix/var/nix/daemon-socket/socket" ];
+      filesystem = {
+        allowRead = [
+          "/nix/store"
+          "~/.cache/nix"
+          "~/.local/share/nix"
+          "~/.nix-defexpr"
+        ];
+        allowWrite = [ "~/.cache/nix" ];
+      };
+    };
   };
 
   programs.zsh.profileExtra = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (lib.mkAfter pathInit);
