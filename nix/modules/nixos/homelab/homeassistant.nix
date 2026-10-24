@@ -590,6 +590,7 @@ in
       title = "Home Assistant";
       href = "https://homeassistant.${config.homelab.tailscale.tailnet}";
       icon = "home-assistant.png";
+      description = "Smart home";
     };
 
     virtualisation.libvirt = {

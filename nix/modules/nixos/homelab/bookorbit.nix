@@ -14,6 +14,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "ghcr.io/${svc}/${svc}:latest";
       hostName = svc;
+      dashboard.description = "Finds and downloads books";
       # A Readarr alternative
       dashboard.group = "Media";
       withUser = true;

@@ -226,6 +226,7 @@ in
             href = "https://${svc}.${config.homelab.tailscale.tailnet}/web";
             group = "Media";
             icon = "plex.png";
+            description = "Watch movies and TV";
           };
         })
       ]

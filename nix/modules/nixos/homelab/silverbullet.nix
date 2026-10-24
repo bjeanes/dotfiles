@@ -12,6 +12,7 @@ in
   options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc {
     image = "ghcr.io/silverbulletmd/silverbullet:latest";
     hostName = svc;
+    dashboard.description = "Personal notes";
     # Its space is shared over Taildrive, which belongs to a machine
     exposeAs = "sidecar";
     withUser = true;

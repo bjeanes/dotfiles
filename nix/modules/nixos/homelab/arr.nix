@@ -21,6 +21,7 @@ let
       after ? [ ],
       exposeAs ? "service",
       icon ? "${name}.png",
+      description ? null,
     }:
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
@@ -32,7 +33,7 @@ let
           dashboard = {
             enable = https != null;
             group = "Media";
-            inherit icon;
+            inherit icon description;
           };
           withUser = forceUser == null;
         }
@@ -145,6 +146,7 @@ in
   imports = [
     # TV Shows
     (mkArr "sonarr" {
+      description = "Finds and downloads TV episodes";
       https = 8989;
       after = [
         "prowlarr"
@@ -155,6 +157,7 @@ in
 
     # Movies
     (mkArr "radarr" {
+      description = "Finds and downloads movies";
       https = 7878;
       after = [
         "prowlarr"
@@ -164,6 +167,7 @@ in
     })
 
     (mkArr "radarr4k" {
+      description = "Finds and downloads movies in 4K";
       image = "lscr.io/linuxserver/radarr:latest";
       icon = "radarr.png";
       https = 7878;
@@ -176,6 +180,7 @@ in
 
     # Music
     (mkArr "lidarr" {
+      description = "Finds and downloads music";
       https = 8686;
       after = [
         "prowlarr"
@@ -191,19 +196,27 @@ in
     # })
 
     # Subtitles
-    (mkArr "bazarr" { https = 6767; })
+    (mkArr "bazarr" {
+      description = "Finds subtitles for movies and TV";
+      https = 6767;
+    })
 
     # Indexer aggregation
     (mkArr "prowlarr" {
+      description = "Search sources the downloaders use";
       https = 9696;
       needsMedia = false;
     })
 
     # NZB
-    (mkArr "sabnzbd" { https = 8080; })
+    (mkArr "sabnzbd" {
+      description = "Downloads from Usenet";
+      https = 8080;
+    })
 
     # Managing media requests
     (mkArr "overseerr" {
+      description = "Request a movie or TV show";
       image = "docker.io/sctx/overseerr:latest";
       https = 5055;
       needsMedia = false;
@@ -218,9 +231,9 @@ in
     })
 
     # Reliably unpacking media
+    # No web UI (its metrics server is off), so it has no Service or entry
     (mkArr "unpackerr" {
       image = "ghcr.io/unpackerr/unpackerr:latest";
-      https = 5656;
       after = [
         "sonarr"
         "radarr"
@@ -230,6 +243,7 @@ in
 
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
     (mkArr "autobrr" {
+      description = "Grabs new releases as trackers announce them";
       image = "ghcr.io/autobrr/autobrr:latest";
       https = 7474;
       needsMedia = false;
@@ -241,6 +255,7 @@ in
 
     # https://getqui.com/
     (mkArr "qui" {
+      description = "Manages torrent downloads";
       image = "ghcr.io/autobrr/qui:latest";
       https = 7476;
       after = [
@@ -251,6 +266,7 @@ in
     # Collect statistics about what is getting watched in Plex, so that I can
     # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
+      description = "Statistics on what's watched in Plex";
       image = "ghcr.io/tautulli/tautulli:latest";
       https = 8181;
       needsMedia = false;
@@ -258,6 +274,7 @@ in
     })
 
     (mkArr "maintainerr" {
+      description = "Cleans up unwatched movies and TV";
       image = "ghcr.io/maintainerr/maintainerr:latest";
       https = 6246;
       needsMedia = false;

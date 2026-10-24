@@ -13,6 +13,7 @@ in
     # image = "ghcr.io/tphakala/birdnet-go:latest";
     image = "ghcr.io/tphakala/birdnet-go:nightly";
     hostName = svc;
+    dashboard.description = "Identifies birds from their calls";
     withUser = true;
   };
 

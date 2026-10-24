@@ -13,6 +13,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "codeberg.org/forgejo/forgejo:16";
       hostName = svc;
+      dashboard.description = "Code and Git repositories";
       withUser = true;
     }
     // {

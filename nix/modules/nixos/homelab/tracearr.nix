@@ -14,6 +14,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "ghcr.io/connorgallopo/${svc}:latest";
       hostName = svc;
+      dashboard.description = "Who's watching Plex, and from where";
       # A Tautulli alternative
       dashboard.group = "Media";
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
