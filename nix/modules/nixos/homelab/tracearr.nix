@@ -17,6 +17,10 @@ in
       dashboard.description = "Who's watching Plex, and from where";
       # A Tautulli alternative
       dashboard.group = "Media";
+      dashboard.widget = {
+        type = "tracearr";
+        secrets.key = "tracearr-api-key";
+      };
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
     }
     // {

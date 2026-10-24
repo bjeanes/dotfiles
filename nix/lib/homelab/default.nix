@@ -119,6 +119,12 @@
           type = lib.types.str;
           description = "Path under ${svc}'s tailnet hostname that the dashboard links to";
         };
+
+        widget = lib.mkOption {
+          default = dashboard.widget or null;
+          type = lib.types.nullOr (lib.types.attrsOf lib.types.anything);
+          description = "Homepage widget for ${svc}; see `homelab.dashboard.entries.<name>.widget`";
+        };
       };
     }
     // lib.optionalAttrs withUser {

@@ -227,6 +227,12 @@ in
             group = "Media";
             icon = "plex.png";
             description = "Watch movies and TV";
+            widget = {
+              type = "plex";
+              url = "https://${svc}.${config.homelab.tailscale.tailnet}";
+              # Not plex-token, which is a one-off claim token
+              secrets.key = "plex-dashboard-token";
+            };
           };
         })
       ]

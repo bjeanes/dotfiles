@@ -22,6 +22,7 @@ let
       exposeAs ? "service",
       icon ? "${name}.png",
       description ? null,
+      widget ? null,
     }:
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
@@ -33,7 +34,11 @@ let
           dashboard = {
             enable = https != null;
             group = "Media";
-            inherit icon description;
+            inherit
+              icon
+              description
+              widget
+              ;
           };
           withUser = forceUser == null;
         }
@@ -147,6 +152,11 @@ in
     # TV Shows
     (mkArr "sonarr" {
       description = "Finds and downloads TV episodes";
+      widget = {
+        type = "sonarr";
+        secrets.key = "sonarr-api-key";
+        settings.enableQueue = true;
+      };
       https = 8989;
       after = [
         "prowlarr"
@@ -158,6 +168,11 @@ in
     # Movies
     (mkArr "radarr" {
       description = "Finds and downloads movies";
+      widget = {
+        type = "radarr";
+        secrets.key = "radarr-api-key";
+        settings.enableQueue = true;
+      };
       https = 7878;
       after = [
         "prowlarr"
@@ -168,6 +183,11 @@ in
 
     (mkArr "radarr4k" {
       description = "Finds and downloads movies in 4K";
+      widget = {
+        type = "radarr";
+        secrets.key = "radarr4k-api-key";
+        settings.enableQueue = true;
+      };
       image = "lscr.io/linuxserver/radarr:latest";
       icon = "radarr.png";
       https = 7878;
@@ -181,6 +201,10 @@ in
     # Music
     (mkArr "lidarr" {
       description = "Finds and downloads music";
+      widget = {
+        type = "lidarr";
+        secrets.key = "lidarr-api-key";
+      };
       https = 8686;
       after = [
         "prowlarr"
@@ -198,12 +222,20 @@ in
     # Subtitles
     (mkArr "bazarr" {
       description = "Finds subtitles for movies and TV";
+      widget = {
+        type = "bazarr";
+        secrets.key = "bazarr-api-key";
+      };
       https = 6767;
     })
 
     # Indexer aggregation
     (mkArr "prowlarr" {
       description = "Search sources the downloaders use";
+      widget = {
+        type = "prowlarr";
+        secrets.key = "prowlarr-api-key";
+      };
       https = 9696;
       needsMedia = false;
     })
@@ -211,12 +243,20 @@ in
     # NZB
     (mkArr "sabnzbd" {
       description = "Downloads from Usenet";
+      widget = {
+        type = "sabnzbd";
+        secrets.key = "sabnzbd-api-key";
+      };
       https = 8080;
     })
 
     # Managing media requests
     (mkArr "overseerr" {
       description = "Request a movie or TV show";
+      widget = {
+        type = "seerr";
+        secrets.key = "overseerr-api-key";
+      };
       image = "docker.io/sctx/overseerr:latest";
       https = 5055;
       needsMedia = false;
@@ -244,6 +284,10 @@ in
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
     (mkArr "autobrr" {
       description = "Grabs new releases as trackers announce them";
+      widget = {
+        type = "autobrr";
+        secrets.key = "autobrr-api-key";
+      };
       image = "ghcr.io/autobrr/autobrr:latest";
       https = 7474;
       needsMedia = false;
@@ -256,6 +300,10 @@ in
     # https://getqui.com/
     (mkArr "qui" {
       description = "Manages torrent downloads";
+      widget = {
+        type = "qui";
+        secrets.key = "qui-api-key";
+      };
       image = "ghcr.io/autobrr/qui:latest";
       https = 7476;
       after = [
@@ -267,6 +315,10 @@ in
     # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
       description = "Statistics on what's watched in Plex";
+      widget = {
+        type = "tautulli";
+        secrets.key = "tautulli-api-key";
+      };
       image = "ghcr.io/tautulli/tautulli:latest";
       https = 8181;
       needsMedia = false;
@@ -275,6 +327,9 @@ in
 
     (mkArr "maintainerr" {
       description = "Cleans up unwatched movies and TV";
+      widget = {
+        type = "maintainerr";
+      };
       image = "ghcr.io/maintainerr/maintainerr:latest";
       https = 6246;
       needsMedia = false;

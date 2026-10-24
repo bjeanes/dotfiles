@@ -44,6 +44,20 @@ in
   "plex-token.age".publicKeys = all;
   "tautulli-api-key.age".publicKeys = all;
 
+  # Homepage dashboard widgets
+  "bazarr-api-key.age".publicKeys = all;
+  "sabnzbd-api-key.age".publicKeys = all;
+  "overseerr-api-key.age".publicKeys = all;
+  "autobrr-api-key.age".publicKeys = all;
+  "qui-api-key.age".publicKeys = all;
+  "tracearr-api-key.age".publicKeys = all;
+  "plex-dashboard-token.age".publicKeys = all;
+  "bookorbit-dashboard-username.age".publicKeys = all;
+  "bookorbit-dashboard-password.age".publicKeys = all;
+  "unifi-api-key.age".publicKeys = all;
+  "nextdns-api-key.age".publicKeys = all;
+  "nextdns-profile.age".publicKeys = all;
+
   "tracearr-jwt-secret.age".publicKeys = all;
   "tracearr-cookie-secret.age".publicKeys = all;
 

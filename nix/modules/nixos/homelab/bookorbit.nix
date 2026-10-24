@@ -17,6 +17,18 @@ in
       dashboard.description = "Finds and downloads books";
       # A Readarr alternative
       dashboard.group = "Media";
+      dashboard.widget = {
+        type = "bookorbit";
+        secrets = {
+          username = "bookorbit-dashboard-username";
+          password = "bookorbit-dashboard-password";
+        };
+        # Reading and finished counts are per user, unlike these
+        settings.fields = [
+          "books"
+          "authors"
+        ];
+      };
       withUser = true;
       backupDescription = "Back up ${svc}'s data and database dumps to legacy location on NAS";
     }

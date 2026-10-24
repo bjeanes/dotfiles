@@ -16,6 +16,10 @@ in
       hostName = "qb";
       dashboard.description = "Downloads torrents";
       dashboard.group = "Media";
+      # Asks nothing: it reaches qBittorrent from 10.88.0.1, which is whitelisted
+      dashboard.widget = {
+        type = "qbittorrent";
+      };
       withUser = true;
     }
     // {

@@ -591,6 +591,10 @@ in
       href = "https://homeassistant.${config.homelab.tailscale.tailnet}";
       icon = "home-assistant.png";
       description = "Smart home";
+      widget = {
+        type = "homeassistant";
+        secrets.key = "homeassistant-api-key";
+      };
     };
 
     virtualisation.libvirt = {
