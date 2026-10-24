@@ -14,6 +14,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "lscr.io/linuxserver/qbittorrent:latest";
       hostName = "qb";
+      dashboard.group = "Media";
       withUser = true;
     }
     // {

@@ -585,6 +585,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # The VM is on the tailnet itself, so there's no service here to derive this from
+    homelab.dashboard.entries.homeassistant = {
+      title = "Home Assistant";
+      href = "https://homeassistant.${config.homelab.tailscale.tailnet}";
+      icon = "home-assistant.png";
+    };
 
     virtualisation.libvirt = {
       enable = true;

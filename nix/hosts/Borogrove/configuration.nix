@@ -44,6 +44,8 @@
     authorizedKeysFile = ./../../../secrets/homeassistant-key.pub;
   };
 
+  homelab.dashboard.enable = true;
+
   homelab.services = {
     arrs.enable = true;
     # radarr has 7878

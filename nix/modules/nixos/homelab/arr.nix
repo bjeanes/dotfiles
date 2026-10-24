@@ -20,6 +20,7 @@ let
       forceUser ? null,
       after ? [ ],
       exposeAs ? "service",
+      icon ? "${name}.png",
     }:
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
@@ -28,6 +29,11 @@ let
         myLib.mkHomelabServiceOptions config name {
           inherit image exposeAs;
           hostName = name;
+          dashboard = {
+            enable = https != null;
+            group = "Media";
+            inherit icon;
+          };
           withUser = forceUser == null;
         }
         // {
@@ -159,6 +165,7 @@ in
 
     (mkArr "radarr4k" {
       image = "lscr.io/linuxserver/radarr:latest";
+      icon = "radarr.png";
       https = 7878;
       after = [
         "prowlarr"

@@ -220,6 +220,14 @@ in
             https = 32400;
           }
         ))
+
+        (lib.mkIf cfg.tailscale.enable {
+          homelab.dashboard.entries.${svc} = {
+            href = "https://${svc}.${config.homelab.tailscale.tailnet}/web";
+            group = "Media";
+            icon = "plex.png";
+          };
+        })
       ]
     );
 

@@ -12,6 +12,8 @@
       hostName ? null,
       # How the service is put on the tailnet; see `tailscale.exposeAs`
       exposeAs ? "service",
+      # Defaults for the `dashboard` options below
+      dashboard ? { },
       withUser ? false,
       backupDescription ? "Back up configDir to legacy location on NAS",
     }:
@@ -84,6 +86,38 @@
             exposed as a Tailscale Service. Defaults to the port it listens on
             in its pod.
           '';
+        };
+      };
+
+      dashboard = {
+        enable = lib.mkOption {
+          default = dashboard.enable or true;
+          type = lib.types.bool;
+          description = "List ${svc} on the homelab dashboard";
+        };
+
+        group = lib.mkOption {
+          default = dashboard.group or "Services";
+          type = lib.types.str;
+          description = "Dashboard group ${svc} is listed under";
+        };
+
+        icon = lib.mkOption {
+          default = dashboard.icon or "${svc}.png";
+          type = lib.types.nullOr lib.types.str;
+          description = "Dashboard icon for ${svc}: a dashboard-icons name, `si-`/`mdi-` icon or URL";
+        };
+
+        description = lib.mkOption {
+          default = dashboard.description or null;
+          type = lib.types.nullOr lib.types.str;
+          description = "Dashboard description for ${svc}";
+        };
+
+        path = lib.mkOption {
+          default = dashboard.path or "/";
+          type = lib.types.str;
+          description = "Path under ${svc}'s tailnet hostname that the dashboard links to";
         };
       };
     }

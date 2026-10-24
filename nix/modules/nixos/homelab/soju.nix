@@ -13,6 +13,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "codeberg.org/emersion/${svc}:latest";
       hostName = "irc";
+      dashboard.icon = "mdi-pound";
       # Services here have no per-path handlers or PROXY protocol yet
       exposeAs = "sidecar";
     }

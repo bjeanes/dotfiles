@@ -19,6 +19,8 @@ in
       '';
       image = "docker.io/miniflux/miniflux:latest";
       hostName = svc;
+      # The tailnet root is nextflux, which has its own entry
+      dashboard.path = "/miniflux/";
       # Services here have no per-path handlers yet
       exposeAs = "sidecar";
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
@@ -176,6 +178,14 @@ in
           inherit (cfg) timeZone;
           image = cfg.dbImage;
         })
+
+        {
+          homelab.dashboard.entries.nextflux = {
+            href = "https://${fqdn}/";
+            icon = "mdi-rss-box";
+            description = "Reader for ${svc}";
+          };
+        }
 
         (mkTailscaleQuadletExposure svc {
           https = {

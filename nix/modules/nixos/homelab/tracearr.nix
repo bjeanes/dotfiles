@@ -14,6 +14,8 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "ghcr.io/connorgallopo/${svc}:latest";
       hostName = svc;
+      # A Tautulli alternative
+      dashboard.group = "Media";
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
     }
     // {
