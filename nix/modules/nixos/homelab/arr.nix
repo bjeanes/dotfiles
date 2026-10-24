@@ -19,7 +19,7 @@ let
       funnel ? false,
       forceUser ? null,
       after ? [ ],
-      exposeAs ? "sidecar",
+      exposeAs ? "service",
     }:
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
@@ -200,6 +200,8 @@ in
       needsMedia = false;
       configMount = "/app/config";
       funnel = true;
+      # Services can't be Funnelled
+      exposeAs = "sidecar";
       after = [
         "sonarr"
         "radarr"
