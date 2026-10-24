@@ -918,6 +918,7 @@ do
             event = "FileType",
             pattern = "clojure",
         },
+        { command = "setlocal nofixendofline noendofline", event = { "BufNewFile", "BufRead" }, pattern = "*.age" },
     }
 
     for _, autocmd in ipairs(__nixvim_autocommands) do
