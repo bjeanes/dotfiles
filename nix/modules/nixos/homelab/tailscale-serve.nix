@@ -244,6 +244,14 @@ let
     // serviceConfig;
   };
 
+  /*
+    The serve CLI updates the serve config and the advertised services by
+    reading the whole thing, changing it and writing it back, with nothing
+    guarding against a concurrent writer. Units started together (as on a
+    deploy) would lose each other's changes without this.
+  */
+  locked = command: "${pkgs.util-linux}/bin/flock /run/lock/tailscale-serve.lock ${command}";
+
   mkServiceUnit =
     name: service:
     let
@@ -254,12 +262,14 @@ let
     # tailnet.
     mkOneshot "Tailscale Service svc:${name}" (
       {
-        ExecStart = pkgs.writeShellScript "tailscale-service-${name}" ''
-          set -euo pipefail
-          ${clear}
-          ${lib.concatStringsSep "\n" (serveCommands name service)}
-        '';
-        ExecStop = clear;
+        ExecStart = locked (
+          pkgs.writeShellScript "tailscale-service-${name}" ''
+            set -euo pipefail
+            ${clear}
+            ${lib.concatStringsSep "\n" (serveCommands name service)}
+          ''
+        );
+        ExecStop = locked clear;
       }
       // lib.optionalAttrs (registerCfg.credentialsFile != null) {
         ExecStartPre = "${lib.getExe register} ${registerSpec name service}";
@@ -275,8 +285,8 @@ let
       serve = "${tailscale} serve --https=443 --set-path=${lib.escapeShellArg path}";
     in
     mkOneshot "Tailscale Serve ${path} on this node" {
-      ExecStart = "${serve} --bg ${lib.escapeShellArg (upstream "http" to)}";
-      ExecStop = "-${serve} off";
+      ExecStart = locked "${serve} --bg ${lib.escapeShellArg (upstream "http" to)}";
+      ExecStop = "-${locked "${serve} off"}";
     };
 in
 {
