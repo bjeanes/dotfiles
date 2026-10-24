@@ -39,7 +39,7 @@
           '';
 
         # Token comes from $CLAUDE_CODE_OAUTH_TOKEN if set, else the agenix
-        # secret (see secrets/secrets.nix), so it needn't be exported to every
+        # secret (see secrets/agenix-rules.nix), so it needn't be exported to every
         # shell and is only ever handed to the agent process. The
         # stock adapter would also fall back to the literal string
         # "CLAUDE_CODE_OAUTH_TOKEN" when unset (401), and its auth handler

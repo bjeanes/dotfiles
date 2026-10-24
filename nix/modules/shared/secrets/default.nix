@@ -8,7 +8,7 @@
 }:
 let
   secretsDir = ../../../../secrets;
-  rules = import (secretsDir + "/secrets.nix");
+  rules = import (secretsDir + "/agenix-rules.nix");
   inherit (flake.lib) hosts;
 
   # Absent from lib/hosts, or no key there => decrypts with my user key: keep all.
