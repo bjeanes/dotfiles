@@ -172,7 +172,8 @@ in
         inherit user;
 
         signing = {
-          behavior = "own";
+          # Signed on push instead (`git.sign-on-push`)
+          behavior = "drop";
           backend = "ssh";
           key = signingKey;
         };
