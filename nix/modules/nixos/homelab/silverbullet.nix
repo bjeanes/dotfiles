@@ -11,6 +11,9 @@ in
 {
   options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc {
     image = "ghcr.io/silverbulletmd/silverbullet:latest";
+    hostName = svc;
+    # Its space is shared over Taildrive, which belongs to a machine
+    exposeAs = "sidecar";
     withUser = true;
   };
 
@@ -19,6 +22,9 @@ in
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
       secrets = config.age.secrets;
+
+      inherit (config.virtualisation.quadlet) pods;
+      podName = "${svc}-pod";
     in
     lib.mkIf cfg.enable (
       lib.mkMerge [
@@ -30,10 +36,6 @@ in
             };
           };
           users.groups.${cfg.group} = { };
-
-          systemd.services.${myLib.containerSvcName config "${svc}-tailscale"} = {
-            partOf = [ "${svc}.service" ];
-          };
 
           systemd.tmpfiles.rules =
             let
@@ -47,23 +49,20 @@ in
               "Z ${cfg.configDir} - ${user} ${group} - -"
             ];
 
-          virtualisation.oci-containers = {
-            containers = {
-              ${svc} = {
+          virtualisation.quadlet = {
+            pods.${podName} = { };
+
+            containers.${svc} = {
+              autoStart = true;
+              containerConfig = {
+                pod = pods.${podName}.ref;
                 image = cfg.image;
-                autoStart = true;
-                dependsOn = [ "${svc}-tailscale" ];
+                autoUpdate = "registry";
+                podmanArgs = [ "--hostuser=${cfg.user}" ];
                 volumes = [
                   "${cfg.configDir}:/space"
                 ];
-                extraOptions = [
-                  "--network=container:${svc}-tailscale"
-                  "--hostuser=${cfg.user}"
-                ];
-                labels = {
-                  "io.containers.autoupdate" = "registry";
-                };
-                environment = {
+                environments = {
                   TZ = cfg.timeZone;
                   SB_PORT = "3000";
                 };
@@ -99,8 +98,8 @@ in
           myLib.buildBackupScriptForDir pkgs svc cfg.configDir { inherit (cfg) timeZone; }
         ))
 
-        (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
-          hostname = svc;
+        (myLib.mkTailscaleQuadletExposure pkgs config svc {
+          inherit podName;
           https = 3000;
 
           # Runs tailscaled as the same user Silverbullet drops to, so pages
