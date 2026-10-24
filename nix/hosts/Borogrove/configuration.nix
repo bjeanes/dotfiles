@@ -47,7 +47,11 @@
   homelab.services = {
     arrs.enable = true;
     qbittorrent.enable = true;
-    forgejo.enable = true;
+    forgejo = {
+      enable = true;
+      # bookorbit has 3000, tracearr 3001
+      tailscale.localPort = 3002;
+    };
     silverbullet.enable = true;
     birdnet.enable = true;
     hister.enable = true;

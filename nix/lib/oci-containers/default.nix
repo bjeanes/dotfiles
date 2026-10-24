@@ -255,6 +255,10 @@ rec {
       podName ? "${svc}-pod",
       # Port the app listens on in the pod
       https,
+      # Raw TCP forwards from a tailnet port to the port the app listens on
+      # in the pod, which as a Service is also its port on the host's
+      # 127.0.0.1 (so it can't be one the host uses, like 22)
+      tcp ? { },
       ...
     }@args:
     let
@@ -278,6 +282,7 @@ rec {
           // {
             inherit podName;
             hostname = cfg.hostName;
+            tcp = lib.mapAttrsToList (listen: port: "${listen}:${toString port}") tcp;
           }
         )
       ))
@@ -285,9 +290,11 @@ rec {
       (lib.mkIf (exposeAs == "service") {
         virtualisation.quadlet.pods.${podName}.podConfig.publishPorts = [
           "127.0.0.1:${toString localPort}:${toString https}"
-        ];
+        ]
+        ++ lib.mapAttrsToList (_: port: "127.0.0.1:${toString port}:${toString port}") tcp;
         homelab.tailscale.serve.services.${cfg.hostName} = {
           https = localPort;
+          inherit tcp;
           displayName = svc;
         };
       })
