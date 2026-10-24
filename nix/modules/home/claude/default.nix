@@ -55,6 +55,19 @@ in
     # installer does rely on it, so this needs revisiting if that's used.
     settings.env.DISABLE_AUTOUPDATER = "1";
 
+    # Replaces the global allow list in settings.json on each switch, so a rule
+    # added there by hand belongs here too. Project ones go in each project's
+    # .claude/settings.local.json.
+    settings.permissions.allow = [
+      "mcp__context7__query-docs"
+      "Bash(docker build *)"
+      "Bash(docker compose *)"
+      "Bash(jj diff *)"
+      "Bash(jj log *)"
+      "Bash(jj st *)"
+      "Bash(jj squash *)"
+    ];
+
     # Sandboxed `nix` commands need the daemon and their per-user cache and state
     settings.sandbox = {
       network.allowUnixSockets = [ "/nix/var/nix/daemon-socket/socket" ];

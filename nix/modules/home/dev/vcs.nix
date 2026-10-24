@@ -414,8 +414,18 @@ in
 
     # The skills jj-hunk-tool ships with. Where they say to commit, the
     # global vcs rule decides whether that is allowed.
-    programs.claude-code.skills = lib.genAttrs [ "jj-surgeon" "jj-subagent-workspaces" ] (
-      skill: "${perSystem.self.jj-hunk-tool}/share/skills/jj-hunk-tool/${skill}"
-    );
+    programs.claude-code =
+      let
+        skills = [
+          "jj-surgeon"
+          "jj-subagent-workspaces"
+        ];
+      in
+      {
+        skills = lib.genAttrs skills (
+          skill: "${perSystem.self.jj-hunk-tool}/share/skills/jj-hunk-tool/${skill}"
+        );
+        settings.permissions.allow = map (skill: "Skill(${skill})") skills;
+      };
   };
 }
