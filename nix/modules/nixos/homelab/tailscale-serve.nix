@@ -9,7 +9,122 @@
 let
   cfg = config.homelab.tailscale.serve.services;
   nodeCfg = config.homelab.tailscale.serve.node;
+  registerCfg = config.homelab.tailscale.serve.register;
   tailscale = lib.getExe config.services.tailscale.package;
+  inherit (config.homelab.tailscale) tailnet;
+
+  /*
+    Defines a Service in the tailnet before it is advertised, so neither that
+    nor freeing its name is a trip to the admin console. A machine still
+    holding the name is deleted only if it carries `replaceTag` (i.e. it is an
+    old sidecar) and is offline; otherwise this fails, and the unit retries
+    until the sidecar has gone. An existing Service is updated in place, keeping
+    its addresses, only when its ports or tags differ.
+  */
+  register = pkgs.writeShellApplication {
+    name = "tailscale-service-register";
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+    ];
+    text = ''
+      spec="$1"
+      name="$(jq -r .name "$spec")"
+      fqdn="$(jq -r .fqdn "$spec")"
+      replaceTag="$(jq -r '.replaceTag // empty' "$spec")"
+      base=https://api.tailscale.com/api/v2
+
+      body="$(mktemp)"
+      trap 'rm -f "$body"' EXIT
+
+      # Secrets go through process substitution to stay out of argv
+      token="$(
+        curl -fsS "$base/oauth/token" \
+          --data-urlencode "client_id=$TS_API_CLIENT_ID" \
+          --data-urlencode client_secret@<(printf %s "$TS_API_CLIENT_SECRET") |
+          jq -r .access_token
+      )"
+
+      # Prints the HTTP status; the response is left in $body
+      api() {
+        curl -sS -o "$body" -w '%{http_code}' \
+          -H @<(printf 'Authorization: Bearer %s\n' "$token") "$@"
+      }
+
+      fail() {
+        echo "$1 (HTTP $2):" >&2
+        cat "$body" >&2
+        exit 1
+      }
+
+      status="$(api --get "$base/tailnet/-/devices" --data-urlencode "name=$fqdn" --data-urlencode fields=all)"
+      [[ $status == 200 ]] || fail "listing devices" "$status"
+
+      # Filtered again here in case the API ever ignores the query
+      devices="$(jq -c --arg fqdn "$fqdn" '.devices[] | select(.name == $fqdn)' "$body")"
+      while IFS= read -r device; do
+        [[ -n $device ]] || continue
+        id="$(jq -r .nodeId <<<"$device")"
+
+        if [[ -z $replaceTag ]] || ! jq -e --arg tag "$replaceTag" '.tags // [] | index($tag)' <<<"$device" >/dev/null; then
+          echo "$fqdn belongs to machine $id, which isn't tagged ''${replaceTag:-for replacement}; delete it by hand" >&2
+          exit 1
+        fi
+
+        if jq -e .connectedToControl <<<"$device" >/dev/null; then
+          echo "$fqdn belongs to machine $id, which is still connected; waiting for it to go" >&2
+          exit 1
+        fi
+
+        echo "deleting machine $id, which held $fqdn"
+        status="$(api -X DELETE "$base/device/$id")"
+        [[ $status == 200 ]] || fail "deleting machine $id" "$status"
+      done <<<"$devices"
+
+      put() {
+        status="$(api -X PUT -H 'Content-Type: application/json' --data-binary @- "$base/tailnet/-/services/$name")"
+        [[ $status == 200 ]] || fail "defining $name" "$status"
+      }
+
+      status="$(api "$base/tailnet/-/services/$name")"
+      case $status in
+        404)
+          echo "defining $name"
+          jq '{name, ports, tags, comment}' "$spec" | put
+          ;;
+        200)
+          if jq -e --slurpfile want "$spec" \
+            '(.ports | sort) == ($want[0].ports | sort) and (.tags // [] | sort) == ($want[0].tags | sort)' \
+            "$body" >/dev/null; then
+            echo "$name is already defined as configured"
+          else
+            echo "updating $name"
+            jq --slurpfile want "$spec" '.ports = $want[0].ports | .tags = $want[0].tags' "$body" | put
+          fi
+          ;;
+        *)
+          fail "looking up $name" "$status"
+          ;;
+      esac
+    '';
+  };
+
+  registerSpec =
+    name: service:
+    pkgs.writeText "tailscale-service-${name}.json" (
+      builtins.toJSON {
+        name = "svc:${name}";
+        fqdn = "${name}.${tailnet}";
+        ports = map (port: "tcp:${port}") (
+          lib.optional (service.https != null) "443"
+          ++ lib.attrNames service.tcp
+          ++ lib.attrNames service.tlsTcp
+        );
+        inherit (registerCfg) tags;
+        replaceTag = registerCfg.replaceMachinesTagged;
+        comment = "Managed by NixOS on ${config.networking.hostName}";
+      }
+    );
 
   # "/" -> "root", "/foo/bar" -> "foo-bar"
   pathUnitName =
@@ -89,10 +204,14 @@ let
   mkOneshot = description: serviceConfig: {
     inherit description;
     after = [
+      "network-online.target"
       "tailscaled.service"
       "tailscaled-autoconnect.service"
     ];
-    wants = [ "tailscaled.service" ];
+    wants = [
+      "network-online.target"
+      "tailscaled.service"
+    ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -113,14 +232,20 @@ let
     # Clearing first drops listeners that are no longer configured. Stopping
     # un-advertises, so removing the service from the config takes it off the
     # tailnet.
-    mkOneshot "Tailscale Service svc:${name}" {
-      ExecStart = pkgs.writeShellScript "tailscale-service-${name}" ''
-        set -euo pipefail
-        ${clear}
-        ${lib.concatStringsSep "\n" (serveCommands name service)}
-      '';
-      ExecStop = clear;
-    };
+    mkOneshot "Tailscale Service svc:${name}" (
+      {
+        ExecStart = pkgs.writeShellScript "tailscale-service-${name}" ''
+          set -euo pipefail
+          ${clear}
+          ${lib.concatStringsSep "\n" (serveCommands name service)}
+        '';
+        ExecStop = clear;
+      }
+      // lib.optionalAttrs (registerCfg.credentialsFile != null) {
+        ExecStartPre = "${lib.getExe register} ${registerSpec name service}";
+        EnvironmentFile = registerCfg.credentialsFile;
+      }
+    );
 
   # Setting a path replaces its handler, so unlike services there is nothing
   # to clear first. `off` fails if the handler is already gone, hence `-`.
@@ -154,8 +279,37 @@ in
       description = ''
         Tailscale Services (`svc:<name>`) this host's tailscaled serves. Each
         has to be defined in the tailnet, and the host approved for it, before
-        it is reachable.
+        it is reachable; see `register` for the former.
       '';
+    };
+
+    register = {
+      credentialsFile = lib.mkOption {
+        default = config.age.secrets.tailscale-oauth-services.path or null;
+        defaultText = lib.literalExpression "config.age.secrets.tailscale-oauth-services.path";
+        type = lib.types.nullOr lib.types.path;
+        description = ''
+          Environment file with `TS_API_CLIENT_ID` and `TS_API_CLIENT_SECRET` for
+          an OAuth client with the `services` and `devices:core` scopes, used to
+          define each Service in the tailnet. `null` leaves that to the admin
+          console.
+        '';
+      };
+
+      tags = lib.mkOption {
+        default = [ "tag:homelab-svc" ];
+        type = lib.types.listOf lib.types.str;
+        description = "Tags Services are defined with, which their auto-approval keys off";
+      };
+
+      replaceMachinesTagged = lib.mkOption {
+        default = "tag:service";
+        type = lib.types.nullOr lib.types.str;
+        description = ''
+          A machine holding a Service's name is deleted, once offline, only if
+          it has this tag, which the old sidecars do. `null` never deletes.
+        '';
+      };
     };
   };
 

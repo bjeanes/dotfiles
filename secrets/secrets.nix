@@ -30,6 +30,10 @@ in
   # ephemeral tailscale services tagged with tag:home,tag:service
   "tailscale-auth-service.age".publicKeys = all;
 
+  # OAuth client (services, devices:core) that defines Tailscale Services, as
+  # TS_API_CLIENT_ID= and TS_API_CLIENT_SECRET= lines
+  "tailscale-oauth-services.age".publicKeys = all;
+
   "sonarr-api-key.age".publicKeys = all;
   "radarr-api-key.age".publicKeys = all;
   "radarr4k-api-key.age".publicKeys = all;
