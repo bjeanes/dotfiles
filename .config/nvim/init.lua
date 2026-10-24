@@ -344,7 +344,6 @@ require("conform").setup({
         stylelint = { command = "stylelint" },
         stylua = { command = "stylua" },
         taplo = { command = "taplo" },
-        terraform_fmt = { command = "terraform" },
         xmlformat = {
             command = "xmlformat",
         },
@@ -362,7 +361,6 @@ require("conform").setup({
         rust = { "rustfmt" },
         sh = { "shellcheck", "shellharden", "shfmt" },
         sql = { "sqlfluff" },
-        terraform = { "terraform_fmt" },
         toml = { "taplo" },
         typescript = { "biome", "prettierd", stop_after_first = true, timeout_ms = 2000 },
         xml = { "xmlformat", "xmllint" },
