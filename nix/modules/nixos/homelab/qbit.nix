@@ -13,6 +13,8 @@ in
   options.homelab.services.${svc} =
     flake.lib.mkHomelabServiceOptions config svc {
       image = "lscr.io/linuxserver/qbittorrent:latest";
+      hostName = "qb";
+      exposeAs = "sidecar";
       withUser = true;
     }
     // {
@@ -33,9 +35,16 @@ in
     let
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
-      svcName = myLib.containerSvcName config svc;
-      setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
       secrets = config.age.secrets;
+
+      inherit (config.virtualisation.quadlet) pods;
+
+      podName = "${svc}-pod";
+      vpnName = "${svc}-vpn";
+      mediaMount = "mnt-nfs-nas-media.mount";
+
+      # Seeding torrents get the time they need to stop cleanly
+      stopTimeout = 7200;
     in
     lib.mkIf cfg.enable (
       lib.mkMerge [
@@ -48,23 +57,6 @@ in
           };
           users.groups.${cfg.group} = { };
 
-          systemd.services.${myLib.containerSvcName config "${svc}-vpn"} = {
-            aliases = [ "${svc}-vpn.service" ];
-          };
-
-          systemd.services.${myLib.containerSvcName config "${svc}-tailscale"} = {
-            partOf = [ "${svc}.service" ];
-          };
-
-          systemd.services.${svcName} = {
-            aliases = [ "${svc}.service" ];
-            after = [ "mnt-nfs-nas-media.mount" ];
-            bindsTo = [ "mnt-nfs-nas-media.mount" ];
-            serviceConfig = {
-              TimeoutStopSec = lib.mkForce "2h";
-            };
-          };
-
           systemd.tmpfiles.rules =
             let
               inherit (cfg) user group;
@@ -72,87 +64,100 @@ in
             [
               # Ensure config directory exists, owned by user
               "d ${cfg.configDir}    0775 ${user} ${group} - -"
-              "d ${cfg.configDir}/ts 0775 ${user} ${group} - -"
 
               # Ensure directory and contents belong to specified owner and group
               "Z ${cfg.configDir} - ${user} ${group} - -"
             ];
 
-          virtualisation.oci-containers = {
+          virtualisation.quadlet = {
+            # Everything in the pod shares gluetun's network namespace, so
+            # all of it goes out through the VPN
+            pods.${podName}.podConfig = { inherit stopTimeout; };
+
             containers = {
-              "${svc}-vpn" = {
-                image = "ghcr.io/qdm12/gluetun:v3";
-                extraOptions = [
-                  "--cap-add=net_admin"
-                  "--pull=always"
-                  "--device=/dev/net/tun:/dev/net/tun"
-                ];
-                environment = {
-                  TZ = cfg.timeZone;
-                  VPN_SERVICE_PROVIDER = "airvpn";
-                  VPN_TYPE = "wireguard";
-                  SERVER_REGIONS = "Oceania";
-                  FIREWALL_VPN_INPUT_PORTS = toString cfg.torrentPort;
-                  FIREWALL_INPUT_PORTS = toString cfg.webUiPort;
-                  FIREWALL_OUTBOUND_SUBNETS = myLib.lanSubnet;
+              ${vpnName} = {
+                autoStart = true;
+                containerConfig = {
+                  pod = pods.${podName}.ref;
+                  image = "ghcr.io/qdm12/gluetun:v3";
+                  pull = "always";
+                  addCapabilities = [ "NET_ADMIN" ];
+                  devices = [ "/dev/net/tun:/dev/net/tun" ];
+                  environments = {
+                    TZ = cfg.timeZone;
+                    VPN_SERVICE_PROVIDER = "airvpn";
+                    VPN_TYPE = "wireguard";
+                    SERVER_REGIONS = "Oceania";
+                    FIREWALL_VPN_INPUT_PORTS = toString cfg.torrentPort;
+                    FIREWALL_INPUT_PORTS = toString cfg.webUiPort;
+                    FIREWALL_OUTBOUND_SUBNETS = myLib.lanSubnet;
+                  };
+                  volumes = [
+                    "${secrets.wg-private-key.path}:/run/secrets/wireguard_private_key"
+                    "${secrets.wg-preshared-key.path}:/run/secrets/wireguard_preshared_key"
+                    "${secrets.wg-addresses.path}:/run/secrets/wireguard_addresses"
+                  ];
                 };
-                volumes = [
-                  # "${secrets.wg-conf.path}/run/secrets/wireguard_conf"
-                  "${secrets.wg-private-key.path}:/run/secrets/wireguard_private_key"
-                  "${secrets.wg-preshared-key.path}:/run/secrets/wireguard_preshared_key"
-                  "${secrets.wg-addresses.path}:/run/secrets/wireguard_addresses"
-                ];
               };
 
               ${svc} = {
-                image = cfg.image;
                 autoStart = true;
-                dependsOn = [ "${svc}-vpn" ];
-                volumes = [
-                  "${cfg.configDir}:/config"
-                  "/mnt/nfs/nas/media:/data"
-                ];
-                extraOptions = [
-                  "--pull=always"
-                  "--network=container:${svc}-vpn"
-                  # "--stop-timeout=-1" # -1 is Docker only, but we are running Podman
-                  "--stop-timeout=7200" # 2 hours
-                ];
-                environment = {
-                  TORRENTING_PORT = toString cfg.torrentPort;
-                  TZ = cfg.timeZone;
-                  UMASK = "002";
-                  DOCKER_MODS = "linuxserver/mods:universal-stdout-logs|ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest";
-                  LOGS_TO_STDOUT = "/config/qBittorrent/logs/qbittorrent.log";
+                containerConfig = {
+                  pod = pods.${podName}.ref;
+                  image = cfg.image;
+                  pull = "always";
+                  inherit stopTimeout;
+                  volumes = [
+                    "${cfg.configDir}:/config"
+                    "/mnt/nfs/nas/media:/data"
+                  ];
+                  environments = {
+                    TORRENTING_PORT = toString cfg.torrentPort;
+                    TZ = cfg.timeZone;
+                    UMASK = "002";
+                    DOCKER_MODS = "linuxserver/mods:universal-stdout-logs|ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest";
+                    LOGS_TO_STDOUT = "/config/qBittorrent/logs/qbittorrent.log";
+                  };
                 };
+                unitConfig = {
+                  After = [
+                    "${vpnName}.service"
+                    mediaMount
+                  ];
+                  Requires = [ "${vpnName}.service" ];
+                  BindsTo = [ mediaMount ];
+                };
+                serviceConfig.TimeoutStopSec = "${toString stopTimeout}s";
               };
             };
           };
         }
 
+        # The sidecar's tailscaled also has to wait for the tunnel
+        (lib.mkIf (cfg.tailscale.exposeAs == "sidecar") {
+          virtualisation.quadlet.containers."${svc}-tailscale".unitConfig = {
+            After = [ "${vpnName}.service" ];
+            Requires = [ "${vpnName}.service" ];
+          };
+        })
+
         (lib.mkIf cfg.backupToNAS (
           myLib.buildBackupScriptForDir pkgs svc cfg.configDir { inherit (cfg) timeZone; }
         ))
 
-        (myLib.mkTailscaleContainer pkgs config "${svc}-tailscale" {
-          hostname = "qb";
+        (myLib.mkTailscaleQuadletExposure pkgs config svc {
+          inherit podName;
           https = cfg.webUiPort;
-          container = {
-            extraOptions = [ "--network=container:${svc}-vpn" ];
-            dependsOn = [
-              "${svc}-vpn"
-              svc
-            ];
-          };
         })
 
         # Nix expressions give us no way to derive the UID from a user at
-        # evaluation time, so this delays resolution of user/group names
-        # to UID/GID at service start time, by modifying the
-        # systemd.service record for the docker container.
-        (setEnvFromCommandsForContainer svc {
-          PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
-          PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+        # evaluation time, so these resolve at service start.
+        (myLib.mkQuadletDynamicEnvironment pkgs config {
+          containerName = svc;
+          variables = {
+            PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+            PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+          };
         })
       ]
     );
