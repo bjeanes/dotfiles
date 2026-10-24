@@ -15,6 +15,7 @@ in
       image = "ghcr.io/ulsklyc/${svc}:latest";
       hostName = svc;
       dashboard.description = "Household documents, health records and finances";
+      dashboard.group = "Home";
       dashboard.icon = "mdi-home-heart";
       withUser = true;
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";

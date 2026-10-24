@@ -16,7 +16,7 @@ in
       hostName = svc;
       dashboard.description = "Finds and downloads books";
       # A Readarr alternative
-      dashboard.group = "Media";
+      dashboard.group = "Library";
       dashboard.widget = {
         type = "bookorbit";
         secrets = {
@@ -27,6 +27,8 @@ in
         settings.fields = [
           "books"
           "authors"
+          "series"
+          "storage"
         ];
       };
       withUser = true;

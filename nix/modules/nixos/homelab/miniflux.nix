@@ -20,6 +20,7 @@ in
       image = "docker.io/miniflux/miniflux:latest";
       hostName = svc;
       dashboard.description = "News feeds (settings and admin)";
+      dashboard.group = "Reading";
       # The tailnet root is nextflux, which has its own entry
       dashboard.path = "/miniflux/";
       # Services here have no per-path handlers yet
@@ -183,6 +184,7 @@ in
         {
           homelab.dashboard.entries.nextflux = {
             href = "https://${fqdn}/";
+            group = "Reading";
             icon = "mdi-rss-box";
             description = "Read news feeds";
           };

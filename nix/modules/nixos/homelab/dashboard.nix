@@ -51,7 +51,7 @@ let
         };
 
         group = lib.mkOption {
-          default = "Services";
+          default = "Tools";
           type = lib.types.str;
         };
 
@@ -140,6 +140,16 @@ in
       description = "Port on 127.0.0.1 the dashboard listens on";
     };
 
+    groups = lib.mkOption {
+      default = [ ];
+      type = lib.types.listOf (lib.types.attrsOf lib.types.anything);
+      description = ''
+        Groups in the order they appear, each a `name` plus any Homepage
+        layout settings (icon, style, columns). Groups not listed follow.
+        Add to the built-in ones with `lib.mkBefore`/`lib.mkAfter`.
+      '';
+    };
+
     entries = lib.mkOption {
       default = { };
       type = lib.types.attrsOf (lib.types.submodule entryOptions);
@@ -173,6 +183,47 @@ in
     }
 
     (lib.mkIf cfg.enable {
+      # In config rather than as the option's default, so that additions merge
+      # with them instead of replacing them
+      homelab.dashboard.groups = [
+        {
+          name = "Watch";
+          icon = "mdi-television-play";
+        }
+        {
+          name = "Home";
+          icon = "mdi-home";
+        }
+        {
+          name = "Reading";
+          icon = "mdi-book-open-variant";
+        }
+        {
+          name = "Notes";
+          icon = "mdi-notebook";
+        }
+        {
+          name = "Library";
+          icon = "mdi-bookshelf";
+        }
+        {
+          name = "Downloads";
+          icon = "mdi-download";
+        }
+        {
+          name = "Monitoring";
+          icon = "mdi-chart-line";
+        }
+        {
+          name = "Network";
+          icon = "mdi-lan";
+        }
+        {
+          name = "Tools";
+          icon = "mdi-tools";
+        }
+      ];
+
       # Outside Nix altogether
       homelab.dashboard.entries = {
         unifi = {
@@ -208,7 +259,23 @@ in
         enable = true;
         listenPort = cfg.port;
         allowedHosts = "${cfg.hostName}.${tailnet}";
-        settings.title = "Homelab";
+        settings = {
+          title = "Homelab";
+          # A list, as attribute sets lose their order
+          layout = map (group: { ${group.name} = removeAttrs group [ "name" ]; }) cfg.groups;
+        };
+        widgets = [
+          {
+            datetime = {
+              text_size = "4xl";
+              locale = "en-AU";
+              format = {
+                dateStyle = "full";
+                timeStyle = "short";
+              };
+            };
+          }
+        ];
         services = servicesYaml;
       };
 

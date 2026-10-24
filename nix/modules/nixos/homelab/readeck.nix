@@ -13,6 +13,7 @@ in
     image = "codeberg.org/${svc}/${svc}:latest";
     hostName = svc;
     dashboard.description = "Save articles to read later";
+    dashboard.group = "Reading";
     withUser = true;
     backupDescription = "Back up ${svc}'s exports to legacy location on NAS";
   };

@@ -224,7 +224,7 @@ in
         (lib.mkIf cfg.tailscale.enable {
           homelab.dashboard.entries.${svc} = {
             href = "https://${svc}.${config.homelab.tailscale.tailnet}/web";
-            group = "Media";
+            group = "Watch";
             icon = "plex.png";
             description = "Watch movies and TV";
             widget = {

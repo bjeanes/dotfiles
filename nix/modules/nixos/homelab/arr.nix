@@ -23,6 +23,7 @@ let
       icon ? "${name}.png",
       description ? null,
       widget ? null,
+      group ? "Library",
     }:
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
@@ -33,8 +34,8 @@ let
           hostName = name;
           dashboard = {
             enable = https != null;
-            group = "Media";
             inherit
+              group
               icon
               description
               widget
@@ -242,6 +243,7 @@ in
 
     # NZB
     (mkArr "sabnzbd" {
+      group = "Downloads";
       description = "Downloads from Usenet";
       widget = {
         type = "sabnzbd";
@@ -252,6 +254,7 @@ in
 
     # Managing media requests
     (mkArr "overseerr" {
+      group = "Watch";
       description = "Request a movie or TV show";
       widget = {
         type = "seerr";
@@ -283,6 +286,7 @@ in
 
     # Subscribe to private tracker IRC announce channels and auto-download certain torrents
     (mkArr "autobrr" {
+      group = "Downloads";
       description = "Grabs new releases as trackers announce them";
       widget = {
         type = "autobrr";
@@ -299,10 +303,18 @@ in
 
     # https://getqui.com/
     (mkArr "qui" {
+      group = "Downloads";
       description = "Manages torrent downloads";
       widget = {
         type = "qui";
         secrets.key = "qui-api-key";
+        # The qBittorrent widget already shows transfers
+        settings.fields = [
+          "total"
+          "errored"
+          "ratio"
+          "freeSpace"
+        ];
       };
       image = "ghcr.io/autobrr/qui:latest";
       https = 7476;
@@ -314,10 +326,15 @@ in
     # Collect statistics about what is getting watched in Plex, so that I can
     # remove things that aren't being watched if I need to free up space.
     (mkArr "tautulli" {
+      group = "Monitoring";
       description = "Statistics on what's watched in Plex";
       widget = {
         type = "tautulli";
         secrets.key = "tautulli-api-key";
+        settings = {
+          enableUser = true;
+          showEpisodeNumber = true;
+        };
       };
       image = "ghcr.io/tautulli/tautulli:latest";
       https = 8181;

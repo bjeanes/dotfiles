@@ -97,7 +97,7 @@
         };
 
         group = lib.mkOption {
-          default = dashboard.group or "Services";
+          default = dashboard.group or "Tools";
           type = lib.types.str;
           description = "Dashboard group ${svc} is listed under";
         };

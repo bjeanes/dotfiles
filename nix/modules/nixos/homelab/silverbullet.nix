@@ -13,6 +13,7 @@ in
     image = "ghcr.io/silverbulletmd/silverbullet:latest";
     hostName = svc;
     dashboard.description = "Personal notes";
+    dashboard.group = "Notes";
     # Its space is shared over Taildrive, which belongs to a machine
     exposeAs = "sidecar";
     withUser = true;

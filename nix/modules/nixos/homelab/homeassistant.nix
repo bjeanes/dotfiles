@@ -588,6 +588,7 @@ in
     # The VM is on the tailnet itself, so there's no service here to derive this from
     homelab.dashboard.entries.homeassistant = {
       title = "Home Assistant";
+      group = "Home";
       href = "https://homeassistant.${config.homelab.tailscale.tailnet}";
       icon = "home-assistant.png";
       description = "Smart home";

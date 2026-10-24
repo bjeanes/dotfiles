@@ -16,10 +16,12 @@ in
       hostName = svc;
       dashboard.description = "Who's watching Plex, and from where";
       # A Tautulli alternative
-      dashboard.group = "Media";
+      dashboard.group = "Monitoring";
       dashboard.widget = {
         type = "tracearr";
         secrets.key = "tracearr-api-key";
+        # Tautulli lists the streams themselves
+        settings.view = "summary";
       };
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
     }

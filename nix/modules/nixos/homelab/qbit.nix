@@ -15,10 +15,11 @@ in
       image = "lscr.io/linuxserver/qbittorrent:latest";
       hostName = "qb";
       dashboard.description = "Downloads torrents";
-      dashboard.group = "Media";
+      dashboard.group = "Downloads";
       # Asks nothing: it reaches qBittorrent from 10.88.0.1, which is whitelisted
       dashboard.widget = {
         type = "qbittorrent";
+        settings.enableLeechProgress = true;
       };
       withUser = true;
     }
