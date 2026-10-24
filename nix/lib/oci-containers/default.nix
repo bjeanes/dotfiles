@@ -292,7 +292,10 @@ rec {
         virtualisation.quadlet.pods.${podName}.podConfig.publishPorts = [
           "127.0.0.1:${toString localPort}:${toString https}"
         ];
-        homelab.tailscale.serve.services.${cfg.hostName}.https = localPort;
+        homelab.tailscale.serve.services.${cfg.hostName} = {
+          https = localPort;
+          displayName = svc;
+        };
       })
     ];
 

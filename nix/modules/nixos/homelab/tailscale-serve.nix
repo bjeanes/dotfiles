@@ -90,16 +90,22 @@ let
       case $status in
         404)
           echo "defining $name"
-          jq '{name, ports, tags, comment}' "$spec" | put
+          jq '{name, displayName, ports, tags, comment}' "$spec" | put
           ;;
         200)
-          if jq -e --slurpfile want "$spec" \
-            '(.ports | sort) == ($want[0].ports | sort) and (.tags // [] | sort) == ($want[0].tags | sort)' \
-            "$body" >/dev/null; then
+          if jq -e --slurpfile want "$spec" '
+            (.ports | sort) == ($want[0].ports | sort)
+            and (.tags // [] | sort) == ($want[0].tags | sort)
+            and .displayName == $want[0].displayName
+          ' "$body" >/dev/null; then
             echo "$name is already defined as configured"
           else
             echo "updating $name"
-            jq --slurpfile want "$spec" '.ports = $want[0].ports | .tags = $want[0].tags' "$body" | put
+            jq --slurpfile want "$spec" '
+              .ports = $want[0].ports
+              | .tags = $want[0].tags
+              | .displayName = $want[0].displayName
+            ' "$body" | put
           fi
           ;;
         *)
@@ -114,6 +120,7 @@ let
     pkgs.writeText "tailscale-service-${name}.json" (
       builtins.toJSON {
         name = "svc:${name}";
+        inherit (service) displayName;
         fqdn = "${name}.${tailnet}";
         ports = map (port: "tcp:${port}") (
           lib.optional (service.https != null) "443"
@@ -145,37 +152,50 @@ let
       description = "port on 127.0.0.1, or URL";
     };
 
-  serviceOptions = {
-    options = {
-      https = lib.mkOption {
-        default = null;
-        type = lib.types.nullOr target;
-        example = 3000;
-        description = ''
-          Upstream for HTTPS on port 443. tailscaled terminates TLS, so a bare
-          port is proxied to as plain HTTP.
-        '';
-      };
-
-      tcp = lib.mkOption {
-        default = { };
-        type = lib.types.attrsOf target;
-        example = {
-          "22" = 2222;
+  serviceOptions =
+    { name, ... }:
+    {
+      options = {
+        https = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr target;
+          example = 3000;
+          description = ''
+            Upstream for HTTPS on port 443. tailscaled terminates TLS, so a bare
+            port is proxied to as plain HTTP.
+          '';
         };
-        description = "Raw TCP forwards, keyed by listen port";
-      };
 
-      tlsTcp = lib.mkOption {
-        default = { };
-        type = lib.types.attrsOf target;
-        example = {
-          "6697" = 6501;
+        tcp = lib.mkOption {
+          default = { };
+          type = lib.types.attrsOf target;
+          example = {
+            "22" = 2222;
+          };
+          description = "Raw TCP forwards, keyed by listen port";
         };
-        description = "TCP forwards that tailscaled terminates TLS for, keyed by listen port";
+
+        tlsTcp = lib.mkOption {
+          default = { };
+          type = lib.types.attrsOf target;
+          example = {
+            "6697" = 6501;
+          };
+          description = "TCP forwards that tailscaled terminates TLS for, keyed by listen port";
+        };
+
+        displayName = lib.mkOption {
+          default = name;
+          defaultText = lib.literalMD "the Service's name";
+          type = lib.types.strMatching ".{1,64}";
+          example = "miniflux";
+          description = ''
+            Label shown for the Service in the admin console and to clients, for
+            when its name (which is also its hostname) doesn't say what it is.
+          '';
+        };
       };
     };
-  };
 
   /*
     `serve set-config` would be declarative, but its versioned file ties the
