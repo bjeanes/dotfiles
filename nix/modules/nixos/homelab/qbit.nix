@@ -14,7 +14,6 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "lscr.io/linuxserver/qbittorrent:latest";
       hostName = "qb";
-      exposeAs = "sidecar";
       withUser = true;
     }
     // {
@@ -132,14 +131,6 @@ in
             };
           };
         }
-
-        # The sidecar's tailscaled also has to wait for the tunnel
-        (lib.mkIf (cfg.tailscale.exposeAs == "sidecar") {
-          virtualisation.quadlet.containers."${svc}-tailscale".unitConfig = {
-            After = [ "${vpnName}.service" ];
-            Requires = [ "${vpnName}.service" ];
-          };
-        })
 
         (lib.mkIf cfg.backupToNAS (
           myLib.buildBackupScriptForDir pkgs svc cfg.configDir { inherit (cfg) timeZone; }

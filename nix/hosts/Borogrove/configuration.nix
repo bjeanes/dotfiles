@@ -50,7 +50,11 @@
     radarr4k.tailscale.localPort = 7879;
     # birdnet has 8080
     sabnzbd.tailscale.localPort = 8081;
-    qbittorrent.enable = true;
+    qbittorrent = {
+      enable = true;
+      # birdnet has 8080, sabnzbd 8081
+      tailscale.localPort = 8082;
+    };
     forgejo = {
       enable = true;
       # bookorbit has 3000, tracearr 3001
