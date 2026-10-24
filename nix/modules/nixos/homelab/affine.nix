@@ -13,6 +13,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "ghcr.io/toeverything/${svc}:stable";
       hostName = svc;
+      exposeAs = "service";
       backupDescription = "Back up ${svc}'s blobs, key and database dumps to legacy location on NAS";
     }
     // {
