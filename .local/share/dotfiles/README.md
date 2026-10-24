@@ -32,8 +32,8 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.12.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/455808fd0fae06e6d70fadfd61432275db8f34ce |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-paredit` | https://github.com/julienvincent/nvim-paredit/tree/v1.2.0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/e289100ff98969e118c702199d88b764ce9e7fdf |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/f3061339b8eaf9fda873600bc425b8d2d8502533 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/ca581c3436fc2b236847f5b739ebc263739e5ca6 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/8decd73460d26ef0a0befb745d022dd1fc2c38b8 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/rainbow-delimiters.nvim` | https://gitlab.com/HiPhish/rainbow-delimiters.nvim |
 | `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/882c996cf28183f4d63640de0b4c02ec886d01f2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/7235c7ce2cea530cb6b59bc3e46d4bfe917d15c8 |
