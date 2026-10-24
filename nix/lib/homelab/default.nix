@@ -52,6 +52,35 @@
         type = lib.types.str;
         description = "Tailnet hostname to expose ${svc} as";
       };
+
+      tailscale = {
+        exposeAs = lib.mkOption {
+          default = "sidecar";
+          type = lib.types.enum [
+            "sidecar"
+            "service"
+          ];
+          description = ''
+            How ${svc} is put on the tailnet: as its own machine through a
+            Tailscale sidecar in its pod, or as a Tailscale Service hosted by
+            this machine's tailscaled.
+
+            Switching to `service` frees the hostname only once the sidecar's
+            machine is deleted from the tailnet, and the Service has to be
+            defined there under the same name.
+          '';
+        };
+
+        localPort = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.port;
+          description = ''
+            Port on the host's 127.0.0.1 that ${svc} is published on when
+            exposed as a Tailscale Service. Defaults to the port it listens on
+            in its pod.
+          '';
+        };
+      };
     }
     // lib.optionalAttrs withUser {
       user = lib.mkOption {
@@ -66,6 +95,10 @@
         description = "Group to run the ${svc} service as";
       };
     };
+
+  # A sidecar shares the pod's loopback, but a published port arrives on the
+  # pod's network interface.
+  listenAddressFor = cfg: if cfg.tailscale.exposeAs == "service" then "0.0.0.0" else "127.0.0.1";
 
   # Naming for a service's Postgres sidecar, shared between the container,
   # the app's connection settings and dumps. Only reachable within the pod,

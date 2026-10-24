@@ -31,7 +31,7 @@ in
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;
-      mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
+      mkTailscaleQuadletExposure = myLib.mkTailscaleQuadletExposure pkgs config;
 
       inherit (config.virtualisation.quadlet) pods;
 
@@ -62,7 +62,7 @@ in
                 environments = {
                   TZ = cfg.timeZone;
 
-                  HISTER__SERVER__ADDRESS = "127.0.0.1:${toString port}";
+                  HISTER__SERVER__ADDRESS = "${myLib.listenAddressFor cfg}:${toString port}";
                   HISTER__SERVER__BASE_URL = "https://${fqdn}";
                 }
                 // lib.optionalAttrs cfg.userHandling {
@@ -87,11 +87,7 @@ in
           };
         }
 
-        (mkTailscaleQuadletContainer "${svc}-tailscale" {
-          inherit podName;
-          hostname = cfg.hostName;
-          https = port;
-        })
+        (mkTailscaleQuadletExposure svc { https = port; })
 
         (lib.mkIf cfg.backupToNAS (buildBackupScriptForDir cfg.configDir { inherit (cfg) timeZone; }))
       ]

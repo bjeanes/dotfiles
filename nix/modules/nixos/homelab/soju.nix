@@ -35,7 +35,7 @@ in
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;
-      mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
+      mkTailscaleQuadletExposure = myLib.mkTailscaleQuadletExposure pkgs config;
 
       inherit (config.virtualisation.quadlet) pods;
 
@@ -151,9 +151,8 @@ in
         # `optionalAttrs`) forces them while the module system is still working
         # out this module's config, which is an infinite recursion. Conditional
         # *values* are lazy, so they are fine.
-        (mkTailscaleQuadletContainer "${svc}-tailscale" {
-          inherit podName;
-          hostname = cfg.hostName;
+        (mkTailscaleQuadletExposure svc {
+          sidecarOnly = "Tailscale Services here don't support per-path handlers or PROXY protocol yet";
 
           # gamja's static assets come from kimchi on 80; soju's own HTTP
           # endpoints are proxied straight to it, bypassing kimchi's panicking

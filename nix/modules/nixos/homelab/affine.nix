@@ -36,7 +36,7 @@ in
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;
-      mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
+      mkTailscaleQuadletExposure = myLib.mkTailscaleQuadletExposure pkgs config;
 
       inherit (config.virtualisation.quadlet) pods volumes;
 
@@ -128,7 +128,7 @@ in
                 environments = {
                   TZ = cfg.timeZone;
 
-                  LISTEN_ADDR = "127.0.0.1";
+                  LISTEN_ADDR = myLib.listenAddressFor cfg;
                   AFFINE_SERVER_PORT = toString port;
 
                   # tailscaled terminates TLS and proxies plaintext to `port`,
@@ -185,11 +185,7 @@ in
           dataPath = "/var/lib/postgresql/data";
         })
 
-        (mkTailscaleQuadletContainer "${svc}-tailscale" {
-          inherit podName;
-          hostname = cfg.hostName;
-          https = port;
-        })
+        (mkTailscaleQuadletExposure svc { https = port; })
 
         (lib.mkIf cfg.backupToNAS (
           lib.mkMerge [

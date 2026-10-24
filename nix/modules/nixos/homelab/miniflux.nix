@@ -47,7 +47,7 @@ in
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;
-      mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
+      mkTailscaleQuadletExposure = myLib.mkTailscaleQuadletExposure pkgs config;
 
       inherit (config.virtualisation.quadlet) pods;
 
@@ -175,9 +175,8 @@ in
           image = cfg.dbImage;
         })
 
-        (mkTailscaleQuadletContainer "${svc}-tailscale" {
-          inherit podName;
-          hostname = cfg.hostName;
+        (mkTailscaleQuadletExposure svc {
+          sidecarOnly = "Tailscale Services here don't support per-path handlers yet";
           https = {
             "/" = nextfluxPort;
             # tailscaled strips the mount point before proxying, so the

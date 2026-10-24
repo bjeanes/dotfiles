@@ -21,7 +21,7 @@ in
       myLib = flake.lib;
       cfg = config.homelab.services.${svc};
       buildBackupScriptForDir = myLib.buildBackupScriptForDir pkgs svc;
-      mkTailscaleQuadletContainer = myLib.mkTailscaleQuadletContainer pkgs config;
+      mkTailscaleQuadletExposure = myLib.mkTailscaleQuadletExposure pkgs config;
 
       inherit (config.virtualisation.quadlet) pods;
 
@@ -78,9 +78,10 @@ in
                 environments = {
                   TZ = cfg.timeZone;
 
-                  # Only the Tailscale sidecar in the pod needs to reach this,
-                  # and it's within the default trusted proxies.
-                  READECK_SERVER_HOST = "127.0.0.1";
+                  # The proxy in front, the sidecar on loopback or podman's
+                  # gateway for a Service, is within the default trusted
+                  # proxies either way.
+                  READECK_SERVER_HOST = myLib.listenAddressFor cfg;
                   READECK_SERVER_PORT = toString port;
                   READECK_SERVER_BASE_URL = "https://${fqdn}";
                 };
@@ -106,11 +107,7 @@ in
           };
         }
 
-        (mkTailscaleQuadletContainer "${svc}-tailscale" {
-          inherit podName;
-          hostname = cfg.hostName;
-          https = port;
-        })
+        (mkTailscaleQuadletExposure svc { https = port; })
 
         (lib.mkIf cfg.backupToNAS (
           lib.mkMerge [

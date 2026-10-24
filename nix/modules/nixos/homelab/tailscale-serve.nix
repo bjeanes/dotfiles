@@ -169,6 +169,24 @@ in
         assertion = lib.allUnique (map pathUnitName (lib.attrNames nodeCfg.https));
         message = "homelab.tailscale.serve.node.https: paths collide once made into unit names";
       }
+      (
+        let
+          # Bare ports are what services publish on 127.0.0.1
+          localPorts = lib.concatMap (
+            service:
+            lib.filter builtins.isInt (
+              [ service.https ] ++ lib.attrValues service.tcp ++ lib.attrValues service.tlsTcp
+            )
+          ) (lib.attrValues cfg);
+          duplicates = lib.unique (lib.filter (p: lib.count (q: q == p) localPorts > 1) localPorts);
+        in
+        {
+          assertion = duplicates == [ ];
+          message = "homelab.tailscale.serve.services: local port(s) ${
+            lib.concatMapStringsSep ", " toString duplicates
+          } used by more than one service; set `tailscale.localPort` on one of them";
+        }
+      )
     ]
     ++ map (path: {
       assertion = lib.hasPrefix "/" path;

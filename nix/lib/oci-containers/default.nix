@@ -247,4 +247,53 @@ rec {
       })
     ];
 
+  # Puts a pod-based homelab service on the tailnet the way its
+  # `tailscale.exposeAs` asks for. Anything else is passed to the sidecar.
+  mkTailscaleQuadletExposure =
+    pkgs: config: svc:
+    {
+      podName ? "${svc}-pod",
+      # Port the app listens on in the pod
+      https,
+      # Why ${svc} can't be a Tailscale Service, if it can't
+      sidecarOnly ? null,
+      ...
+    }@args:
+    let
+      cfg = config.homelab.services.${svc};
+      inherit (cfg.tailscale) exposeAs;
+      localPort = myLib.coalesce cfg.tailscale.localPort https;
+    in
+    lib.mkMerge [
+      {
+        assertions = [
+          {
+            assertion = exposeAs == "sidecar" || sidecarOnly == null;
+            message = "homelab.services.${svc}.tailscale.exposeAs: only a sidecar is supported: ${toString sidecarOnly}";
+          }
+          {
+            assertion = sidecarOnly != null || builtins.isInt https;
+            message = "mkTailscaleQuadletExposure ${svc}: `https` must be a port unless `sidecarOnly` is set";
+          }
+        ];
+      }
+
+      (lib.mkIf (exposeAs == "sidecar") (
+        mkTailscaleQuadletContainer pkgs config "${svc}-tailscale" (
+          removeAttrs args [ "sidecarOnly" ]
+          // {
+            inherit podName;
+            hostname = cfg.hostName;
+          }
+        )
+      ))
+
+      (lib.mkIf (exposeAs == "service" && sidecarOnly == null) {
+        virtualisation.quadlet.pods.${podName}.podConfig.publishPorts = [
+          "127.0.0.1:${toString localPort}:${toString https}"
+        ];
+        homelab.tailscale.serve.services.${cfg.hostName}.https = localPort;
+      })
+    ];
+
 }
