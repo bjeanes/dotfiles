@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  perSystem,
   ...
 }:
 let
@@ -292,6 +293,14 @@ in
         revsets.log = "builtin_log() | (trunk()..bookmarks())";
 
         aliases = {
+          # Hunk- and line-level split/squash/restore/absorb, without -i
+          hunk = [
+            "util"
+            "exec"
+            "--"
+            "jj-hunk-tool"
+          ];
+
           # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
           mon = [
             "util"
@@ -395,6 +404,13 @@ in
 
     home.packages = with pkgs; [
       gg-jj
+      perSystem.self.jj-hunk-tool
     ];
+
+    # The skills jj-hunk-tool ships with. Where they say to commit, the
+    # global vcs rule decides whether that is allowed.
+    programs.claude-code.skills = lib.genAttrs [ "jj-surgeon" "jj-subagent-workspaces" ] (
+      skill: "${perSystem.self.jj-hunk-tool}/share/skills/jj-hunk-tool/${skill}"
+    );
   };
 }
