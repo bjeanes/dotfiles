@@ -43,6 +43,14 @@ rec {
       };
     };
 
+  # Quadlet counterpart of setEnvFromFilesForContainer
+  setEnvFromFilesForQuadlet =
+    pkgs: config: containerName: vars:
+    mkQuadletDynamicEnvironment pkgs config {
+      inherit containerName;
+      variables = builtins.mapAttrs (_: v: "cat ${lib.escapeShellArg v}") vars;
+    };
+
   mkQuadletDynamicEnvironment =
     pkgs: config:
     {
@@ -253,7 +261,8 @@ rec {
     pkgs: config: svc:
     {
       podName ? "${svc}-pod",
-      # Port the app listens on in the pod
+      # Port the app listens on in the pod; `null` for one with nothing to
+      # serve, which as a Service is then left off the tailnet entirely
       https,
       # Raw TCP forwards from a tailnet port to the port the app listens on
       # in the pod, which as a Service is also its port on the host's
@@ -270,7 +279,7 @@ rec {
       {
         assertions = [
           {
-            assertion = exposeAs == "sidecar" || builtins.isInt https;
+            assertion = exposeAs == "sidecar" || https == null || builtins.isInt https;
             message = "mkTailscaleQuadletExposure ${svc}: a Tailscale Service needs `https` to be a single port; anything more needs `exposeAs = \"sidecar\"`";
           }
         ];
@@ -287,7 +296,7 @@ rec {
         )
       ))
 
-      (lib.mkIf (exposeAs == "service") {
+      (lib.mkIf (exposeAs == "service" && https != null) {
         virtualisation.quadlet.pods.${podName}.podConfig.publishPorts = [
           "127.0.0.1:${toString localPort}:${toString https}"
         ]

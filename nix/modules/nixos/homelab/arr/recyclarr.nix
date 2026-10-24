@@ -9,7 +9,7 @@ let
   tsnet = config.homelab.tailscale.tailnet;
   myLib = flake.lib;
 
-  setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer pkgs config;
+  setEnvFromFilesForQuadlet = myLib.setEnvFromFilesForQuadlet pkgs config;
 
   arrs = [
     "sonarr"
@@ -236,9 +236,7 @@ in
         };
 
         url = lib.mkOption {
-          # TODO: make this not coupled to Tailscale
-          default =
-            if config.homelab.services.${arr}.tailscale.enable then "https://${arr}.${tsnet}" else null;
+          default = "https://${config.homelab.services.${arr}.hostName}.${tsnet}";
           type = lib.types.str;
           description = "URL for Recyclarr to use for ${arr}";
         };
@@ -256,7 +254,7 @@ in
     lib.mkMerge (
       [
         {
-          virtualisation.oci-containers.containers.recyclarr.volumes = [
+          virtualisation.quadlet.containers.recyclarr.containerConfig.volumes = [
             "${recyclarrConfig}:/config/recyclarr.yml:ro"
           ];
         }
@@ -268,7 +266,7 @@ in
           cfg = config.homelab.services.recyclarr.${arr};
         in
         lib.mkIf cfg.enable (
-          setEnvFromFilesForContainer "recyclarr" {
+          setEnvFromFilesForQuadlet "recyclarr" {
             "${lib.toUpper arr}_API_KEY" = cfg.apiKeyFile;
           }
         )

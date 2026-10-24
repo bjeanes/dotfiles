@@ -8,34 +8,26 @@
 let
   myLib = flake.lib;
 
-  setEnvFromCommandsForContainer = myLib.setEnvFromCommandsForContainer pkgs config;
-
   mkArr =
     name:
     {
       needsMedia ? true,
       image ? "lscr.io/linuxserver/${name}:latest",
+      # Web UI port; `null` for one without
       https ? null,
       configMount ? "/config",
       funnel ? false,
-      # Extra listeners beyond the `https` web UI, in `mkTailscaleServeConfig`
-      # spec form (e.g. `[ "6697:6501" ]`). `tlsTcp` has tailscaled terminate
-      # TLS and forward plaintext to the target.
-      tcp ? [ ],
-      tlsTcp ? [ ],
       forceUser ? null,
       after ? [ ],
-      ...
+      exposeAs ? "sidecar",
     }:
-    let
-      svcName = myLib.containerSvcName config name;
-    in
     {
       imports = lib.optional (builtins.pathExists ./arr/${name}.nix) ./arr/${name}.nix;
 
       options.homelab.services.${name} =
         myLib.mkHomelabServiceOptions config name {
-          inherit image;
+          inherit image exposeAs;
+          hostName = name;
           withUser = forceUser == null;
         }
         // {
@@ -43,14 +35,6 @@ let
             default = config.homelab.services.arrs.enable;
             type = lib.types.bool;
             description = "Enable ${name}";
-          };
-
-          tailscale = {
-            enable = lib.mkOption {
-              default = config.homelab.services.arrs.tailscale.enable;
-              type = lib.types.bool;
-              description = "Enable Tailscale for ${name}";
-            };
           };
 
           after = lib.mkOption {
@@ -63,140 +47,89 @@ let
       config =
         let
           cfg = config.homelab.services.${name};
-          tsName = "${name}-tailscale";
+          podName = "${name}-pod";
+          inherit (config.virtualisation.quadlet) pods;
+          mediaMount = "mnt-nfs-nas-media.mount";
+
+          # The ones that are enabled on this host
+          dependencies = map (svc: "${svc}.service") (
+            lib.filter (svc: config.homelab.services.${svc}.enable) cfg.after
+          );
         in
         lib.mkIf cfg.enable (
-          lib.mkMerge (
-            [
-              {
-                systemd.services.${svcName}.aliases = [ "${name}.service" ];
-                systemd.services."${svcName}-tailscale" = {
-                  startLimitBurst = 3;
-                  startLimitIntervalSec = 1;
-                };
+          lib.mkMerge [
+            {
+              virtualisation.quadlet = {
+                pods.${podName} = { };
 
-                virtualisation.oci-containers = {
-                  containers = {
-                    ${name} = {
-                      image = cfg.image;
-                      autoStart = true;
-                      volumes = [ "${cfg.configDir}:${configMount}" ];
-                      labels = {
-                        "io.containers.autoupdate" = "registry";
-                      };
-                      # extraOptions = [ "--pull=always" ];
-                      environment = {
-                        TZ = cfg.timeZone;
-                        UMASK = "002";
-                      };
-                    };
-                  };
-                };
-              }
-              {
-                # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
-                systemd.tmpfiles.rules =
-                  with lib;
-                  let
-                    user = if forceUser == null then cfg.user else head (splitString ":" forceUser);
-                    group = if forceUser == null then cfg.group else head (reverseList (splitString ":" forceUser));
-                  in
-                  concatMap
-                    (dir: ([
-                      # Ensure config directory exists, owned by user
-                      "d ${dir} 0775 ${user} ${group} - -"
-
-                      # Ensure directory and contents belong to specified owner and group
-                      "Z ${dir} - ${user} ${group} - -"
-                    ]))
-                    [
-                      cfg.configDir
-                    ];
-              }
-              (lib.optionalAttrs (forceUser == null) (
-                {
-                  users.users = {
-                    "${cfg.user}" = {
-                      isSystemUser = true;
-                      group = cfg.group;
-                    };
-                  };
-                  users.groups.${cfg.group} = { };
-                }
-                //
-                  # Nix expressions give us no way to derive the UID from a user at
-                  # evaluation time, so this delays resolution of user/group names
-                  # to UID/GID at service start time, by modifying the
-                  # systemd.service record for the docker container.
-                  (setEnvFromCommandsForContainer name {
-                    PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
-                    PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
-                  })
-              ))
-              (lib.optionalAttrs needsMedia {
-                virtualisation.oci-containers.containers.${name}.volumes = [
-                  "/mnt/nfs/nas/media:/data"
-                ];
-                systemd.services = {
-                  ${svcName} = {
-                    bindsTo = [ "mnt-nfs-nas-media.mount" ];
-                    after = [ "mnt-nfs-nas-media.mount" ];
-                  };
-                };
-              })
-              (lib.mkIf cfg.backupToNAS (
-                myLib.buildBackupScriptForDir pkgs name cfg.configDir { inherit (cfg) timeZone; }
-              ))
-              (lib.mkIf cfg.tailscale.enable {
-                virtualisation.oci-containers.containers = {
-                  # Set up main service container to use and depend on the network container for Tailscale
-                  ${name} = {
-                    extraOptions = [
-                      "--network=container:${tsName}"
-                    ];
-                    dependsOn = [ tsName ];
-                  };
-                };
-              })
-              (lib.mkIf cfg.tailscale.enable (
-                myLib.mkTailscaleContainer pkgs config tsName (
-                  {
-                    hostname = name;
-                    inherit tcp tlsTcp https;
-                  }
-                  // lib.optionalAttrs funnel { funnel = [ 443 ]; }
-                )
-              ))
-            ]
-            ++ (map (
-              svc:
-              (lib.mkIf (config.homelab.services.${svc}.enable) (
-                let
-                  self = if (cfg.tailscale.enable) then tsName else svcName;
-
-                  # tailscale conditional temporarily disabled because qBit
-                  # doesn't have the `.tailscale.enabled` option, as its
-                  # always enabled. I am currently running everything through
-                  # tailscale, so content to leave this hardcoded _for now_
-                  after =
-                    # if (config.homelab.services.${svc}.tailscale.enable) then
-                    [
-                      "${svc}.service"
-                      "${svc}-tailscale.service"
+                containers.${name} = {
+                  autoStart = true;
+                  containerConfig = {
+                    pod = pods.${podName}.ref;
+                    image = cfg.image;
+                    autoUpdate = "registry";
+                    volumes = [
+                      "${cfg.configDir}:${configMount}"
                     ]
-                  # else
-                  #   ["${svc}.service"];
-                  ;
-                in
-                {
-                  systemd.services.${self} = {
-                    inherit after;
-                    requires = after;
+                    ++ lib.optional needsMedia "/mnt/nfs/nas/media:/data";
+                    environments = {
+                      TZ = cfg.timeZone;
+                      UMASK = "002";
+                    };
                   };
-                }
-              ))
-            ) after)
-          )
+                  unitConfig = {
+                    After = dependencies ++ lib.optional needsMedia mediaMount;
+                    Requires = dependencies;
+                    BindsTo = lib.optional needsMedia mediaMount;
+                  };
+                };
+              };
+            }
+            {
+              # https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html#SYNOPSIS
+              systemd.tmpfiles.rules =
+                with lib;
+                let
+                  user = if forceUser == null then cfg.user else head (splitString ":" forceUser);
+                  group = if forceUser == null then cfg.group else head (reverseList (splitString ":" forceUser));
+                in
+                [
+                  # Ensure config directory exists, owned by user
+                  "d ${cfg.configDir} 0775 ${user} ${group} - -"
+
+                  # Ensure directory and contents belong to specified owner and group
+                  "Z ${cfg.configDir} - ${user} ${group} - -"
+                ];
+            }
+            # Not mkIf: `cfg.user` doesn't exist with forceUser, and mkIf
+            # still evaluates attribute names
+            (lib.optionalAttrs (forceUser == null) {
+              users.users = {
+                "${cfg.user}" = {
+                  isSystemUser = true;
+                  group = cfg.group;
+                };
+              };
+              users.groups.${cfg.group} = { };
+            })
+            # Nix expressions give us no way to derive the UID from a user at
+            # evaluation time, so these resolve at service start.
+            (lib.optionalAttrs (forceUser == null) (
+              myLib.mkQuadletDynamicEnvironment pkgs config {
+                containerName = name;
+                variables = {
+                  PUID = "${pkgs.coreutils}/bin/id -u ${cfg.user}";
+                  PGID = "${pkgs.getent}/bin/getent group ${cfg.group} | cut -d: -f3";
+                };
+              }
+            ))
+            (lib.mkIf cfg.backupToNAS (
+              myLib.buildBackupScriptForDir pkgs name cfg.configDir { inherit (cfg) timeZone; }
+            ))
+            (myLib.mkTailscaleQuadletExposure pkgs config name (
+              { inherit https podName; } // lib.optionalAttrs funnel { funnel = [ 443 ]; }
+            ))
+          ]
         );
     };
 in
@@ -344,14 +277,6 @@ in
       default = false;
       type = lib.types.bool;
       description = "Enable the *arr suite";
-    };
-
-    tailscale = {
-      enable = lib.mkOption {
-        default = config.homelab.tailscale.enable;
-        type = lib.types.bool;
-        description = "Enable Tailscale for enabled *arr software, by default";
-      };
     };
   };
 }

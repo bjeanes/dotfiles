@@ -9,7 +9,7 @@ let
   tsnet = config.homelab.tailscale.tailnet;
   myLib = flake.lib;
 
-  setEnvFromFilesForContainer = myLib.setEnvFromFilesForContainer pkgs config;
+  setEnvFromFilesForQuadlet = myLib.setEnvFromFilesForQuadlet pkgs config;
 
   # Instance name mapped to the Unpackerr service it belongs to. Unpackerr
   # addresses instances as `UN_<SERVICE>_<N>_*` where N counts from zero
@@ -55,9 +55,7 @@ in
         };
 
         url = lib.mkOption {
-          # TODO: make this not coupled to Tailscale
-          default =
-            if config.homelab.services.${arr}.tailscale.enable then "https://${arr}.${tsnet}" else null;
+          default = "https://${config.homelab.services.${arr}.hostName}.${tsnet}";
           type = lib.types.str;
           description = "URL for Unpacker to use for ${arr}";
         };
@@ -83,12 +81,12 @@ in
         lib.mkIf instance.enable (
           lib.mkMerge [
             {
-              virtualisation.oci-containers.containers.unpackerr.environment = {
+              virtualisation.quadlet.containers.unpackerr.containerConfig.environments = {
                 "${prefix}URL" = instance.url;
-                "${prefix}PROTOCOLS " = " torrent,usenet";
+                "${prefix}PROTOCOLS" = "torrent,usenet";
               };
             }
-            (setEnvFromFilesForContainer "unpackerr" {
+            (setEnvFromFilesForQuadlet "unpackerr" {
               "${prefix}API_KEY" = instance.apiKeyFile;
             })
           ]
