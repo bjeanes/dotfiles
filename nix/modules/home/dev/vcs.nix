@@ -126,6 +126,11 @@ in
       ignores = [
         "*.swp"
         ".DS_Store"
+        "*.log"
+        # Local-only overrides, e.g. Claude Code's CLAUDE.local.md and
+        # .claude/settings.local.json
+        "*.local.md"
+        "*.local.json"
       ];
     };
 
