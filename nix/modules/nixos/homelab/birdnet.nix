@@ -13,6 +13,7 @@ in
     # image = "ghcr.io/tphakala/birdnet-go:latest";
     image = "ghcr.io/tphakala/birdnet-go:nightly";
     hostName = svc;
+    exposeAs = "service";
     withUser = true;
   };
 

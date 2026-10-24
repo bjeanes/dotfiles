@@ -52,7 +52,11 @@
     birdnet.enable = true;
     hister.enable = true;
     soju.enable = true;
-    tracearr.enable = true;
+    tracearr = {
+      enable = true;
+      # bookorbit has 3000
+      tailscale.localPort = 3001;
+    };
     bookorbit.enable = true;
     readeck.enable = true;
     affine.enable = true;
