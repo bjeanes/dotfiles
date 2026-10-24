@@ -124,7 +124,6 @@
           "shfmt"
         ];
         sql = [ "sqlfluff" ];
-        terraform = [ "terraform_fmt" ];
         toml = [ "taplo" ];
         typescript = {
           __unkeyed-1 = "biome";
@@ -202,9 +201,6 @@
         };
         taplo = {
           command = lib.getExe pkgs.taplo;
-        };
-        terraform_fmt = {
-          command = lib.getExe pkgs.terraform;
         };
         xmlformat = {
           command = lib.getExe pkgs.xmlformat;
