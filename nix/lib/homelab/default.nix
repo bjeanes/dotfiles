@@ -11,7 +11,7 @@
       # `null` omits the option; otherwise the default tailnet hostname
       hostName ? null,
       # How the service is put on the tailnet; see `tailscale.exposeAs`
-      exposeAs ? "sidecar",
+      exposeAs ? "service",
       withUser ? false,
       backupDescription ? "Back up configDir to legacy location on NAS",
     }:

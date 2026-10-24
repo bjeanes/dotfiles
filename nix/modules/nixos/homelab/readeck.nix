@@ -12,7 +12,6 @@ in
   options.homelab.services.${svc} = flake.lib.mkHomelabServiceOptions config svc {
     image = "codeberg.org/${svc}/${svc}:latest";
     hostName = svc;
-    exposeAs = "service";
     withUser = true;
     backupDescription = "Back up ${svc}'s exports to legacy location on NAS";
   };

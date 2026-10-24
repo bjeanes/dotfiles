@@ -14,7 +14,6 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "ghcr.io/ulsklyc/${svc}:latest";
       hostName = svc;
-      exposeAs = "service";
       withUser = true;
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
     }

@@ -13,6 +13,8 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "codeberg.org/emersion/${svc}:latest";
       hostName = "irc";
+      # Services here have no per-path handlers or PROXY protocol yet
+      exposeAs = "sidecar";
     }
     // {
       gamja = {
@@ -152,7 +154,6 @@ in
         # out this module's config, which is an infinite recursion. Conditional
         # *values* are lazy, so they are fine.
         (mkTailscaleQuadletExposure svc {
-          sidecarOnly = "Tailscale Services here don't support per-path handlers or PROXY protocol yet";
 
           # gamja's static assets come from kimchi on 80; soju's own HTTP
           # endpoints are proxied straight to it, bypassing kimchi's panicking

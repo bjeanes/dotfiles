@@ -19,6 +19,8 @@ in
       '';
       image = "docker.io/miniflux/miniflux:latest";
       hostName = svc;
+      # Services here have no per-path handlers yet
+      exposeAs = "sidecar";
       backupDescription = "Back up ${svc}'s database dumps to legacy location on NAS";
     }
     // {
@@ -176,7 +178,6 @@ in
         })
 
         (mkTailscaleQuadletExposure svc {
-          sidecarOnly = "Tailscale Services here don't support per-path handlers yet";
           https = {
             "/" = nextfluxPort;
             # tailscaled strips the mount point before proxying, so the
