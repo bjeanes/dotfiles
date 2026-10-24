@@ -1,2 +1,5 @@
 *.swp
 .DS_Store
+*.log
+*.local.md
+*.local.json
