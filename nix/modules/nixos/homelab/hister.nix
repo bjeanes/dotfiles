@@ -13,6 +13,7 @@ in
     flake.lib.mkHomelabServiceOptions config svc {
       image = "ghcr.io/asciimoo/${svc}:latest";
       hostName = svc;
+      exposeAs = "service";
     }
     // {
       userHandling = lib.mkOption {

@@ -50,10 +50,7 @@
     forgejo.enable = true;
     silverbullet.enable = true;
     birdnet.enable = true;
-    hister = {
-      enable = true;
-      tailscale.exposeAs = "service";
-    };
+    hister.enable = true;
     soju.enable = true;
     tracearr.enable = true;
     bookorbit.enable = true;

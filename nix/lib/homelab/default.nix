@@ -10,6 +10,8 @@
       image ? null,
       # `null` omits the option; otherwise the default tailnet hostname
       hostName ? null,
+      # How the service is put on the tailnet; see `tailscale.exposeAs`
+      exposeAs ? "sidecar",
       withUser ? false,
       backupDescription ? "Back up configDir to legacy location on NAS",
     }:
@@ -55,7 +57,10 @@
 
       tailscale = {
         exposeAs = lib.mkOption {
-          default = "sidecar";
+          default = exposeAs;
+          # It follows from how the service is used (e.g. shared into other
+          # tailnets), not from which host runs it
+          readOnly = true;
           type = lib.types.enum [
             "sidecar"
             "service"
@@ -63,7 +68,7 @@
           description = ''
             How ${svc} is put on the tailnet: as its own machine through a
             Tailscale sidecar in its pod, or as a Tailscale Service hosted by
-            this machine's tailscaled.
+            this machine's tailscaled. Set by ${svc}'s module.
 
             Switching to `service` frees the hostname only once the sidecar's
             machine is deleted from the tailnet, and the Service has to be
