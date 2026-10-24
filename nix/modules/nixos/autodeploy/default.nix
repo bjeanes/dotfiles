@@ -15,12 +15,7 @@
     }
 
     (lib.mkIf config.services.tailscale.enable {
-      system.activationScripts = {
-        tsServeComin.text = # sh
-          ''
-            ${config.services.tailscale.package}/bin/tailscale serve --bg --set-path "/comin" "http://localhost:4243/metrics"
-          '';
-      };
+      homelab.tailscale.serve.node.https."/comin" = "http://localhost:4243/metrics";
     })
   ];
 }
