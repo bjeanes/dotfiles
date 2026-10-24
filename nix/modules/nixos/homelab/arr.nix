@@ -79,7 +79,9 @@ let
                   };
                   unitConfig = {
                     After = dependencies ++ lib.optional needsMedia mediaMount;
-                    Requires = dependencies;
+                    # Not Requires: an arr still works without them, and would
+                    # otherwise go down whenever one restarts
+                    Wants = dependencies;
                     BindsTo = lib.optional needsMedia mediaMount;
                   };
                 };
