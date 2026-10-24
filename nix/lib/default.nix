@@ -16,7 +16,7 @@ lib.foldr lib.recursiveUpdate { } (
     ./hosts
     ./misc
     ./nvim
-    ./oci-containers
+    ./quadlet
     ./tailscale
   ]
 )

@@ -79,7 +79,6 @@
     };
   };
 
-  virtualisation.oci-containers.backend = "podman";
   virtualisation.podman = {
     autoPrune.enable = true;
     dockerCompat = true;

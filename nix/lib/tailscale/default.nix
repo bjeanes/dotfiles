@@ -380,7 +380,7 @@
       config.assertions = [
         {
           assertion = drive == { } || user != null;
-          message = "mkTailscaleContainer: `drive` requires `user`; tailscaled refuses to serve Taildrive shares as root";
+          message = "mkTailscaleQuadletContainer: `drive` requires `user`; tailscaled refuses to serve Taildrive shares as root";
         }
       ];
 
@@ -411,8 +411,6 @@
       containerName,
       unit,
       shares,
-      # Quadlet is podman-only; oci-containers passes its configured backend
-      ctr ? "${pkgs.podman}/bin/podman",
     }:
     let
 
@@ -423,7 +421,7 @@
         # default) and only symlinks it to the well-known path when it can
         # write /var/run/tailscale, which it cannot as a non-root container.
         ts() {
-          ${ctr} exec ${lib.escapeShellArg containerName} \
+          ${pkgs.podman}/bin/podman exec ${lib.escapeShellArg containerName} \
             tailscale --socket=/tmp/tailscaled.sock "$@"
         }
 

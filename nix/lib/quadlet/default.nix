@@ -4,46 +4,7 @@ let
   inherit (myLib) mkTailscaleContainerCommon mkTaildriveShares;
 in
 rec {
-  containerSvcName =
-    config: name: config.virtualisation.oci-containers.containers.${name}.serviceName;
-
-  # Allow setting environment variables on an oci-container declaration from the contents of a file
-  setEnvFromFilesForContainer =
-    pkgs: config: name: vars:
-    setEnvFromCommandsForContainer pkgs config name (
-      builtins.mapAttrs (_: v: "cat ${lib.escapeShellArg v}") vars
-    );
-
-  # Allow setting environment variables on an oci-container declaration from the output of a command
-  setEnvFromCommandsForContainer =
-    pkgs: config: containerName: variables:
-    mkOciDynamicEnvironment pkgs config { inherit variables containerName; };
-
-  mkOciDynamicEnvironment =
-    pkgs: config:
-    {
-      containerName,
-      variables,
-    }:
-    let
-      serviceName = containerSvcName config containerName;
-
-      generated = mkDynamicEnvFile pkgs {
-        inherit serviceName variables;
-      };
-    in
-    {
-      virtualisation.oci-containers.containers.${containerName}.environmentFiles = [
-        generated.envFile
-      ];
-
-      systemd.services.${serviceName}.serviceConfig = {
-        ExecStartPre = lib.mkAfter [ generated.execStartPre ];
-        ExecStopPost = lib.mkAfter [ generated.execStopPost ];
-      };
-    };
-
-  # Quadlet counterpart of setEnvFromFilesForContainer
+  # Sets environment variables on a quadlet container from the contents of files
   setEnvFromFilesForQuadlet =
     pkgs: config: containerName: vars:
     mkQuadletDynamicEnvironment pkgs config {
@@ -156,56 +117,6 @@ rec {
       execStartPre = generate;
       execStopPost = clean;
     };
-
-  mkTailscaleContainer =
-    pkgs: config: name:
-    {
-      container ? { },
-      ...
-    }@opts:
-    with lib;
-    let
-      rest = removeAttrs opts [ "container" ];
-      common = mkTailscaleContainerCommon pkgs config name rest;
-    in
-    mkMerge [
-      common.config
-      {
-        virtualisation.oci-containers.containers.${name} = container;
-      }
-      (mkOciDynamicEnvironment pkgs config {
-        containerName = name;
-        variables = common.dynamicEnvironment;
-      })
-      {
-        virtualisation.oci-containers.containers.${name} = {
-          inherit (common)
-            environment
-            volumes
-            image
-            hostname
-            ;
-          extraOptions = [
-            "--cap-add=net_admin"
-            "--cap-add=sys_module"
-          ]
-          ++ common.extraOptions;
-          labels = {
-            "io.containers.autoupdate" = "registry";
-          };
-        };
-      }
-      (mkTaildriveShares pkgs {
-        containerName = name;
-        unit = "${containerSvcName config name}.service";
-        shares = common.driveShares;
-        ctr =
-          let
-            inherit (config.virtualisation.oci-containers) backend;
-          in
-          "${pkgs.${backend}}/bin/${backend}";
-      })
-    ];
 
   mkTailscaleQuadletContainer =
     pkgs: config: name:
