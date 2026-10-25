@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "nixos": {
+      "command": "nix",
+      "args": ["develop", "-c", "uvx", "mcp-nixos==3.1.0"]
+    }
+  }
+}

@@ -45,6 +45,7 @@ pkgs.mkShell {
       shfmt
       nh
       push-local-flake
+      uv # runs mcp-nixos for .mcp.json; nixpkgs' is broken
     ])
     ++ (with inputs; [
       self.packages.${system}.nvim
