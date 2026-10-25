@@ -10,6 +10,11 @@ Before drafting anything as me, read `writing-examples.md`. It has annotated
 excerpts of my writing and before/after rewrites of the Claude-isms. This file
 holds the rules; that one holds the evidence behind them.
 
+The rules files themselves are written for an agent to follow. They lead with
+the instruction and give the reason after, which breaks the premise-first rule
+below. An agent is more likely to follow an instruction it meets first. Don't
+copy their structure when writing as me.
+
 ## Voice
 
 - **Write for the reader with the least context.** That could be someone
@@ -24,8 +29,8 @@ holds the rules; that one holds the evidence behind them.
 - **First person for what I did, found or believe.** "I realised", "I took the
   liberty of", "I'm not too concerned", "that I won't get into here". Admit
   mistakes plainly: "I mindlessly moved the `transaction` in one nesting level".
-  A need that comes from the work itself is different. It is the team's need, so
-  write "we" or state it directly: "It is important to know how far the mirror
+  A need that comes from the work itself is different. Since it is the team's
+  need, write "we" or state it directly: "It is important to know how far the mirror
   has drifted". Writing "I want to know…" makes it sound like a personal
   preference.
 - **Be precise about certainty.** Separate what is known from what is believed

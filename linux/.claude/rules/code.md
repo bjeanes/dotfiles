@@ -30,12 +30,12 @@ Reviewability is the constraint that outranks coverage.
 # Code comments
 
 Write code that answers the question a comment would have. Naming,
-decomposition, and explicit types carry more than prose does, and they can't
-drift.
+decomposition, and explicit types convey more than prose does. They also can't
+drift from the code the way a comment can.
 
 Add a comment only when something is genuinely subtle, or when its importance is
 easy to overlook -- a non-obvious invariant, a deliberate deviation, a workaround
-with a reason. That bar means comments are occasional, not routine.
+with a reason. That bar makes comments occasional.
 
 Whatever you do write must stand on its own:
 
@@ -88,7 +88,7 @@ SAMPLES_PER_KIND = 5
 ```
 
 The header restated the constant's name, and the list beneath it said every
-value twice. Each value now carries its own note. `SAMPLE_SIZE` needed a
+value twice. Each value now has its own note. `SAMPLE_SIZE` needed a
 comment to say what it counted, but `SAMPLES_PER_KIND` says it without one.
 
 Prefer suggesting commit message content over lengthy code comments unless

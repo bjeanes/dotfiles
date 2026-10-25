@@ -2,9 +2,9 @@
 
 A `.git` directory does not mean the repo is driven by git. Many of my repos
 are colocated Jujutsu (`jj`) repos, where jj owns the working copy and git is
-just the backing store. Check before running any git command that writes:
-`jj root` succeeds inside a jj repo, and a `.jj` directory sits alongside
-`.git`.
+just the backing store. Before running any git command that writes, check
+which kind of repo it is. Inside a jj repo, `jj root` succeeds and a `.jj`
+directory sits alongside `.git`.
 
 When jj is in charge, use `jj` for anything that changes the working copy,
 history, or refs. Read-only git (`git log`, `git show`, `git diff`) is fine.
@@ -16,21 +16,21 @@ two views.
 Do not assume the git command has a same-named jj equivalent, or guess at
 flags -- look them up when you need them (`jj help`, `jj help -k`, the docs).
 
-One thing worth knowing up front, since it looks like a problem and is not:
-a colocated repo normally shows detached HEAD in `git status`. That is the
-expected steady state. Leave it alone.
+A colocated repo normally shows detached HEAD in `git status`. It looks like
+a problem. However, it is the expected steady state. Leave it alone.
 
 # What a commit is for
 
 Every commit should be clear, atomic, and reviewable -- by me and by anyone
-I work with. One logical change, whole and nothing else: it builds and
-works on its own, and its message says what changed and why. A reviewer
+I work with. Each one holds a single logical change, whole and with nothing
+else in it. It builds and works on its own. Its message says what changed and
+why. A reviewer
 should never have to untangle two changes from one commit, or piece one
 change together from several.
 
-Making those boundaries is the hard part, and it gets harder the longer
-unrelated work piles up together. So the time to cut a commit is when a unit
-is done, not after the next one has started on top of it.
+Drawing those boundaries is the hard part. It gets harder the longer
+unrelated work piles up together. So, cut a commit as soon as a unit is done,
+before the next one starts on top of it.
 
 A large change lands as a series of commits, each one reviewable on its own.
 For example: refactor the dependencies first, then introduce the new
@@ -44,19 +44,19 @@ exploratory work.
 
 # Committing
 
-By default you are my pair, and we work through each commit together. Never
+By default you are my pair. We work through each commit together. Never
 commit without being told to. Not at the end of a task, not as a
 convenience, not because the work looks finished. Leave changes in the
 working copy and let me decide when they land.
-
-Some projects loosen this default in their own instructions, and some
-tighten it. For that project, its instructions win. Wherever committing is
-allowed, the rest of this file says how to do it.
 
 But do not run past the natural commit boundaries either. When the work
 spans several coherent, self-contained units, stop at the end of each one
 rather than building the whole feature into a single undifferentiated pile.
 Say what is done, what is next, and let me commit before continuing.
+
+Some projects loosen this default in their own instructions. Others tighten
+it. For that project, its instructions win. Wherever committing is allowed,
+the rest of this file says how to do it.
 
 ## When I give the go-ahead
 
@@ -65,7 +65,7 @@ agreeing to a plan of commits. Within that line of work, commit each unit
 yourself as it is finished and checked, and keep going without waiting on
 me. Afterwards, tell me what landed: each commit's change ID and subject.
 
-That go-ahead is for that line of work only. It does not carry over to the
+That go-ahead is for that line of work only. It does not extend to the
 next task, or to anything that turns up along the way; ask again for those.
 Still stop and ask when:
 
@@ -83,17 +83,18 @@ rules decide whether you may.
 
 ## Working under a megamerge
 
-I often work with `@` on top of a megamerge: a merge whose parents are
-separate lines of work, each based on trunk, so all of them are in effect at
-once. `closest_merge(@)` finds it. When `@` is a megamerge or a descendant of
-one, new work becomes a line of its own -- another parent of the megamerge,
-parallel to the rest -- not commits on top of the merge, and not part of
-another parent's line. Commit it above the merge, then move it under with
+I often work with `@` on top of a megamerge. That is a merge whose parents
+are separate lines of work, each based on trunk, so that all of them are in
+effect at once. `closest_merge(@)` finds it. When `@` is a megamerge or a
+descendant of one, new work becomes a line of its own. That makes it another
+parent of the megamerge, parallel to the rest. It doesn't go on top of the
+merge, or into another parent's line. Commit it above the merge, then move it
+under with
 `jj stack <revs>` (or `jj stage` for everything above the merge, as one line).
 
 If making it a parent would leave the megamerge conflicted, don't. Keep the
-line separate, based on trunk in its own workspace, and ask me whether to
-merge it in and resolve the conflicts or leave it apart.
+line separate, based on trunk in its own workspace. Then ask me whether to
+merge it in and resolve the conflicts, or leave it apart.
 
 ## Keep everyone's work in view
 
@@ -129,7 +130,7 @@ from it should have the changes from every parallel line available to use.
 
 ## `.claude/` and `CLAUDE.md`
 
-Leave changes to `.claude/` and `CLAUDE.md` out of feature commits: unless I
+Leave changes to `.claude/` and `CLAUDE.md` out of feature commits. Unless I
 ask otherwise, they stay uncommitted. I often keep them local-only, in a
 commit or series of their own that is one of the megamerge's parents. In some
 repos they hold notes on the domain and research I've gathered, which you
@@ -141,20 +142,21 @@ merge that also includes the parents holding those changes, so they stay in
 effect while you work.
 
 The local-only files -- `CLAUDE.local.md`, `.claude/settings.local.json` --
-are never committed at all, not even to that series. They should be ignored,
-but don't rely on that: check they aren't in what you're committing.
+are never committed at all, not even to that series. They should be ignored.
+However, don't rely on that. Check they aren't in what you're committing.
 
 ## Never publish
 
 Nothing is ever pushed, and no PR is opened, without me saying so for that
-specific push. This is what makes the go-ahead safe: until something leaves
-this machine, all of it can still be reshaped.
+specific push. Until something leaves this machine, all of it can still be
+reshaped. That is what makes the go-ahead safe.
 
 ## Subagents
 
 A subagent may commit the same way, in its own `jj workspace`, but only for
-a line of work I have agreed to directly -- not one the delegating agent
-decided to hand off on its own. Brief it on these rules. It commits only in
+a line of work I have agreed to directly. If the delegating agent decided to
+hand the work off on its own, the subagent doesn't commit. Brief it on these
+rules. It commits only in
 its workspace, never pushes, and never uses `jj op restore`, which rewinds
 the operation log every workspace shares. The delegating agent brings its
 commits into the stack, reviews them as it would its own, and removes the
@@ -164,7 +166,7 @@ Put workspaces outside the repo tree. A workspace inside it can fail to
 check out. Removing one takes two steps. `jj workspace forget` leaves the
 workspace's working-copy commit behind, so `jj abandon` that as well.
 
-If the sandbox blocks a workspace path, don't quietly retry somewhere else.
+If the sandbox blocks a workspace path, don't retry somewhere else.
 Name the directory and ask me for write access to it as a step of its own.
 Then create the workspace once that's granted. I may only see a denied path
 as a bare "unable to open a workspace" error, with no choice offered. If you
