@@ -15,7 +15,6 @@
       bat
       treefmt
       direnv
-      nixpkgs-fmt
       nh
       jq
     ];
