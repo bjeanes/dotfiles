@@ -32,11 +32,26 @@ Making those boundaries is the hard part, and it gets harder the longer
 unrelated work piles up together. So the time to cut a commit is when a unit
 is done, not after the next one has started on top of it.
 
+A large change lands as a series of commits, each one reviewable on its own.
+For example: refactor the dependencies first, then introduce the new
+component, then tie it together. Each commit changes as little code as its
+step needs (see `code.md`). Its message gives the reader the context they
+need to review it (see `writing.md`).
+
+These standards hold whoever makes the commit and however much autonomy they
+have. That includes you under a go-ahead, a subagent, and proof-of-concept or
+exploratory work.
+
 # Committing
 
-By default, never commit without being told to. Not at the end of a task,
-not as a convenience, not because the work looks finished. Leave changes in
-the working copy and let me decide when they land.
+By default you are my pair, and we work through each commit together. Never
+commit without being told to. Not at the end of a task, not as a
+convenience, not because the work looks finished. Leave changes in the
+working copy and let me decide when they land.
+
+Some projects loosen this default in their own instructions, and some
+tighten it. For that project, its instructions win. Wherever committing is
+allowed, the rest of this file says how to do it.
 
 But do not run past the natural commit boundaries either. When the work
 spans several coherent, self-contained units, stop at the end of each one
@@ -80,6 +95,38 @@ If making it a parent would leave the megamerge conflicted, don't. Keep the
 line separate, based on trunk in its own workspace, and ask me whether to
 merge it in and resolve the conflicts or leave it apart.
 
+## Keep everyone's work in view
+
+The working copy often holds more than your own work, such as the other
+parents of a megamerge or uncommitted changes in the working commit. I may be
+using it at the same time. So may agents working in parallel.
+
+When it holds other work in progress, don't `jj edit` a different commit or
+otherwise move the working copy off `@`. That would pull the context out from
+under whoever is using it. `jj edit` also checks out a tree without my
+local-only files. The next snapshot then folds those files into whatever
+commit `@` sits on. A snapshot can happen at any moment, even when I approve a
+command.
+
+Instead, make your changes at `@` and place them with
+`jj squash --from @ --into <rev> <paths>`. It accepts paths and works into any
+ancestor. When `@` holds edits bound for different revisions in the same file,
+or in the same hunk, move them precisely with `jj hunk squash ID[:LINES]...
+--into <rev>`. `jj hunk absorb --dry-run` suggests where each hunk belongs.
+"Splitting mixed changes" below and the jj-surgeon skill cover the details.
+Afterwards, check that `jj diff -r <rev> --name-only` shows no
+`.claude/` paths. Also check that `jj op log` shows only the operations you
+meant to run. Since I may be working in parallel, expect some operations that
+aren't yours.
+
+If you need a clean tree, use a separate workspace. You may need one when your
+work conflicts with other lines, or sits close enough to them to muddy test
+results or behaviour. You may also need one when a change needs an
+intermediate tree that squashing can't express. Even then, keep your line
+under the megamerge wherever conflicts allow. Everything in flight should be
+visible together in the main working copy. For example, a web app I'm running
+from it should have the changes from every parallel line available to use.
+
 ## `.claude/` and `CLAUDE.md`
 
 Leave changes to `.claude/` and `CLAUDE.md` out of feature commits: unless I
@@ -112,6 +159,16 @@ its workspace, never pushes, and never uses `jj op restore`, which rewinds
 the operation log every workspace shares. The delegating agent brings its
 commits into the stack, reviews them as it would its own, and removes the
 workspace afterwards.
+
+Put workspaces outside the repo tree. A workspace inside it can fail to
+check out. Removing one takes two steps. `jj workspace forget` leaves the
+workspace's working-copy commit behind, so `jj abandon` that as well.
+
+If the sandbox blocks a workspace path, don't quietly retry somewhere else.
+Name the directory and ask me for write access to it as a step of its own.
+Then create the workspace once that's granted. I may only see a denied path
+as a bare "unable to open a workspace" error, with no choice offered. If you
+silently retry elsewhere, it looks to me like a refusal I never made.
 
 ## Splitting mixed changes
 
