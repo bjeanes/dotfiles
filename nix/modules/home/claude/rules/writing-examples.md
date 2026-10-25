@@ -98,7 +98,7 @@ a minute or two.
 ```
 
 Take from it: the reader gets the mental model before the decision. The one
-emphasised word is the one that carries the danger. The last paragraph grounds
+emphasised word is the one that conveys the danger. The last paragraph grounds
 the choice in something I checked.
 
 ### B. Owning a mistake (2025-01)
@@ -530,7 +530,7 @@ most of the drift dates from the outage".
 - **Typos.** "their is", "shoudl", "logut", "archaelogists".
 - **Run-on sentences.** I write some, as in excerpt C. Don't imitate them.
 - **Commits from roughly August 2026 onward.** Many were drafted with an agent
-  and carry the patterns listed above. Don't treat them as examples of my
+  and show the patterns listed above. Don't treat them as examples of my
   writing.
 - **Feature-list commits.** Earlier commits with "New Components:" or
   "Key Features:" headings and terse, uniform bullets were also agent-drafted.
