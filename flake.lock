@@ -174,26 +174,6 @@
         "type": "github"
       }
     },
-    "nil": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1785028902,
-        "narHash": "sha256-F+MFs5cJbqcrlu/6BzQhNwF7Ih26yG9Yg9p4xyDz5eY=",
-        "owner": "oxalica",
-        "repo": "nil",
-        "rev": "205c8ba65a7f956d7837a710794001b3515c65ff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "nil",
-        "type": "github"
-      }
-    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -403,7 +383,6 @@
         "docker-inspect-run-cmd-fmt": "docker-inspect-run-cmd-fmt",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
-        "nil": "nil",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
         "nixos-generators": "nixos-generators",

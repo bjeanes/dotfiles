@@ -16,7 +16,6 @@
       treefmt
       direnv
       nixpkgs-fmt
-      nil
       nh
       jq
     ];
