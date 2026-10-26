@@ -10,4 +10,4 @@ export LG_CONFIG_FILE="$HOME/.local/share/dotfiles/catppuccin-lazygit/mocha/mauv
 export OP_PLUGIN_ALIASES_SOURCED="1"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 export VISUAL="nvim"
-
+export PATH="$HOME/bin${PATH:+:}$PATH"
