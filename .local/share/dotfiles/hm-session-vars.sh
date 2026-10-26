@@ -9,5 +9,6 @@ export GLAMOUR_STYLE="$HOME/.local/share/dotfiles/catppuccin-glamour/catppuccin-
 export LG_CONFIG_FILE="$HOME/.local/share/dotfiles/catppuccin-lazygit/mocha/mauve.yml,$HOME/.config/lazygit/config.yml"
 export OP_PLUGIN_ALIASES_SOURCED="1"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+export TMUX_TMPDIR="${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}"
 export VISUAL="nvim"
 export PATH="$HOME/bin${PATH:+:}$PATH"
