@@ -15,6 +15,11 @@
       set -s extended-keys on
       set -g renumber-windows on
 
+      # Name windows after the title a program sets, falling back to the
+      # command. An unset pane title is the hostname, and a program may clear
+      # it to "" on exit.
+      set -g automatic-rename-format '#{?#{&&:#{pane_title},#{!=:#{pane_title},#{host}}},#{pane_title},#{pane_current_command}}'
+
       bind -T copy-mode-vi v send -X begin-selection
       bind -T copy-mode-vi y send -X copy-selection-and-cancel
 
@@ -23,4 +28,9 @@
       bind c new-window -c "#{pane_current_path}"
     '';
   };
+
+  catppuccin.tmux.extraConfig = ''
+    set -g @catppuccin_window_text " #W"
+    set -g @catppuccin_window_current_text " #W"
+  '';
 }
