@@ -16,6 +16,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/catppuccin-lazygit` | catppuccin-lazygit 0-unstable-2026-10-09 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
+| `~/.local/share/dotfiles/tmuxplugin-catppuccin` | tmuxplugin-catppuccin 0-unstable-2026-09-21 |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/blink.cmp` | https://github.com/Saghen/blink.cmp/tree/v1.10.2 |
