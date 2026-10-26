@@ -7,6 +7,7 @@
     historyLimit = 50000;
     baseIndex = 1;
     keyMode = "vi";
+    clock24 = true;
     # Pass OSC 52 from programs in a pane (e.g. Claude's /copy) through to the
     # outer terminal, so copies over ssh land on the local clipboard.
     extraConfig = ''
