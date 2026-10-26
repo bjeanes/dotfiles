@@ -78,6 +78,8 @@
   ];
 
   config = {
+    home.sessionPath = [ "$HOME/bin" ];
+
     home.shellAliases = {
       g = "git";
       l = "ls";
