@@ -11,6 +11,6 @@ export OP_PLUGIN_ALIASES_SOURCED="1"
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 export VISUAL="nvim"
-
+export PATH="$HOME/bin${PATH:+:}$PATH"
 # reset TERM with new TERMINFO available (if any)
 export TERM="$TERM"
