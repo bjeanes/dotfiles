@@ -20,6 +20,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
 | `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2026-10-08 |
+| `~/.local/share/dotfiles/tmuxplugin-catppuccin` | tmuxplugin-catppuccin 0-unstable-2026-09-21 |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
 | `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2026-10-10 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
