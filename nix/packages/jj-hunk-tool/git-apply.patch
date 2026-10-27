@@ -1,0 +1,37 @@
+--- a/src/tool.rs
++++ b/src/tool.rs
+@@ -1014,14 +1014,30 @@
+ 
+     // Step 2: Apply the pre-computed patch
+     let reverse = std::env::var(REVERSE_ENV_VAR).is_ok();
+-    let mut patch_cmd = Command::new("patch");
+-    patch_cmd.args(["-p1", "--silent"]);
++    // Unlike `patch`, `git apply` fails on an empty patch
++    if std::fs::metadata(&patch_path)
++        .with_context(|| format!("reading {patch_path}"))?
++        .len()
++        == 0
++    {
++        return Ok(());
++    }
++
++    // GNU patch rejects some correct patches whose hunks have uneven context
++    // (https://github.com/mvzink/jj-hunk-tool/issues/2); `git apply` doesn't.
++    let mut patch_cmd = Command::new("git");
++    patch_cmd.args(["apply", "-p1"]);
+     if reverse {
+         patch_cmd.arg("--reverse");
+     }
+-    patch_cmd.arg("-i").arg(&patch_path);
++    patch_cmd.arg(&patch_path);
+     patch_cmd.current_dir(right_path);
+-    let status = patch_cmd.status().context("failed to run patch")?;
++    // Outside a repository, `git apply` patches paths relative to the current
++    // directory. Inside one, it would use the repository's root instead.
++    if let Some(parent) = right_path.parent() {
++        patch_cmd.env("GIT_CEILING_DIRECTORIES", parent);
++    }
++    let status = patch_cmd.status().context("failed to run git apply")?;
+ 
+     if !status.success() {
+         bail!("patch failed to apply (exit code: {:?})", status.code());
