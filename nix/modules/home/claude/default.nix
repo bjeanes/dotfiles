@@ -1,7 +1,6 @@
 # Claude Code's global rules, plus a `claude` that picks the install and signs
 # in from agenix. Settings and CLAUDE.md stay as they are on each machine.
 {
-  config,
   inputs,
   lib,
   pkgs,
@@ -15,11 +14,6 @@ let
   # it); elsewhere this is plain `claude` with its usual login.
   claude = pkgs.writeShellApplication {
     name = "claude";
-
-    # Home Manager gates plugin support on this. nixpkgs' version is the
-    # oldest that can run, since the other installs only get newer.
-    passthru.version = pkgs.claude-code.version;
-
     text = ''
       real=${lib.getExe pkgs.claude-code}
       for installed in "$HOME/.local/bin/claude" /opt/homebrew/bin/claude /usr/local/bin/claude; do
@@ -45,8 +39,6 @@ let
   pathInit = ''
     export PATH="${claude}/bin:$PATH"
   '';
-
-  revdiffLauncher = ".claude-plugin/skills/revdiff/scripts/launch-revdiff.sh";
 in
 {
   home.packages = [ inputs.revdiff.packages.${pkgs.stdenv.hostPlatform.system}.default ];
@@ -56,7 +48,11 @@ in
     package = claude;
     rulesDir = ./rules;
 
-    plugins.revdiff = inputs.revdiff;
+    # Through a marketplace, since `plugins` links the plugin in as a symlink.
+    # revdiff's manifest names its skills directory, which then resolves into
+    # the store, outside the link, and Claude Code skips it.
+    marketplaces.revdiff = inputs.revdiff;
+    settings.enabledPlugins."revdiff@revdiff" = true;
 
     # Merged into the writable settings.json at activation, so `/config` and
     # permission prompts can still write to it. A declared list replaces that
@@ -94,12 +90,10 @@ in
         allowWrite = [ "~/.cache/nix" ];
       };
 
-      # revdiff's launcher drives Ghostty and iTerm2 with `osascript`, which
-      # the sandbox blocks. The skill resolves the launcher through either the
-      # plugin's link in skills/ or the store path it points to.
+      # revdiff's launcher opens its overlay through tmux's socket, or through
+      # `osascript` for Ghostty and iTerm2, all of which the sandbox blocks
       excludedCommands = [
-        "${inputs.revdiff}/${revdiffLauncher}*"
-        "${config.programs.claude-code.configDir}/skills/revdiff/${revdiffLauncher}*"
+        "${inputs.revdiff}/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh*"
       ];
     };
   };
