@@ -24,7 +24,7 @@ end
 
 -- Set up options {{{
 do
-    local nixvim_options = { pumblend = 0, termguicolors = true, winblend = 0 }
+    local nixvim_options = { pumblend = 0, termguicolors = true, title = true, titlestring = "%t%( %M%)", winblend = 0 }
 
     for k, v in pairs(nixvim_options) do
         vim.opt[k] = v
