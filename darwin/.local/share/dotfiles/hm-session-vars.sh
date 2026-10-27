@@ -8,9 +8,12 @@ export FZF_DEFAULT_OPTS_FILE="$HOME/.local/share/dotfiles/catppuccin-fzf/catppuc
 export GLAMOUR_STYLE="$HOME/.local/share/dotfiles/catppuccin-glamour/catppuccin-mocha.json"
 export LG_CONFIG_FILE="$HOME/.local/share/dotfiles/catppuccin-lazygit/mocha/mauve.yml,$HOME/Library/Application Support/lazygit/config.yml"
 export OP_PLUGIN_ALIASES_SOURCED="1"
-export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 export VISUAL="nvim"
 export PATH="$HOME/bin${PATH:+:}$PATH"
+if [ -z "$SSH_CONNECTION" ]; then
+  export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+fi
+
 # reset TERM with new TERMINFO available (if any)
 export TERM="$TERM"
