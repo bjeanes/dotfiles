@@ -39,6 +39,16 @@ let
   pathInit = ''
     export PATH="${claude}/bin:$PATH"
   '';
+
+  revdiffLauncher = "${inputs.revdiff}/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh";
+
+  jjReview = pkgs.runCommandLocal "jj-review-skill" { } ''
+    cp -r ${./skills/jj-review} $out
+    chmod -R u+w $out
+    patchShebangs $out/scripts
+    substituteInPlace $out/scripts/jj-review-loop.sh --replace-fail @launcher@ ${revdiffLauncher}
+    substituteInPlace $out/SKILL.md --replace-fail @out@ $out
+  '';
 in
 {
   home.packages = [ inputs.revdiff.packages.${pkgs.stdenv.hostPlatform.system}.default ];
@@ -54,6 +64,8 @@ in
     marketplaces.revdiff = inputs.revdiff;
     settings.enabledPlugins."revdiff@revdiff" = true;
 
+    skills.jj-review = jjReview;
+
     # Merged into the writable settings.json at activation, so `/config` and
     # permission prompts can still write to it. A declared list replaces that
     # list in the file, though lists from other settings files still combine.
@@ -68,6 +80,7 @@ in
     # added there by hand belongs here too. Project ones go in each project's
     # .claude/settings.local.json.
     settings.permissions.allow = [
+      "Skill(jj-review)"
       "mcp__context7__query-docs"
       "Bash(docker build *)"
       "Bash(docker compose *)"
@@ -91,9 +104,11 @@ in
       };
 
       # revdiff's launcher opens its overlay through tmux's socket, or through
-      # `osascript` for Ghostty and iTerm2, all of which the sandbox blocks
+      # `osascript` for Ghostty and iTerm2, all of which the sandbox blocks.
+      # jj-review's loop runs the launcher for each change.
       excludedCommands = [
-        "${inputs.revdiff}/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh*"
+        "${revdiffLauncher}*"
+        "${jjReview}/scripts/jj-review-loop.sh*"
       ];
     };
   };
