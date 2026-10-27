@@ -13,6 +13,11 @@ let
   # it); elsewhere this is plain `claude` with its usual login.
   claude = pkgs.writeShellApplication {
     name = "claude";
+
+    # Home Manager gates plugin support on this. nixpkgs' version is the
+    # oldest that can run, since the other installs only get newer.
+    passthru.version = pkgs.claude-code.version;
+
     text = ''
       real=${lib.getExe pkgs.claude-code}
       for installed in "$HOME/.local/bin/claude" /opt/homebrew/bin/claude /usr/local/bin/claude; do
