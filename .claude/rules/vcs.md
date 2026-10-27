@@ -166,6 +166,13 @@ Put workspaces outside the repo tree. A workspace inside it can fail to
 check out. Removing one takes two steps. `jj workspace forget` leaves the
 workspace's working-copy commit behind, so `jj abandon` that as well.
 
+Always pass `--no-colocate` to `jj workspace add`, even where a skill
+(such as jj-subagent-workspaces) gives the command without it. In a
+colocated repo, jj otherwise also creates a git worktree for the new
+workspace, which means writing under the main repo's `.git` directory. My
+sandbox denies writes there, so creating the workspace fails every time.
+The workspace doesn't need a git worktree, since jj alone drives it.
+
 If the sandbox blocks a workspace path, don't retry somewhere else.
 Name the directory and ask me for write access to it as a step of its own.
 Then create the workspace once that's granted. I may only see a denied path
