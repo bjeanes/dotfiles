@@ -1,6 +1,8 @@
 # Claude Code's global rules, plus a `claude` that picks the install and signs
 # in from agenix. Settings and CLAUDE.md stay as they are on each machine.
 {
+  config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -43,12 +45,18 @@ let
   pathInit = ''
     export PATH="${claude}/bin:$PATH"
   '';
+
+  revdiffLauncher = ".claude-plugin/skills/revdiff/scripts/launch-revdiff.sh";
 in
 {
+  home.packages = [ inputs.revdiff.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+
   programs.claude-code = {
     enable = true;
     package = claude;
     rulesDir = ./rules;
+
+    plugins.revdiff = inputs.revdiff;
 
     # Merged into the writable settings.json at activation, so `/config` and
     # permission prompts can still write to it. A declared list replaces that
@@ -85,6 +93,14 @@ in
         ];
         allowWrite = [ "~/.cache/nix" ];
       };
+
+      # revdiff's launcher drives Ghostty and iTerm2 with `osascript`, which
+      # the sandbox blocks. The skill resolves the launcher through either the
+      # plugin's link in skills/ or the store path it points to.
+      excludedCommands = [
+        "${inputs.revdiff}/${revdiffLauncher}*"
+        "${config.programs.claude-code.configDir}/skills/revdiff/${revdiffLauncher}*"
+      ];
     };
   };
 

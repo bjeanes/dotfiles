@@ -76,6 +76,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # The flake's source is also its Claude Code plugin
+    revdiff = {
+      url = "github:umputun/revdiff";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
