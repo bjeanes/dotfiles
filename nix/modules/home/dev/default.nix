@@ -24,6 +24,7 @@
 
     programs.bat.enable = true;
     programs.bat.config = {
+      style = "header,grid";
       map-syntax = [
         "flake.lock:JSON"
       ];
