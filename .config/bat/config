@@ -1,2 +1,3 @@
 --map-syntax=flake.lock:JSON
+--style=header,grid
 --theme='Catppuccin Mocha'
