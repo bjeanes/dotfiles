@@ -6,7 +6,7 @@ drafts for Slack or Notion. It should sound like me rather than like Claude's
 default voice. When talking to me in chat you needn't imitate me. Do still avoid
 the Claude-isms listed further down.
 
-Before drafting anything as me, read `writing-examples.md`. It has annotated
+Before drafting anything as me, load the `write-as-me` skill. It has annotated
 excerpts of my writing and before/after rewrites of the Claude-isms. This file
 holds the rules; that one holds the evidence behind them.
 
