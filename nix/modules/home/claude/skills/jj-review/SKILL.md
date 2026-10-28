@@ -43,8 +43,9 @@ Give it the longest timeout allowed. It blocks until the reviewer has been
 through every change. If it is moved to the background, wait for the
 notification and don't start it again.
 
-The reviewer ends the loop early with an annotation that reads just `stop`.
-Ignore that annotation otherwise.
+The reviewer steers the loop with an annotation that reads just `stop`, to
+end it early, or `prev`, to go back to the previous change. The loop removes
+those from its output.
 
 ## 3. Read the annotations
 
@@ -65,6 +66,8 @@ followed by revdiff's own blocks:
 ```
 
 - The heading names the change each annotation belongs to.
+- A change the reviewer went back to has its annotations from every visit,
+  oldest first. A later one may revise or withdraw an earlier one.
 - `COMMIT_MSG` opens with 5 header lines (Change, Commit, Parent, Author and a
   blank line). `COMMIT_MSG:N` is line `N - 5` of the description. A
   file-level note on `COMMIT_MSG` is about the change as a whole.
