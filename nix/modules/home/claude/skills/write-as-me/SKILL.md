@@ -1,8 +1,13 @@
+---
+name: write-as-me
+description: Annotated excerpts of my writing and rewrites of Claude-isms, the evidence behind the rules in writing.md. Load before drafting or revising anything that goes out under my name - a commit message (jj describe, jj commit, jj split, jj new -m), a PR description, a review comment, a code comment, docs, or a Slack or Notion draft.
+---
+
 # Writing as me: examples
 
 Read this before drafting anything that goes out under my name: commit messages,
-PR descriptions, review comments, docs, and Slack or Notion drafts. The rules are
-in `writing.md`. This file holds the evidence behind them.
+PR descriptions, review comments, code comments, docs, and Slack or Notion
+drafts. The rules are in `writing.md`. This file holds the evidence behind them.
 
 Identifying names in the excerpts have been replaced with placeholders such as
 `<service>` or `<colleague>`.

@@ -65,6 +65,7 @@ in
     settings.enabledPlugins."revdiff@revdiff" = true;
 
     skills.jj-review = jjReview;
+    skills.write-as-me = ./skills/write-as-me;
 
     # Merged into the writable settings.json at activation, so `/config` and
     # permission prompts can still write to it. A declared list replaces that
