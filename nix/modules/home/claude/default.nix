@@ -67,6 +67,8 @@ in
     skills.jj-review = jjReview;
     skills.write-as-me = ./skills/write-as-me;
 
+    agents.writing-reviewer = ./agents/writing-reviewer.md;
+
     # Merged into the writable settings.json at activation, so `/config` and
     # permission prompts can still write to it. A declared list replaces that
     # list in the file, though lists from other settings files still combine.
