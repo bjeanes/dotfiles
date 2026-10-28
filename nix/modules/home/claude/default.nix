@@ -60,6 +60,16 @@ let
     text = builtins.readFile ./hooks/writing-review.sh;
   };
 
+  commentReview = pkgs.writeShellApplication {
+    name = "comment-review";
+    runtimeInputs = with pkgs; [
+      coreutils
+      gnugrep
+      jq
+    ];
+    text = builtins.readFile ./hooks/comment-review.sh;
+  };
+
   # A hook's `if` holds a single permission rule, so each command needs its own
   writingCommands = [
     "jj describe"
@@ -105,6 +115,20 @@ in
           "if" = "Bash(${command} *)";
           command = lib.getExe writingReview;
         }) writingCommands;
+      }
+    ];
+
+    # After the edit, since fixing a comment is just another edit. Declaring
+    # PostToolUse likewise replaces a list added to settings.json by hand.
+    settings.hooks.PostToolUse = [
+      {
+        matcher = "Edit|MultiEdit|Write";
+        hooks = [
+          {
+            type = "command";
+            command = lib.getExe commentReview;
+          }
+        ];
       }
     ];
 
