@@ -49,6 +49,30 @@ let
     substituteInPlace $out/scripts/jj-review-loop.sh --replace-fail @launcher@ ${revdiffLauncher}
     substituteInPlace $out/SKILL.md --replace-fail @out@ $out
   '';
+
+  writingReview = pkgs.writeShellApplication {
+    name = "writing-review";
+    runtimeInputs = with pkgs; [
+      coreutils
+      gnugrep
+      jq
+    ];
+    text = builtins.readFile ./hooks/writing-review.sh;
+  };
+
+  # A hook's `if` holds a single permission rule, so each command needs its own
+  writingCommands = [
+    "jj describe"
+    "jj desc"
+    "jj commit"
+    "jj split"
+    "jj new"
+    "gh pr create"
+    "gh pr edit"
+    "gh pr comment"
+    "gh pr review"
+    "gh api"
+  ];
 in
 {
   home.packages = [ inputs.revdiff.packages.${pkgs.stdenv.hostPlatform.system}.default ];
@@ -68,6 +92,21 @@ in
     skills.write-as-me = ./skills/write-as-me;
 
     agents.writing-reviewer = ./agents/writing-reviewer.md;
+
+    # Rules loaded at the start of a session lose their pull as it grows, so
+    # bring the writing rules back just before text goes out under my name.
+    # Declaring PreToolUse replaces any PreToolUse list added to settings.json
+    # by hand.
+    settings.hooks.PreToolUse = [
+      {
+        matcher = "Bash";
+        hooks = map (command: {
+          type = "command";
+          "if" = "Bash(${command} *)";
+          command = lib.getExe writingReview;
+        }) writingCommands;
+      }
+    ];
 
     # Merged into the writable settings.json at activation, so `/config` and
     # permission prompts can still write to it. A declared list replaces that
