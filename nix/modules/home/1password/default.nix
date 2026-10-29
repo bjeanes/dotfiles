@@ -27,7 +27,6 @@ in
       enable = true;
 
       plugins = with pkgs; [
-        gh # github
         cargo
         heroku
         tea # gitea
