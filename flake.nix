@@ -82,6 +82,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    paneru = {
+      url = "github:karinushka/paneru";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix-darwin.follows = "nix-darwin";
+        flake-parts.follows = "flake-parts";
+      };
+    };
+
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 

@@ -10,4 +10,6 @@
   age.secrets.claude-code-oauth-token.owner = config.system.primaryUser;
 
   users.users.bjeanes.home = "/Users/bjeanes";
+
+  services.paneru.enable = true;
 }
