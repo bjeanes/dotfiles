@@ -71,10 +71,6 @@ eval "$(devenv hook bash)"
 
 . $HOME/.local/share/dotfiles/watch-defaults.sh
 
-gh() {
-  op plugin run -- gh "$@";
-}
-
 cargo() {
   op plugin run -- cargo "$@";
 }

@@ -109,10 +109,6 @@ add-zsh-hook preexec _set_title_preexec
 
 . $HOME/.local/share/dotfiles/watch-defaults.sh
 
-gh() {
-  op plugin run -- gh "$@";
-}
-
 cargo() {
   op plugin run -- cargo "$@";
 }
