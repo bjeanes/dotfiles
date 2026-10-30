@@ -113,6 +113,28 @@ problem is overuse, especially where it stands in for an explanation.
   on how long each shard takes to process". A plain "That…" referring to what
   the previous sentence established is fine, as in
   "That means running…" or "That is almost exactly three files per photo".
+
+  Watch most of all for a heavy subject. That is a subject the reader has to
+  unpack before they reach the verb. There are three warning signs:
+
+  - a negation, such as "no X", "without X" or "that can't…";
+  - a relative clause, such as "that contains the file";
+  - a condition disguised as a noun phrase, such as "a failing shard".
+
+  A negation in the subject is especially hard to read. The reader has to work
+  out the positive case before they can follow the rest of the sentence. If a
+  subject shows one warning sign, look at it again. If it shows two or more,
+  rewrite the sentence. "If no scope that contains the file lists a server
+  type" nests a relative clause inside a negation. "A backend without a runner
+  runs the servers command on your machine" disguises a condition as a negated
+  noun phrase. To fix a heavy subject, try these in order: describe what the
+  real actor does, in the order it does it; lead with the default case; or
+  state the condition as a plain "if" or "when" clause. For example: "By
+  default, the servers command runs on your machine. To run it elsewhere, set a
+  runner on the backend."
+
+  To check a draft, find the subject of each sentence. Ask whether it actually
+  performs the verb, and whether a reader could say it aloud in one breath.
 - **"Carry" and other vague verbs.** Unless something is literally being
   carried, there is usually a more precise word, such as convey, imply, assume,
   uphold or encode. Prefer the word that is more precise or conveys more nuance.
