@@ -135,6 +135,11 @@ problem is overuse, especially where it stands in for an explanation.
 
   To check a draft, find the subject of each sentence. Ask whether it actually
   performs the verb, and whether a reader could say it aloud in one breath.
+- **A negated noun where the verb could take the negation**, as in "has no
+  teardown step yet" or "there is no way to resume". Negate the verb instead:
+  "doesn't have a teardown step yet", or "there isn't a way to resume". I find the negated
+  verb easier to read. Only negate the subject or object when the verb can't
+  take the negation.
 - **"Carry" and other vague verbs.** Unless something is literally being
   carried, there is usually a more precise word, such as convey, imply, assume,
   uphold or encode. Prefer the word that is more precise or conveys more nuance.
