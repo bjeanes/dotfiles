@@ -277,6 +277,7 @@ in
                 "prv"
                 "priv"
                 "private"
+                "review" # agents' commits awaiting my review
               ]
             ++ [
               # commits with conflicts
