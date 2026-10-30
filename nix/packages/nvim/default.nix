@@ -14,6 +14,7 @@ nixvim'.makeNixvimWithModule {
   inherit pkgs;
   extraSpecialArgs = {
     myLib = flake.lib;
+    inherit inputs system;
   };
   module = {
     # This means I can't use `default.nix` as a filename later, because there

@@ -75,6 +75,11 @@
       };
     };
 
+    heddle = {
+      url = "github:bjeanes/heddle";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # https://developer.1password.com/docs/cli/shell-plugins/nix/
     _1password-shell-plugins = {
       url = "github:1Password/shell-plugins";

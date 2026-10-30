@@ -187,6 +187,27 @@
         "type": "github"
       }
     },
+    "heddle": {
+      "inputs": {
+        "jolt-src": "jolt-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793315702,
+        "narHash": "sha256-+t2vK1iQ93KARUR7zA/pIvEZ1Yct3I17nvYuhvMtsPc=",
+        "owner": "bjeanes",
+        "repo": "heddle",
+        "rev": "f0927a4e2547169f85d37cbc8ed657cb2781a4e9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bjeanes",
+        "repo": "heddle",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -220,6 +241,25 @@
         "owner": "vic",
         "repo": "import-tree",
         "type": "github"
+      }
+    },
+    "jolt-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792265041,
+        "narHash": "sha256-YfUBMLzUwVqtM/9dwTQMLBJp2bIw1yjZFQSa2cHCnQY=",
+        "ref": "refs/tags/v0.8.23",
+        "rev": "a0ac71c3f638fe55158bd01b4ecbb0dd3d7545e5",
+        "revCount": 4487,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/jolt-lang/jolt"
+      },
+      "original": {
+        "ref": "refs/tags/v0.8.23",
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/jolt-lang/jolt"
       }
     },
     "microvm": {
@@ -517,6 +557,7 @@
         "comin": "comin",
         "docker-inspect-run-cmd-fmt": "docker-inspect-run-cmd-fmt",
         "flake-parts": "flake-parts",
+        "heddle": "heddle",
         "home-manager": "home-manager",
         "microvm": "microvm",
         "nix-darwin": "nix-darwin",

@@ -2,6 +2,7 @@
   flake,
   pkgs,
   lib,
+  perSystem,
   ...
 }:
 {
@@ -17,6 +18,7 @@
       direnv
       nh
       jq
+      perSystem.heddle.heddle
     ];
 
     # TODO: https://news.ycombinator.com/item?id=31010090 for wiring together `rg`+`fzf`+`bat`
