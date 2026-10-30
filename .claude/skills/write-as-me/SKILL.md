@@ -419,7 +419,8 @@ analysed.
 
 Most of the "before" examples are quoted from agent-drafted text in my
 projects. The "quietly" and "deliberately not" examples are invented, since
-those changes happen not to use either word. The "after" versions show one way to write each, not the
+those changes happen not to use either word. In the negated-noun example, the
+phrase is real but "the installer" is a stand-in. The "after" versions show one way to write each, not the
 only way.
 
 ### "<assertion>, so <outcome>"
@@ -529,6 +530,14 @@ just established is fine. "That means running something against the production
 buckets" and "That is almost exactly three files per photo" can both stay. They
 point at something already on the page. The pattern to avoid is a noun phrase
 standing in for the real actor or for a condition.
+
+### A negated noun
+
+> The installer has no teardown step yet.
+
+> The installer doesn't have a teardown step yet.
+
+Only the verb changes. The noun stays as it is.
 
 ### "I want" for a need the work has
 
