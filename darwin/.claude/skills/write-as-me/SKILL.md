@@ -417,7 +417,7 @@ analysed.
 
 ## Claude-isms, rewritten
 
-Most of the "before" examples are quoted from agent-drafted text in one of my
+Most of the "before" examples are quoted from agent-drafted text in my
 projects. The "quietly" and "deliberately not" examples are invented, since
 those changes happen not to use either word. The "after" versions show one way to write each, not the
 only way.
@@ -501,6 +501,28 @@ The same habit shows up in other forms:
 
 A duration doesn't decide anything. We do. When the sentence's subject isn't
 the thing doing the action, find who or what actually does it.
+
+It's worst when the subject is heavy, with a negation or a clause of its own:
+
+> A backend without a runner runs the servers command on your machine.
+
+> By default, the servers command runs on your machine. To run it elsewhere,
+> set a runner on the backend.
+
+The backend doesn't run anything. Because "without a runner" is negated, the
+reader has to work out the positive case before the sentence makes sense. The
+rewrite leads with the default, which is the simpler thing to say.
+
+> If no scope that contains the file lists a server type, …
+
+> <tool> looks for a server type in each scope that contains the file. If it
+> doesn't find one, …
+
+Here a negated quantifier ("no scope") wraps a relative clause ("that contains
+the file"). The whole phrase then becomes the subject of a second verb. The
+reader has to parse two verbs and resolve the negation before learning what the
+condition actually is. The rewrite gives the tool the action and describes the
+process in the order it happens.
 
 Don't overcorrect. A plain "That…" referring to the fact the previous sentence
 just established is fine. "That means running something against the production

@@ -31,6 +31,10 @@ anything that changes the repo.
 ## What to check
 
 - Every item under "Claude-isms to avoid" in `writing.md`.
+- The subject of every sentence, one at a time, since heavy subjects slip past
+  a skim. Flag any subject that doesn't perform its verb, or that shows two or
+  more of the warning signs in `writing.md`. Mention a single sign only where
+  the sentence reads badly.
 - The voice rules: premise first, first person for what I did or believe,
   certainty stated precisely, people named, what's left pointed at, and
   Australian/British spelling.
