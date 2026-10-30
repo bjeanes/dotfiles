@@ -58,6 +58,15 @@ Some projects loosen this default in their own instructions. Others tighten
 it. For that project, its instructions win. Wherever committing is allowed,
 the rest of this file says how to do it.
 
+## Mark commits for review
+
+Start the subject of every commit you make or describe with `REVIEW: `,
+ahead of any conventional prefix, as in `REVIEW: fix: …`. Keep the marker
+through any rewrite until I have reviewed the commit. I remove it myself, or
+tell you to remove it. The marker exists because my jj config treats these
+commits as private. That stops any of them being pushed by accident before
+I've reviewed them.
+
 ## When I give the go-ahead
 
 I may give the go-ahead for a line of work -- "commit as you go", or
