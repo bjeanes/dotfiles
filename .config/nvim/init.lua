@@ -700,6 +700,8 @@ require("permalink").setup({
 
 require("nvim-paredit").setup({ indent = { enabled = true } })
 
+require("heddle").setup()
+
 -- Set up autogroups {{
 do
     local __nixvim_autogroups = { ["nixvim-path"] = { clear = true }, nixvim_lsp_binds = { clear = false } }

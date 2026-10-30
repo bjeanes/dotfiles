@@ -26,6 +26,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/conjure` | https://github.com/Olical/conjure/tree/v4.60.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/git-blame.nvim` | https://github.com/f-person/git-blame.nvim/tree/5c536e2d4134d064aa3f41575280bc8a2a0e03d7 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/heddle` | https://github.com/bjeanes/heddle/tree/f0927a4e2547169f85d37cbc8ed657cb2781a4e9 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/mini.nvim` | https://github.com/nvim-mini/mini.nvim/tree/v0.18.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/neo-tree.nvim` | https://github.com/nvim-neo-tree/neo-tree.nvim/tree/3.42.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nix-develop.nvim` | https://github.com/figsoda/nix-develop.nvim/tree/33f0a63ba878febcf1b078f9a4d314c0f952809a |
