@@ -11,5 +11,7 @@
 
   users.users.bjeanes.home = "/Users/bjeanes";
 
+  # At most one of these; the Rift module asserts it.
   services.paneru.enable = true;
+  services.rift.enable = false;
 }
