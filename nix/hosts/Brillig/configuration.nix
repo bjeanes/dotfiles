@@ -70,6 +70,7 @@
   };
 
   homelab.services.yuvomi.enable = true;
+  homelab.services.moltis.enable = true;
 
   virtualisation.podman.autoPrune.enable = true;
   virtualisation.quadlet.autoUpdate.enable = true;

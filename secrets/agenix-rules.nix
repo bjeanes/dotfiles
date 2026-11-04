@@ -80,6 +80,11 @@ in
     jabberwocky
   ];
 
+  "openrouter-api-key.age".publicKeys = [
+    bjeanes
+    brillig
+  ];
+
   "wg-private-key.age".publicKeys = [
     bjeanes
     borogrove
