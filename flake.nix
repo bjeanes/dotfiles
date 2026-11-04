@@ -42,6 +42,11 @@
 
     quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
 
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
