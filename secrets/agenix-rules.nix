@@ -85,6 +85,11 @@ in
     brillig
   ];
 
+  "moltis-vault-recovery-key.age".publicKeys = [
+    bjeanes
+    brillig
+  ];
+
   "wg-private-key.age".publicKeys = [
     bjeanes
     borogrove

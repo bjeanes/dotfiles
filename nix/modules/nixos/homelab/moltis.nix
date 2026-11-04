@@ -18,7 +18,13 @@ let
 
   # Keep other secrets out of here. The guest can read everything in it.
   secretsDir = "/run/microvm-${svc}-secrets";
-  apiKey = "openrouter-api-key";
+
+  # Environment variable in the guest => agenix secret
+  secrets = {
+    OPENROUTER_API_KEY = "openrouter-api-key";
+    # Lets Moltis unseal its vault at boot, before it loads stored channels
+    MOLTIS_VAULT_AUTO_UNSEAL_KEY = "moltis-vault-recovery-key";
+  };
 
   blockedRanges = [
     "10.0.0.0/8"
@@ -70,10 +76,13 @@ in
     { microvm.host.enable = cfg.enable; }
 
     (lib.mkIf cfg.enable {
-      age.secrets.${apiKey} = {
-        path = "${secretsDir}/${apiKey}";
-        symlink = false;
-      };
+      age.secrets = lib.mapAttrs' (
+        _: name:
+        lib.nameValuePair name {
+          path = "${secretsDir}/${name}";
+          symlink = false;
+        }
+      ) secrets;
 
       microvm.vms.${svc} = {
         specialArgs = { inherit perSystem; };
@@ -146,7 +155,7 @@ in
             bind = "0.0.0.0";
             inherit port;
             openFirewall = true;
-            credentials.OPENROUTER_API_KEY = "/run/host-secrets/${apiKey}";
+            credentials = lib.mapAttrs (_: name: "/run/host-secrets/${name}") secrets;
             environment = {
               MOLTIS_BEHIND_PROXY = "true";
               MOLTIS_EXTERNAL_URL = "https://${cfg.hostName}.${config.homelab.tailscale.tailnet}";
