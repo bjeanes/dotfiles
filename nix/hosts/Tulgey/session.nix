@@ -35,7 +35,8 @@ let
   '';
 
   kioskSession = {
-    command = "${lib.getExe pkgs.sway} --config ${swayConfig}";
+    # greetd discards the session's output.
+    command = "${config.systemd.package}/bin/systemd-cat --identifier=sway ${lib.getExe pkgs.sway} --debug --config ${swayConfig}";
     user = "tablet";
   };
 in
