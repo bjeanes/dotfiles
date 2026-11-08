@@ -137,7 +137,19 @@ in
                 size = cfg.stateSizeMB;
               }
             ];
+
+            # sudo microvm -s moltis -- -i /etc/ssh/ssh_host_ed25519_key
+            vsock = {
+              cid = 3;
+              ssh.enable = true;
+            };
           };
+
+          # Only over vsock, from the host
+          services.openssh.openFirewall = false;
+          users.users.root.openssh.authorizedKeys.keys = [
+            flake.lib.hosts.${lib.toLower config.networking.hostName}.hostKey
+          ];
 
           networking.useNetworkd = true;
           systemd.network.networks."10-uplink" = {
