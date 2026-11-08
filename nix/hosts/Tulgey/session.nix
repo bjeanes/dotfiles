@@ -11,6 +11,16 @@ let
   cfg = config.panel;
   mqttHost = flake.lib.hosts.homeassistant.lan;
 
+  # rustc rejects squeekboard's declaration of libc's `close`, whose real
+  # signature returns an `i32`.
+  squeekboard = pkgs.squeekboard.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace src/vkeyboard.rs \
+        --replace-fail 'fn close(fd: u32);' 'fn close(fd: i32) -> i32;' \
+        --replace-fail 'close(self.fd as u32);' 'close(self.fd as i32);'
+    '';
+  });
+
   swayConfig = pkgs.writeText "tulgey-kiosk.conf" ''
     output eDP-1 scale 2
 
@@ -24,7 +34,7 @@ let
 
     # squeekboard only self-selects dark under Phosh; GTK_THEME picks the
     # dark stylesheet it already ships. Read once at startup.
-    exec env GTK_THEME=Adwaita:dark ${lib.getExe pkgs.squeekboard}
+    exec env GTK_THEME=Adwaita:dark ${lib.getExe squeekboard}
 
     exec ${lib.getExe perSystem.self.touchkio} \
       --web-url=${cfg.dashboardUrl} \
