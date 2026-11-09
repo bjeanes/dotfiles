@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   flake,
   inputs,
   perSystem,
@@ -162,12 +163,20 @@ in
             ];
           };
 
+          # So that Chromium can render text
+          fonts.enableDefaultPackages = true;
+
           services.moltis = {
             enable = true;
             bind = "0.0.0.0";
             inherit port;
             openFirewall = true;
             credentials = lib.mapAttrs (_: name: "/run/host-secrets/${name}") secrets;
+            # For the browser tool in sessions that aren't sandboxed
+            extraPackages = [
+              pkgs.chromium
+              pkgs.obscura
+            ];
             environment = {
               MOLTIS_BEHIND_PROXY = "true";
               MOLTIS_EXTERNAL_URL = "https://${cfg.hostName}.${config.homelab.tailscale.tailnet}";
