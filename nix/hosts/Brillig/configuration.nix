@@ -70,7 +70,10 @@
   };
 
   homelab.services.yuvomi.enable = true;
-  homelab.services.moltis.enable = true;
+  homelab.services.moltis = {
+    enable = true;
+    memoryMB = 6144;
+  };
 
   virtualisation.podman.autoPrune.enable = true;
   virtualisation.quadlet.autoUpdate.enable = true;
