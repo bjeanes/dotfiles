@@ -55,6 +55,16 @@ in
       '';
     };
 
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.chromium ]";
+      description = ''
+        Packages on Moltis's PATH, such as browsers for its browser tool in
+        sessions that aren't sandboxed.
+      '';
+    };
+
     podman.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -85,10 +95,12 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      path = lib.optionals cfg.podman.enable [
-        "/run/wrappers"
-        config.virtualisation.podman.package
-      ];
+      path =
+        lib.optionals cfg.podman.enable [
+          "/run/wrappers"
+          config.virtualisation.podman.package
+        ]
+        ++ cfg.extraPackages;
 
       environment = {
         MOLTIS_DATA_DIR = stateDir;
