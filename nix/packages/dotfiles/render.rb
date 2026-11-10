@@ -234,16 +234,31 @@ class Render
   # Assumes nothing this config generates has a version suffix or is named
   # "source". If UPSTREAM_README lists something it shouldn't, look here.
   private def upstream?(object)
+    object = wrapped_object(object)
     @sources.key?(object) || store_name(object) == "source" || store_name(object).match?(VERSION_SUFFIX)
   end
 
   #   flake input         => "https://github.com/owner/repo/tree/<rev>"
   #   zsh-vi-mode-0.12.0  => "zsh-vi-mode 0.12.0"
   private def describe(object)
+    object = wrapped_object(object)
     return @sources[object]["url"] if @sources.key?(object)
 
     name = name_without_version(object)
     "#{name} #{store_name(object).delete_prefix("#{name}-")}".strip
+  end
+
+  # If every entry of `object` links into the same store object, as a
+  # symlinkJoin of a single package does (e.g. Home Manager's claude-code
+  # plugins), this returns that object.
+  private def wrapped_object(object)
+    return object unless File.directory?(object)
+
+    targets = Dir.children(object).map do |entry|
+      path = File.join(object, entry)
+      split_store_path(File.readlink(path))&.first if File.symlink?(path)
+    end
+    targets.uniq.one? && targets.first ? targets.first : object
   end
 
   private def write_upstream_readme
