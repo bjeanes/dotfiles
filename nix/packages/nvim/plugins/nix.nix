@@ -24,7 +24,7 @@
       callback.__raw = # lua
         ''
           function()
-            local nixvim = vim.split(${lib.nixvim.toLuaObject (lib.makeBinPath config.extraPackages)}, ":")
+            local nixvim = vim.split(${lib.nixvim.toLuaObject (lib.makeBinPath config.extraPackages)}, ":", { trimempty = true })
             local nixvim_after = vim.split(${lib.nixvim.toLuaObject (lib.makeBinPath config.extraPackagesAfter)}, ":", { trimempty = true })
 
             local res = vim.system(
