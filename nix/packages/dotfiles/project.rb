@@ -203,7 +203,7 @@ class Projection
   # The store name minus its version, so that a version bump changes the
   # vendored files rather than their paths.
   private def label_for(object)
-    @labels[object] ||= unique_label(name_without_version(object))
+    @labels[object] ||= unique_label(@flake_inputs.dig(object, "name") || name_without_version(object))
   end
 
   private def name_without_version(object)
@@ -223,10 +223,10 @@ class Projection
   #   flake input         => "https://github.com/owner/repo/tree/<rev>"
   #   zsh-vi-mode-0.12.0  => "zsh-vi-mode 0.12.0"
   private def describe(object)
-    @flake_inputs.fetch(object) do
-      name = name_without_version(object)
-      "#{name} #{store_name(object).delete_prefix("#{name}-")}".strip
-    end
+    return @flake_inputs[object]["url"] if @flake_inputs.key?(object)
+
+    name = name_without_version(object)
+    "#{name} #{store_name(object).delete_prefix("#{name}-")}".strip
   end
 
   private def write_upstream_readme

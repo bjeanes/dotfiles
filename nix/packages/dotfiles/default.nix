@@ -17,13 +17,15 @@ let
     else
       locked.url or locked.type;
 
-  # Store path => where it was fetched from, for inputs the config refers to
-  # directly (e.g. zsh plugins), which are otherwise all just named "source".
+  # Store path => the input's name and where it was fetched from, for inputs the
+  # config refers to directly (e.g. zsh plugins), which are otherwise all just
+  # named "source".
   flakeInputs = lib.mapAttrs' (
     name: input:
-    lib.nameValuePair (builtins.unsafeDiscardStringContext input.outPath) (
-      upstreamUrl lock.nodes.${lock.nodes.root.inputs.${name}}.locked
-    )
+    lib.nameValuePair (builtins.unsafeDiscardStringContext input.outPath) {
+      inherit name;
+      url = upstreamUrl lock.nodes.${lock.nodes.root.inputs.${name}}.locked;
+    }
   ) (lib.filterAttrs (name: _: lib.isString (lock.nodes.root.inputs.${name} or null)) inputs);
 in
 pkgs.runCommand "dotfiles"
