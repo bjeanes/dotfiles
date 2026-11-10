@@ -1,15 +1,19 @@
+# Only the Home Manager config, its inputs and flake.lock come from
+# `sourceFlake`, which may be an older revision. Everything else comes from
+# `flake`, the revision doing the rendering.
 {
   pkgs,
   flake,
-  inputs,
+  sourceFlake ? flake,
   ...
 }:
 let
   inherit (pkgs) lib;
+  inherit (sourceFlake) inputs;
 
-  hm = flake.nixosConfigurations.Borogrove.config.home-manager.users.bjeanes;
+  hm = sourceFlake.nixosConfigurations.Borogrove.config.home-manager.users.bjeanes;
 
-  lock = lib.importJSON "${flake}/flake.lock";
+  lock = lib.importJSON "${sourceFlake}/flake.lock";
   upstreamUrl =
     locked:
     if locked.type == "github" then
@@ -35,6 +39,7 @@ pkgs.runCommand "dotfiles"
       pkgs.zsh
     ];
     allowedReferences = [ ];
+    passthru.render = sourceFlake: import ./. { inherit pkgs flake sourceFlake; };
   }
   ''
     cp -RL ${hm.home-files} $out
