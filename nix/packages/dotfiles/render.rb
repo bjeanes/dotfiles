@@ -1,7 +1,7 @@
 # Renders a copy of Home Manager's `home-files` as a plain home directory
 # with no /nix/store references, for sharing with people who don't use Nix.
 #
-# Usage: render.rb HOME_FILES HOME_DIRECTORY FLAKE_INPUTS_JSON OUT
+# Usage: render.rb HOME_FILES HOME_DIRECTORY SOURCES_JSON HOME_LINKS_JSON OUT
 
 require "fileutils"
 require "json"
@@ -10,9 +10,10 @@ require "set"
 
 STORE_REF = %r{/nix/store/[0-9a-z]{32}-[A-Za-z0-9+\-._?=]+(?:/[A-Za-z0-9+\-._?=@%]+)*}
 STORE_SHEBANG = %r{\A#!/nix/store/[^/]+/bin/}
+STORE_BIN_DIRS = %r{\A/nix/store/[^/:]+/bin(?::/nix/store/[^/:]+/bin)*\z}  # as lib.makeBinPath joins them
 
 SINGLE_QUOTED = /'([^'"$`\\]+)'/  # with no ", $, ` or \ inside, which double quotes treat specially
-LUA_STRING = /"([^"\s]+)"/
+LUA_STRING = /"([^"\s\\]+)"/  # no backslashes, so a string escaped inside another isn't matched
 
 EXCLUDED = [
   ".cache/nix-index",                                         # nix-index's database
@@ -32,7 +33,10 @@ DROPPED_LINES = [
   %r{nix-index.*/command-not-found},  # needs nix-index's database
   %r{^\s*HELPDIR=.*/nix/store/},      # zsh's own help files
   %r{^\s*(export\s+)?LOCALE_ARCHIVE}, # only Nix's glibc reads it
-  %r{PATH=.*/nix/store/[^/]+/bin:}    # packages are assumed to be on $PATH
+  %r{PATH=.*/nix/store/[^/]+/bin:},   # packages are assumed to be on $PATH
+  %r{_host_prog = "/nix/store/},      # Neovim's Nix-built Ruby and Python providers
+  %r{^-- Ignore the user lua configuration$},              # nixvim's comment on the next two
+  %r{runtimepath:remove\(vim\.fn\.stdpath\("config"\)}  # takes ~/.config/nvim, where the config lives here, off the runtime path
 ].freeze
 
 SHELL_NAMES = %w[.bashrc .bash_profile .profile .zshrc .zshenv .zprofile].freeze
@@ -52,13 +56,14 @@ HomePath = Data.define(:path)  # relative to $HOME
 HomeLink = Data.define(:rel, :object, :root)
 
 class Render
-  def initialize(home_files, home_directory, flake_inputs, out)
+  def initialize(home_files, home_directory, sources, home_links, out)
     @home_files = home_files
     @home_dir_ref = /#{Regexp.escape(home_directory)}(?![\w.-])/  # not /home/bjeanes2
-    @flake_inputs = JSON.parse(File.read(flake_inputs))
+    @sources = JSON.parse(File.read(sources))
     @out = Pathname(out)
     @home_links = store_objects_linked_into_home
     @linked_objects = @home_links.select(&:root).to_h { |link| [link.object, link.root] }
+    @linked_objects.merge!(JSON.parse(File.read(home_links)))
     @upstream = {}  # home path => where its code comes from
     @labels = {}
     @vendored = Set.new
@@ -128,6 +133,8 @@ class Render
       end
     when :lua
       text.gsub(LUA_STRING) do
+        next %("") if $1.match?(STORE_BIN_DIRS)  # packages are assumed to be on $PATH
+
         localise($1, home: "$HOME")
           .split("$HOME", -1)
           .map { %("#{_1}") }
@@ -213,7 +220,7 @@ class Render
   # The store name minus its version, so that a version bump changes the
   # vendored files rather than their paths.
   private def label_for(object)
-    @labels[object] ||= unique_label(@flake_inputs.dig(object, "name") || name_without_version(object))
+    @labels[object] ||= unique_label(@sources.dig(object, "name") || name_without_version(object))
   end
 
   private def name_without_version(object)
@@ -227,13 +234,13 @@ class Render
   # Assumes nothing this config generates has a version suffix or is named
   # "source". If UPSTREAM_README lists something it shouldn't, look here.
   private def upstream?(object)
-    @flake_inputs.key?(object) || store_name(object) == "source" || store_name(object).match?(VERSION_SUFFIX)
+    @sources.key?(object) || store_name(object) == "source" || store_name(object).match?(VERSION_SUFFIX)
   end
 
   #   flake input         => "https://github.com/owner/repo/tree/<rev>"
   #   zsh-vi-mode-0.12.0  => "zsh-vi-mode 0.12.0"
   private def describe(object)
-    return @flake_inputs[object]["url"] if @flake_inputs.key?(object)
+    return @sources[object]["url"] if @sources.key?(object)
 
     name = name_without_version(object)
     "#{name} #{store_name(object).delete_prefix("#{name}-")}".strip
