@@ -15,10 +15,9 @@
 
       # https://nixcademy.com/posts/rosetta-linux-builder-macos/
       package = pkgs.darwin.linux-builder-vz;
-      systems = [
-        "aarch64-linux"
-        "x86_64-linux"
-      ];
+      # x86_64-linux goes to the NixOS builders (../../shared/distributed-builds)
+      # because Rosetta can't build it reliably.
+      systems = [ "aarch64-linux" ];
       maxJobs = 4;
 
       # Guest defaults (1 core / 3G / 20G disk) are too small to build a whole
