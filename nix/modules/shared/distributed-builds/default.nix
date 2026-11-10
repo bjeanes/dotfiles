@@ -3,6 +3,7 @@
   config,
   flake,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -15,7 +16,7 @@ let
   peers = lib.filterAttrs (_: host: host ? hostKey) hosts;
 
   selfName = lib.toLower config.networking.hostName;
-  self = peers.${selfName} or { };
+  self = hosts.${selfName} or { };
 
   remotes = lib.filterAttrs (name: host: name != selfName && host ? builder) peers;
 
@@ -43,11 +44,13 @@ in
 {
   options.distributed-builds = {
     enable = lib.mkEnableOption "using the other NixOS machines as remote builders" // {
-      default = peers ? ${selfName};
+      default = peers ? ${selfName} || cfg.client;
     };
 
+    # Every Mac, so that its linux-builder VM (../../darwin/nix) needn't build
+    # x86_64-linux under Rosetta.
     client = lib.mkEnableOption "handing this host's builds to the machines that serve them" // {
-      default = self.buildClient or false;
+      default = self.buildClient or pkgs.stdenv.hostPlatform.isDarwin;
     };
 
     user = lib.mkOption {

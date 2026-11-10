@@ -27,6 +27,10 @@ let
 
   selfName = lib.toLower config.networking.hostName;
   self = peers.${selfName} or { };
+
+  # Every Mac is a client too; see ../../shared/distributed-builds.
+  macs = map lib.toLower (builtins.attrNames flake.darwinConfigurations);
+  clients = lib.filterAttrs (name: host: host.buildClient or (lib.elem name macs)) hosts;
 in
 {
   options.distributed-builds = {
@@ -61,10 +65,9 @@ in
         shell = pkgs.bashInteractive;
         description = "Remote builds submitted by the other machines";
 
-        # Every peer except this one -- a host has no reason to log into itself.
-        openssh.authorizedKeys.keys = lib.mapAttrsToList (_: host: host.hostKey) (
-          lib.filterAttrs (name: _: name != selfName) peers
-        );
+        # Only NixOS hosts have a `hostKey`. A Mac records the same SSH host key
+        # as `ageHostKey`.
+        openssh.authorizedKeys.keys = lib.mapAttrsToList (_: host: host.hostKey or host.ageHostKey) clients;
       };
 
       users.groups.${cfg.user} = { };
