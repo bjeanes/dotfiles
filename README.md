@@ -1,5 +1,13 @@
 # Bo's Dot Files
 
+## Not using Nix?
+
+If you only want to browse my dotfiles, the [`dotfiles` branch][dotfiles] has
+them as a plain home directory, without anything that depends on Nix. CI
+updates it from `main` on every push.
+
+[dotfiles]: https://github.com/bjeanes/dotfiles/tree/dotfiles
+
 ## Install
 
 - Install Nix, using determinate systems' installer:
