@@ -189,9 +189,19 @@ class Projection
       return Command[label]
     end
 
-    # Anything else this config generated, such as .zprofile sourcing
-    # /nix/store/…-hm-session-vars.sh/etc/profile.d/hm-session-vars.sh. Copy
-    # the whole directory around a file, so that anything sourced from beside
+    # A generated file alone in its store object. For example, .zprofile
+    # sourcing /nix/store/…-hm-session-vars.sh/etc/profile.d/hm-session-vars.sh
+    # becomes VENDOR_DIR/hm-session-vars.sh. Since nothing else in the object
+    # needs to come with it, it can drop etc/profile.d, which only reflects how
+    # Nix packaged it.
+    if path.file? && enum_for(:each_file, Pathname(object)).one?
+      vendor(path, "#{VENDOR_DIR}/#{label}")
+      return HomePath["#{VENDOR_DIR}/#{label}"]
+    end
+
+    # Anything else this config generated, such as
+    # /nix/store/…-jj-review-skill/scripts/jj-review-loop.sh. Copy the whole
+    # directory around a file, so that anything it runs or sources from beside
     # it comes too. A path that doesn't exist stays a path to nothing.
     if path.exist?
       source = path.file? && !subpath.empty? ? path.dirname : path
