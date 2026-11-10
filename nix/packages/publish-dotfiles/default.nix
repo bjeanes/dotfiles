@@ -6,5 +6,5 @@ pkgs.writeShellApplication {
     pkgs.findutils
     pkgs.git
   ];
-  text = builtins.readFile ./publish-dotfiles.sh;
+  text = builtins.readFile ./render.sh + builtins.readFile ./publish-dotfiles.sh;
 }

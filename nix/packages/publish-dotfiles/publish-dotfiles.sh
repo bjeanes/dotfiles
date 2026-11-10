@@ -11,9 +11,6 @@
 # names its source commit in.
 
 branch_dir=$(realpath "$1")
-repo=$(git rev-parse --show-toplevel)
-source_repo=${SOURCE_REPO:-bjeanes/dotfiles}
-progress_ref=refs/dotfiles/rendered
 head=$(git rev-parse HEAD)
 
 ancestor_of_head() {
@@ -41,27 +38,7 @@ fi
 
 for rev in $revs; do
   echo "rendering $(git log -1 --format='%h %s' "$rev")" >&2
-  out=$(nix build --no-link --print-out-paths --impure --expr "
-    (builtins.getFlake \"git+file://$repo?rev=$head\").packages.x86_64-linux.dotfiles.render
-      (builtins.getFlake \"git+file://$repo?rev=$rev\")
-  ")
-
-  find "$branch_dir" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-  cp -R "$out"/. "$branch_dir"/
-  chmod -R u+w "$branch_dir"
-  # --force, so that the user's global ignores can't leave files out.
-  git -C "$branch_dir" add --all --force
-
-  if git -C "$branch_dir" diff --cached --quiet; then
-    echo "  no change" >&2
-  else
-    GIT_AUTHOR_NAME=$(git log -1 --format=%an "$rev") \
-      GIT_AUTHOR_EMAIL=$(git log -1 --format=%ae "$rev") \
-      GIT_AUTHOR_DATE=$(git log -1 --format=%aI "$rev") \
-      git -C "$branch_dir" commit --quiet \
-      -m "$(git log -1 --format=%s "$rev")" \
-      -m "Generated from $source_repo@$rev"
-  fi
-
+  out=$(render "$head" "$rev")
+  commit_render "$out" "$rev"
   git update-ref "$progress_ref" "$rev"
 done
