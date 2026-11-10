@@ -864,7 +864,8 @@ do
             callback = function()
                 local nixvim = vim.split(
                     "",
-                    ":"
+                    ":",
+                    { trimempty = true }
                 )
                 local nixvim_after = vim.split("", ":", { trimempty = true })
 
