@@ -1,7 +1,7 @@
-# Rewrites a copy of Home Manager's `home-files` into a plain home directory
+# Renders a copy of Home Manager's `home-files` as a plain home directory
 # with no /nix/store references, for sharing with people who don't use Nix.
 #
-# Usage: project.rb HOME_FILES HOME_DIRECTORY FLAKE_INPUTS_JSON OUT
+# Usage: render.rb HOME_FILES HOME_DIRECTORY FLAKE_INPUTS_JSON OUT
 
 require "fileutils"
 require "json"
@@ -23,7 +23,7 @@ EXCLUDED = [
 ].freeze
 
 DROPPED_BLOCKS = [
-  # Sources Nix's bash-completion, which is most of the projection's size.
+  # Sources Nix's bash-completion, which is most of the render's size.
   # Distros and Homebrew load their own, which is what the guard checks for.
   /^if \[\[ ! -v BASH_COMPLETION_VERSINFO \]\]; then\n.*\n^fi\n\n?/
 ].freeze
@@ -51,7 +51,7 @@ HomePath = Data.define(:path)  # relative to $HOME
 
 HomeLink = Data.define(:rel, :object, :root)
 
-class Projection
+class Render
   def initialize(home_files, home_directory, flake_inputs, out)
     @home_files = home_files
     @home_dir_ref = /#{Regexp.escape(home_directory)}(?![\w.-])/  # not /home/bjeanes2
@@ -82,7 +82,7 @@ class Projection
   # Home Manager links store objects into home, whole or file-by-file. So
   #   .claude/skills/foo/SKILL.md -> /nix/store/abc-foo/SKILL.md
   # gives a link whose root is ".claude/skills/foo". References to that object
-  # can then point at the copy already in the projection.
+  # can then point at the copy already in the render.
   private def store_objects_linked_into_home
     Dir.glob("**/*", File::FNM_DOTMATCH, base: @home_files).filter_map do |rel|
       path = File.join(@home_files, rel)
@@ -336,4 +336,4 @@ class Projection
   end
 end
 
-Projection.new(*ARGV).run
+Render.new(*ARGV).run

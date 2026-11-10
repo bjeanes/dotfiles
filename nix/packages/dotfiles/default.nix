@@ -39,7 +39,7 @@ pkgs.runCommand "dotfiles"
   ''
     cp -RL ${hm.home-files} $out
     chmod -R u+w $out
-    ruby ${./project.rb} \
+    ruby ${./render.rb} \
       ${hm.home-files} \
       ${hm.home.homeDirectory} \
       ${pkgs.writeText "flake-inputs.json" (builtins.toJSON flakeInputs)} \
