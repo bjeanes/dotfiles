@@ -103,6 +103,10 @@ let
     }}"} =
       ".config/nvim";
   };
+
+  # Read from `sourceFlake`, the revision being rendered, instead of `flake`.
+  # Older revisions have no README, so their renders don't either.
+  readme = "${sourceFlake}/nix/packages/dotfiles/README.md";
 in
 pkgs.runCommand "dotfiles"
   {
@@ -123,6 +127,7 @@ pkgs.runCommand "dotfiles"
       ${pkgs.writeText "sources.json" (builtins.toJSON sources)} \
       ${pkgs.writeText "home-links.json" (builtins.toJSON homeLinks)} \
       $out
+    ${lib.optionalString (builtins.pathExists readme) "cp ${readme} $out/README.md"}
 
     # Dropping Nix-only lines can leave a block empty, which breaks the file.
     for f in .bashrc .bash_profile .profile; do
