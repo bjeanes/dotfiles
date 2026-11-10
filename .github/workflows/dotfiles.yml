@@ -1,0 +1,70 @@
+name: dotfiles
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      last-rendered:
+        description: Render only the commits after this one, such as to step past one that can't be rendered
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dotfiles
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GIT_COMMITTER_NAME: github-actions[bot]
+      GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: cachix/install-nix-action@75c75c31ebece974e48ebc36b4ad125bd97bd97b # v31.11.3
+        with:
+          github_access_token: ${{ github.token }}
+          # The flake's own nixConfig doesn't apply to the flakes publish-dotfiles
+          # loads with builtins.getFlake.
+          extra_nix_config: |
+            extra-substituters = https://nix-community.cachix.org
+            extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+      - uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
+        with:
+          use-flakehub: false
+
+      - name: Check out the dotfiles branch
+        run: |
+          git fetch origin 'refs/dotfiles/*:refs/dotfiles/*'
+          if git rev-parse --verify --quiet origin/dotfiles; then
+            git worktree add -B dotfiles ../dotfiles origin/dotfiles
+          else
+            git worktree add --orphan -b dotfiles ../dotfiles
+          fi
+
+      - name: Render and commit
+        env:
+          LAST_RENDERED: ${{ inputs.last-rendered }}
+        run: nix run .#publish-dotfiles -- ../dotfiles "$LAST_RENDERED"
+
+      # Push even if rendering failed, so the commits rendered before the failure
+      # aren't lost.
+      - name: Push
+        if: ${{ !cancelled() }}
+        run: |
+          refs=()
+          if git -C ../dotfiles rev-parse --verify --quiet HEAD; then
+            refs+=(dotfiles:refs/heads/dotfiles)
+          fi
+          if git rev-parse --verify --quiet refs/dotfiles/rendered; then
+            refs+=(refs/dotfiles/rendered:refs/dotfiles/rendered)
+          fi
+          if [ ${#refs[@]} -gt 0 ]; then
+            git push origin "${refs[@]}"
+          fi
