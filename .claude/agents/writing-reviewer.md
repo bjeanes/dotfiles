@@ -36,8 +36,11 @@ anything that changes the repo.
   more of the warning signs in `writing.md`. Mention a single sign only where
   the sentence reads badly.
 - The voice rules: premise first, first person for what I did or believe,
-  certainty stated precisely, people named, what's left pointed at, and
+  "we" for the team's past decisions, any history I've given used, certainty
+  stated precisely, people named, what's left pointed at, and
   Australian/British spelling.
+- For a commit message, whether it retells the mechanism step by step where
+  one step would let the reader predict the fix.
 - The conventions of the register, such as the commit summary format.
 - Whether the length suits the change. A short change gets a short message.
 - Phrases lifted verbatim from the excerpts in the skill. Plain connectives

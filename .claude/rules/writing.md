@@ -32,7 +32,13 @@ copy their structure when writing as me.
   A need that comes from the work itself is different. Since it is the team's
   need, write "we" or state it directly: "It is important to know how far the mirror
   has drifted". Writing "I want to know…" makes it sound like a personal
-  preference.
+  preference. For a decision the team made earlier, write "we", as in "which we
+  had set to". "Which was set to" hides who did it.
+- **Use the history I've given you.** If I've mentioned my own experience of
+  the problem, such as an earlier attempt to reproduce it, put it in the text in
+  the first person: "I struggled to reproduce this in the past…". It explains
+  why the change matters or why it took this long, and only I could have said
+  it.
 - **Be precise about certainty.** Separate what is known from what is believed
   or suspected: "is believed to be due to", "(I suspect)", "I'm not positive
   that this version is totally right either", "this has not been thoroughly
@@ -68,8 +74,18 @@ copy their structure when writing as me.
 **Commit messages.** These use a conventional-commit prefix (`feat:`, `fix:`,
 `chore:`, `refactor:`, `build:`, `security:`, `revert:`) with a lowercase
 summary in the imperative. The body is prose, often
-opening with "This…" or with the premise. Bullets are for enumerating changes. A
-body is often under five sentences.
+opening with "This…" or with the premise. Bullets are for enumerating changes.
+How long a message is depends on the change. Include what a reviewer needs to
+understand it. Also include what a later reader, arriving from `git blame`,
+needs to know about why the code is the way it is. Since code comments are kept
+sparse (see `code.md`), the message is often the only place that reasoning is
+written down. That covers the premise, the alternatives considered and how the
+problem was found. The code already shows the mechanism. Explain only as much
+of it as the reader needs to predict the fix, which is usually one step, such
+as "the library sees a logged-in cookie with no active session". A trace of
+which method calls which reads like a debugger session. Leave that to the code,
+or link the lines. If I considered an alternative, give it a sentence where the
+fix is described instead of a paragraph of its own.
 
 **PR descriptions.** These are close to the eventual merge commit body. When a
 reviewer needs to act on something I add a `> [!NOTE]` or a short section. A
