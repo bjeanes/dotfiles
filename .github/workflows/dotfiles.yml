@@ -17,12 +17,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
-    runs-on: ubuntu-24.04
+  render:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            runner: ubuntu-26.04
+            system: x86_64-linux
+          - platform: darwin
+            runner: macos-26
+            system: aarch64-darwin
+    name: render (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     env:
       GIT_COMMITTER_NAME: github-actions[bot]
       GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      DOTFILES_SYSTEM: ${{ matrix.system }}
+      BRANCH: dotfiles-${{ matrix.platform }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -39,19 +52,19 @@ jobs:
         with:
           use-flakehub: false
 
-      - name: Check out the dotfiles branch
+      - name: Check out the platform's branch
         run: |
           git fetch origin 'refs/dotfiles/*:refs/dotfiles/*'
-          if git rev-parse --verify --quiet origin/dotfiles; then
-            git worktree add -B dotfiles ../dotfiles origin/dotfiles
+          if git rev-parse --verify --quiet "origin/$BRANCH"; then
+            git worktree add -B "$BRANCH" ../out "origin/$BRANCH"
           else
-            git worktree add --orphan -b dotfiles ../dotfiles
+            git worktree add --orphan -b "$BRANCH" ../out
           fi
 
       - name: Render and commit
         env:
           LAST_RENDERED: ${{ inputs.last-rendered }}
-        run: nix run .#publish-dotfiles -- ../dotfiles "$LAST_RENDERED"
+        run: nix run .#publish-dotfiles -- ../out "$LAST_RENDERED"
 
       # Push even if rendering failed, so the commits rendered before the failure
       # aren't lost.
@@ -59,12 +72,41 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           refs=()
-          if git -C ../dotfiles rev-parse --verify --quiet HEAD; then
-            refs+=(dotfiles:refs/heads/dotfiles)
+          if git -C ../out rev-parse --verify --quiet HEAD; then
+            refs+=("$BRANCH:refs/heads/$BRANCH")
           fi
-          if git rev-parse --verify --quiet refs/dotfiles/rendered; then
-            refs+=(refs/dotfiles/rendered:refs/dotfiles/rendered)
+          progress=refs/dotfiles/${{ matrix.platform }}
+          if git rev-parse --verify --quiet "$progress"; then
+            refs+=("$progress:$progress")
           fi
           if [ ${#refs[@]} -gt 0 ]; then
             git push origin "${refs[@]}"
+          fi
+
+  # Stitch even if a render failed, so the other platform's renders still land.
+  stitch:
+    needs: render
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    env:
+      GIT_COMMITTER_NAME: github-actions[bot]
+      GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: cachix/install-nix-action@75c75c31ebece974e48ebc36b4ad125bd97bd97b # v31.11.3
+        with:
+          github_access_token: ${{ github.token }}
+
+      - name: Stitch
+        run: |
+          git fetch origin '+refs/heads/dotfiles*:refs/heads/dotfiles*'
+          nix run .#stitch-dotfiles
+
+      - name: Push
+        run: |
+          if git rev-parse --verify --quiet refs/heads/dotfiles; then
+            git push origin refs/heads/dotfiles:refs/heads/dotfiles
           fi
