@@ -11,7 +11,16 @@ let
   inherit (pkgs) lib;
   inherit (sourceFlake) inputs;
 
-  hm = sourceFlake.nixosConfigurations.Borogrove.config.home-manager.users.bjeanes;
+  inherit (pkgs.stdenv.hostPlatform) system isDarwin;
+
+  # Revisions from before the `home` host fall back to a real host's config.
+  hm =
+    sourceFlake.legacyPackages.${system}.homeConfigurations."bjeanes@home".config or (
+      if isDarwin then
+        sourceFlake.darwinConfigurations.Jabberwocky
+      else
+        sourceFlake.nixosConfigurations.Borogrove
+    ).config.home-manager.users.bjeanes;
 
   lock = lib.importJSON "${sourceFlake}/flake.lock";
   upstreamUrl =
