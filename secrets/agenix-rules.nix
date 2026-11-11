@@ -57,6 +57,7 @@ in
   "autobrr-api-key.age".publicKeys = all;
   "qui-api-key.age".publicKeys = all;
   "tracearr-api-key.age".publicKeys = all;
+  "immich-api-key.age".publicKeys = all;
   "plex-dashboard-token.age".publicKeys = all;
   "bookorbit-dashboard-username.age".publicKeys = all;
   "bookorbit-dashboard-password.age".publicKeys = all;

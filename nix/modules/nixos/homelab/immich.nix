@@ -16,6 +16,12 @@ in
       hostName = "photos";
       dashboard.description = "Photos and videos";
       dashboard.group = "Home";
+      dashboard.widget = {
+        type = "immich";
+        # Needs the `server.statistics` permission
+        secrets.key = "immich-api-key";
+        settings.version = 2;
+      };
     }
     // {
       mlImage = lib.mkOption {
