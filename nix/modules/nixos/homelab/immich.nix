@@ -19,7 +19,7 @@ in
       dashboard.widget = {
         type = "immich";
         # Needs the `server.statistics` permission
-        secrets.key = "immich-api-key";
+        secrets.key = "immich-homepage-api-key";
         settings.version = 2;
       };
     }
