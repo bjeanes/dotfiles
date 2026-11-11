@@ -91,8 +91,6 @@ glab() {
   op plugin run -- glab "$@";
 }
 
-source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
-
 function lg() {
     export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
     command lazygit "$@"
@@ -101,11 +99,6 @@ function lg() {
       rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
     fi
 }
-
-if test -n "$KITTY_INSTALLATION_DIR"; then
-  export KITTY_SHELL_INTEGRATION="no-rc"
-  source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
-fi
 
 __HM_PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__hm_vte_prompt_command"
 . $HOME/.local/share/dotfiles/vte/etc/profile.d/vte.sh
@@ -118,18 +111,6 @@ if [[ $(type -t __vte_prompt_command) = function ]]; then
   PROMPT_COMMAND="$__HM_PROMPT_COMMAND"
 fi
 unset __HM_PROMPT_COMMAND
-
-# Inside a kitty terminal, use the `ssh` kitten so that terminfo, shell
-# integration, and config are copied to the remote host. Checked at shell
-# startup rather than via a static alias so that shells started outside of
-# kitty (or on hosts without it) get plain `ssh`.
-case "$TERM" in
-  *kitty*)
-    if command -v kitty >/dev/null 2>&1; then
-      alias ssh='kitty +kitten ssh'
-    fi
-    ;;
-esac
 
 eval "$(direnv hook bash)"
 
