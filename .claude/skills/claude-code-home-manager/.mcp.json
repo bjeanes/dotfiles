@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "home-assistant": {
+      "command": "home-assistant-mcp",
+      "type": "stdio"
+    }
+  }
+}
