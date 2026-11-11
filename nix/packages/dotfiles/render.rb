@@ -119,7 +119,20 @@ class Render
 
   private def drop_nix_only_code(text)
     text = DROPPED_BLOCKS.reduce(text) { |remaining, block| remaining.gsub(block, "") }
-    text.lines.reject { |line| DROPPED_LINES.any? { _1.match?(line) } }.join
+    kept = []
+    dropped = false
+    text.lines.each do |line|
+      if DROPPED_LINES.any? { _1.match?(line) }
+        dropped = true
+        next
+      end
+      # Dropping a line can bring the blank lines either side of it together.
+      next if dropped && line.strip.empty? && kept.last&.strip&.empty?
+
+      dropped = false
+      kept << line
+    end
+    kept.join
   end
 
   # An absolute path that was fine in single quotes becomes $HOME-relative here,
