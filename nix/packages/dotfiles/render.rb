@@ -20,7 +20,9 @@ EXCLUDED = [
   ".config/systemd/user/agenix.service",                      # decrypts Nix-managed secrets
   ".config/systemd/user/default.target.wants/agenix.service",
   ".config/fontconfig",                                       # only points into home-manager-path
-  ".config/direnv/lib/hm-nix-direnv.sh"                       # nix-direnv's hook
+  ".config/direnv/lib/hm-nix-direnv.sh",                      # nix-direnv's hook
+  "Applications/Home Manager Apps",                           # whole app bundles, on macOS
+  "Library/Fonts/.home-manager-fonts-version"
 ].freeze
 
 DROPPED_BLOCKS = [
@@ -35,6 +37,7 @@ DROPPED_LINES = [
   %r{^\s*(export\s+)?LOCALE_ARCHIVE}, # only Nix's glibc reads it
   %r{PATH=.*/nix/store/[^/]+/bin:},   # packages are assumed to be on $PATH
   %r{_host_prog = "/nix/store/},      # Neovim's Nix-built Ruby and Python providers
+  %r{TERMINFO_DIRS=.*(\.nix-profile|/etc/profiles/)}, # the system's terminfo will do
   %r{^-- Ignore the user lua configuration$},              # nixvim's comment on the next two
   %r{runtimepath:remove\(vim\.fn\.stdpath\("config"\)}  # takes ~/.config/nvim, where the config lives here, off the runtime path
 ].freeze
