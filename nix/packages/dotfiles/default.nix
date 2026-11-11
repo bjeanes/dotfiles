@@ -79,11 +79,13 @@ let
       input = lib.findFirst (path: srcPath == path || lib.hasPrefix "${path}/" srcPath) null (
         builtins.attrNames flakeInputs
       );
+      # fetchFromGitHub leaves `rev` null when given a `tag` instead.
+      ref = if src.rev or null != null then lib.removePrefix "refs/tags/" src.rev else src.tag or null;
     in
     if input != null then
       flakeInputs.${input}.url
-    else if lib.hasPrefix "https://github.com/" (src.gitRepoUrl or "") && src ? rev then
-      "https://github.com/${src.owner}/${src.repo}/tree/${lib.removePrefix "refs/tags/" src.rev}"
+    else if lib.hasPrefix "https://github.com/" (src.gitRepoUrl or "") && ref != null then
+      "https://github.com/${src.owner}/${src.repo}/tree/${ref}"
     else
       src.gitRepoUrl or src.url or null;
 
