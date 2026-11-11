@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
-  # Opt-in; see terminal.nix.
+  # Darwin hosts enable this by default (modules/darwin/terminals). Linux
+  # workstations opt in from their own home config.
   config = {
     programs.ghostty = {
       # ghostty-bin repackages the official signed .app; building from source

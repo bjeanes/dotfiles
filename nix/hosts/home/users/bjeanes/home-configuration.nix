@@ -2,10 +2,8 @@
 {
   imports = [ flake.homeModules.default ];
 
-  # The terminals are opt-in per machine (see nix/modules/home/dev/terminal.nix).
+  # Ghostty is opt-in per machine (see nix/modules/home/dev/ghostty.nix).
   programs.ghostty.enable = true;
-  programs.kitty.enable = true;
-  programs.wezterm.enable = true;
 
   home.stateVersion = "24.05";
 }

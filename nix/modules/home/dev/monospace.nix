@@ -11,20 +11,6 @@ in
     fira-code
   ];
 
-  programs.kitty = {
-    font = {
-      package = pkgs.nerd-fonts.meslo-lg;
-      name = code-font;
-      size = 13;
-    };
-  };
-
-  programs.wezterm.extraConfig = /* lua */ ''
-    config.font = wezterm.font_with_fallback({
-      "${code-font}",
-    })
-  '';
-
   fonts.fontconfig.enable = true;
   fonts.fontconfig.defaultFonts.monospace = [
     code-font
