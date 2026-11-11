@@ -69,6 +69,7 @@
     ];
   };
 
+  homelab.services.kiosk-satellite-proxy.enable = true;
   homelab.services.yuvomi.enable = true;
   homelab.services.moltis = {
     enable = true;
