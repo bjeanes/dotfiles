@@ -106,8 +106,12 @@ let
     );
 
   # Store path => the home path it stands for.
-  nvimSource = "${sourceFlake}/nix/packages/nvim"; # opened by the snacks dashboard's "Config" entry
-  homeLinks = lib.optionalAttrs (nixvim != null && builtins.pathExists nvimSource) {
+  # Opened by the snacks dashboard's "Config" entry.
+  nvimSource = lib.findFirst builtins.pathExists null [
+    "${sourceFlake}/nix/packages/nvim"
+    "${sourceFlake}/packages/nvim" # commits from before blueprint
+  ];
+  homeLinks = lib.optionalAttrs (nixvim != null && nvimSource != null) {
     ${builtins.unsafeDiscardStringContext "${builtins.path {
       path = nvimSource;
       name = "nvim";
