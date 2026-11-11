@@ -14,6 +14,8 @@ let
   # it); elsewhere this is plain `claude` with its usual login.
   claude = pkgs.writeShellApplication {
     name = "claude";
+    # Without one, Home Manager only passes its plugins to its own wrapper
+    passthru.version = pkgs.claude-code.version;
     text = ''
       real=${lib.getExe pkgs.claude-code}
       for installed in "$HOME/.local/bin/claude" /opt/homebrew/bin/claude /usr/local/bin/claude; do
