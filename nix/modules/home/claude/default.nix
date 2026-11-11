@@ -123,12 +123,28 @@ in
     agents.writing-reviewer = ./agents/writing-reviewer.md;
 
     # Elsewhere, the server can't read its secret and fails to start
-    mcpServers = lib.optionalAttrs (hasSecret "homeassistant-mcp-url") {
-      home-assistant = {
-        type = "stdio";
-        command = lib.getExe homeAssistantMcp;
+    mcpServers =
+      lib.optionalAttrs (hasSecret "homeassistant-mcp-url") {
+        home-assistant = {
+          type = "stdio";
+          command = lib.getExe homeAssistantMcp;
+        };
+      }
+      // lib.optionalAttrs (hasSecret "unifi-mcp-password") {
+        unifi = {
+          type = "stdio";
+          command = lib.getExe' pkgs.uv "uvx";
+          args = [ "unifi-network-mcp@0.45.0" ];
+          env = {
+            UNIFI_NETWORK_HOST = "10.10.10.254";
+            UNIFI_NETWORK_CONTROLLER_TYPE = "proxy";
+            UNIFI_NETWORK_USERNAME = "mcp";
+            UNIFI_NETWORK_PASSWORD_FILE = osConfig.age.secrets.unifi-mcp-password.path;
+            UNIFI_NETWORK_TOOL_PERMISSION_MODE = "confirm";
+            UNIFI_POLICY_NETWORK_FIREWALL_POLICIES_DELETE = "true";
+          };
+        };
       };
-    };
 
     # Rules loaded at the start of a session lose their pull as it grows, so
     # bring the writing rules back just before text goes out under my name.

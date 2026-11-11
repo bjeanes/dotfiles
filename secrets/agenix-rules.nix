@@ -82,6 +82,7 @@ in
 
   "claude-code-oauth-token.age".publicKeys = claudeCode;
   "homeassistant-mcp-url.age".publicKeys = claudeCode;
+  "unifi-mcp-password.age".publicKeys = claudeCode;
 
   "openrouter-api-key.age".publicKeys = [
     bjeanes
