@@ -9,16 +9,23 @@ Your package manager may have it under the same name.
 
 | Path | Source |
 | --- | --- |
+| `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.3.1 |
 | `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | catppuccin-bat 0-unstable-2025-06-29 |
 | `~/.config/eza/theme.yml` | catppuccin-eza 0-unstable-2025-09-03 |
+| `~/.config/ghostty/themes/catppuccin-mocha` | catppuccin-ghostty 0-unstable-2026-08-28 |
+| `~/.config/systemd/user/app-com.mitchellh.ghostty.service` | ghostty 1.3.1 |
+| `~/.local/share/dbus-1/services/com.mitchellh.ghostty.service` | ghostty 1.3.1 |
 | `~/.local/share/dotfiles/catppuccin-fzf` | catppuccin-fzf 0-unstable-2026-06-28 |
 | `~/.local/share/dotfiles/catppuccin-glamour` | catppuccin-glamour 0-unstable-2025-05-02 |
 | `~/.local/share/dotfiles/catppuccin-lazygit` | catppuccin-lazygit 0-unstable-2026-10-09 |
+| `~/.local/share/dotfiles/catppuccin-wezterm` | catppuccin-wezterm 0-unstable-2023-04-12 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
+| `~/.local/share/dotfiles/kitty-themes` | kitty-themes 0-unstable-2026-10-08 |
 | `~/.local/share/dotfiles/revdiff` | https://github.com/umputun/revdiff/tree/7a2eaf50f7b9b90fc0a522d53cce472d32235e40 |
 | `~/.local/share/dotfiles/tmuxplugin-catppuccin` | tmuxplugin-catppuccin 0-unstable-2026-09-21 |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
+| `~/.local/share/dotfiles/wezterm` | wezterm 0-unstable-2026-10-10 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/blink.cmp` | https://github.com/Saghen/blink.cmp/tree/v1.10.2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/v2.0.0 |
