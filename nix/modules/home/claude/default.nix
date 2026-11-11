@@ -38,7 +38,7 @@ let
     '';
   };
 
-  hasSecret = name: osConfig.age.secrets ? ${name};
+  hasSecret = name: (osConfig.age.secrets or { }) ? ${name};
 
   homeAssistantMcp = pkgs.writeShellApplication {
     name = "home-assistant-mcp";
