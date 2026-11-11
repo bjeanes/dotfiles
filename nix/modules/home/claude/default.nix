@@ -167,6 +167,12 @@ in
           "~/.nix-defexpr"
         ];
         allowWrite = [ "~/.cache/nix" ];
+
+        # The sandbox matches resolved paths. /run/agenix links to a generation
+        # under /run/agenix.d. On macOS, /run itself links to /private/var/run.
+        denyRead = [
+          (if pkgs.stdenv.hostPlatform.isDarwin then "/private/var/run/agenix.d" else "/run/agenix.d")
+        ];
       };
 
       # revdiff's launcher opens its overlay through tmux's socket, or through
