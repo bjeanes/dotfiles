@@ -85,6 +85,13 @@ in
   "homeassistant-mcp-url.age".publicKeys = claudeCode;
   "unifi-mcp-password.age".publicKeys = claudeCode;
 
+  # Upload permissions, plus job.create and job.read to pause Immich's jobs
+  "immich-go-api-key.age".publicKeys = [
+    bjeanes
+    bandersnatch
+    jabberwocky
+  ];
+
   "openrouter-api-key.age".publicKeys = [
     bjeanes
     brillig

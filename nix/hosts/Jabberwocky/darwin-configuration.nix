@@ -10,6 +10,7 @@
   age.secrets.claude-code-oauth-token.owner = config.system.primaryUser;
   age.secrets.homeassistant-mcp-url.owner = config.system.primaryUser;
   age.secrets.unifi-mcp-password.owner = config.system.primaryUser;
+  age.secrets.immich-go-api-key.owner = config.system.primaryUser;
 
   users.users.bjeanes.home = "/Users/bjeanes";
 }
