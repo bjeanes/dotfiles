@@ -300,10 +300,16 @@ in
 
         aliases = {
           # Hunk- and line-level split/squash/restore/absorb, without -i
+          #
+          # Through `sh`, since inside the Claude Code sandbox jj can start an
+          # unreadable copy from earlier on PATH alongside this one.
           hunk = [
             "util"
             "exec"
             "--"
+            "sh"
+            "-c"
+            ''exec jj-hunk-tool "$@"''
             "jj-hunk-tool"
           ];
 
