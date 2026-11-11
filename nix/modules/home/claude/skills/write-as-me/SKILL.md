@@ -561,6 +561,84 @@ most of the drift dates from the outage".
 > This doesn't retry within a shard. A shard is small enough to re-run in full,
 > and resuming part-way would need state we don't otherwise keep.
 
+### Retelling the call stack
+
+This pair is a whole commit message, since the problem is in its shape more
+than in any one sentence. The agent's first draft:
+
+```text
+fix: return to the requested page after an expired session
+
+The `remember2` feature keeps the session cookie for up to 14 days.
+However, the server expires sessions sooner than that: after 36 hours
+idle or 5 days for staff. When a browser comes back with a cookie for an
+expired session, `require_authentication` passes, because the cookie
+still holds the account. Then `check_active_session` finds no active
+session row. Rodauth clears the session and redirects to
+`active_sessions_redirect`, which was set to `login_redirect` (`/_admin`
+or `/members`).
+
+That page is the one which then calls `login_required`. Since
+`login_required` saves the current path as the place to return to after
+log in, it saved the dashboard and the page originally asked for was
+lost. For staff this is the *usual* way a session ends, which is why
+admins see it the most. Clients and providers are affected too.
+
+This makes `active_sessions_redirect` call `login_required` directly. It
+saves the requested path (for GET requests) and redirects to the log in
+page itself. The flash is the same as before, because the extra redirect
+used to replace the active sessions message with this one anyway.
+
+I also considered overriding `no_longer_active_session` to clear the
+session and call `login_required`. It is more explicit, but it is a
+larger change for the same behaviour.
+
+This was hard to reproduce before because the existing specs expire the
+cookie itself. In that case the visitor is simply logged out and the
+redirect already worked. The new specs keep the cookie and backdate the
+session's `last_use` instead.
+```
+
+The version I approved:
+
+```text
+fix: return to the requested page after an expired session
+
+With "remember me", `remember2` keeps the session cookie for 14 days.
+However, for staff the active session behind it expires much sooner
+(36 hours idle, or 5 days total). When that happens, Rodauth sees a
+logged-in cookie with no active session. It clears the session and
+redirects to `active_sessions_redirect`, which we had set to
+`login_redirect` (i.e. `/_admin` or `/members`).
+
+Since the dashboard is then the page that hits `login_required`, it is
+the dashboard that gets saved as the place to return to after logging
+in. The page that was actually requested is lost before anything saves
+it. Staff see this the most because it is the *usual* way their
+sessions end, but users are affected too.
+
+This calls `login_required` from `active_sessions_redirect` instead. It
+saves the requested path and redirects to the log in page itself. The
+flash doesn't change, as the old double redirect ended on that same
+message anyway. Overriding `no_longer_active_session` would be more
+explicit, but is a bigger change for the same result.
+
+I struggled to reproduce this in the past because `expire_cookies`
+removes the cookie entirely. Without a cookie, the redirect always
+worked. The new specs leave the cookie alone and backdate the session's
+`last_use` past `session_inactivity_deadline` instead.
+```
+
+The first draft breaks few of the other rules. What makes it read as
+agent-written is the walk through each check in turn, which reads like a
+debugger session. The rewrite keeps the one step a reader needs to predict the
+fix. It gives the alternative one sentence in the paragraph about the fix. It
+also says "we had set", which names who made the earlier decision.
+
+The last paragraph of the rewrite uses something I'd mentioned while we worked
+on it, that I had struggled to reproduce the bug before. The first draft left
+that out.
+
 ## What not to copy
 
 - **Typos.** "their is", "shoudl", "logut", "archaelogists".
