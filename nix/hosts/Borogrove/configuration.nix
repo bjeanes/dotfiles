@@ -79,6 +79,7 @@
       enable = true;
       hostName = "rss";
     };
+    immich.enable = true;
   };
 
   virtualisation.podman = {
