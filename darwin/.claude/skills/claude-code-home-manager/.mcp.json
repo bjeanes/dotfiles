@@ -3,6 +3,21 @@
     "home-assistant": {
       "command": "home-assistant-mcp",
       "type": "stdio"
+    },
+    "unifi": {
+      "args": [
+        "unifi-network-mcp@0.45.0"
+      ],
+      "command": "uvx",
+      "env": {
+        "UNIFI_NETWORK_CONTROLLER_TYPE": "proxy",
+        "UNIFI_NETWORK_HOST": "10.10.10.254",
+        "UNIFI_NETWORK_PASSWORD_FILE": "/run/agenix/unifi-mcp-password",
+        "UNIFI_NETWORK_TOOL_PERMISSION_MODE": "confirm",
+        "UNIFI_NETWORK_USERNAME": "mcp",
+        "UNIFI_POLICY_NETWORK_FIREWALL_POLICIES_DELETE": "true"
+      },
+      "type": "stdio"
     }
   }
 }
