@@ -20,6 +20,12 @@ let
   ];
 
   all = systems ++ users;
+
+  # For Claude Code's token and MCP credentials
+  claudeCode = users ++ [
+    bandersnatch
+    jabberwocky
+  ];
 in
 {
   "default-password.age".publicKeys = all;
@@ -74,11 +80,8 @@ in
     tulgey
   ];
 
-  "claude-code-oauth-token.age".publicKeys = [
-    bjeanes
-    bandersnatch
-    jabberwocky
-  ];
+  "claude-code-oauth-token.age".publicKeys = claudeCode;
+  "homeassistant-mcp-url.age".publicKeys = claudeCode;
 
   "openrouter-api-key.age".publicKeys = [
     bjeanes

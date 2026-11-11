@@ -3,6 +3,7 @@
 {
   inputs,
   lib,
+  osConfig,
   pkgs,
   ...
 }:
@@ -34,6 +35,22 @@ let
       fi
 
       exec "$real" "$@"
+    '';
+  };
+
+  hasSecret = name: osConfig.age.secrets ? ${name};
+
+  homeAssistantMcp = pkgs.writeShellApplication {
+    name = "home-assistant-mcp";
+    runtimeInputs = with pkgs; [
+      coreutils
+      uv
+    ];
+    text = ''
+      # Not as an argument, since `ps` shows those to every user
+      SSE_URL=$(tr -d '\r\n' <${osConfig.age.secrets.homeassistant-mcp-url.path})
+      export SSE_URL
+      exec uvx mcp-proxy@0.13.0 --transport streamablehttp
     '';
   };
 
@@ -104,6 +121,14 @@ in
     skills.write-as-me = ./skills/write-as-me;
 
     agents.writing-reviewer = ./agents/writing-reviewer.md;
+
+    # Elsewhere, the server can't read its secret and fails to start
+    mcpServers = lib.optionalAttrs (hasSecret "homeassistant-mcp-url") {
+      home-assistant = {
+        type = "stdio";
+        command = lib.getExe homeAssistantMcp;
+      };
+    };
 
     # Rules loaded at the start of a session lose their pull as it grows, so
     # bring the writing rules back just before text goes out under my name.
