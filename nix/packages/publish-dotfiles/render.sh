@@ -1,15 +1,21 @@
 # Run from the root of a clone of this flake, with `branch_dir` set to a
-# checkout of the `dotfiles` branch.
+# checkout of the platform's branch, by convention `dotfiles-linux` or
+# `dotfiles-darwin`. DOTFILES_SYSTEM is the Nix system to render for.
 
 repo=$(git rev-parse --show-toplevel)
 source_repo=${SOURCE_REPO:-bjeanes/dotfiles}
-progress_ref=refs/dotfiles/rendered
+system=${DOTFILES_SYSTEM:-x86_64-linux}
+case $system in
+  *-darwin) platform=darwin ;;
+  *) platform=linux ;;
+esac
+progress_ref=refs/dotfiles/$platform
 
 # Prints the store path of SOURCE's Home Manager config, rendered by the
 # `dotfiles` package of RENDERER.
 render() { # renderer source
   nix build --no-link --print-out-paths --impure --expr "
-    (builtins.getFlake \"git+file://$repo?rev=$1\").packages.x86_64-linux.dotfiles.render
+    (builtins.getFlake \"git+file://$repo?rev=$1\").packages.$system.dotfiles.render
       (builtins.getFlake \"git+file://$repo?rev=$2\")
   "
 }

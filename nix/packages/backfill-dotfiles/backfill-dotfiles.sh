@@ -1,6 +1,7 @@
 # Renders this flake's history from FIRST onwards into a checkout of the
-# `dotfiles` branch, one commit per commit that changes the result. Run it from
-# the root of a clone of this flake. It never pushes.
+# platform's branch, one commit per commit that changes the result. As with
+# publish-dotfiles, DOTFILES_SYSTEM is the Nix system to render for. Run it
+# from the root of a clone of this flake. It never pushes.
 #
 # Usage: backfill-dotfiles BRANCH_DIR FIRST
 #

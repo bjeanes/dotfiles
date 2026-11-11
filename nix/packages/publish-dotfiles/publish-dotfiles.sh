@@ -1,14 +1,16 @@
 # Renders each commit on the current branch that hasn't been rendered yet, and
-# commits the result to a checkout of the `dotfiles` branch. Run it from the
+# commits the result to a checkout of the platform's branch. Run it from the
 # root of a clone of this flake. It never pushes.
 #
 # Usage: publish-dotfiles BRANCH_DIR [LAST_RENDERED]
 #
-# It resumes after refs/dotfiles/rendered, or else after the commit that
+# It resumes after refs/dotfiles/<platform>, or else after the commit that
 # BRANCH_DIR's last commit was generated from, or else renders HEAD alone.
 # LAST_RENDERED overrides both, such as to step past a commit that can't be
-# rendered at all. SOURCE_REPO is the GitHub repository each commit message
-# names its source commit in.
+# rendered at all. DOTFILES_SYSTEM is the Nix system to render for (by default
+# x86_64-linux), and its platform, `linux` or `darwin`, names the progress ref.
+# SOURCE_REPO is the GitHub repository each commit message names its source
+# commit in.
 
 branch_dir=$(realpath "$1")
 head=$(git rev-parse HEAD)
