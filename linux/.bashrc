@@ -24,6 +24,10 @@ alias -- ls=eza
 alias -- lt='eza --tree'
 alias -- vimdiff='nvim -d'
 
+if [[ -r "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash" ]]; then
+  builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
+
 if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then
   eval "$(fzf --bash)"
 fi
@@ -85,6 +89,8 @@ glab() {
   op plugin run -- glab "$@";
 }
 
+source "$HOME/.local/share/dotfiles/wezterm/etc/profile.d/wezterm.sh"
+
 function lg() {
     export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
     command lazygit "$@"
@@ -93,6 +99,11 @@ function lg() {
       rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
     fi
 }
+
+if test -n "$KITTY_INSTALLATION_DIR"; then
+  export KITTY_SHELL_INTEGRATION="no-rc"
+  source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+fi
 
 __HM_PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__hm_vte_prompt_command"
 . $HOME/.local/share/dotfiles/vte/etc/profile.d/vte.sh
