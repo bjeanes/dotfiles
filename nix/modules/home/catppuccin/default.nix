@@ -6,6 +6,15 @@
     flavor = lib.mkDefault "macchiato";
   };
 
+  # These tools read their colours once at launch. Instead of a fixed flavour,
+  # they use the terminal's 16 ANSI colours, which Ghostty's theme redefines for
+  # light and dark.
+  catppuccin.eza.enable = false;
+  catppuccin.fzf.enable = false;
+  catppuccin.lazygit.enable = false;
+  catppuccin.starship.enable = false;
+  programs.fzf.defaultOptions = [ "--color=16" ];
+
   catppuccin.bat.enable = false;
   programs.bat.config = {
     theme-light = "Catppuccin Latte";
