@@ -1,0 +1,4 @@
+theme = auto
+auto-theme-light = catppuccin-latte
+# revdiff doesn't ship a Catppuccin Macchiato theme
+auto-theme-dark = catppuccin-mocha
