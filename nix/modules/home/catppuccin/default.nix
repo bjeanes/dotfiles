@@ -21,6 +21,13 @@
     theme-dark = "Catppuccin Macchiato";
   };
 
+  xdg.configFile."revdiff/config".text = ''
+    theme = auto
+    auto-theme-light = catppuccin-latte
+    # revdiff doesn't ship a Catppuccin Macchiato theme
+    auto-theme-dark = catppuccin-mocha
+  '';
+
   catppuccin.ghostty.enable = false;
   programs.ghostty.settings.theme = "dark:Catppuccin Macchiato,light:Catppuccin Latte";
 
