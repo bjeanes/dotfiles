@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   catppuccin = {
     autoEnable = lib.mkDefault true;
@@ -14,4 +14,25 @@
 
   catppuccin.ghostty.enable = false;
   programs.ghostty.settings.theme = "dark:Catppuccin Macchiato,light:Catppuccin Latte";
+
+  catppuccin.tmux.extraConfig =
+    let
+      options = ''
+        set -g @catppuccin_window_text " #W"
+        set -g @catppuccin_window_current_text " #W"
+      '';
+
+      # The reset unsets the plugin's window and status options, ours included.
+      flavourHook = hook: flavour: ''
+        set-hook -g ${hook} {
+          set -g @catppuccin_flavor ${flavour}
+          set -g @catppuccin_reset true
+          ${options}
+          run-shell ${config.catppuccin.sources.tmux.rtp}
+        }
+      '';
+    in
+    options
+    + flavourHook "client-light-theme" "latte"
+    + flavourHook "client-dark-theme" config.catppuccin.tmux.flavor;
 }

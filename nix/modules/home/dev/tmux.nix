@@ -28,9 +28,4 @@
       bind c new-window -c "#{pane_current_path}"
     '';
   };
-
-  catppuccin.tmux.extraConfig = ''
-    set -g @catppuccin_window_text " #W"
-    set -g @catppuccin_window_current_text " #W"
-  '';
 }
