@@ -33,8 +33,9 @@ end
 -- }}}
 
 require("catppuccin").setup({
+    background = { dark = "macchiato", light = "latte" },
     default_integrations = true,
-    flavour = "macchiato",
+    flavour = "auto",
     integrations = { blink_cmp = true, mini = { enabled = true }, treesitter = true },
     term_colors = true,
     transparent_background = true,
