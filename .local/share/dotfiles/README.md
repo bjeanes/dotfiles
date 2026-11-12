@@ -10,7 +10,6 @@ Your package manager may have it under the same name.
 | Path | Source |
 | --- | --- |
 | `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty-bin 1.3.1 |
-| `~/.config/bat/themes/Catppuccin Macchiato.tmTheme` | catppuccin-bat 0-unstable-2025-06-29 |
 | `~/.config/eza/theme.yml` | catppuccin-eza 0-unstable-2025-09-03 |
 | `~/.local/share/dotfiles/catppuccin-fzf` | catppuccin-fzf 0-unstable-2026-06-28 |
 | `~/.local/share/dotfiles/catppuccin-glamour` | catppuccin-glamour 0-unstable-2025-05-02 |

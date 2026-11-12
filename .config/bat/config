@@ -1,4 +1,5 @@
 --map-syntax=flake.lock:JSON
 --map-syntax='~/.config/ghostty/config:Ghostty Config'
 --style=header,grid
---theme='Catppuccin Macchiato'
+--theme-dark='Catppuccin Macchiato'
+--theme-light='Catppuccin Latte'
