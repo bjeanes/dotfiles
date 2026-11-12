@@ -10,10 +10,7 @@ Your package manager may have it under the same name.
 | Path | Source |
 | --- | --- |
 | `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty-bin 1.3.1 |
-| `~/.config/eza/theme.yml` | catppuccin-eza 0-unstable-2025-09-03 |
-| `~/.local/share/dotfiles/catppuccin-fzf` | catppuccin-fzf 0-unstable-2026-06-28 |
 | `~/.local/share/dotfiles/catppuccin-glamour` | catppuccin-glamour 0-unstable-2025-05-02 |
-| `~/.local/share/dotfiles/catppuccin-lazygit` | catppuccin-lazygit 0-unstable-2026-10-09 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
 | `~/.local/share/dotfiles/revdiff` | https://github.com/umputun/revdiff/tree/7a2eaf50f7b9b90fc0a522d53cce472d32235e40 |
