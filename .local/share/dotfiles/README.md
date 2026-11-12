@@ -14,6 +14,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
 | `~/.local/share/dotfiles/revdiff` | https://github.com/umputun/revdiff/tree/7a2eaf50f7b9b90fc0a522d53cce472d32235e40 |
+| `~/.local/share/dotfiles/rex` | rex 0.1.0-preview.16 |
 | `~/.local/share/dotfiles/tmuxplugin-catppuccin` | tmuxplugin-catppuccin 0-unstable-2026-09-21 |
 | `~/.local/share/dotfiles/vte` | vte 0.84.1 |
 | `~/.local/share/dotfiles/zsh-autosuggestions` | zsh-autosuggestions 0.7.1 |
@@ -38,6 +39,10 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-nix` | https://github.com/LnL7/vim-nix/tree/7235c7ce2cea530cb6b59bc3e46d4bfe917d15c8 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/vim-sleuth` | https://github.com/tpope/vim-sleuth/tree/be69bff86754b1aa5adcbb527d7fcd1635a84080 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/which-key.nvim` | https://github.com/folke/which-key.nvim/tree/3aab2147e74890957785941f0c1ad87d0a44c15a |
+| `~/.terminfo/72/rex` | rex 0.1.0-preview.16 |
+| `~/.terminfo/78/xterm-rex` | rex 0.1.0-preview.16 |
+| `~/.terminfo/r/rex` | rex 0.1.0-preview.16 |
+| `~/.terminfo/x/xterm-rex` | rex 0.1.0-preview.16 |
 | `~/.zsh/plugins/F-Sy-H` | zsh-f-sy-h 1.67 |
 | `~/.zsh/plugins/cd-ls` | https://github.com/zshzoo/cd-ls/tree/02bbfa4030c4fb06b137527d1290da0e9993fb67 |
 | `~/.zsh/plugins/fzf-tab` | zsh-fzf-tab 1.3.0 |
