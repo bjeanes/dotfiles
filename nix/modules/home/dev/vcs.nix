@@ -314,14 +314,38 @@ in
           ];
 
           # https://jj-vcs.github.io/jj/latest/FAQ/#can-i-monitor-how-jj-log-evolves
-          mon = [
-            "util"
-            "exec"
-            "--"
-            "sh"
-            "-c"
-            "clear; jj --ignore-working-copy --no-pager --color always log; fswatch -o  `jj root`/.jj | xargs -I{} sh -c 'clear; jj --ignore-working-copy --no-pager --color always log'"
-          ];
+          #
+          # Since hwatch can only refresh on a timer, it polls a saved copy of
+          # the log, which the fswatch loop re-renders on each change.
+          mon =
+            let
+              # `jj mon [<jj log args>...]`: a scrollable `jj log` that refreshes as the repo changes
+              jjMon = pkgs.writeShellScript "jj-mon" /* bash */ ''
+                set -eu
+                out=$(mktemp -d)
+                trap 'kill $(jobs -p) 2>/dev/null || true; rm -rf "$out"' EXIT
+
+                log() { jj --ignore-working-copy --no-pager --color always log "$@"; }
+                if ! log "$@" >"$out/log" 2>&1; then cat "$out/log" >&2; exit 1; fi
+
+                mkfifo "$out/events"
+                ${lib.getExe pkgs.fswatch} -o "$(jj root)/.jj" >"$out/events" &
+                while read -r _; do
+                  log "$@" >"$out/next" 2>&1 || true
+                  mv "$out/next" "$out/log"
+                done <"$out/events" &
+
+                # hwatch draws over whatever is already on screen
+                clear
+                ${lib.getExe pkgs.hwatch} -x -c -t --mouse -w --no-summary -L 1 -n 1 -- cat "$out/log"
+              '';
+            in
+            [
+              "util"
+              "exec"
+              "--"
+              "${jjMon}"
+            ];
 
           # https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit
           #
