@@ -59,7 +59,13 @@ let
     export PATH="${claude}/bin:$PATH"
   '';
 
-  revdiffLauncher = "${inputs.revdiff}/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh";
+  revdiffSrc = pkgs.applyPatches {
+    name = "revdiff-source";
+    src = inputs.revdiff;
+    patches = [ ./revdiff-rex.patch ];
+  };
+
+  revdiffLauncher = "${revdiffSrc}/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh";
 
   jjReview = pkgs.runCommandLocal "jj-review-skill" { } ''
     cp -r ${./skills/jj-review} $out
@@ -114,7 +120,7 @@ in
     # Through a marketplace, since `plugins` links the plugin in as a symlink.
     # revdiff's manifest names its skills directory, which then resolves into
     # the store, outside the link, and Claude Code skips it.
-    marketplaces.revdiff = inputs.revdiff;
+    marketplaces.revdiff = revdiffSrc;
     settings.enabledPlugins."revdiff@revdiff" = true;
 
     skills.jj-review = jjReview;
