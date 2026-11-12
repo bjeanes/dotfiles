@@ -82,7 +82,7 @@ if [[ $options[zle] = on ]]; then
   source <(fzf --zsh)
 fi
 
-source "$HOME/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting/catppuccin_mocha-zsh-syntax-highlighting.zsh"
+source "$HOME/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting/catppuccin_macchiato-zsh-syntax-highlighting.zsh"
 
 # Set shell options
 set_opts=(

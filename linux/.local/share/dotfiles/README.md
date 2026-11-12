@@ -10,9 +10,9 @@ Your package manager may have it under the same name.
 | Path | Source |
 | --- | --- |
 | `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.3.1 |
-| `~/.config/bat/themes/Catppuccin Mocha.tmTheme` | catppuccin-bat 0-unstable-2025-06-29 |
+| `~/.config/bat/themes/Catppuccin Macchiato.tmTheme` | catppuccin-bat 0-unstable-2025-06-29 |
 | `~/.config/eza/theme.yml` | catppuccin-eza 0-unstable-2025-09-03 |
-| `~/.config/ghostty/themes/catppuccin-mocha` | catppuccin-ghostty 0-unstable-2026-08-28 |
+| `~/.config/ghostty/themes/catppuccin-macchiato` | catppuccin-ghostty 0-unstable-2026-08-28 |
 | `~/.config/systemd/user/app-com.mitchellh.ghostty.service` | ghostty 1.3.1 |
 | `~/.local/share/dbus-1/services/com.mitchellh.ghostty.service` | ghostty 1.3.1 |
 | `~/.local/share/dotfiles/catppuccin-fzf` | catppuccin-fzf 0-unstable-2026-06-28 |
