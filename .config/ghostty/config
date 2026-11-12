@@ -3,6 +3,6 @@ background-opacity = 0.900000
 keybind = global:ctrl+`=toggle_quick_terminal
 minimum-contrast = 1.100000
 shell-integration-features = sudo,ssh-env,ssh-terminfo,title
-theme = light:catppuccin-mocha,dark:catppuccin-mocha
-theme = dark:catppuccin-mocha,light:catppuccin-latte
+theme = light:catppuccin-macchiato,dark:catppuccin-macchiato
+theme = dark:catppuccin-macchiato,light:catppuccin-latte
 window-theme = dark
