@@ -9,6 +9,7 @@
       quadlet-nix.homeManagerModules.quadlet
       nix-index-database.homeModules.default
       { programs.nix-index-database.comma.enable = true; }
+      rex.homeManagerModules.default
       flake.modules.shared.secrets
     ])
     ++ builtins.attrValues (removeAttrs flake.homeModules [ "default" ]);
