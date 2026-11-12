@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "superlogical": {
+      "type": "http",
+      "url": "https://www.superlogical.com/rex/community-mcp"
+    }
+  }
+}
