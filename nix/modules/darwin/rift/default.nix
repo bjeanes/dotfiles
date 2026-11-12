@@ -39,7 +39,7 @@ in
           # The default config's "0.0 = refresh rate" fails validation.
           animation_fps = 120.0; # ProMotion
           default_disable = false; # manage every Space, like Paneru
-          focus_follows_mouse = true;
+          focus_follows_mouse = false;
           mouse_follows_focus = true;
           mouse_hides_on_focus = false;
           # Mouse warp treats displays stacked top-to-bottom as left-to-right.

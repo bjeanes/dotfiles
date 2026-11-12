@@ -14,7 +14,7 @@ in
 
   services.paneru.settings = {
     options = {
-      focus_follows_mouse = true;
+      focus_follows_mouse = false;
       mouse_follows_focus = true;
       preset_column_widths = [
         0.2
