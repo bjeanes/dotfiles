@@ -8,5 +8,6 @@
 
   programs.bat.config.theme = "Catppuccin Macchiato";
 
-  programs.ghostty.settings.theme = "dark:catppuccin-macchiato,light:catppuccin-latte";
+  catppuccin.ghostty.enable = false;
+  programs.ghostty.settings.theme = "dark:Catppuccin Macchiato,light:Catppuccin Latte";
 }
