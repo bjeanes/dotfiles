@@ -8,7 +8,7 @@ revset=${1:?usage: jj-review-loop.sh REVSET OUT_DIR}
 out=${2:?usage: jj-review-loop.sh REVSET OUT_DIR}
 
 here=$(dirname "$0")
-launcher=$HOME/.local/share/dotfiles/revdiff/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh
+launcher=$HOME/.local/share/dotfiles/revdiff-source/.claude-plugin/skills/revdiff/scripts/launch-revdiff.sh
 
 mkdir -p "$out"
 mapfile -t ids < <(jj log -r "$revset" --reversed --no-graph -T 'change_id.short(8) ++ "\n"')
