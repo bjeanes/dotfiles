@@ -144,6 +144,13 @@ in
             UNIFI_POLICY_NETWORK_FIREWALL_POLICIES_DELETE = "true";
           };
         };
+      }
+      // {
+        # Not `rex`, which would clash with Rex's own skills and CLI
+        superlogical = {
+          type = "http";
+          url = "https://www.superlogical.com/rex/community-mcp";
+        };
       };
 
     # Rules loaded at the start of a session lose their pull as it grows, so
