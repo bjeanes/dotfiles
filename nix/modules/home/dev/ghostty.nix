@@ -12,8 +12,6 @@
 
       settings = {
         background-blur-radius = 20;
-        window-theme = "dark";
-        #window-theme = system;
         background-opacity = 0.9;
         minimum-contrast = 1.1;
         shell-integration-features = "sudo,ssh-env,ssh-terminfo,title";
