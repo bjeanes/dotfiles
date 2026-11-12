@@ -6,7 +6,11 @@
     flavor = lib.mkDefault "macchiato";
   };
 
-  programs.bat.config.theme = "Catppuccin Macchiato";
+  catppuccin.bat.enable = false;
+  programs.bat.config = {
+    theme-light = "Catppuccin Latte";
+    theme-dark = "Catppuccin Macchiato";
+  };
 
   catppuccin.ghostty.enable = false;
   programs.ghostty.settings.theme = "dark:Catppuccin Macchiato,light:Catppuccin Latte";
