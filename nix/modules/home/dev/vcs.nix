@@ -178,7 +178,7 @@ in
         inherit user;
 
         signing = {
-          # Signed on push instead (`git.sign-on-push`)
+          # Signed on push instead (`revsets.git-sign-on-push`)
           behavior = "drop";
           backend = "ssh";
           key = signingKey;
@@ -243,7 +243,7 @@ in
 
         remotes.origin.auto-track-bookmarks = "bjeanes/*";
 
-        git.sign-on-push = true;
+        revsets.git-sign-on-push = true;
 
         # See `private()` revset alias
         git.private-commits = "private()";
