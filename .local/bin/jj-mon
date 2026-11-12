@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -eu
+out=$(mktemp -d)
+trap 'kill $(jobs -p) 2>/dev/null || true; rm -rf "$out"' EXIT
+
+log() { jj --ignore-working-copy --no-pager --color always log "$@"; }
+if ! log "$@" >"$out/log" 2>&1; then cat "$out/log" >&2; exit 1; fi
+
+mkfifo "$out/events"
+fswatch -o "$(jj root)/.jj" >"$out/events" &
+while read -r _; do
+  log "$@" >"$out/next" 2>&1 || true
+  mv "$out/next" "$out/log"
+done <"$out/events" &
+
+# hwatch draws over whatever is already on screen
+clear
+hwatch -x -c -t --mouse -w --no-summary -L 1 -n 1 -- cat "$out/log"
+
