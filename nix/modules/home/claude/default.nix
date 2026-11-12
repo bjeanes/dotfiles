@@ -192,6 +192,9 @@ in
     # installer does rely on it, so this needs revisiting if that's used.
     settings.env.DISABLE_AUTOUPDATER = "1";
 
+    # Claude Code deletes transcripts older than this at startup (default 30)
+    settings.cleanupPeriodDays = 3650;
+
     # Replaces the global allow list in settings.json on each switch, so a rule
     # added there by hand belongs here too. Project ones go in each project's
     # .claude/settings.local.json.
