@@ -9,7 +9,6 @@ stage = ["stack", "closest_merge(@)+:: ~ empty()"]
 
 [git]
 private-commits = "private()"
-sign-on-push = true
 
 [remotes.origin]
 auto-track-bookmarks = "bjeanes/*"
@@ -22,6 +21,7 @@ auto-track-bookmarks = "bjeanes/*"
 "private()" = "( subject(exact-i:'wip') ) | ( subject(glob-i:'wip:*') ) | ( subject(exact-i:'prv') ) | ( subject(glob-i:'prv:*') ) | ( subject(exact-i:'priv') ) | ( subject(glob-i:'priv:*') ) | ( subject(exact-i:'private') ) | ( subject(glob-i:'private:*') ) | ( subject(exact-i:'review') ) | ( subject(glob-i:'review:*') ) | ( conflicts() ) | ( empty() ~ (root() | merges()) ) | ( local_private() )"
 
 [revsets]
+git-sign-on-push = true
 log = "builtin_log() | (trunk()..bookmarks())"
 
 [signing]
