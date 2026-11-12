@@ -11,6 +11,7 @@
 {
   config,
   flake,
+  lib,
   pkgs,
   ...
 }:
@@ -40,6 +41,9 @@
 
   networking.hostId = "ead7048e";
   networking.networkmanager.enable = true;
+
+  # The shared Tailscale module advertises every host as a server; this is a kiosk
+  services.tailscale.extraUpFlags = lib.mkForce [ "--advertise-tags=tag:home" ];
 
   users.users.bjeanes = {
     isNormalUser = true;
