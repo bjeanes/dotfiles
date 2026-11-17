@@ -258,7 +258,7 @@ in
       description = "Request a movie or TV show";
       widget = {
         type = "seerr";
-        secrets.key = "overseerr-api-key";
+        secrets.key = "seerr-api-key";
       };
       image = "ghcr.io/seerr-team/seerr:latest";
       https = 5055;

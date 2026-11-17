@@ -53,7 +53,7 @@ in
   # Homepage dashboard widgets
   "bazarr-api-key.age".publicKeys = all;
   "sabnzbd-api-key.age".publicKeys = all;
-  "overseerr-api-key.age".publicKeys = all;
+  "seerr-api-key.age".publicKeys = all;
   "autobrr-api-key.age".publicKeys = all;
   "qui-api-key.age".publicKeys = all;
   "tracearr-api-key.age".publicKeys = all;
