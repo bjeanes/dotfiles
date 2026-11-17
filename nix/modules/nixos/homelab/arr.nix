@@ -273,6 +273,26 @@ in
       ];
     })
 
+    (mkArr "seerr" {
+      group = "Watch";
+      description = "Request a movie or TV show";
+      widget = {
+        type = "seerr";
+        secrets.key = "overseerr-api-key";
+      };
+      image = "ghcr.io/seerr-team/seerr:latest";
+      https = 5055;
+      needsMedia = false;
+      configMount = "/app/config";
+      funnel = true;
+      # Services can't be Funnelled
+      exposeAs = "sidecar";
+      after = [
+        "sonarr"
+        "radarr"
+      ];
+    })
+
     # Reliably unpacking media
     # No web UI (its metrics server is off), so it has no Service or entry
     (mkArr "unpackerr" {
