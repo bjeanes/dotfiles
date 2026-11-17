@@ -80,6 +80,7 @@
       hostName = "rss";
     };
     immich.enable = true;
+    immich-public-proxy.enable = true;
   };
 
   virtualisation.podman = {
