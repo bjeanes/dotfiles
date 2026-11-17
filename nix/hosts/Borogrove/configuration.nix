@@ -81,6 +81,7 @@
     };
     immich.enable = true;
     immich-public-proxy.enable = true;
+    wherewasi.enable = true;
   };
 
   virtualisation.podman = {

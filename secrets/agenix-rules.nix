@@ -92,6 +92,12 @@ in
     jabberwocky
   ];
 
+  # asset.read, asset.view and person.read
+  "wherewasi-immich-api-key.age".publicKeys = [
+    bjeanes
+    borogrove
+  ];
+
   "openrouter-api-key.age".publicKeys = [
     bjeanes
     brillig
