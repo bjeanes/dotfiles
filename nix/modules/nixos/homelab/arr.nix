@@ -253,26 +253,6 @@ in
     })
 
     # Managing media requests
-    (mkArr "overseerr" {
-      group = "Watch";
-      description = "Request a movie or TV show";
-      widget = {
-        type = "seerr";
-        secrets.key = "overseerr-api-key";
-      };
-      image = "docker.io/sctx/overseerr:latest";
-      https = 5055;
-      needsMedia = false;
-      configMount = "/app/config";
-      funnel = true;
-      # Services can't be Funnelled
-      exposeAs = "sidecar";
-      after = [
-        "sonarr"
-        "radarr"
-      ];
-    })
-
     (mkArr "seerr" {
       group = "Watch";
       description = "Request a movie or TV show";
@@ -377,7 +357,7 @@ in
         "tautulli"
         "sonarr"
         "radarr"
-        "overseerr"
+        "seerr"
       ];
     })
 
