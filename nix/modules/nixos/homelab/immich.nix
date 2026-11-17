@@ -30,6 +30,12 @@ in
         description = "OCI image for ${svc}'s machine learning";
       };
 
+      animalMlImage = lib.mkOption {
+        default = "ghcr.io/rtp4jc/animal-ml:0.3.0";
+        type = lib.types.str;
+        description = "OCI image that adds dogs and cats to ${svc}'s face detection";
+      };
+
       dbImage = lib.mkOption {
         # Has pgvecto.rs alongside VectorChord, which a database restored from
         # Immich < 1.133 needs to migrate from one to the other
@@ -63,6 +69,9 @@ in
       pg = myLib.postgresFor svc;
       valkeyName = "${svc}-valkey";
       mlName = "${svc}-machine-learning";
+      # Off the default, 3003, where the server finds the animal sidecar
+      # instead
+      mlPort = 3004;
 
       port = 2283;
       valkeyPort = 6379;
@@ -112,10 +121,23 @@ in
                 environments = {
                   TZ = cfg.timeZone;
                   IMMICH_HOST = "127.0.0.1";
+                  IMMICH_PORT = toString mlPort;
                 };
                 volumes = [
                   "${volumes."${svc}-model-cache".ref}:/cache"
                 ];
+              };
+            };
+
+            containers."${svc}-animal-ml" = {
+              autoStart = true;
+              containerConfig = {
+                pod = pods.${podName}.ref;
+                image = cfg.animalMlImage;
+                environments = {
+                  TZ = cfg.timeZone;
+                  UPSTREAM_ML_URL = "http://localhost:${toString mlPort}";
+                };
               };
             };
 
