@@ -8,7 +8,6 @@
   ++ (with inputs; [
     agenix.nixosModules.default
     comin.nixosModules.comin
-    catppuccin.nixosModules.catppuccin
     nixvirt.nixosModules.default
     quadlet-nix.nixosModules.quadlet
     nix-index-database.nixosModules.default
