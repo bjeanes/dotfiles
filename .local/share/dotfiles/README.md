@@ -9,9 +9,9 @@ Your package manager may have it under the same name.
 
 | Path | Source |
 | --- | --- |
-| `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.3.1 |
-| `~/.config/systemd/user/app-com.mitchellh.ghostty.service` | ghostty 1.3.1 |
-| `~/.local/share/dbus-1/services/com.mitchellh.ghostty.service` | ghostty 1.3.1 |
+| `~/.config/bat/syntaxes/ghostty.sublime-syntax` | ghostty 1.4.0 |
+| `~/.config/systemd/user/app-com.mitchellh.ghostty.service` | ghostty 1.4.0 |
+| `~/.local/share/dbus-1/services/com.mitchellh.ghostty.service` | ghostty 1.4.0 |
 | `~/.local/share/dotfiles/catppuccin-glamour` | catppuccin-glamour 0-unstable-2025-05-02 |
 | `~/.local/share/dotfiles/catppuccin-zsh-syntax-highlighting` | catppuccin-zsh-syntax-highlighting 0-unstable-2024-07-20 |
 | `~/.local/share/dotfiles/docker-inspect-run-cmd-fmt` | https://gist.github.com/8ce9c75d518b6eb863f667442d7bc679.git |
@@ -21,7 +21,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/blink.cmp` | https://github.com/Saghen/blink.cmp/tree/v1.10.2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/catppuccin-nvim` | https://github.com/catppuccin/nvim/tree/v2.0.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/claudecode.nvim` | https://github.com/coder/claudecode.nvim/tree/2390c6e45c4789072c293ac69de051d169668b29 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/codecompanion.nvim` | https://github.com/olimorris/codecompanion.nvim/tree/v19.27.0 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/codecompanion.nvim` | https://github.com/olimorris/codecompanion.nvim/tree/v20.0.1 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conform.nvim` | https://github.com/stevearc/conform.nvim/tree/016802de402556da54c36bd7359b441266b01cdd |
 | `~/.local/share/nvim/site/pack/dotfiles/start/conjure` | https://github.com/Olical/conjure/tree/v4.60.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/direnv.vim` | https://github.com/direnv/direnv.vim/tree/ab2a7e08dd630060cd81d7946739ac7442a4f269 |
@@ -33,7 +33,7 @@ Your package manager may have it under the same name.
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-lspconfig` | https://github.com/neovim/nvim-lspconfig/tree/v2.12.0 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-navic` | https://github.com/smiteshp/nvim-navic/tree/455808fd0fae06e6d70fadfd61432275db8f34ce |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-paredit` | https://github.com/julienvincent/nvim-paredit/tree/v1.2.0 |
-| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/ca581c3436fc2b236847f5b739ebc263739e5ca6 |
+| `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter` | https://github.com/nvim-treesitter/nvim-treesitter/tree/29212d826054bb2948fa9d3a99eca9bf6a050eb2 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/nvim-treesitter-context` | https://github.com/nvim-treesitter/nvim-treesitter-context/tree/8decd73460d26ef0a0befb745d022dd1fc2c38b8 |
 | `~/.local/share/nvim/site/pack/dotfiles/start/rainbow-delimiters.nvim` | https://gitlab.com/HiPhish/rainbow-delimiters.nvim |
 | `~/.local/share/nvim/site/pack/dotfiles/start/snacks.nvim` | https://github.com/folke/snacks.nvim/tree/882c996cf28183f4d63640de0b4c02ec886d01f2 |
