@@ -49,7 +49,6 @@ pkgs.mkShell {
     ])
     ++ (with inputs; [
       self.packages.${system}.nvim
-      nixos-generators.packages.${system}.nixos-generate
       agenix.packages.${system}.default
     ]);
 }
