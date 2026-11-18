@@ -45,7 +45,7 @@ in
       };
 
       valkeyImage = lib.mkOption {
-        default = "docker.io/valkey/valkey:8-alpine";
+        default = "docker.io/valkey/valkey:9-alpine";
         type = lib.types.str;
         description = "OCI image for the Valkey backing ${svc}";
       };
