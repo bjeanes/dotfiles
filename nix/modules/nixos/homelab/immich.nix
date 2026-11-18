@@ -7,7 +7,7 @@
 }:
 let
   svc = "immich";
-  version = "v3.4.0";
+  version = "v3.4.1";
 in
 {
   options.homelab.services.${svc} =
