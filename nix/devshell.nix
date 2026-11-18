@@ -49,6 +49,7 @@ pkgs.mkShell {
     ])
     ++ (with inputs; [
       self.packages.${system}.nvim
+      self.packages.${system}.update-nixpkgs
       agenix.packages.${system}.default
     ]);
 }
